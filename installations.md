@@ -153,9 +153,10 @@ brew prune
   brew cask install --force keepassx
   ```
 
-* Tweaks
+* Tweaks, Drivers
   ```
   brew cask install --force steermouse
+  brew cask install --force paragon-ntfs
   ```
 
 * Calendars
