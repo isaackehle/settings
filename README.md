@@ -8,3 +8,5 @@ Everything you or I need to know about setting up a Mac
 * zsh.md: ZSH install goodness
 
 
+TODO:
+* Make a Brewfile out of installations.md
