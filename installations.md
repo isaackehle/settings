@@ -82,8 +82,11 @@ brew prune
 
 * Terminals
   ```
-  brew cask install --force iterm2-beta
+  brew cask install --force iterm2-beta 
   ```
+
+  * Themes are [here](http://iterm2colorschemes.com/) 
+
 
 * Browsers
   ```
