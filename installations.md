@@ -183,6 +183,8 @@ brew prune
   brew cask install --force controlplane
   brew cask install --force macid
   brew cask install --force java
+  brew cask install --force spectacle
+  brew install tree
   ```
 
 * SDKs
@@ -278,7 +280,7 @@ brew prune
 * [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
 * [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
-
+* [Wallcat](https://beta.wall.cat/)
 
 ## Tweaks
 
