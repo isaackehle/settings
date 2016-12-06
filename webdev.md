@@ -9,15 +9,6 @@ n
 
 ## Installations
 
-* Install node using nvm
-  ```
-  brew install nvm
-  command -v nvm
-  nvm install node
-  nvm use node
-  nvm run node --version
-  ```
-
 * List all global packages installed
   ```
   npm ls -g --depth 0
