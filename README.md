@@ -7,6 +7,3 @@ Everything you or I need to know about setting up a Mac
 * ruby.md: Ruby installation via `rvm`
 * zsh.md: ZSH install goodness
 
-
-TODO:
-* Make a Brewfile out of installations.md
