@@ -282,6 +282,9 @@ brew prune
 * [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
 * [Wallcat](https://beta.wall.cat/)
+* iFax
+* Paragon NTFS 14
+
 
 ## Tweaks
 
