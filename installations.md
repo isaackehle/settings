@@ -279,6 +279,14 @@ brew prune
 
 ## Tweaks
 
+* steermouse
+
+For issues with scrolling while trying to middle click:
+```
+  Wheel Mode: Ratchet, uncheck smooth scroll
+```
+
+
 * Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
 ```

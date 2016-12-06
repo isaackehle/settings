@@ -49,3 +49,5 @@ n
   sudo xcodebuild -license
   ```
 
+* Nativescript
+  * https://docs.nativescript.org/start/ns-setup-os-x
