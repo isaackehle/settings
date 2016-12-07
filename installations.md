@@ -156,7 +156,7 @@ brew prune
 * Tweaks, Drivers
   ```
   brew cask install --force steermouse
-  brew cask install --force paragon-ntfs
+  # brew cask install --force paragon-ntfs -- did not like install via brew
   ```
 
 * Calendars
