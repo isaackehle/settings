@@ -35,4 +35,11 @@
   
 * Kill the connections file
 
-  
+* Save tnsnames.ora, sqlnet.ora
+  1. Ensure Navicat Premium is closed
+  1. Download from http://www.ncsu.edu/project/oraclenet/tns.html
+  1. Save files to ~/Documents
+  1. Link the file(s) to the home folder:
+  ```
+    ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
+  ```
