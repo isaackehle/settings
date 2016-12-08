@@ -233,8 +233,13 @@ brew prune
     brew cask install --force navicat-premium
     ```
     * Might need to set the TDS for navicat
+      ```bash
+      # Current Session
+      launchctl setenv TDSVER 7.0
+      ```
 
       ```bash
+      # Permanent
       echo '<?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
