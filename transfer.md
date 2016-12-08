@@ -40,6 +40,6 @@
   1. Download from http://www.ncsu.edu/project/oraclenet/tns.html
   1. Save files to ~/Documents
   1. Link the file(s) to the home folder:
-  ```
-    ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
-  ```
+     ```
+       ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
+     ```

@@ -228,10 +228,40 @@ brew prune
   ```
 
 * Databases
-  ```
-  brew cask install --force navicat-premium mongochef
-  brew cask install --force robomongo
-  ```
+  * Navicat
+    ```
+    brew cask install --force navicat-premium
+    ```
+    * Might need to set the TDS for navicat
+
+      ```bash
+      echo '<?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+       <key>Label</key>
+           <string>setenv.TDSVER</string>
+       <key>ProgramArguments</key>
+       <array>
+         <string>/bin/launchctl</string>
+         <string>setenv</string>
+         <string>TDSVER</string>
+         <string>7.0</string>
+       </array>
+       <key>RunAtLoad</key>
+           <true/>
+      </dict>
+      </plist>' > ~/Library/LaunchAgents/setenv.TDSVER.plist
+      ```
+  * MongoChef
+    ```bash
+    brew cask install --force mongochef
+    ```
+
+  * Robomongo
+    ```bash
+    brew cask install --force robomongo
+    ```
 
 * VMs
   ```
