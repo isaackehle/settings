@@ -442,7 +442,11 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores true
   brew install ssldump
   brew install tcping
   brew install texi2html
+
   brew install thefuck
+
+  echo "alias fuck='eval $(thefuck $(fc -ln -1)); history -r'" >> ~/.zshrc
+  
   brew install unixodbc
   brew install vips
   brew install w3m
