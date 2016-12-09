@@ -43,3 +43,18 @@
      ```
        ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
      ```
+* Copy Settings
+  1. Create zip file
+     ```
+     cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
+     zip -r ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip .
+     ```
+  1. Unzip file on new computer
+     ```
+     cd ~/Library/Application\ Support/
+     mv PremiumSoft\ CyberTech PremiumSoft\ CyberTech.bak
+     mkdir PremiumSoft\ CyberTech
+     cd PremiumSoft\ CyberTech
+     unzip ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip
+     ```
+  
