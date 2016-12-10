@@ -61,4 +61,3 @@
   1. Set DYLD_LIBRARY_PATH to `/opt/oracle/instantclient`
   1. Set TNS_ADMIN to `/opt/oracle/instantclient/network/admin`
 
-  
