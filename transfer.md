@@ -41,5 +41,18 @@
   1. Save files to ~/Documents
   1. Link the file(s) to the home folder:
      ```
-       ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
+     ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
+     ln -s ~/Documents/sqlnet.ora ~/.sqlnet.ora
      ```
+  1. Link the file(s) to the OCI network folder:
+     ```
+     sudo mkdir -p /opt/oracle/instantclient/network/admin/
+     sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
+     sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
+     ```
+* Save Navicat Settings
+  1. Open Navicat->Preferences, Environments tab
+  1. Uncheck 'Use Bundled Instant Client'
+  1. Set ORACLE_HOME to `/opt/oracle/instantclient`
+  1. Set DYLD_LIBRARY_PATH to `/opt/oracle/instantclient`
+  1. Set TNS_ADMIN to `/opt/oracle/instantclient/network/admin`
