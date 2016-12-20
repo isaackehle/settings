@@ -14,19 +14,19 @@
 [Homepage](http://brew.sh/)
 
 Install via ruby:
-```
+```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
 Tap the versions keg:
-```
+```bash
 brew tap homebrew/versions
 ```
 
 Other Base Stuff
 
 * GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
-  ```
+  ```bash
   brew install coreutils moreutils findutils
   brew install homebrew/dupes/grep
   brew install homebrew/dupes/screen
@@ -34,34 +34,34 @@ Other Base Stuff
   ```
 
 * generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)  
-  ```
+  ```bash
   brew install grc
   ```
 
 * Install wget with IRI support
-  ```
+  ```bash
   brew install wget --with-iri
   ```
 
 * Install more recent versions of some OS X tools
-  ```
+  ```bash
   brew install vim --override-system-vi
   ```
 
 * zsh, with oh-my-zsh
-  ```
+  ```bash
   brew install zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   ```
 * Updates openssh
-  ```
+  ```bash
   brew install homebrew/dupes/openssh
   ```
 
 ## Brew Cask Installation
 A nice way of installing GUI packages, along with [updating them](https://github.com/buo/homebrew-cask-upgrade).
 
-```
+```bash
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
 brew tap buo/cask-upgrade
@@ -70,7 +70,7 @@ brew tap caskroom/fonts
 
 To Update Brew and Casks:
 
-```
+```bash
 brew update
 brew cu
 brew doctor
