@@ -65,6 +65,7 @@ A nice way of installing GUI packages, along with [updating them](https://github
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
 brew tap buo/cask-upgrade
+brew tap caskroom/fonts
 ```
 
 To Update Brew and Casks:
@@ -77,11 +78,15 @@ brew cleanup
 brew prune
 ```
 
+## Fonts
+```bash
+brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto-mono-for-powerline font-roboto-slab
+``` 
 
 ## Programs
 
 * Terminals
-  ```
+  ```bash
   brew cask install --force iterm2-beta 
   ```
 
@@ -89,7 +94,7 @@ brew prune
 
 
 * Browsers
-  ```
+  ```bash
   brew cask install --force filezilla
   brew cask install --force firefox
   brew cask install --force google-chrome
@@ -98,7 +103,7 @@ brew prune
   ```
 
 * Music
-  ```
+  ```bash
   brew cask install --force amazon-music
   brew cask install --force spotify
   brew cask install --force vlc
@@ -107,7 +112,7 @@ brew prune
   ```
 
 * Editors, merge tools
-  ```
+  ```bash
   brew cask install --force atom
   brew cask install --force libreoffice
   brew cask install --force microsoft-office
@@ -122,55 +127,55 @@ brew prune
   ```
 
 * Compression
-  ```
+  ```bash
   brew install unrar
   brew cask install the-unarchiver
   ```
 
 * Fonts
-  ```
+  ```bash
   brew cask install --force font-noto-sans-hebrew
   brew cask install --force font-open-sans-hebrew
   brew cask install --force font-open-sans-hebrew-condensed
   ```
 
 * Chats
-  ```
+  ```bash
   brew cask install --force telegram gitter skype slack-beta
   brew cask install --force messenger-for-desktop
   brew cask install --force adium
   ```
 
 * Adobe
-  ```
+  ```bash
   brew cask install --force adobe-air adobe-reader
   ```
 
 * Cloud Sync, passwords
-  ```
+  ```bash
   brew cask install --force dropbox insync
   brew cask install --force lastpass
   brew cask install --force keepassx
   ```
 
 * Tweaks, Drivers
-  ```
+  ```bash
   brew cask install --force steermouse
   # brew cask install --force paragon-ntfs -- did not like install via brew
   ```
 
 * Calendars
-  ```
+  ```bash
   brew cask install --force itsycal
   ```
 
 * Uninstaller Programs
-  ```
+  ```bash
   brew cask install --force appcleaner
   ```
 
 * Other Sweet Utils
-  ```
+  ```bash
   brew cask install --force path-finder
   brew cask install --force xquartz
   brew cask install --force burn ccleaner
@@ -189,29 +194,29 @@ brew prune
   ```
 
 * SDKs
-  ```
+  ```bash
   brew cask install --force android-studio
   brew install android-sdk
   ```
 
 * Torrent, Downloaders
-  ```
+  ```bash
   brew cask install --force deluge
   brew cask install --force folx
   ```
 
 * VNC
-  ```
+  ```bash
   brew cask install --force vnc-viewer
   ```
 
 * VPN
-  ```
+  ```bash
   brew cask install --force tunnelblick
   ```
 
 * Drawing, Multimedia, Graphics
-  ```
+  ```bash
   brew cask install --force gimp
   brew cask install --force colorpicker colorpicker-hex colorsnapper
   brew cask install --force ffmpegx
@@ -229,7 +234,7 @@ brew prune
 
 * Databases
   * Navicat
-    ```
+    ```bash
     brew cask install --force navicat-premium
     ```
     * Might need to set the TDS for navicat
@@ -269,14 +274,14 @@ brew prune
     ```
 
 * VMs
-  ```
+  ```bash
   brew cask install --force virtualbox
   brew cask install --force vmware-fusion
   brew install docker-machine
   ```
 
 * Internet Utils
-  ```
+  ```bash
   brew cask install --force wireshark
 
   brew install nmap
@@ -288,19 +293,19 @@ brew prune
   ```
 
 * Version Control
-  ```
+  ```bash
   brew install git
   brew cask install --force github-desktop
   ```
 
 * Node, Databases
-  ```
+  ```bash
   brew install node
   brew install mongodb
   ```
 
 * Encryption, MD5 
-  ```
+  ```bash
   brew install mcrypt
   brew install md5sha1sum
   brew install mhash
@@ -333,13 +338,13 @@ For issues with scrolling while trying to middle click:
 
 * Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
-```
+```bash
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
 ### Uncategorized brew apps -- things I haven't taken the time to sort
 
-  ```
+  ```bash
   brew install ansible
   brew install apg
   brew install apr
