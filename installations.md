@@ -234,10 +234,13 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
 * Databases
   * Navicat
-    ```bash
+   
+   ```bash
     brew cask install --force navicat-premium
     ```
-    * Might need to set the TDS for navicat
+   
+   * Might need to set the TDS for navicat
+      
       ```bash
       # Current Session
       launchctl setenv TDSVER 7.0
@@ -263,10 +266,27 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
       </dict>
       </plist>' > ~/Library/LaunchAgents/setenv.TDSVER.plist
       ```
-  * MongoChef
+  * Studio-3T MongoChef
     ```bash
-    brew cask install --force mongochef
+    brew cask install --force studio-3t
     ```
+  * MongoDB
+
+  ```bash
+  brew install mongodb
+  ```
+ 
+    * To have launchd start mongodb at login:
+    
+    ```bash
+    ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
+    ```
+  
+    * Then to load mongodb now:
+    ```bash
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+    ```
+
 
   * Robomongo
     ```bash
