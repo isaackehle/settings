@@ -1,7 +1,6 @@
 
 # Transfer from one mac to another
 
-
 ## MongoChef
 
 * Export connections
@@ -19,17 +18,18 @@
   
 * Kill the connections file
 
-  
 ## Navicat
 
 * Copy Settings
   1. Create zip file
-     ```
+
+     ```bash
      cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
      zip -r ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip .
      ```
   1. Unzip file on new computer
-     ```
+
+     ```bash
      cd ~/Library/Application\ Support/
      mv PremiumSoft\ CyberTech PremiumSoft\ CyberTech.bak
      mkdir PremiumSoft\ CyberTech
@@ -41,15 +41,17 @@
 
 * Save tnsnames.ora, sqlnet.ora
   1. Ensure Navicat Premium is closed
-  1. Download from http://www.ncsu.edu/project/oraclenet/tns.html
+  1. Download from [Oracle](http://www.ncsu.edu/project/oraclenet/tns.html)
   1. Save files to ~/Documents
   1. Link the file(s) to the home folder:
-     ```
+
+     ```bash
      ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
      ln -s ~/Documents/sqlnet.ora ~/.sqlnet.ora
      ```
   1. Link the file(s) to the OCI network folder:
-     ```
+
+     ```bash
      sudo mkdir -p /opt/oracle/instantclient/network/admin/
      sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
      sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
@@ -61,3 +63,8 @@
   1. Set DYLD_LIBRARY_PATH to `/opt/oracle/instantclient`
   1. Set TNS_ADMIN to `/opt/oracle/instantclient/network/admin`
 
+* Check dns server settings on mac:
+
+```bash
+scutil --dns | grep 'nameserver\[[0-9]*\]'
+```
