@@ -13,3 +13,6 @@ For issues with scrolling while trying to middle click:
   brew install vim --override-system-vi
   ```
 
+```
+brew install tree
+```
