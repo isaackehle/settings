@@ -334,7 +334,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
 
 ## Other programs that do not have casks
-* radium
 * cisco any connect
 * [Better Touch Tool](http://blog.boastr.net/)
 * [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
@@ -360,6 +359,12 @@ For issues with scrolling while trying to middle click:
 
 ```bash
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+```
+
+Messaging Apps
+```bash
+brew install telegram
+
 ```
 
 ### Uncategorized brew apps -- things I haven't taken the time to sort
@@ -490,5 +495,15 @@ brew install rename
 brew install tree
 brew install zopfli
 ```
+
+
+Other Appstore Apps
+```
+Wunderlist
+VPN Unlimited
+Color Picker
+iHex - Hex Editor
+```
+
 
 
