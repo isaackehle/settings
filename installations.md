@@ -18,11 +18,6 @@ Install via ruby:
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Tap the versions keg:
-```bash
-brew tap homebrew/versions
-```
-
 Other Base Stuff
 
 * GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
@@ -341,7 +336,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 ## Other programs that do not have casks
 * radium
 * cisco any connect
-* [MagicPrefs](http://magicprefs.com/)
 * [Better Touch Tool](http://blog.boastr.net/)
 * [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
 * [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
