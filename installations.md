@@ -79,17 +79,12 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
 ## Programs
 
+*  [iterm2](./iterm2.md)
+*  [browsers](./browsers.md)
+
 * Terminals
   [iterm2](./iterm2.md)
 
-* Browsers
-  ```bash
-  brew cask install --force filezilla
-  brew cask install --force firefox
-  brew cask install --force google-chrome
-  brew cask install --force waterfox
-  brew cask install --force thunderbird
-  ```
 
 * Music
   ```bash
