@@ -121,13 +121,15 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force font-open-sans-hebrew-condensed
   ```
 
-* Chats
-
-```bash
-  brew cask install --force telegram gitter skype slack-beta
-  brew cask install --force slack
-  brew cask install --force messenger-for-desktop
-  brew cask install --force adium
+* Messaging Apps
+  ```bash
+  brew install telegram
+  brew cask install telegram-desktop
+  brew cask install gitter 
+  brew cask install skype
+  brew cask install slack
+  brew cask install messenger-for-desktop
+  brew cask install adium
   ```
 
 * Adobe
@@ -146,13 +148,11 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * Passwords
 
   ```bash
-  brew cask install --force lastpass
   brew cask install --force keepassx
   ```
 
 * Tweaks, Drivers
   ```bash
-  brew cask install --force steermouse
   # brew cask install --force paragon-ntfs -- did not like install via brew
   ```
 
@@ -273,7 +273,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
 ## Other programs that do not have casks
 * cisco any connect
-* [Better Touch Tool](http://blog.boastr.net/)
 * [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
 * [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
 * [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -282,28 +281,12 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * iFax
 * Paragon NTFS 14
 
-
-## Tweaks
-
-* steermouse
-
-For issues with scrolling while trying to middle click:
-```
-  Wheel Mode: Ratchet, uncheck smooth scroll
-```
-
-
 * Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
 ```bash
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
-Messaging Apps
-```bash
-brew install telegram
-
-```
 
 ### Uncategorized brew apps -- things I haven't taken the time to sort
 
@@ -449,7 +432,7 @@ iMovie
 Pages, Numbers, etc
 XCode
 tweetdeck
-
+lastpass
 ```
 
 
