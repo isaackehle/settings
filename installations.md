@@ -82,9 +82,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 *  [iterm2](./iterm2.md)
 *  [browsers](./browsers.md)
 
-* Terminals
-  [iterm2](./iterm2.md)
-
 
 * Music
   ```bash
