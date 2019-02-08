@@ -11,6 +11,7 @@
 # New Computer Installation
 
 * [brew](./brew.md)
+* [zsh, with oh-my-zsh](./zsh.md)
 
 * generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)  
   ```bash
@@ -22,14 +23,6 @@
   brew install wget
   ```
 
-* Install more recent versions of some OS X tools
-  ```bash
-  brew install vim --override-system-vi
-  ```
-
-* zsh, with oh-my-zsh
-
-  * [here](./zsh.md)
 
 * Updates openssh
   ```bash
