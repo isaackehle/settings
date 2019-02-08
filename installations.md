@@ -509,6 +509,9 @@ Microsoft Remote Desktop Beta
 Microsft Office
 iMovie
 Pages, Numbers, etc
+XCode
+tweetdeck
+
 ```
 
 
