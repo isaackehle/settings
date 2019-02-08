@@ -498,11 +498,17 @@ brew install zopfli
 
 
 Other Appstore Apps
-```
+
+
+```bash
 Wunderlist
 VPN Unlimited
 Color Picker
 iHex - Hex Editor
+Microsoft Remote Desktop Beta
+Microsft Office
+iMovie
+Pages, Numbers, etc
 ```
 
 
