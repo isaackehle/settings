@@ -82,6 +82,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * [iterm2](./iterm2.md)
 * [browsers](./browsers.md)
 * [editors](./editors.md)
+* [internet utils](./internet.md)
 
 * Music
   ```bash
@@ -219,17 +220,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew install docker-machine
   ```
 
-* Internet Utils
-  ```bash
-  brew cask install --force wireshark
-
-  brew install nmap
-  brew install mtr
-  sudo chown root:wheel /usr/local/Cellar/mtr/0.86/sbin/mtr
-  sudo chmod u+s /usr/local/Cellar/mtr/0.86/sbin/mtr
-  brew install nikto
-  brew install dnsmap
-  ```
 
 * Version Control
   ```bash
