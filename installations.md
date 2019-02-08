@@ -33,7 +33,7 @@ Other Base Stuff
   brew install grc
   ```
 
-* Install wget with IRI support
+* Install wget
   ```bash
   brew install wget
   ```
