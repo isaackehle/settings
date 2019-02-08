@@ -35,7 +35,7 @@ Other Base Stuff
 
 * Install wget with IRI support
   ```bash
-  brew install wget --with-iri
+  brew install wget
   ```
 
 * Install more recent versions of some OS X tools
