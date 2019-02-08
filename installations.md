@@ -103,15 +103,16 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * Editors, merge tools
   ```bash
   brew cask install --force atom
+  brew cask install --force vscode
+  brew cask install --force sketch
   brew cask install --force libreoffice
   brew cask install --force microsoft-office
-  brew cask install --force phpstorm textexpander textwrangler webstorm
+  ~brew cask install --force phpstorm textexpander textwrangler webstorm~
   brew cask install --force hex
   brew cask install --force araxis-merge
   brew cask install --force sublime-text
   brew cask install --force macvim
   brew cask install --force aquamacs
-  brew cask install --force skitch
   brew install doxygen
   ```
 
