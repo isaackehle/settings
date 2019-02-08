@@ -122,20 +122,30 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   ```
 
 * Chats
-  ```bash
+
+```bash
   brew cask install --force telegram gitter skype slack-beta
+  brew cask install --force slack
   brew cask install --force messenger-for-desktop
   brew cask install --force adium
   ```
 
 * Adobe
+
   ```bash
   brew cask install --force adobe-air adobe-reader
   ```
 
-* Cloud Sync, passwords
+* Cloud Sync
+
   ```bash
-  brew cask install --force dropbox insync
+  brew cask install --force dropbox
+  brew cask install --force insync
+  ```
+
+* Passwords
+
+  ```bash
   brew cask install --force lastpass
   brew cask install --force keepassx
   ```
