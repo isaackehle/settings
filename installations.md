@@ -86,7 +86,9 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   ```
 
   * Themes are [here](http://iterm2colorschemes.com/) 
+  * Keyboard Mappings are [here](https://stackoverflow.com/questions/6205157/iterm-2-how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line) 
 
+  
 
 * Browsers
   ```bash
