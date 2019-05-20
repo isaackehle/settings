@@ -19,7 +19,6 @@ A nice way of installing GUI packages, along with [updating them](https://github
 ```bash
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
-brew tap buo/cask-upgrade
 brew tap caskroom/fonts
 ```
 
@@ -27,7 +26,6 @@ To Update Brew and Casks:
 
 ```bash
 brew update
-brew cu
 brew doctor
 brew cleanup
 brew prune
