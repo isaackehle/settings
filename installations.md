@@ -36,12 +36,19 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 ``` 
 
 ## Programs
-
 * [iterm2](./iterm2.md)
 * [browsers](./browsers.md)
 * [editors](./editors.md)
 * [internet utils](./internet.md)
 
+* Terminals
+  ```bash
+  brew cask install --force iterm2-beta 
+  ```
+
+  * Themes are [here](http://iterm2colorschemes.com/) 
+  * Keyboard Mappings are [here](https://stackoverflow.com/questions/6205157/iterm-2-how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line) 
+  
 * Music
   ```bash
   brew cask install --force amazon-music
