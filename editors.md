@@ -2,6 +2,7 @@
   ```bash
   vscode
   
+  brew cask install --force visual-studio-code
   brew cask install --force sketch
   brew cask install --force libreoffice
   brew cask install --force microsoft-office
