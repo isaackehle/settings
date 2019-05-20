@@ -1,7 +1,18 @@
 Middle Mouse Buttons:
 
-* [BetterTouchTool](https://folivora.ai/downloads/)
-* steermouse:   brew cask install --force steermouse
+* BetterTouchTool
+
+[Website](https://folivora.ai/downloads/)
+
+```
+brew cask install bettertouchtool
+```
+
+* Steermouse
+
+```
+brew cask install --force steermouse
+```
 
 For issues with scrolling while trying to middle click:
 ```
