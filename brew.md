@@ -11,9 +11,6 @@ Other Base Stuff
 * GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
   ```bash
   brew install coreutils moreutils findutils
-  brew install homebrew/dupes/grep
-  brew install homebrew/dupes/screen
-  brew install gnu-sed --with-default-names
   ```
 
 ## Brew Cask Installation
