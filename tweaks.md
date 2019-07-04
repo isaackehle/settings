@@ -1,3 +1,8 @@
+Screensaver:
+
+* Amphetamine
+  * From Mac App Store
+
 Middle Mouse Buttons:
 
 * BetterTouchTool
