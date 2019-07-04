@@ -10,68 +10,25 @@
 
 # New Computer Installation
 
-## Brew
-[Homepage](http://brew.sh/)
-
-Install via ruby:
-```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-Other Base Stuff
-
-* GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
-  ```bash
-  brew install coreutils moreutils findutils
-  brew install homebrew/dupes/grep
-  brew install homebrew/dupes/screen
-  brew install gnu-sed --with-default-names
-  ```
+* [brew](./brew.md)
+* [zsh, with oh-my-zsh](./zsh.md)
 
 * generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)  
   ```bash
   brew install grc
   ```
 
-* Install wget with IRI support
+* Install wget
   ```bash
   brew install wget
   ```
 
-* Install more recent versions of some OS X tools
-  ```bash
-  brew install vim --override-system-vi
-  ```
 
-* zsh, with oh-my-zsh
-  ```bash
-  brew install zsh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  ```
 * Updates openssh
   ```bash
   brew install homebrew/dupes/openssh
   ```
 
-## Brew Cask Installation
-A nice way of installing GUI packages, along with [updating them](https://github.com/buo/homebrew-cask-upgrade).
-
-```bash
-brew install caskroom/cask/brew-cask
-brew tap caskroom/versions
-brew tap buo/cask-upgrade
-brew tap caskroom/fonts
-```
-
-To Update Brew and Casks:
-
-```bash
-brew update
-brew cu
-brew doctor
-brew cleanup
-brew prune
-```
 
 ## Fonts
 ```bash
@@ -79,6 +36,10 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 ``` 
 
 ## Programs
+* [iterm2](./iterm2.md)
+* [browsers](./browsers.md)
+* [editors](./editors.md)
+* [internet utils](./internet.md)
 
 * Terminals
   ```bash
@@ -87,18 +48,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
   * Themes are [here](http://iterm2colorschemes.com/) 
   * Keyboard Mappings are [here](https://stackoverflow.com/questions/6205157/iterm-2-how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line) 
-
   
-
-* Browsers
-  ```bash
-  brew cask install --force filezilla
-  brew cask install --force firefox
-  brew cask install --force google-chrome
-  brew cask install --force waterfox
-  brew cask install --force thunderbird
-  ```
-
 * Music
   ```bash
   brew cask install --force amazon-music
@@ -108,20 +58,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force rdio
   ```
 
-* Editors, merge tools
-  ```bash
-  brew cask install --force atom
-  brew cask install --force libreoffice
-  brew cask install --force microsoft-office
-  brew cask install --force phpstorm textexpander textwrangler webstorm
-  brew cask install --force hex
-  brew cask install --force araxis-merge
-  brew cask install --force sublime-text
-  brew cask install --force macvim
-  brew cask install --force aquamacs
-  brew cask install --force skitch
-  brew install doxygen
-  ```
+
 
 * Compression
   ```bash
@@ -136,28 +73,38 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force font-open-sans-hebrew-condensed
   ```
 
-* Chats
+* Messaging Apps
   ```bash
-  brew cask install --force telegram gitter skype slack-beta
-  brew cask install --force messenger-for-desktop
-  brew cask install --force adium
+  brew install telegram
+  brew cask install telegram-desktop
+  brew cask install gitter 
+  brew cask install skype
+  brew cask install slack
+  brew cask install messenger-for-desktop
+  brew cask install adium
   ```
 
 * Adobe
+
   ```bash
   brew cask install --force adobe-air adobe-reader
   ```
 
-* Cloud Sync, passwords
+* Cloud Sync
+
   ```bash
-  brew cask install --force dropbox insync
-  brew cask install --force lastpass
+  brew cask install --force dropbox
+  brew cask install --force insync
+  ```
+
+* Passwords
+
+  ```bash
   brew cask install --force keepassx
   ```
 
 * Tweaks, Drivers
   ```bash
-  brew cask install --force steermouse
   # brew cask install --force paragon-ntfs -- did not like install via brew
   ```
 
@@ -229,66 +176,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force sling
   ```
 
-* Databases
-  * Navicat
-   
-   ```bash
-    brew cask install --force navicat-premium
-    ```
-   
-   * Might need to set the TDS for navicat
-      
-      ```bash
-      # Current Session
-      launchctl setenv TDSVER 7.0
-      ```
-
-      ```bash
-      # Permanent
-      echo '<?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-       <key>Label</key>
-           <string>setenv.TDSVER</string>
-       <key>ProgramArguments</key>
-       <array>
-         <string>/bin/launchctl</string>
-         <string>setenv</string>
-         <string>TDSVER</string>
-         <string>7.0</string>
-       </array>
-       <key>RunAtLoad</key>
-           <true/>
-      </dict>
-      </plist>' > ~/Library/LaunchAgents/setenv.TDSVER.plist
-      ```
-  * Studio-3T MongoChef
-    ```bash
-    brew cask install --force studio-3t
-    ```
-  * MongoDB
-
-  ```bash
-  brew install mongodb
-  ```
- 
-    * To have launchd start mongodb at login:
-    
-    ```bash
-    ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
-    ```
-  
-    * Then to load mongodb now:
-    ```bash
-    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
-    ```
-
-
-  * Robomongo
-    ```bash
-    brew cask install --force robomongo
-    ```
+* [Databases](./databases.md)
 
 * VMs
   ```bash
@@ -297,17 +185,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew install docker-machine
   ```
 
-* Internet Utils
-  ```bash
-  brew cask install --force wireshark
-
-  brew install nmap
-  brew install mtr
-  sudo chown root:wheel /usr/local/Cellar/mtr/0.86/sbin/mtr
-  sudo chmod u+s /usr/local/Cellar/mtr/0.86/sbin/mtr
-  brew install nikto
-  brew install dnsmap
-  ```
 
 * Version Control
   ```bash
@@ -337,7 +214,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 
 ## Other programs that do not have casks
 * cisco any connect
-* [Better Touch Tool](http://blog.boastr.net/)
 * [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
 * [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
 * [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -346,28 +222,12 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * iFax
 * Paragon NTFS 14
 
-
-## Tweaks
-
-* steermouse
-
-For issues with scrolling while trying to middle click:
-```
-  Wheel Mode: Ratchet, uncheck smooth scroll
-```
-
-
 * Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
 ```bash
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
-Messaging Apps
-```bash
-brew install telegram
-
-```
 
 ### Uncategorized brew apps -- things I haven't taken the time to sort
 
@@ -511,6 +371,9 @@ Microsoft Remote Desktop Beta
 Microsft Office
 iMovie
 Pages, Numbers, etc
+XCode
+tweetdeck
+lastpass
 ```
 
 
