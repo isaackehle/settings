@@ -376,5 +376,10 @@ tweetdeck
 lastpass
 ```
 
+Other ones I found helpful one day..
+
+```
+brew cask install google-drive-file-stream google-hangouts google-backup-and-sync google-earth-pro
+```
 
 
