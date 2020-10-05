@@ -103,6 +103,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 * Calendars
   ```bash
   brew cask install --force itsycal
+  brew cask install --force anylist
   ```
 
 * Uninstaller Programs
