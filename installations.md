@@ -36,7 +36,7 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
 ``` 
 
 ## Programs
-* [iterm2](./iterm2.md)
+* [iterm](./iterm.md)
 * [browsers](./browsers.md)
 * [editors](./editors.md)
 * [internet utils](./internet.md)
