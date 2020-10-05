@@ -58,8 +58,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force rdio
   ```
 
-
-
 * Compression
   ```bash
   brew install unrar
@@ -73,10 +71,11 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   brew cask install --force font-open-sans-hebrew-condensed
   ```
 
-* Messaging Apps
+* Messaging/Conferencing Apps
   ```bash
-  brew install telegram
+  brew cask install telegram
   brew cask install telegram-desktop
+  brew cask install vsee
   brew cask install gitter 
   brew cask install skype
   brew cask install slack
