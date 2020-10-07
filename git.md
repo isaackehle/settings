@@ -1,5 +1,12 @@
 # GIT
 
+## username/password:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "youremail@yourdomain.com"
+```
+
 ## aliases:
 
 ```bash
