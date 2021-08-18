@@ -1,20 +1,20 @@
-* Editors, merge tools
-  ```bash
-  vscode
-  
-  brew cask install --force visual-studio-code
-  brew cask install --force sketch
-  brew cask install --force libreoffice
-  brew cask install --force microsoft-office
-  ~brew cask install --force phpstorm textexpander textwrangler webstorm~
-  brew cask install --force hex
-  brew cask install --force araxis-merge
-  brew cask install --force sublime-text
-  brew cask install --force macvim
-  brew cask install --force aquamacs
-  brew install doxygen
-  ```
-  
- brew cask install atom
- 
- apm install sync-settings
+
+| Use | Command/Link | 
+| - | - |
+| VS Code | `brew install visual-studio-code` |
+| PyCharm, Community Edition | `brew install pycharm-ce` |
+| Atom | `brew install atom` |
+| PHP Storm | `brew install phpstorm` |
+| Web Storm | `brew install webstorm` |
+| Sketch | `brew install sketch` |
+| Libre Office | `brew install libreoffice` |
+| Microsoft Office | `brew install microsoft-office` |
+| TextExpander | `brew install textexpander` |
+| hex | `brew install hex` |
+| Araxis Merge | `brew install araxis-merge` |
+| Sublime | `brew install sublime-text` |
+| Mac VIM | `brew install macvim` |
+| Aquamacs | `brew install aquamacs` |
+
+
+apm install sync-settings
