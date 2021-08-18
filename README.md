@@ -16,9 +16,9 @@ Everything you or I need to know about setting up a Mac
 
 ## General Summary
 
-* installations.md: Goodies to install, and the commands to do it
-* transfer.md: How to transfer to an old computer to a new
-* webdev.md: Typical things needed for doing web development
+* [installations.md](/installations.md): Goodies to install, and the commands to do it
+* [transfer.md](/transfer.md): How to transfer to an old computer to a new
+* [webdev.md](/webdev.md): Typical things needed for doing web development
 * [node.md](/node.md): Node installation via `nvm`
 * [ruby.md](/ruby.md): Ruby installation via `rvm`
 * [zsh.md](/zsh.md): ZSH install goodness
