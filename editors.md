@@ -1,7 +1,7 @@
 
 | Tool | Command | Follow up |
 | - | - | - |
-| VS Code | `brew install visual-studio-code` | |
+| [VS Code](https://code.visualstudio.com/) | `brew install visual-studio-code` | |
 | [PyCharm, Community Edition](https://www.jetbrains.com/pycharm/) | `brew install pycharm-ce` | |
 | [IntelliJ IDEA, Community Edition](https://www.jetbrains.com/idea/) | `brew install intellij-idea-ce` | |
 | [Atom](https://atom.io/) | `brew install atom` | `apm install sync-settings` |
