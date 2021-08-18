@@ -1,4 +1,4 @@
-# settings
+# General MacOS Development Environment settings and other goodies
 
 Everything you or I need to know about setting up a Mac
 
@@ -11,6 +11,7 @@ Everything you or I need to know about setting up a Mac
 4. Install zsh
    - [zsh.md](/zsh.md)
 6. Install nvm/node
+   - [node.md](/node.md)
 
 
 ## General Summary
@@ -19,6 +20,6 @@ Everything you or I need to know about setting up a Mac
 * transfer.md: How to transfer to an old computer to a new
 * webdev.md: Typical things needed for doing web development
 * [node.md](/node.md): Node installation via `nvm`
-* ruby.md: Ruby installation via `rvm`
-* zsh.md: ZSH install goodness
+* [ruby.md](/ruby.md): Ruby installation via `rvm`
+* [zsh.md](/zsh.md): ZSH install goodness
 
