@@ -3,6 +3,7 @@
 | - | - | - |
 | VS Code | `brew install visual-studio-code` | |
 | PyCharm, Community Edition | `brew install pycharm-ce` | |
+| IntelliJ IDEA, Community Edition | `brew install intellij-idea-ce` | |
 | Atom | `brew install atom` | `apm install sync-settings` |
 | PHP Storm | `brew install phpstorm` | |
 | Web Storm | `brew install webstorm` | |
