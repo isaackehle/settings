@@ -16,8 +16,6 @@ Everything you or I need to know about setting up a Mac
 1. Install python3
    - `brew install python@3`
 
-[sops](https://github.com/mozilla/sops)
-[launch darkly](https://launchdarkly.com)
 
 
 
