@@ -13,6 +13,11 @@ Everything you or I need to know about setting up a Mac
 6. Install nvm/node
    - [node.md](/node.md)
 
+1. Install python3
+   - `brew install python@3`
+
+[sops](https://github.com/mozilla/sops)
+
 
 ## General Summary
 
