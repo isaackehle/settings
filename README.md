@@ -5,8 +5,10 @@ Everything you or I need to know about setting up a Mac
 ## Order of Operations
 
 1. Install [Microsoft Edge Beta](https://www.microsoftedgeinsider.com/en-us/download)
-1. Open a terminal, and install [brew.sh](https://brew.sh/)
-
+2. Open a terminal, and install [brew.sh](https://brew.sh/)
+3. Install [iterm2](https://iterm2.com/)
+  a. 
+4. Install nvm/node
 
 
 ## General Summary
