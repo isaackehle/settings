@@ -17,6 +17,8 @@ Everything you or I need to know about setting up a Mac
    - `brew install python@3`
 
 [sops](https://github.com/mozilla/sops)
+[launch darkly](https://launchdarkly.com)
+
 
 
 ## General Summary
