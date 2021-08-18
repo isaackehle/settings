@@ -14,7 +14,7 @@ n
   npm ls -g --depth 0
   ```
 
-* Angular 2 
+* Angular 2+
   ```
   npm install -g angular-cli@latest
   npm install -g typescript@beta
@@ -25,6 +25,11 @@ n
   npm install -g babel-cli csv-parse fs grunt-cli gulp-cli karma-cli moment pug-cli
   
   ```
+
+* Goodness
+  * [sops](https://github.com/mozilla/sops)
+  * [launch darkly](https://launchdarkly.com)
+
 
 
 * Common Global Packages
