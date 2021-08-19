@@ -31,6 +31,7 @@ n
   * [launch darkly](https://launchdarkly.com)
   * [sdkman.io](https://sdkman.io/) 
   * [gradle](https://gradle.org/) `brew install gradle`
+  * [aws cli]() `brew install awscli`
 
 
 
