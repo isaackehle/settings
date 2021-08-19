@@ -27,8 +27,10 @@ n
   ```
 
 * Goodness
-  * [sops](https://github.com/mozilla/sops)
+  * [sops](https://github.com/mozilla/sops) `brew install sops`
   * [launch darkly](https://launchdarkly.com)
+  * [sdkman.io](https://sdkman.io/) 
+  * [gradle](https://gradle.org/) `brew install gradle`
 
 
 
