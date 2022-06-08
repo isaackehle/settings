@@ -7,7 +7,7 @@ Everything you or I need to know about setting up a Mac
 1. Install [Microsoft Edge Beta](https://www.microsoftedgeinsider.com/en-us/download)
 2. Open a terminal, and install [brew.sh](https://brew.sh/)
 3. Install [iterm2](https://iterm2.com/)
-   - `brew install iterm2`
+   - [iterm.md](/iterm.md)
 4. Install zsh
    - [zsh.md](/zsh.md)
 6. Install nvm/node
