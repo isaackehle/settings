@@ -13,7 +13,7 @@ Plugins:
 
 ```bash
 plugins=(git)
-plugins=(git bundler osx rake ruby)
+plugins=(git bundler macos rake ruby)
 ```
 
 
