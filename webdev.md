@@ -1,13 +1,23 @@
 
-# References
-* https://github.com/creationix/nvm
-* http://stackoverflow.com/questions/28017374/what-is-the-suggested-way-to-install-brew-node-js-io-js-nvm-npm-on-os-x
-* http://stackoverflow.com/questions/11177954/how-do-i-completely-uninstall-node-js-and-reinstall-from-beginning-mac-os-x
-n
-* http://marcgrabanski.com/setting-up-mac-osx-web-development/
+# Development Tools
+
 
 
 ## Installations
+
+* Tools
+
+ | Package | Commands | 
+ | - | - |
+ | [sops](https://github.com/mozilla/sops) | `brew install sops` |
+ | [launch darkly](https://launchdarkly.com) |  |
+ | [sdkman.io]([https://launchdarkly.com](https://sdkman.io) |  |
+ | [gradle](https://gradle.org/)  |  `brew install gradle` |
+ | [aws cli](https://aws.amazon.com/cli)  |  `brew install awscli` |
+ | [gh](https://github.com/)  |  `brew install gh` |
+ | [volta](https://[volta](https://volta.sh/)/)  |  `` |
+ 
+
 
 * List all global packages installed
   ```
@@ -26,12 +36,6 @@ n
   
   ```
 
-* Goodness
-  * [sops](https://github.com/mozilla/sops) `brew install sops`
-  * [launch darkly](https://launchdarkly.com)
-  * [sdkman.io](https://sdkman.io/) 
-  * [gradle](https://gradle.org/) `brew install gradle`
-  * [aws cli]() `brew install awscli`
 
 
 
@@ -50,3 +54,12 @@ n
 
 * Nativescript
   * https://docs.nativescript.org/start/ns-setup-os-x
+
+
+## References
+
+* https://github.com/creationix/nvm
+* http://stackoverflow.com/questions/28017374/what-is-the-suggested-way-to-install-brew-node-js-io-js-nvm-npm-on-os-x
+* http://stackoverflow.com/questions/11177954/how-do-i-completely-uninstall-node-js-and-reinstall-from-beginning-mac-os-x
+n
+* http://marcgrabanski.com/setting-up-mac-osx-web-development/
