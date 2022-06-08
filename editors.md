@@ -1,20 +1,21 @@
-* Editors, merge tools
-  ```bash
-  vscode
-  
-  brew cask install --force visual-studio-code
-  brew cask install --force sketch
-  brew cask install --force libreoffice
-  brew cask install --force microsoft-office
-  ~brew cask install --force phpstorm textexpander textwrangler webstorm~
-  brew cask install --force hex
-  brew cask install --force araxis-merge
-  brew cask install --force sublime-text
-  brew cask install --force macvim
-  brew cask install --force aquamacs
-  brew install doxygen
-  ```
-  
- brew cask install atom
- 
- apm install sync-settings
+
+| Tool | Command | Follow up |
+| - | - | - |
+| [VS Code](https://code.visualstudio.com/) | `brew install visual-studio-code` | |
+| [PyCharm, Community Edition](https://www.jetbrains.com/pycharm/) | `brew install pycharm-ce` | |
+| [IntelliJ IDEA, Community Edition](https://www.jetbrains.com/idea/) | `brew install intellij-idea-ce` | |
+| [Atom](https://atom.io/) | `brew install atom` | `apm install sync-settings` |
+| [Sublime](https://www.sublimetext.com/) | `brew install sublime-text` | |
+| [Mac VIM](https://macvim-dev.github.io/macvim/) | `brew install macvim` | |
+| [PHP Storm](https://www.jetbrains.com/phpstorm/) | `brew install phpstorm` | |
+| [Web Storm](https://www.jetbrains.com/webstorm/) | `brew install webstorm` | |
+| Sketch | `brew install sketch` | |
+| Libre Office | `brew install libreoffice` | |
+| Microsoft Office | `brew install microsoft-office` | |
+| TextExpander | `brew install textexpander` | |
+| hex | `brew install hex` | |
+| Araxis Merge | `brew install araxis-merge` | |
+| Aquamacs | `brew install aquamacs` | |
+
+
+

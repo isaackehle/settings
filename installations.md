@@ -32,8 +32,13 @@
 
 ## Fonts
 ```bash
-brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto-mono-for-powerline font-roboto-slab
+brew install font-roboto font-roboto-condensed font-roboto-mono font-roboto-mono-for-powerline font-roboto-slab
+# brew install font-noto-sans-hebrew
+# brew install font-open-sans-hebrew
+# brew install font-open-sans-hebrew-condensed
 ``` 
+
+
 
 ## Programs
 * [iterm](./iterm.md)
@@ -55,13 +60,6 @@ brew cask install font-roboto font-roboto-condensed font-roboto-mono font-roboto
   ```bash
   brew install unrar
   brew cask install the-unarchiver
-  ```
-
-* Fonts
-  ```bash
-  brew cask install --force font-noto-sans-hebrew
-  brew cask install --force font-open-sans-hebrew
-  brew cask install --force font-open-sans-hebrew-condensed
   ```
 
 * Messaging/Conferencing Apps
