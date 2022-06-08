@@ -15,10 +15,9 @@
  | [gradle](https://gradle.org/)  |  `brew install gradle` |
  | [aws cli](https://aws.amazon.com/cli)  |  `brew install awscli` |
  | [gh](https://github.com/)  |  `brew install gh` |
- | [volta](https://[volta](https://volta.sh/)/)  |  `` |
+ | [volta](https://[volta](https://volta.sh/)/)  |  `curl https://get.volta.sh | bash`, `volta install node` |
  
-
-
+ 
 * List all global packages installed
   ```
   npm ls -g --depth 0
