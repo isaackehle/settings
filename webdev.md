@@ -12,10 +12,10 @@
  | [sops](https://github.com/mozilla/sops) | `brew install sops` |
  | [launch darkly](https://launchdarkly.com) |  |
  | [sdkman.io](https://sdkman.io) |  |
- | [gradle](https://gradle.org/)  |  `brew install gradle` |
+ | [gradle](https://gradle.org)  |  `brew install gradle` |
  | [aws cli](https://aws.amazon.com/cli)  |  `brew install awscli` |
- | [gh](https://github.com/)  |  `brew install gh` |
- | [volta](https://[volta](https://volta.sh/)/)  |  `curl https://get.volta.sh | bash`, `volta install node` |
+ | [gh](https://github.com)  |  `brew install gh` |
+ | [volta](https://volta.sh)  |  `curl https://get.volta.sh \| bash`, `volta install node` |
  
  
 * List all global packages installed
