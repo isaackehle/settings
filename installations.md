@@ -1,228 +1,254 @@
+# Reference Articles
 
+- http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities
+- http://marcgrabanski.com/setting-up-mac-osx-web-development/
+- https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/
+- https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers
+- https://miteshshah.github.io/mac/install-network-tools-on-mac-os-x/
 
-## Reference Articles
+- generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)
 
-* http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities
-* http://marcgrabanski.com/setting-up-mac-osx-web-development/
-* https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/
-* https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers
-* https://miteshshah.github.io/mac/install-network-tools-on-mac-os-x/
-
-# New Computer Installation
-
-* [brew](./brew.md)
-* [zsh, with oh-my-zsh](./zsh.md)
-
-* generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)  
   ```bash
   brew install grc
   ```
 
-* Install wget
+- Install wget
+
   ```bash
   brew install wget
   ```
 
+- Updates openssh
 
-* Updates openssh
   ```bash
   brew install homebrew/dupes/openssh
   ```
 
-
-## Fonts
-```bash
-brew install font-roboto font-roboto-condensed font-roboto-mono font-roboto-mono-for-powerline font-roboto-slab
-# brew install font-noto-sans-hebrew
-# brew install font-open-sans-hebrew
-# brew install font-open-sans-hebrew-condensed
-``` 
-
-
-
 ## Programs
-* [iterm](./iterm.md)
-* [browsers](./browsers.md)
-* [editors](./editors.md)
-* [internet utils](./internet.md)
 
+- [iterm](./iterm.md)
+- [browsers](./browsers.md)
+- [editors](./editors.md)
+- [internet utils](./internet.md)
 
-* Music
+- Music
+
   ```bash
-  brew cask install --force amazon-music
-  brew cask install --force spotify
-  brew cask install --force vlc
-  brew cask install --force pandora
-  brew cask install --force rdio
+  brew install amazon-music
+  brew install spotify
+  brew install vlc
+  brew install pandora
+  brew install rdio
   ```
 
-* Compression
+- Compression
+
   ```bash
   brew install unrar
-  brew cask install the-unarchiver
+  brew install the-unarchiver
   ```
 
-* Messaging/Conferencing Apps
+- Messaging/Conferencing Apps
+
   ```bash
-  brew cask install telegram
-  brew cask install telegram-desktop
-  brew cask install vsee
-  brew cask install gitter 
-  brew cask install skype
-  brew cask install slack
-  brew cask install messenger-for-desktop
-  brew cask install adium
+  brew install telegram
+  brew install telegram-desktop
+  brew install vsee
+  brew install gitter
+  brew install skype
+  brew install slack
+  brew install messenger-for-desktop
+  brew install adium
   ```
 
-* Adobe
+- Adobe
 
   ```bash
-  brew cask install --force adobe-air adobe-reader
+  brew install adobe-air adobe-reader
   ```
 
-* Cloud Sync
+- Cloud Sync
 
   ```bash
-  brew cask install --force dropbox
-  brew cask install --force insync
+  brew install dropbox
+  brew install insync
   ```
 
-* Passwords
+- Passwords
 
   ```bash
-  brew cask install --force keepassx
+  brew install keepassx
   ```
 
-* Tweaks, Drivers
+- Tweaks, Drivers
+
   ```bash
-  # brew cask install --force paragon-ntfs -- did not like install via brew
+  # brew install paragon-ntfs -- did not like install via brew
   ```
 
-* Calendars
+- Calendars
+
   ```bash
-  brew cask install --force itsycal
-  brew cask install --force anylist
+  brew install itsycal
+  brew install anylist
   ```
 
-* Uninstaller Programs
+- Uninstaller Programs
+
   ```bash
-  brew cask install --force appcleaner
+  brew install appcleaner
   ```
 
-* Other Sweet Utils
+- Other Sweet Utils
+
   ```bash
-  brew cask install --force path-finder
-  brew cask install --force xquartz
-  brew cask install --force burn ccleaner
-  brew cask install --force ejector
-  brew cask install --force mounty
-  brew cask install --force flux
-  brew cask install --force controlplane
-  brew cask install --force disk-inventory-x
-  brew cask install --force airparrot
-  brew cask install --force alfred
-  brew cask install --force controlplane
-  brew cask install --force macid
-  brew cask install --force java
-  brew cask install --force spectacle
+  brew install path-finder
+  brew install xquartz
+  brew install burn ccleaner
+  brew install ejector
+  brew install mounty
+  brew install flux
+  brew install controlplane
+  brew install disk-inventory-x
+  brew install airparrot
+  brew install alfred
+  brew install controlplane
+  brew install macid
+  brew install java
+  brew install spectacle
   brew install tree
   ```
 
-* SDKs
+- SDKs
+
   ```bash
-  brew cask install --force android-studio
+  brew install android-studio
   brew install android-sdk
   ```
 
-* Torrent, Downloaders
+- Torrent, Downloaders
+
   ```bash
-  brew cask install --force deluge
-  brew cask install --force folx
+  brew install deluge
+  brew install folx
   ```
 
-* VNC
+- VNC
+
   ```bash
-  brew cask install --force vnc-viewer
+  brew install vnc-viewer
   ```
 
-* VPN
+- VPN
+
   ```bash
-  brew cask install --force tunnelblick
+  brew install tunnelblick
   ```
 
-* Drawing, Multimedia, Graphics
+- Drawing, Multimedia, Graphics
+
   ```bash
-  brew cask install --force gimp
-  brew cask install --force colorpicker colorpicker-hex colorsnapper
-  brew cask install --force ffmpegx
+  brew install gimp
+  brew install colorpicker colorpicker-hex colorsnapper
+  brew install ffmpegx
   # brew install ffmpeg
   brew install ffmpeg --with-libvpx
   brew install imagemagick --with-webp
-  brew cask install --force inkscape
-  brew cask install --force handbrake handbrakebatch handbrakecli
-  brew cask install --force omnigraffle
-  brew cask install --force id3-editor
-  brew cask install --force mp3tag
-  brew cask install --force kodi
-  brew cask install --force sling
+  brew install inkscape
+  brew install handbrake handbrakebatch handbrakecli
+  brew install omnigraffle
+  brew install id3-editor
+  brew install mp3tag
+  brew install kodi
+  brew install sling
   ```
 
-* [Databases](./databases.md)
+- [Databases](./databases.md)
 
-* VMs
+- VMs
+
   ```bash
-  brew cask install --force virtualbox
-  brew cask install --force vmware-fusion
+  brew install virtualbox
+  brew install vmware-fusion
   brew install docker-machine
   ```
 
+- Version Control
 
-* Version Control
   ```bash
   brew install git
-  brew cask install --force github-desktop
+  brew install github-desktop
   ```
 
-* Node
+- Node
   ```bash
   brew install node
   ```
 
 # Automation
-  ```bash
-  brew install ansible
-  brew install autossh
-  ```
 
+```bash
+brew install ansible
+brew install autossh
+```
 
-* Encryption, MD5 
+- Encryption, MD5
   ```bash
   brew install mcrypt
   brew install md5sha1sum
   brew install mhash
   ```
 
-
 ## Other programs that do not have casks
-* cisco any connect
-* [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
-* [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
-* [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-* [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
-* [Wallcat](https://beta.wall.cat/)
-* iFax
-* Paragon NTFS 14
 
-* Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
+- cisco any connect
+- [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
+- [Flash Player](http://get.adobe.com/flashplayer/otherversions/)
+- [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+- [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
+- [Wallcat](https://beta.wall.cat/)
+- iFax
+- Paragon NTFS 14
+
+- Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
 ```bash
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
-
 ### Uncategorized brew apps -- things I haven't taken the time to sort
 
 ```bash
+
+brew install insync
+
+brew install tweetdeck
+brew install kiwi
+brew install vnc-viewer
+
+brew install mountain
+brew install skype
+brew install atom
+brew install bettertouchtool
+
+brew install studio-3t
+brew install slack
+brew install telegram-desktop
+
+brew install anylist
+brew install ccleaner
+brew install burn
+
+
+brew install imagemagick
+brew install graphviz
+
+brew install visual-studio-code
+
+
+kiwi
+
+
 
 brew install apg
 brew install apr
@@ -240,7 +266,7 @@ brew install ffind
 brew install fftw
 brew install figlet
 brew install findutils
-brew install fontconfig
+
 brew install freetype
 brew install gdbm
 brew install gdk-pixbuf
@@ -289,7 +315,6 @@ brew install mtr
 brew install nettle
 brew install nmap
 brew install node
-brew install nvm
 brew install oniguruma
 brew install openjpeg
 brew install openssh
@@ -349,9 +374,7 @@ brew install tree
 brew install zopfli
 ```
 
-
 Other Appstore Apps
-
 
 ```bash
 Wunderlist
@@ -370,7 +393,5 @@ lastpass
 Other ones I found helpful one day..
 
 ```
-brew cask install google-drive-file-stream google-hangouts google-backup-and-sync google-earth-pro
+brew install google-drive-file-stream google-hangouts google-backup-and-sync google-earth-pro
 ```
-
-
