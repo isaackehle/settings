@@ -1,6 +1,13 @@
 # GIT
 
-## username/password:
+## CLI
+
+```bash
+brew install gh
+gh auth login
+```
+
+## Set username and email in .gitconfig
 
 ```bash
 git config --global user.name "Your Name"
