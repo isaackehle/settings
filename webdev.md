@@ -11,7 +11,7 @@
  | - | - |
  | [sops](https://github.com/mozilla/sops) | `brew install sops` |
  | [launch darkly](https://launchdarkly.com) |  |
- | [sdkman.io](https://sdkman.io) |  `curl -s "https://get.sdkman.io" \| bash` |
+ | [sdkman.io](https://sdkman.io) |  `curl -s "https://get.sdkman.io" \| bash`, `sdk install java` |
  | [gradle](https://gradle.org)  |  `brew install gradle` |
  | [aws cli](https://aws.amazon.com/cli)  |  `brew install awscli` |
  | [gh](https://github.com)  |  `brew install gh` |
