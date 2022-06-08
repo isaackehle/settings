@@ -1,8 +1,10 @@
-* Browsers
-  ```bash
-  brew cask install --force filezilla
-  brew cask install --force firefox
-  brew cask install --force google-chrome
-  brew cask install --force waterfox
-  brew cask install --force thunderbird
-  ```
+# Browsers
+
+```bash
+brew install filezilla
+brew install firefox
+brew install google-chrome
+brew install microsoft-edge-beta
+brew install waterfox
+brew install thunderbird
+```

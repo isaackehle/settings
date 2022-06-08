@@ -1,30 +1,31 @@
 Screensaver:
 
-* Amphetamine
-  * From Mac App Store
+- Amphetamine
+  - From Mac App Store
 
 Middle Mouse Buttons:
 
-* BetterTouchTool
+- BetterTouchTool
 
 [Website](https://folivora.ai/downloads/)
 
 ```
-brew cask install bettertouchtool
+brew install bettertouchtool
 ```
 
-* Steermouse
+- Steermouse
 
 ```
-brew cask install --force steermouse
+brew install --force steermouse
 ```
 
 For issues with scrolling while trying to middle click:
+
 ```
   Wheel Mode: Ratchet, uncheck smooth scroll
 ```
 
-* Install more recent versions of some OS X tools
+- Install more recent versions of some OS X tools
   ```bash
   brew install vim --override-system-vi
   ```

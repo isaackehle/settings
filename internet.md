@@ -1,6 +1,7 @@
-* Internet Utils
+- Internet Utils
+
   ```bash
-  brew cask install --force wireshark
+  brew install --force wireshark
 
   brew install nmap
   brew install mtr
