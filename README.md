@@ -8,13 +8,14 @@ Everything you or I need to know about setting up a Mac
 2. Open a terminal, and install [brew.sh](https://brew.sh/)
 3. Install [iterm2](https://iterm2.com/)
    - [iterm.md](/iterm.md)
-4. Install zsh
+3. Install python3
+   - `brew install python3`
+5. Install zsh
    - [zsh.md](/zsh.md)
-5. Web Dev Tools
+6. Web Dev Tools
   - [webdev.md](/webdev.md): Typical things needed for doing web development
   - [node.md](/node.md): Node installation via `nvm`
-1. Install python3
-   - `brew install python@3`
+7. Install python3
 
 
 
