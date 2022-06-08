@@ -10,6 +10,8 @@ Everything you or I need to know about setting up a Mac
    - [iterm.md](/iterm.md)
 3. Install python3
    - `brew install python3`
+4. Install docker
+   - [docker.md](/docker.md)
 5. Install zsh
    - [zsh.md](/zsh.md)
 6. Web Dev Tools
