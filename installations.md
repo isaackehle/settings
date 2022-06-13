@@ -1,10 +1,11 @@
-# Reference Articles
+# Installations
+
+## Reference Articles
 
 - http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities
 - http://marcgrabanski.com/setting-up-mac-osx-web-development/
 - https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/
 - https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers
-- https://miteshshah.github.io/mac/install-network-tools-on-mac-os-x/
 
 - generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)
 
@@ -31,47 +32,11 @@
 - [editors](./editors.md)
 - [internet utils](./internet.md)
 
-- Music
-
-  ```bash
-  brew install amazon-music
-  brew install spotify
-  brew install vlc
-  brew install pandora
-  brew install rdio
-  ```
-
 - Compression
 
   ```bash
   brew install unrar
   brew install the-unarchiver
-  ```
-
-- Messaging/Conferencing Apps
-
-  ```bash
-  brew install telegram
-  brew install telegram-desktop
-  brew install vsee
-  brew install gitter
-  brew install skype
-  brew install slack
-  brew install messenger-for-desktop
-  brew install adium
-  ```
-
-- Adobe
-
-  ```bash
-  brew install adobe-air adobe-reader
-  ```
-
-- Cloud Sync
-
-  ```bash
-  brew install dropbox
-  brew install insync
   ```
 
 - Passwords
@@ -165,14 +130,6 @@
 
 - [Databases](./databases.md)
 
-- VMs
-
-  ```bash
-  brew install virtualbox
-  brew install vmware-fusion
-  brew install docker-machine
-  ```
-
 - Version Control
 
   ```bash
@@ -180,26 +137,35 @@
   brew install github-desktop
   ```
 
-- Node
-  ```bash
-  brew install node
-  ```
-
-# Automation
+## Automation
 
 ```bash
 brew install ansible
 brew install autossh
 ```
 
-- Encryption, MD5
-  ```bash
-  brew install mcrypt
-  brew install md5sha1sum
-  brew install mhash
-  ```
+## Encryption, MD5
 
-## Other programs that do not have casks
+```bash
+brew install mcrypt
+brew install md5sha1sum
+brew install mhash
+```
+
+## image burning software
+
+```bash
+brew install burn
+brew install imagemagick
+```
+
+## auto
+
+```bash
+brew install faac
+```
+
+## Other programs that are not available with homebrew
 
 - cisco any connect
 - [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
@@ -208,6 +174,7 @@ brew install autossh
 - [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
 - [Wallcat](https://beta.wall.cat/)
 - iFax
+- stamps connect
 - Paragon NTFS 14
 
 - Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
@@ -220,35 +187,16 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 
 ```bash
 
-brew install insync
-
-brew install tweetdeck
-brew install kiwi
 brew install vnc-viewer
-
 brew install mountain
-brew install skype
-brew install atom
 brew install bettertouchtool
 
 brew install studio-3t
-brew install slack
-brew install telegram-desktop
-
 brew install anylist
 brew install ccleaner
-brew install burn
-
-
-brew install imagemagick
 brew install graphviz
 
 brew install visual-studio-code
-
-
-kiwi
-
-
 
 brew install apg
 brew install apr
@@ -261,19 +209,17 @@ brew install d-bus
 brew install dbus
 brew install dialog
 brew install expect
-brew install faac
 brew install ffind
 brew install fftw
 brew install figlet
 brew install findutils
-
 brew install freetype
 brew install gdbm
 brew install gdk-pixbuf
 brew install geoip
 brew install gettext
 brew install giflib
-brew install git
+
 brew install glib
 brew install gmp
 brew install gnu-sed
@@ -356,9 +302,6 @@ brew install vips
 brew install w3m
 brew install watch
 brew install watchman
-brew install webp
-brew install x264
-brew install xvid
 brew install xz
 brew install yasm
 brew install zlib
@@ -394,4 +337,8 @@ Other ones I found helpful one day..
 
 ```
 brew install google-drive-file-stream google-hangouts google-backup-and-sync google-earth-pro
+```
+
+```
+
 ```
