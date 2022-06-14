@@ -2,10 +2,10 @@
 
 ## Reference Articles
 
-- http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities
-- http://marcgrabanski.com/setting-up-mac-osx-web-development/
-- https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/
-- https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers
+- <http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities>
+- <http://marcgrabanski.com/setting-up-mac-osx-web-development/>
+- <https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/>
+- <https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers>
 
 - generic [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)
 
@@ -335,10 +335,6 @@ lastpass
 
 Other ones I found helpful one day..
 
-```
-brew install google-drive-file-stream google-hangouts google-backup-and-sync google-earth-pro
-```
-
-```
-
+```bash
+brew install google-drive google-earth-pro
 ```
