@@ -1,8 +1,20 @@
-# iterm2
+# Terminals
 
 ```bash
 brew install iterm2
 ```
+
+Starship is a customizable UI for iterm. This is a major departure from the standard terminal experience, so make sure to review the website before installing.
+
+```bash
+brew install starship
+```
+
+After make sure your profile contains the following:
+
+````bash
+eval "$(starship init zsh)"```
+````
 
 - Themes are [here](http://iterm2colorschemes.com/)
 

@@ -27,7 +27,7 @@
 
 ## Programs
 
-- [iterm](./iterm.md)
+- [terminals](./terminals.md)
 - [browsers](./browsers.md)
 - [editors](./editors.md)
 - [internet utils](./internet.md)
