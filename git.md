@@ -7,6 +7,12 @@ brew install gh
 gh auth login
 ```
 
+Sourcetree is a convenient (powerful) GUI tool for managing your (local and remote) Git repos
+
+```bash
+brew install sourcetree
+```
+
 ## Set username and email in .gitconfig
 
 ```bash
@@ -14,7 +20,7 @@ git config --global user.name "Your Name"
 git config --global user.email "youremail@yourdomain.com"
 ```
 
-## aliases:
+## aliases for .gitconfig
 
 ```bash
 git config --global --add alias.hist "log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit"

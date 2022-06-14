@@ -10,4 +10,6 @@ brew install font-roboto font-roboto-mono font-roboto-mono-for-powerline font-ro
 # brew install font-noto-sans-hebrew
 # brew install font-open-sans-hebrew
 # brew install font-open-sans-hebrew-condensed
+
+brew install font-fira-code
 ```
