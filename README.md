@@ -15,6 +15,14 @@ Everything you or I need to know about setting up a Mac
    - [aws.md](/aws.md): AWS Configurations
    - [webdev.md](/webdev.md): Typical things needed for doing web development
 
+## MacOS Computer name
+
+```bash
+sudo scutil --set HostName MyComputerName
+sudo scutil --set ComputerName MyComputerName
+sudo scutil --set LocalHostName MyComputerName
+```
+
 ## General Summary
 
 - [installations.md](/installations.md): Goodies to install, and the commands to do it
