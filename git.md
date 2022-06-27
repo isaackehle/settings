@@ -28,7 +28,7 @@ git config --global --add alias.hist "log --graph --pretty=format:'%C(magenta)%h
 
 From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/) and [here](https://victorzhou.com/blog/git-aliases/)
 
-```
+```bash
 [alias]
         hist = log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit
         s = status
@@ -50,6 +50,12 @@ From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/) and [he
         cane = commit --amend --no-edit
         lo = log --oneline -n 10
         pr = pull --rebase
+```
+
+## For search and replace
+
+```bash
+:s/^pick/squash/gc
 ```
 
 ## Reference Articles
