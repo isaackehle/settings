@@ -51,6 +51,12 @@
   # brew install paragon-ntfs -- did not like install via brew
   ```
 
+- Passwords
+
+```bash
+brew install 1password 1password-cli
+```
+
 - Calendars
 
   ```bash
