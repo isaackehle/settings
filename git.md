@@ -26,7 +26,8 @@ git config --global user.email "youremail@yourdomain.com"
 git config --global --add alias.hist "log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit"
 ```
 
-From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/) and [here](https://victorzhou.com/blog/git-aliases/)
+From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/)
+and [here](https://victorzhou.com/blog/git-aliases/)
 
 ```bash
 [alias]
@@ -55,7 +56,7 @@ From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/) and [he
 ## For search and replace
 
 ```bash
-:s/^pick/squash/gc
+%s/^pick/squash/gc
 ```
 
 ## Reference Articles
