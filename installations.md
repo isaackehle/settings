@@ -90,20 +90,6 @@ brew install 1password 1password-cli
   brew install tree
   ```
 
-- SDKs
-
-  ```bash
-  brew install android-studio
-  brew install android-sdk
-  ```
-
-- Torrent, Downloaders
-
-  ```bash
-  brew install deluge
-  brew install folx
-  ```
-
 - VNC
 
   ```bash
