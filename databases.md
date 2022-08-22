@@ -1,6 +1,44 @@
 # Databases
 
-## Navicat
+## Database types
+
+### MongoDB
+
+```bash
+brew tap mongodb/brew
+brew install mongodb-community
+```
+
+```bash
+brew install mongodb
+```
+
+- To have launchd start mongodb at login:
+
+```bash
+ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
+```
+
+- Then to load mongodb now:
+
+```bash
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+```
+
+- Or, for mongodb with a replica set:
+
+### Postgresql
+
+From [here](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)
+
+```bash
+brew install postgres
+brew services start postgresql
+```
+
+## GUIs
+
+@## Navicat
 
 ```bash
  brew install --force navicat-premium
@@ -34,34 +72,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 </plist>' > ~/Library/LaunchAgents/setenv.TDSVER.plist
 ```
 
-## Studio-3T MongoChef
+### Studio-3T MongoChef
 
 ```bash
-brew install --force studio-3t
+brew install --cask studio-3t
 ```
 
-## MongoDB
+### Robomongo
 
 ```bash
-brew install mongodb
+brew install --cask robomongo
 ```
 
-- To have launchd start mongodb at login:
+### dBeaver
 
 ```bash
-ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
-```
-
-- Then to load mongodb now:
-
-```bash
-launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
-```
-
-- Or, for mongodb with a replica set:
-
-## Robomongo
-
-```bash
-brew install --force robomongo
+brew install --cask dbeaver-community
 ```
