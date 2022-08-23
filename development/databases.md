@@ -36,6 +36,12 @@ brew install postgres
 brew services start postgresql
 ```
 
+```note
+PostgreSQL: Documentation: 13: 9.16. JSON Functions and Operators
+The operator -> returns JSON object field as JSON.
+The operator ->> returns JSON object field as text.
+```
+
 ## GUIs
 
 @## Navicat
@@ -89,3 +95,5 @@ brew install --cask robomongo
 ```bash
 brew install --cask dbeaver-community
 ```
+
+### Cassandra
