@@ -22,3 +22,8 @@ Install a version and set it to global
 pyenv install 3.10.5
 pyenv global 3.10.5
 ```
+
+```bash
+brew install py2cairo
+brew install pygobject3
+```

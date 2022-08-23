@@ -7,6 +7,10 @@ brew install gh
 gh auth login
 ```
 
+```bash
+brew install github-desktop
+```
+
 Sourcetree is a convenient (powerful) GUI tool for managing your (local and remote) Git repos
 
 ```bash

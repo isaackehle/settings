@@ -17,3 +17,6 @@
 | hex                                                                 | `brew install hex`                |                             |
 | Araxis Merge                                                        | `brew install araxis-merge`       |                             |
 | Aquamacs                                                            | `brew install aquamacs`           |                             |
+
+iHex - Hex Editor
+brew install visual-studio-code

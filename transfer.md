@@ -24,7 +24,7 @@
 - Copy Settings
 
   1. Create zip file
- 
+
      ```bash
      cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
      zip -r ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip .

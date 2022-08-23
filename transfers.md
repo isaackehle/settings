@@ -12,3 +12,9 @@ brew install filezilla
 brew install deluge
 brew install folx
 ```
+
+## wget
+
+```bash
+brew install wget
+```

@@ -8,13 +8,17 @@
 - [terraform](./terraform.md)
 - [volta](./volta.md)
 
-## Other Installations
+## Just
 
-| Package                                   | Commands                                                      |
-| ----------------------------------------- | ------------------------------------------------------------- |
-| [sdkman.io](https://sdkman.io)            | `curl -s "https://get.sdkman.io" \| bash`, `sdk install java` |
-| [just](https://just.io)                   | `brew install just`                                           |
-| [launch darkly](https://launchdarkly.com) |                                                               |
+[just](https://just.io)
+
+```bash
+brew install just
+```
+
+## Feature Flags
+
+[launch darkly](https://launchdarkly.com)
 
 ## List all NPM global packages installed
 
