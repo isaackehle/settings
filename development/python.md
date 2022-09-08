@@ -1,5 +1,7 @@
 # Python and related tooling
 
+https://opensource.com/article/19/5/python-3-default-mac
+
 ```bash
 brew install pyenv
 ```
@@ -19,13 +21,22 @@ pyenv install --list
 Install a version and set it to global
 
 ```bash
-pyenv install 3.10.5
-pyenv global 3.10.5
+pyenv install 3.10.6
+pyenv global 3.10.6
+
+echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.zshrc
+
 ```
 
 ```bash
 brew install py2cairo
 brew install pygobject3
+```
+
+```bash
+pip install termcolors
+pip install notebook
+pip install --upgrade pip
 ```
 
 Python
