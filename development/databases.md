@@ -7,33 +7,28 @@
 ```bash
 brew tap mongodb/brew
 brew install mongodb-community
-```
-
-```bash
 brew install mongodb
-```
 
-- To have launchd start mongodb at login:
+# To have launchd start mongodb at login:
 
-```bash
 ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
-```
 
-- Then to load mongodb now:
-
-```bash
+# Then to load mongodb now:
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
 ```
 
-- Or, for mongodb with a replica set:
+- Or, for mongodb with a replica set
 
 ### Postgresql
 
-From [here](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)
+- [How to Install Postgresql on Mac using Homebrew](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)
+- [PSQL Fatal: role `postgres` does not exist](https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist)
 
 ```bash
 brew install postgres
-brew services start postgresql
+brew services start postgresql@14
+
+/usr/local/opt/postgresql/bin/createuser -s postgres
 ```
 
 ```note
@@ -44,10 +39,10 @@ The operator ->> returns JSON object field as text.
 
 ## GUIs
 
-@## Navicat
+### Navicat
 
 ```bash
- brew install --force navicat-premium
+brew install --force navicat-premium
 ```
 
 > Might need to set the TDS for navicat
