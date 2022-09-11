@@ -25,10 +25,10 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
 - [PSQL Fatal: role `postgres` does not exist](https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist)
 
 ```bash
-brew install postgres
+brew install postgresql@14
 brew services start postgresql@14
 
-/usr/local/opt/postgresql/bin/createuser -s postgres
+/usr/local/opt/postgresql@14/bin/createuser -s postgres
 ```
 
 ```note
