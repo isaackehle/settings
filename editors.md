@@ -20,3 +20,18 @@
 
 iHex - Hex Editor
 brew install visual-studio-code
+
+
+For vi:
+
+Add the following to your ~/.vimrc:
+
+```
+filetype plugin indent on
+set term=builtin_ansi
+
+# for iterm2
+# set term=xterm-256color 
+
+syntax on
+```
