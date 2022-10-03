@@ -1,5 +1,7 @@
 # Development Tools
 
+
+
 ## Installations
 
 - [xcode](./xcode.md)
@@ -7,6 +9,7 @@
 - [gradle](./gradle.md)
 - [terraform](./terraform.md)
 - [volta](./volta.md)
+- [loom](https://www.loom.com/) - `brew install loom`
 
 ## Just
 
