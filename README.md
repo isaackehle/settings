@@ -12,8 +12,8 @@ Everything you or I need to know about setting up a Mac
 6. Install docker or other virtual machines from [here](/vm.md)
 7. Dev Tools
 
-   - [aws.md](/aws.md): AWS Configurations
-   - [webdev.md](/webdev.md): Typical things needed for doing web development
+   - [aws.md](./development/aws.md): AWS Configurations
+   - [webdev.md](./development/webdev.md): Typical things needed for doing web development
 
 ## MacOS Computer name
 
