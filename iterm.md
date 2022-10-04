@@ -1,18 +1,18 @@
 # Terminals
 
-```bash
+```shell
 brew install iterm2
 ```
 
 Starship is a customizable UI for iterm. This is a major departure from the standard terminal experience, so make sure to review the website before installing.
 
-```bash
+```shell
 brew install starship
 ```
 
 After make sure your profile contains the following:
 
-````bash
+````shell
 eval "$(starship init zsh)"```
 ````
 
@@ -24,26 +24,26 @@ eval "$(starship init zsh)"```
 
 https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x
 
-```bash
+```shell
 Delete a word
 Keyboard Shortcut: ⌥←Delete
 Send Hex Code - 0x17
 ```
 
-```bash
+```shell
 Delete a line
 Keyboard Shortcut: ⌥↑←Delete
 Send Hex Code - 0x15
 ```
 
-```bash
+```shell
 Jump Left
 Keyboard Shortcut: ⌥←
 Action: Send Escape Sequence
 Esc+: b
 ```
 
-```bash
+```shell
 Jump Right
 Keyboard Shortcut: ⌥→
 Action: Send Escape Sequence

@@ -1,6 +1,6 @@
 # Multimedia, Drawing, Graphics
 
-```bash
+```shell
 brew install gimp
 brew install colorpicker colorpicker-hex colorsnapper
 brew install ffmpegx
@@ -16,7 +16,7 @@ brew install kodi
 brew install sling
 ```
 
-```bash
+```shell
 brew install faac
 ```
 
@@ -24,23 +24,23 @@ brew install faac
 
 [colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)
 
-```bash
+```shell
 brew install grc
 ```
 
 ## other
 
-```bash
+```shell
 brew install openjpeg
 ```
 
-```bash
+```shell
 brew install webp
 brew install x264
 brew install xvid
 ```
 
-```bash
+```shell
 brew install amazon-music
 brew install spotify
 brew install vlc
@@ -48,7 +48,7 @@ brew install pandora
 brew install rdio
 ```
 
-```bash
+```shell
 brew install graphviz
 brew install apg
 brew install gettext

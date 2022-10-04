@@ -1,20 +1,20 @@
-# Transferring Apps
+# File Downloading and Uploading Transferring Apps
 
 ## FTP
 
-```bash
+```shell
 brew install filezilla
 ```
 
 ## Torrent, Downloaders
 
-```bash
+```shell
 brew install deluge
 brew install folx
 ```
 
 ## wget
 
-```bash
+```shell
 brew install wget
 ```

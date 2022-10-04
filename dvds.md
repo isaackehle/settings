@@ -1,6 +1,6 @@
 # image burning software
 
-```bash
+```shell
 brew install burn
 brew install imagemagick
 ```

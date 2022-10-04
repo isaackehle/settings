@@ -1,6 +1,6 @@
 # Chats and social media
 
-```bash
+```shell
 brew install tweetdeck
 brew install skype
 brew install slack
@@ -11,4 +11,8 @@ brew install gitter
 brew install messenger-for-desktop
 brew install adium
 brew install microsoft-teams
+```
+
+```shell
+brew install kiwi-for-gmail
 ```

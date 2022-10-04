@@ -25,14 +25,14 @@
 
   1. Create zip file
 
-     ```bash
+     ```shell
      cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
      zip -r ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip .
      ```
 
   1. Unzip file on new computer
 
-     ```bash
+     ```shell
      cd ~/Library/Application\ Support/
      mv PremiumSoft\ CyberTech PremiumSoft\ CyberTech.bak
      mkdir PremiumSoft\ CyberTech
@@ -49,14 +49,14 @@
   1. Save files to ~/Documents
   1. Link the file(s) to the home folder:
 
-     ```bash
+     ```shell
      ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
      ln -s ~/Documents/sqlnet.ora ~/.sqlnet.ora
      ```
 
   1. Link the file(s) to the OCI network folder:
 
-     ```bash
+     ```shell
      sudo mkdir -p /opt/oracle/instantclient/network/admin/
      sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
      sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
@@ -72,6 +72,6 @@
 
 - Check dns server settings on mac:
 
-```bash
+```shell
 scutil --dns | grep 'nameserver\[[0-9]*\]'
 ```

@@ -1,6 +1,6 @@
 # VPN
 
-```bash
+```shell
 brew install tunnelblick
 ```
 

@@ -5,12 +5,12 @@ will store such info as the database login/password, api keys, etc.
 
 Documentation is [here](https://github.com/mozilla/sops)
 
-```bash
+```shell
 brew install sops
 ```
 
 After make sure your profile contains the following:
 
-```bash
+```shell
 export EDITOR='code -w'
 ```

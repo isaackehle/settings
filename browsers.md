@@ -1,6 +1,6 @@
 # Browsers
 
-```bash
+```shell
 brew install firefox
 brew install google-chrome
 brew install microsoft-edge-beta

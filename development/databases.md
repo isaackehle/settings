@@ -4,7 +4,7 @@
 
 ### MongoDB
 
-```bash
+```shell
 brew tap mongodb/brew
 brew install mongodb-community
 brew install mongodb
@@ -24,7 +24,7 @@ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
 - [How to Install Postgresql on Mac using Homebrew](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)
 - [PSQL Fatal: role `postgres` does not exist](https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist)
 
-```bash
+```shell
 brew install postgresql@14
 brew services start postgresql@14
 
@@ -41,18 +41,18 @@ The operator ->> returns JSON object field as text.
 
 ### Navicat
 
-```bash
+```shell
 brew install --force navicat-premium
 ```
 
 > Might need to set the TDS for navicat
 
-```bash
+```shell
 # Current Session
 launchctl setenv TDSVER 7.0
 ```
 
-```bash
+```shell
 # Permanent
 echo '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -75,19 +75,19 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 
 ### Studio-3T MongoChef
 
-```bash
+```shell
 brew install --cask studio-3t
 ```
 
 ### Robomongo
 
-```bash
+```shell
 brew install --cask robomongo
 ```
 
 ### dBeaver
 
-```bash
+```shell
 brew install --cask dbeaver-community
 ```
 

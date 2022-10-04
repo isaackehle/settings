@@ -1,6 +1,6 @@
 # SSH/TLS
 
-```bash
+```shell
 brew install homebrew/dupes/openssh
 brew install openssh
 brew install openssl

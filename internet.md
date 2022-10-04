@@ -1,6 +1,6 @@
 # Internet Utils
 
-```bash
+```shell
 brew install --force wireshark
 
 brew install nmap
