@@ -3,6 +3,15 @@
 - [Java RE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 - [Silverlight](http://www.microsoft.com/getsilverlight/Get-Started/Install/Default.aspx)
 
+## SDK Manager
+
+[sdkman.io](https://sdkman.io)
+
+```shell
+curl -s "https://get.sdkman.io" | bash
+sdk install java
+```
+
 ## Trainings
 
 [Java 8 Essential Training Online Class | LinkedIn Learning](https://www.linkedin.com/learning/java-8-essential-training)
@@ -19,7 +28,5 @@ Garbage Collection
 - Out of Memory error
 
 Java -Xms256s - initial heap size
-
 Runtime.maxMemory()
-
 Runtime.totalMemory()
