@@ -2,6 +2,6 @@
 
 Documentation is [here](https://www.terraform.io)
 
-```bash
+```shell
 brew install terraform
 ```

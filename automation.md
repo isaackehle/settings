@@ -1,6 +1,6 @@
 # Automation
 
-```bash
+```shell
 brew install ansible
 brew install autossh
 ```

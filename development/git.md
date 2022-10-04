@@ -2,38 +2,38 @@
 
 ## CLI
 
-```bash
+```shell
 brew install gh
 gh auth login
 ```
 
-```bash
+```shell
 brew install github-desktop
 ```
 
 Sourcetree is a convenient (powerful) GUI tool for managing your (local and remote) Git repos
 
-```bash
+```shell
 brew install sourcetree
 ```
 
 ## Set username and email in .gitconfig
 
-```bash
+```shell
 git config --global user.name "Your Name"
 git config --global user.email "youremail@yourdomain.com"
 ```
 
 ## aliases for .gitconfig
 
-```bash
+```shell
 git config --global --add alias.hist "log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit"
 ```
 
 From [here](https://haacked.com/archive/2014/07/28/github-flow-aliases/)
 and [here](https://victorzhou.com/blog/git-aliases/)
 
-```bash
+```shell
 [alias]
         hist = log --graph --pretty=format:'%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) %C(cyan)<%an>%Creset' --abbrev-commit
         s = status
@@ -59,7 +59,7 @@ and [here](https://victorzhou.com/blog/git-aliases/)
 
 ## For search and replace
 
-```bash
+```shell
 %s/^pick/squash/gc
 ```
 

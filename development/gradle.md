@@ -2,6 +2,6 @@
 
 Documentation is [here](https://gradle.org)
 
-```bash
+```shell
 brew install gradle
 ```

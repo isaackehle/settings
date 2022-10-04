@@ -14,10 +14,11 @@ Everything you or I need to know about setting up a Mac
 
    - [aws.md](./development/aws.md): AWS Configurations
    - [webdev.md](./development/webdev.md): Typical things needed for doing web development
+   - [ruby.md](/ruby.md): Ruby installation via `rvm`
 
 ## MacOS Computer name
 
-```bash
+```shell
 sudo scutil --set HostName MyComputerName
 sudo scutil --set ComputerName MyComputerName
 sudo scutil --set LocalHostName MyComputerName
@@ -27,4 +28,3 @@ sudo scutil --set LocalHostName MyComputerName
 
 - [installations.md](/installations.md): Goodies to install, and the commands to do it
 - [transfer.md](/transfer.md): How to transfer to an old computer to a new
-- [ruby.md](/ruby.md): Ruby installation via `rvm`

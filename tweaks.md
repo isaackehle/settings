@@ -10,31 +10,31 @@ BetterTouchTool
 
 [Website](https://folivora.ai/downloads/)
 
-```bash
+```shell
 brew install bettertouchtool
 ```
 
 ## Steermouse
 
-```bash
+```shell
 brew install --force steermouse
 ```
 
 For issues with scrolling while trying to middle click:
 
-```bash
+```shell
   Wheel Mode: Ratchet, uncheck smooth scroll
 ```
 
 ## Install more recent versions of some OS X tools
 
-```bash
+```shell
 brew install vim --override-system-vi
 ```
 
 ## cli apps
 
-```bash
+```shell
 brew install tree
 brew install pstree
 brew install rename
@@ -45,27 +45,27 @@ brew install rename
 
 Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
 
-```bash
+```shell
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
 ## performance
 
-```bash
+```shell
 brew install ccleaner
 brew install appcleaner
 ```
 
 ## Compression
 
-```bash
+```shell
 brew install unrar
 brew install the-unarchiver
 ```
 
 ## uncategorized
 
-```bash
+```shell
 brew install alfred
 brew install path-finder
 brew install xquartz

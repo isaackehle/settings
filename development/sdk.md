@@ -1,6 +1,6 @@
 # SDKs
 
-```bash
+```shell
 brew install android-studio
 brew install android-sdk
 ```
@@ -9,7 +9,7 @@ brew install android-sdk
 
 [sdkman.io](https://sdkman.io)
 
-```bash
+```shell
 curl -s "https://get.sdkman.io" | bash
 sdk install java
 ```

@@ -1,6 +1,6 @@
 # Fonts
 
-```bash
+```shell
 brew install fontconfig
 
 brew tap homebrew/cask-fonts

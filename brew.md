@@ -4,7 +4,7 @@
 
 Install via ruby:
 
-```bash
+```shell
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
@@ -12,7 +12,7 @@ Other Base Stuff
 
 - GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
 
-  ```bash
+  ```shell
   brew install coreutils moreutils findutils
   ```
 
@@ -20,14 +20,14 @@ Other Base Stuff
 
 A nice way of installing GUI packages, along with [updating them](https://github.com/buo/homebrew-cask-upgrade).
 
-```bash
+```shell
 brew install caskroom/cask/brew-cask
 brew tap caskroom/versions
 ```
 
 To Update Brew and Casks:
 
-```bash
+```shell
 brew update
 brew doctor
 brew cleanup

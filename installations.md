@@ -16,7 +16,7 @@
 
 ### Uncategorized brew apps -- things I haven't taken the time to sort
 
-```bash
+```shell
 
 brew install mountain
 brew install bettertouchtool
@@ -132,6 +132,6 @@ brew install pv
 brew install zopfli
 ```
 
-```bash
+```shell
 brew install google-drive google-earth-pro
 ```

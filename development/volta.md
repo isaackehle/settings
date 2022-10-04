@@ -4,7 +4,7 @@
 
 Documentation is [here](https://volta.sh)
 
-```bash
+```shell
 curl https://get.volta.sh | bash
 volta install node
 ```

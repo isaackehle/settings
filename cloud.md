@@ -1,6 +1,10 @@
 # Cloud Sync
 
-```bash
+```shell
 brew install dropbox
 brew install insync
+```
+
+```shell
+brew install google-drive
 ```

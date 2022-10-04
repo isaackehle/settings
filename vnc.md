@@ -1,5 +1,5 @@
 # VNC
 
-```bash
+```shell
 brew install vnc-viewer
 ```

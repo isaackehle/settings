@@ -1,7 +1,5 @@
 # Development Tools
 
-
-
 ## Installations
 
 - [xcode](./xcode.md)
@@ -15,7 +13,7 @@
 
 [just](https://just.io)
 
-```bash
+```shell
 brew install just
 ```
 
@@ -25,13 +23,13 @@ brew install just
 
 ## List all NPM global packages installed
 
-```bash
+```shell
 npm ls -g --depth 0
 ```
 
 ## Angular 2+
 
-```bash
+```shell
 npm install -g angular-cli@latest
 npm install -g typescript@beta
 npm install -g typescript@2.0

@@ -4,13 +4,13 @@
 
 Documentation is [here](https://github.com/creationix/nvm)
 
-```bash
+```shell
 brew install nvm
 ```
 
 ## NVM Config
 
-```bash
+```shell
 mkdir ~/.nvm
 nano ~/.bash_profile
 

@@ -1,13 +1,13 @@
 # Virtual Machines
 
-```bash
+```shell
 brew install docker
 ```
 
-```bash
+```shell
 brew install virtualbox
 ```
 
-```bash
+```shell
 brew install vmware-fusion
 ```

@@ -1,6 +1,6 @@
 # Apache
 
-```bash
+```shell
 brew install apr
 brew install apr-util
 ```
