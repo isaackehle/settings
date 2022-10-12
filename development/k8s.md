@@ -3,6 +3,7 @@
 ```shell
 brew install kubernetes-cli
 brew install kubectx
+brew install minikube
 brew install derailed/k9s/k9s
 ```
 
