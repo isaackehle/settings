@@ -18,11 +18,13 @@ eval "$(starship init zsh)"```
 
 - Themes are [here](http://iterm2colorschemes.com/)
 
-- [Nerd Fonts](https://medium.com/the-code-review/nerd-fonts-how-to-install-configure-and-remove-programming-fonts-on-a-mac-178833b9daf3)
+[iTerm2 + Oh-My-Zsh: Supercharge Your Mac Terminal](https://catalins.tech/improve-mac-terminal/)
 
 - sync integration (TODO)
 
-https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x
+## Key codes
+
+[Use ⌥ ← and ⌥→ to jump forwards / backwards words in iTerm 2, on OS X](https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x)
 
 ```shell
 Delete a word
@@ -49,3 +51,7 @@ Keyboard Shortcut: ⌥→
 Action: Send Escape Sequence
 Esc+: f
 ```
+
+## Plugins
+
+[8 Terminal tips to make you a 2x developer](https://udaraw.com/iterm-plugins/)
