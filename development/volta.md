@@ -6,6 +6,9 @@ Documentation is [here](https://volta.sh)
 
 ```shell
 curl https://get.volta.sh | bash
+# or
+brew install volta
+
 volta install node
 volta install yarn
 ```
