@@ -5,16 +5,16 @@ Everything you or I need to know about setting up a Mac
 ## Order of Operations
 
 1. Open a terminal, and install [brew.sh](https://brew.sh/)
-2. Install iterm from [here](./iterm.md)
-3. Install zsh from [here](/zsh.md)
+2. Install iterm from [here](iterm.md)
+3. Install zsh from [here](zsh.md)
 4. Install [Microsoft Edge Beta](https://www.microsoftedgeinsider.com/en-us/download)
-5. Install [python3](./development/python.md)
-6. Install docker or other virtual machines from [here](/vm.md)
+5. Install [python3](development/python.md)
+6. Install docker or other virtual machines from [here](vm.md)
 7. Dev Tools
 
-   - [aws.md](./development/aws.md): AWS Configurations
-   - [webdev.md](./development/webdev.md): Typical things needed for doing web development
-   - [ruby.md](/ruby.md): Ruby installation via `rvm`
+   - [aws.md](development/aws.md): AWS Configurations
+   - [webdev.md](development/webdev.md): Typical things needed for doing web development
+   - [ruby.md](development/ruby.md): Ruby installation via `rvm`
 
 ## MacOS Computer name
 
