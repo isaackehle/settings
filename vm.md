@@ -1,10 +1,6 @@
 # Virtual Machines
 
 ```shell
-brew install docker
-```
-
-```shell
 brew install virtualbox
 ```
 
