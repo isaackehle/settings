@@ -9,7 +9,7 @@ Everything you or I need to know about setting up a Mac
 3. Install zsh from [here](zsh.md)
 4. Install [Microsoft Edge Beta](https://www.microsoftedgeinsider.com/en-us/download)
 5. Install [python3](development/python.md)
-6. Install docker or other virtual machines from [here](vm.md)
+6. Install [docker](development/docker.md) or other [virtual machines](vm.md)
 7. Dev Tools
 
    - [aws.md](development/aws.md): AWS Configurations
