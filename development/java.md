@@ -12,6 +12,17 @@ curl -s "https://get.sdkman.io" | bash
 sdk install java
 ```
 
+## Maven
+
+```shell
+brew install maven
+```
+
+brew install maven
+I like to try out different things,
+
+boy this is a pretty cra
+
 ## Trainings
 
 [Java 8 Essential Training Online Class | LinkedIn Learning](https://www.linkedin.com/learning/java-8-essential-training)
