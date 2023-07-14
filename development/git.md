@@ -55,6 +55,8 @@ and [here](https://victorzhou.com/blog/git-aliases/)
         cane = commit --amend --no-edit
         lo = log --oneline -n 10
         pr = pull --rebase
+        fp = fetch --prune
+        pf = push --force
 ```
 
 ## For search and replace
@@ -65,4 +67,4 @@ and [here](https://victorzhou.com/blog/git-aliases/)
 
 ## Reference Articles
 
-- <https://miteshshah.github.io/mac/install-network-tools-on-mac-os-x/>
+* <https://miteshshah.github.io/mac/install-network-tools-on-mac-os-x/>
