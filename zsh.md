@@ -15,3 +15,7 @@ Plugins:
 plugins=(git)
 plugins=(git bundler macos rake ruby)
 ```
+
+For a truly glorious experience, try [powerlevel10k](https://github.com/romkatv/powerlevel10k).
+
+-- Thanks Susie!
