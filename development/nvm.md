@@ -2,13 +2,11 @@
 
 ## Installation
 
-Documentation is [here](https://github.com/creationix/nvm)
+Documentation is at [creationix/nvm](https://github.com/creationix/nvm)
 
 ```shell
 brew install nvm
 ```
-
-## NVM Config
 
 ```shell
 mkdir ~/.nvm

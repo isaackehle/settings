@@ -3,7 +3,9 @@
 [Homepage](https://pnpm.io/installation)
 
 ```shell
-brew install corepack
-
 brew install pnpm
 ```
+
+
+
+
