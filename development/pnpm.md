@@ -5,7 +5,3 @@
 ```shell
 brew install pnpm
 ```
-
-
-
-
