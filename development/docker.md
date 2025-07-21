@@ -1,7 +1,7 @@
 # Docker
 
 ```shell
-brew install docker
+brew install docker docker-compose
 ```
 
 ## Docker Desktop
@@ -14,6 +14,18 @@ brew install docker
 brew install postgresql@15
 
 createuser -s postgres
+```
+
+### ~/.docker/config.json
+
+```json
+{
+	"auths": {
+	},
+	"cliPluginsExtraDirs": [
+		"/opt/homebrew/lib/docker/cli-plugins"
+	]
+}
 ```
 
 ```shell
