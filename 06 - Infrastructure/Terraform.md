@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# Terraform
+# <img src="https://github.com/hashicorp.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Terraform
 
 Infrastructure as code tool for provisioning and managing cloud resources declaratively.
 

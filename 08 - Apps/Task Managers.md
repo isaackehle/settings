@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Task Managers & Design
+# <img src="https://github.com/figma.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Task Managers & Design
 
 Project management and design tools.
 

@@ -2,7 +2,7 @@
 tags: [system]
 ---
 
-# VNC
+# <img src="https://github.com/RealVNC.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> VNC
 
 Remote desktop access using the VNC protocol.
 

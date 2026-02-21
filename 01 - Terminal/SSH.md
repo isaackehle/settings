@@ -2,7 +2,7 @@
 tags: [terminal]
 ---
 
-# SSH
+# <img src="https://github.com/openssh.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> SSH
 
 Secure Shell for encrypted remote connections.
 

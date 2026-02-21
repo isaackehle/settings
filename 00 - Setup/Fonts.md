@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Fonts
+# <img src="https://github.com/ryanoasis.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Fonts
 
 Developer and icon fonts for terminals and editors.
 

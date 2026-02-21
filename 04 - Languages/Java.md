@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Java
+# <img src="https://github.com/openjdk.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Java
 
 JVM language used for enterprise backends, Android, and cross-platform tooling. Managed via SDKMAN.
 

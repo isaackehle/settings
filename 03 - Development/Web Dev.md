@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Web Development
+# <img src="https://github.com/w3c.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Web Development
 
 Tools and frameworks for web development. See also: [[Volta]] for Node.js management.
 

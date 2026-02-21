@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Concepts
+# <img src="https://github.com/get-icon/geticon.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Concepts
 
 Reference definitions and technology landscape notes.
 

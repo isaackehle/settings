@@ -2,7 +2,7 @@
 tags: [node]
 ---
 
-# NVM
+# <img src="https://github.com/nvm-sh.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> NVM
 
 Node Version Manager — install and switch between multiple Node.js versions.
 

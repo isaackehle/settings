@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Browsers
+# <img src="https://github.com/google.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Browsers
 
 ```shell
 brew install --cask firefox

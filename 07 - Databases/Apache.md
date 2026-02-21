@@ -2,7 +2,7 @@
 tags: [databases]
 ---
 
-# Apache HTTP Server
+# <img src="https://github.com/apache.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Apache HTTP Server
 
 Open-source web server. On macOS, it can be installed via Homebrew.
 

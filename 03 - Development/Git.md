@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Git
+# <img src="https://github.com/git.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Git
 
 Version control system. The `gh` CLI and GUI tools make GitHub workflows faster.
 

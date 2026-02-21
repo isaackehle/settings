@@ -2,7 +2,7 @@
 tags: [system]
 ---
 
-# Virtual Machines
+# <img src="https://github.com/hashicorp.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Virtual Machines
 
 Run other operating systems on macOS.
 

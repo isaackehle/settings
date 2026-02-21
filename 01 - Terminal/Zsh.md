@@ -2,7 +2,7 @@
 tags: [terminal]
 ---
 
-# Zsh
+# <img src="https://github.com/ohmyzsh.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Zsh
 
 Zsh is the default shell on macOS. Oh My Zsh adds themes, plugins, and quality-of-life improvements.
 

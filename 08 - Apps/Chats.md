@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Chats & Communication
+# <img src="https://github.com/slackhq.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Chats & Communication
 
 Messaging and social apps.
 

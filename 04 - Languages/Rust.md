@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Rust
+# <img src="https://github.com/rust-lang.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Rust
 
 Systems programming language focused on memory safety and performance.
 

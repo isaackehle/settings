@@ -2,7 +2,7 @@
 tags: [security]
 ---
 
-# Encryption
+# <img src="https://github.com/FiloSottile.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Encryption
 
 Cryptography and hashing tools.
 

@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# AWS
+# <img src="https://github.com/aws.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> AWS
 
 Amazon Web Services — cloud infrastructure platform.
 

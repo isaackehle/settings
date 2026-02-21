@@ -2,7 +2,7 @@
 tags: [databases]
 ---
 
-# Databases
+# <img src="https://github.com/postgres.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Databases
 
 Setup and GUI tools for common databases.
 

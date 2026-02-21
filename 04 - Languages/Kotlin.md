@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Kotlin
+# <img src="https://github.com/JetBrains.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Kotlin
 
 Statically typed JVM language; the preferred language for Android development and a modern Java alternative.
 

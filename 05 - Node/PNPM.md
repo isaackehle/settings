@@ -2,7 +2,7 @@
 tags: [node]
 ---
 
-# PNPM
+# <img src="https://github.com/pnpm.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> PNPM
 
 Fast, disk-efficient package manager. Uses a content-addressable store so packages are never duplicated across projects.
 

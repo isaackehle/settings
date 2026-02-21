@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Calendars
+# <img src="https://github.com/apple.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Calendars
 
 Calendar and scheduling apps.
 

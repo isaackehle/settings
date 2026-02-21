@@ -2,7 +2,7 @@
 tags: [node]
 ---
 
-# Volta
+# <img src="https://github.com/volta-cli.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Volta
 
 Fast, reliable Node.js version manager. Pins Node and package manager versions per project automatically.
 

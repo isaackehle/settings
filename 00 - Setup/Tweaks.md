@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Tweaks
+# <img src="https://github.com/apple.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Tweaks
 
 macOS system enhancements, utilities, and productivity tools.
 

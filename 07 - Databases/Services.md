@@ -2,7 +2,7 @@
 tags: [databases]
 ---
 
-# Services
+# <img src="https://github.com/aws.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Services
 
 Concepts for cloud service and infrastructure models.
 
