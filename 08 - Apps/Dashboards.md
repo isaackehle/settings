@@ -26,6 +26,17 @@ brew install prometheus
 brew services start prometheus
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+open http://localhost:3000
+open http://localhost:9090
+```
+
 ## References
 
 - [Grafana](https://grafana.com/)

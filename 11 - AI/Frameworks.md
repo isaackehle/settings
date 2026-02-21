@@ -44,3 +44,19 @@ pip install llama-index
 ```shell
 pip install torch torchvision torchaudio
 ```
+
+## Configuration
+
+No basic configuration required.
+
+For Hugging Face, authenticate once:
+
+```shell
+huggingface-cli login
+```
+
+## Start / Usage
+
+```shell
+python -c "import torch; print(torch.__version__)"
+```

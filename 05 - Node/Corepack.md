@@ -20,6 +20,10 @@ Or install via Homebrew if needed:
 brew install corepack
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 ```shell

@@ -20,3 +20,11 @@ brew install font-roboto font-roboto-mono font-roboto-slab
 # Fira Code — programming ligatures
 brew install font-fira-code
 ```
+
+## Configuration
+
+Set your terminal/editor font to one of the installed fonts.
+
+## Start / Usage
+
+Start: Open terminal/editor preferences and choose the installed font.

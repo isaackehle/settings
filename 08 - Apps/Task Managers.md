@@ -26,6 +26,14 @@ brew install --cask figma
 
 - [Figma](https://www.figma.com/)
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [ClickUp Documentation](https://help.clickup.com/)

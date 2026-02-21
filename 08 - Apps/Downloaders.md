@@ -25,6 +25,18 @@ brew install --cask folx
 brew install wget
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+- FileZilla / Deluge / Folx: Open the app from Applications.
+
+```shell
+wget --help
+```
+
 ## References
 
 - [FileZilla](https://filezilla-project.org/)

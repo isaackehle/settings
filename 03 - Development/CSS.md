@@ -25,6 +25,16 @@ brew install node  # then: npm install -g postcss-cli
 npm install -g sass
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+sass --version
+```
+
 ## References
 
 - [CSS Tutorial — w3schools](https://www.w3schools.com/Css/default.asp)

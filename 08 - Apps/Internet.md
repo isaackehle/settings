@@ -25,6 +25,17 @@ brew install nikto
 brew install dnsmap
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+nmap localhost
+mtr google.com
+```
+
 ## References
 
 - [Wireshark](https://www.wireshark.org/)

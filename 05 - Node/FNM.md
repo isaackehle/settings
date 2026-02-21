@@ -18,6 +18,10 @@ Add to `~/.zshrc`:
 eval "$(fnm env --use-on-cd --shell zsh)"
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 ```shell

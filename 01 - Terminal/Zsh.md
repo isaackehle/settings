@@ -32,6 +32,12 @@ echo 'source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme' >> ~/
 
 Then restart the terminal to run the configuration wizard.
 
+## Start / Usage
+
+```shell
+zsh
+```
+
 ## References
 
 - [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh)

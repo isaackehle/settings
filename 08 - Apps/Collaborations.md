@@ -10,8 +10,19 @@ Tools for interactive computing and team collaboration.
 
 Browser-based notebooks for data science and interactive Python.
 
+## Installation
+
 ```shell
 pip3 install jupyterlab
+```
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
 jupyter lab
 ```
 

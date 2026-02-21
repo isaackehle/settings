@@ -56,3 +56,16 @@ pip install vllm
 ```shell
 brew install llama.cpp
 ```
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+ollama serve
+ollama run llama3
+```
+
+LM Studio / GPT4All: Start: Open the app from Applications.

@@ -20,6 +20,14 @@ brew install --cask 2fas
 brew install --cask keepassxc
 ```
 
+## Configuration
+
+Set up your vaults and MFA seeds on first launch.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [1Password](https://1password.com/)

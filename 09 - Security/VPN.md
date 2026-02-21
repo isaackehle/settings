@@ -16,6 +16,14 @@ brew install --cask tunnelblick
 brew install --cask protonvpn
 ```
 
+## Configuration
+
+Import your VPN profile or sign in to your VPN provider account.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Proton VPN](https://protonvpn.com/)

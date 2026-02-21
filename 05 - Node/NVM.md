@@ -20,6 +20,10 @@ export NVM_DIR="$HOME/.nvm"
 source $(brew --prefix nvm)/nvm.sh
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 ```shell

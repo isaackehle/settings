@@ -15,6 +15,14 @@ brew install --cask vnc-viewer
 
 macOS has a built-in VNC server: **System Settings → General → Sharing → Screen Sharing**.
 
+## Configuration
+
+Enable Screen Sharing in macOS and allow access for your user account.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [VNC Viewer by RealVNC](https://www.realvnc.com/en/connect/download/viewer/)

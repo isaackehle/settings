@@ -18,6 +18,14 @@ Android Studio includes the Android SDK, emulator, and build tools.
 
 For managing Java, Kotlin, Gradle, and other JVM toolchains, see [[Java]].
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Android Studio](https://developer.android.com/studio)

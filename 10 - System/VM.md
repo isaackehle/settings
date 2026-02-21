@@ -22,6 +22,14 @@ brew install --cask parallels
 brew install --cask virtualbox
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [UTM](https://mac.getutm.app/)

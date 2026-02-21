@@ -42,8 +42,8 @@ unzip ~/settings-backup/navicat/settings.zip
 ### Oracle TNS configuration
 
 1. Ensure Navicat is closed
-2. Download `tnsnames.ora` and `sqlnet.ora`, save to `~/Documents`
-3. Create symlinks:
+1. Download `tnsnames.ora` and `sqlnet.ora`, save to `~/Documents`
+1. Create symlinks:
 
 ```shell
 ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
@@ -54,7 +54,7 @@ sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
 sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
 ```
 
-4. In Navicat → Preferences → Environments:
+1. In Navicat → Preferences → Environments:
    - Uncheck **Use Bundled Instant Client**
    - `ORACLE_HOME` → `/opt/oracle/instantclient`
    - `DYLD_LIBRARY_PATH` → `/opt/oracle/instantclient`
@@ -65,3 +65,11 @@ sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
 ```shell
 scutil --dns | grep 'nameserver\[[0-9]*\]'
 ```
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Use this page as a migration checklist and run each transfer step per app.

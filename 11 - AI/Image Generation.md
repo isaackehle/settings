@@ -42,3 +42,16 @@ python main.py
 [Draw Things](https://drawthings.ai/) is a native macOS/iOS app for running Stable Diffusion locally. Highly optimized for Apple Silicon.
 
 - Available on the Mac App Store.
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+cd stable-diffusion-webui && ./webui.sh
+cd ComfyUI && python main.py
+```
+
+Draw Things: Start: Open the app from Applications.

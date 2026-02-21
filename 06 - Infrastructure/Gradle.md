@@ -18,6 +18,10 @@ Or manage via SDKMAN (preferred for JVM projects):
 sdk install gradle
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 ```shell

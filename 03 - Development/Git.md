@@ -57,6 +57,12 @@ Add to `~/.gitconfig` under `[alias]`:
   bdone  = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
 ```
 
+## Start / Usage
+
+```shell
+git status
+```
+
 ## References
 
 - [gh CLI](https://cli.github.com/)

@@ -19,6 +19,14 @@ brew install google-drive
 brew install insync
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Dropbox](https://www.dropbox.com/)

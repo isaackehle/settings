@@ -38,3 +38,13 @@ brew install thefuck
 brew install watch
 brew install wget
 ```
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+brew list
+```

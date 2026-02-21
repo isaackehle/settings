@@ -28,6 +28,10 @@ Fast HTTP load generator (Rust-based) for quick API benchmarking.
 brew install oha
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## References
 
 - [k6 Documentation](https://grafana.com/docs/k6/latest/)

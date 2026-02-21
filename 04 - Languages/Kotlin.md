@@ -32,6 +32,12 @@ brew install ktlint
 
 - [ktlint](https://ktlint.github.io/)
 
+## Start / Usage
+
+```shell
+kotlin -version
+```
+
 ## References
 
 - [Kotlin](https://kotlinlang.org/)

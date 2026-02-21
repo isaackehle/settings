@@ -6,6 +6,18 @@ tags: [development]
 
 Reference definitions and technology landscape notes.
 
+## Installation
+
+No installation required for this reference page.
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Use this page as a glossary/reference while setting up related tools.
+
 ## Definitions
 
 **Memoization** — Optimization technique that caches the results of expensive function calls and returns the cached result for the same inputs. ([Wikipedia](https://en.wikipedia.org/wiki/Memoization))
@@ -18,12 +30,12 @@ Reference definitions and technology landscape notes.
 
 ## Languages
 
-| Language | Notes |
-|---|---|
-| PHP | Server-side scripting |
-| Rust | Systems programming, memory safety |
-| C/C++ | Low-level systems |
-| Golang | Compiled, concurrent |
+| Language | Notes                              |
+| -------- | ---------------------------------- |
+| PHP      | Server-side scripting              |
+| Rust     | Systems programming, memory safety |
+| C/C++    | Low-level systems                  |
+| Golang   | Compiled, concurrent               |
 
 ## Front-End Frameworks
 
@@ -49,12 +61,12 @@ Reference definitions and technology landscape notes.
 
 ## Build Tools
 
-| Tool | Use |
-|---|---|
-| Webpack | Module bundler |
-| Gulp | Task runner |
-| Grunt | Task runner |
-| Parcel | Zero-config bundler |
+| Tool    | Use                 |
+| ------- | ------------------- |
+| Webpack | Module bundler      |
+| Gulp    | Task runner         |
+| Grunt   | Task runner         |
+| Parcel  | Zero-config bundler |
 
 ## Architecture Patterns
 

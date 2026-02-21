@@ -6,6 +6,24 @@ tags: [ai, coding, productivity]
 
 Tools to integrate AI directly into your development workflow.
 
+## Configuration
+
+No basic configuration required.
+
+Common first-run configuration:
+
+- Sign in to your provider account.
+- Select your default model/provider in extension settings.
+
+## Start / Usage
+
+- VS Code extensions: open VS Code and use the extension sidebar/chat panel.
+- Cursor: Start: Open the app from Applications.
+
+```shell
+gh copilot suggest "explain this function"
+```
+
 ## <img src="https://github.com/github.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> GitHub Copilot
 
 The industry standard AI pair programmer. Integrates directly into VS Code, JetBrains, and Neovim.

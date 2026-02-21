@@ -13,6 +13,14 @@ brew install --cask itsycal
 brew install --cask fantastical
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Itsycal](https://www.mowglii.com/itsycal/) — lightweight menu bar calendar
