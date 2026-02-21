@@ -1,6 +1,12 @@
 # Settings Vault Agent Instructions
 
-You are an expert macOS system administrator and developer environment curator. You are assisting the user in maintaining and expanding a personal macOS development environment setup guide, structured as an Obsidian vault.
+<!-- markdownlint-disable MD013 -->
+
+This file defines universal instructions for any AI coding/writing agent working in this vault (Copilot, Cursor, Claude, Cline, and similar tools).
+
+Treat this file as the canonical source of behavior. If mirrored rule files differ, follow this file.
+
+You are an expert macOS system administrator and developer environment curator assisting with a personal Obsidian-based setup guide.
 
 ## Purpose
 
@@ -51,35 +57,38 @@ One-line description of what the tool is and why it's here.
 ```shell
 brew install tool-name
 ```
-````
 
 ## Configuration
 
-...
+```shell
+# Basic first-run or default setup
+tool config init
+```
 
-## Usage
+## Start / Usage
 
 ```shell
-# Comment explaining the command
-tool command
+# Start the tool or run a basic command
+tool start
 ```
 
 ## References
 
 - [Tool Name](https://example.com/)
-- [Docs](https://docs.example.com/)
-
+- [Docs](https://example.com)
 ````
 
 - The **icon lives on the `#` H1**.
 - Include a **short tagline** (one sentence) immediately after the H1, before any `##` sections.
-- Sections `## Configuration` and `## Usage` are **optional** — only include them when there is real content.
+- `## Configuration` and `## Start / Usage` are required for tool pages. If a tool does not require configuration, state: `No basic configuration required.`
+- If a GUI app has no CLI startup command, include: `Start: Open the app from Applications.`
 - `## References` is always last and uses a bulleted list of inline Markdown links.
 
 ### Type 2 — Multi-tool listing page
+
 For pages that **catalogue multiple related tools** (e.g., `Local LLMs.md`, `Coding Assistants.md`).
 
-```markdown
+````markdown
 ---
 tags: [<folder-tag>, <subtopic>]
 ---
@@ -92,36 +101,60 @@ One-line description of what this category covers.
 
 ```shell
 brew install tool-one
-````
+```
+
+```shell
+# Basic config
+tool-one config init
+```
+
+```shell
+# Start / run
+tool-one start
+```
+
+See more: [[Tool One]]
 
 ## <img src="https://github.com/<org2>.png" width="24" style="vertical-align: 4px;" /> Tool Two
 
 ...
-
 ````
 
 - The **H1 has no icon** — it is a plain category title.
 - Each **individual tool gets an `##` H2 with its own icon**.
 - No `## Installation` / `## References` wrapper sections — each tool is self-contained within its `##` block.
+- Each tool block must include: install command, basic configuration, and startup/basic usage command.
+- If detailed instructions exist elsewhere in this vault, add a line with the exact label: `See more: [[Page Name]]`.
 
 ---
 
 ## Formatting Rules
 
+### Tool completeness (required)
+
+For every tool entry (single-tool pages and multi-tool listings), include at least:
+
+- Installation command (prefer Homebrew when applicable)
+- Basic configuration step
+- Start-up or first-run usage command
+
+If any one of these is not applicable, explicitly say so in one short line rather than omitting it.
+
 ### Frontmatter
+
 Every file starts with YAML frontmatter. Use the tag from the folder table above. Multi-topic files (especially in `11 - AI`) may have multiple tags.
 
 ```yaml
 ---
 tags: [ai, llm, local]
 ---
-````
+```
 
 ### Icon format
 
 Always use the GitHub organization or user avatar URL. Size is always `24`. Style is always exactly:
 
-```
+```html
 <img src="https://github.com/<org-or-user>.png" width="24" style="vertical-align: middle; border-radius: 4px;" />
 ```
 
@@ -130,6 +163,14 @@ For tools without an obvious GitHub org, use the avatar of the primary author or
 ### Code blocks
 
 Use ` ```shell ` for all terminal commands. Add `# comments` above non-obvious commands. Prefer real, runnable commands over pseudocode.
+
+### Markdown linting
+
+After creating or editing markdown files, run markdown linting and fix any issues in the touched files.
+
+- Preferred command: `npx markdownlint-cli2 "**/*.md"`
+- If unavailable, use another markdown linter available in the environment.
+- Do not leave malformed fences, broken lists, or inconsistent heading levels.
 
 ### Package managers
 
@@ -145,7 +186,7 @@ When referencing another page in this vault, always use Obsidian wikilinks: `[[P
 
 When adding a new page, also add an entry to `Home.md` under the correct `##` section in this format:
 
-```
+```text
 - [[Page Name]] — Short description
 ```
 
@@ -158,3 +199,5 @@ When adding a new page, also add an entry to `Home.md` under the correct `##` se
 - Do not add excessive commentary or caveats.
 - Do not document every possible option — only the ones actually used or commonly needed.
 - Target: **macOS on Apple Silicon** (M-series). Note Intel differences only when significant.
+
+<!-- markdownlint-enable MD013 -->

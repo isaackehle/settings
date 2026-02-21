@@ -24,14 +24,14 @@ cd stable-diffusion-webui
 ./webui.sh
 ```
 
-## <img src="https://github.com/comfyanonymous.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> ComfyUI
+## <img src="https://github.com/Comfy-Org.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> ComfyUI
 
-[ComfyUI](https://github.com/comfyanonymous/ComfyUI) is a powerful and modular node-based GUI for Stable Diffusion.
+[ComfyUI](https://github.com/Comfy-Org/ComfyUI) is a powerful and modular node-based GUI for Stable Diffusion.
 
 **Installation:**
 
 ```shell
-git clone https://github.com/comfyanonymous/ComfyUI.git
+git clone https://github.com/Comfy-Org/ComfyUI.git
 cd ComfyUI
 pip install -r requirements.txt
 python main.py

@@ -9,7 +9,7 @@ Legacy reference list of brew packages and setup resources. Most tools are now d
 ## Reference Articles
 
 - <http://apple.stackexchange.com/questions/12161/os-x-terminal-must-have-utilities>
-- <http://marcgrabanski.com/setting-up-mac-osx-web-development/>
+- <https://vite.dev/guide/>
 - <https://miteshshah.github.io/mac/things-to-do-after-installing-mac-os-x/>
 - <https://mattstauffer.co/blog/setting-up-a-new-os-x-development-machine-part-2-global-package-managers>
 

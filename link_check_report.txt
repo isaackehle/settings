@@ -1,0 +1,10 @@
+checked 181
+bad 6 redirected 0
+--- BAD ---
+None | https://filezilla-project.org/ | <urlopen error timed out>
+None | https://help.clickup.com/ | HTTP Error 403: Forbidden
+None | https://www.microsoft.com/en-us/edge | HTTP Error 403: Forbidden
+None | https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac | HTTP Error 403: Forbidden
+None | https://www.microsoft.com/en-us/microsoft-teams/group-chat-software | HTTP Error 403: Forbidden
+None | https://www.realvnc.com/en/connect/download/viewer/ | HTTP Error 403: Forbidden
+--- REDIRECTS ---

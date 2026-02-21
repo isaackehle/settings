@@ -35,7 +35,7 @@ brew install --cask lm-studio
 
 ## <img src="https://github.com/nomic-ai.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> GPT4All
 
-[GPT4All](https://gpt4all.io/) is a free-to-use, locally running, privacy-aware chatbot. No GPU or internet required.
+[GPT4All](https://www.nomic.ai/gpt4all) is a free-to-use, locally running, privacy-aware chatbot. No GPU or internet required.
 
 ```shell
 brew install --cask gpt4all
@@ -49,9 +49,9 @@ brew install --cask gpt4all
 pip install vllm
 ```
 
-## <img src="https://github.com/ggerganov.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Llama.cpp
+## <img src="https://github.com/ggml-org.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Llama.cpp
 
-[Llama.cpp](https://github.com/ggerganov/llama.cpp) allows inference of LLaMA models in pure C/C++. Highly optimized for Apple Silicon (Metal).
+[Llama.cpp](https://github.com/ggml-org/llama.cpp) allows inference of LLaMA models in pure C/C++. Highly optimized for Apple Silicon (Metal).
 
 ```shell
 brew install llama.cpp

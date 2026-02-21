@@ -18,6 +18,14 @@ Tools and frameworks for web development. See also: [[Volta]] for Node.js manage
 - [[Gradle]] — JVM build tool
 - [[Terraform]] — infrastructure as code
 
+## Vite
+
+[Vite](https://vite.dev/) is a modern frontend build tool and dev server with very fast startup.
+
+```shell
+npm create vite@latest
+```
+
 ## Just
 
 [just](https://just.systems) is a command runner (simpler alternative to Make).
@@ -56,5 +64,5 @@ npm install -g @angular/cli
 
 ## References
 
-- [Nativescript setup (macOS)](https://docs.nativescript.org/start/ns-setup-os-x)
-- [Setting up macOS for web development](http://marcgrabanski.com/setting-up-mac-osx-web-development/)
+- [NativeScript documentation](https://docs.nativescript.org/)
+- [Frontend tooling with Vite](https://vite.dev/guide/)

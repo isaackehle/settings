@@ -13,15 +13,15 @@ Password managers and MFA tools.
 brew install --cask 1password
 brew install 1password-cli
 
-# Authy — TOTP MFA
-brew install --cask authy
+# 2FAS — TOTP MFA
+brew install --cask 2fas
 
-# KeePassX — open-source password manager
-brew install --cask keepassx
+# KeePassXC — open-source password manager
+brew install --cask keepassxc
 ```
 
 ## References
 
 - [1Password](https://1password.com/)
-- [Authy](https://authy.com/)
-- [KeePassX](https://www.keepassx.org/)
+- [2FAS](https://2fas.com/)
+- [KeePassXC](https://keepassxc.org/)

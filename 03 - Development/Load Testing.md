@@ -20,7 +20,15 @@ Run a test:
 k6 run script.js
 ```
 
+## oha
+
+Fast HTTP load generator (Rust-based) for quick API benchmarking.
+
+```shell
+brew install oha
+```
+
 ## References
 
-- [k6 Documentation](https://k6.io/docs/)
+- [k6 Documentation](https://grafana.com/docs/k6/latest/)
 - [k6 on GitHub](https://github.com/grafana/k6)

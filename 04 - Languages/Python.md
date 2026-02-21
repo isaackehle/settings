@@ -48,5 +48,5 @@ pip install notebook       # Jupyter
 
 - [pyenv on GitHub](https://github.com/pyenv/pyenv)
 - [FastAPI](https://fastapi.tiangolo.com/)
-- [Mypy — static type checker](https://mypy.readthedocs.io/)
+- [Mypy — static type checker](https://mypy.readthedocs.io/en/stable/)
 - [Setting Python 3 as default on macOS](https://opensource.com/article/19/5/python-3-default-mac)

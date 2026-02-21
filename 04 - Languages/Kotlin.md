@@ -22,7 +22,7 @@ Kotlin is also bundled with Android Studio and managed via SDKMAN. See [[Java]] 
 brew install detekt
 ```
 
-- [Detekt documentation](https://detekt.github.io/detekt/)
+- [Detekt documentation](https://detekt.dev/)
 
 ### ktlint — code style
 

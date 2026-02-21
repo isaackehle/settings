@@ -37,5 +37,5 @@ Host myserver
 
 ## References
 
-- [OpenSSH](https://www.openssh.com/)
+- [OpenSSH](https://www.openssh.org/)
 - [GitHub: Generating a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)

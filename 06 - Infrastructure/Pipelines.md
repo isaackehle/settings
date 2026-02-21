@@ -17,7 +17,7 @@ CI/CD, workflow, and platform engineering tools.
 
 Distributed task queue for Python.
 
-- [Celery documentation](https://docs.celeryq.dev/)
+- [Celery documentation](https://docs.celeryq.dev/en/stable/)
 - [How to check task status](https://stackoverflow.com/questions/9034091/how-to-check-task-status-in-celery)
 
 ## Kubernetes Package Management
@@ -34,7 +34,7 @@ brew install helm
 ## Feature Flags
 
 - [LaunchDarkly](https://launchdarkly.com)
-- [Flagsmith](https://flagsmith.com/) — open-source alternative
+- [Flagsmith](https://www.flagsmith.com/) — open-source alternative
 
 ## Monitoring
 
@@ -43,7 +43,7 @@ brew install helm
 ## Platform Engineering
 
 - [Backstage](https://backstage.io/) — developer portal / software catalog
-- [LocalStack](https://localstack.cloud/) — local AWS cloud stack for testing
+- [LocalStack](https://www.localstack.cloud/) — local AWS cloud stack for testing
 
 ## Artifact Management
 

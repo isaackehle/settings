@@ -27,5 +27,5 @@ Dart is an object-oriented, C-style language developed by Google. It supports cl
 ## References
 
 - [Flutter](https://flutter.dev/)
-- [Dart language tour](https://dart.dev/guides/language/language-tour)
+- [Dart language tour](https://dart.dev/language)
 - [Flutter — Introduction to Dart](https://www.tutorialspoint.com/flutter/flutter_introduction_to_dart_programming.htm)

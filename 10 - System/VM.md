@@ -9,15 +9,22 @@ Run other operating systems on macOS.
 ## Installation
 
 ```shell
-# VirtualBox — free, open-source
-brew install --cask virtualbox
+# UTM — native Apple Silicon VM app (free)
+brew install --cask utm
 
-# VMware Fusion — commercial, better Apple Silicon support
+# VMware Fusion — commercial, strong Apple Silicon support
 brew install --cask vmware-fusion
+
+# Parallels Desktop — commercial, polished macOS integration
+brew install --cask parallels
+
+# VirtualBox — free, open-source (best on Intel / limited on Apple Silicon)
+brew install --cask virtualbox
 ```
 
 ## References
 
+- [UTM](https://mac.getutm.app/)
+- [VMware Fusion](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)
+- [Parallels Desktop](https://www.parallels.com/products/desktop/)
 - [VirtualBox](https://www.virtualbox.org/)
-- [VMware Fusion](https://www.vmware.com/products/fusion.html)
-- [UTM](https://mac.getutm.app/) — native Apple Silicon VM app (free alternative)

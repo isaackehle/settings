@@ -33,6 +33,6 @@ cargo test
 
 ## References
 
-- [Rust Programming Language](https://www.rust-lang.org/)
+- [Rust Programming Language](https://rust-lang.org/)
 - [The Rust Book](https://doc.rust-lang.org/book/)
 - [Rust Essential Training — LinkedIn Learning](https://www.linkedin.com/learning/rust-essential-training)

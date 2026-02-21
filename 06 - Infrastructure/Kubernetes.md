@@ -45,6 +45,6 @@ k9s
 
 ## References
 
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/home/)
 - [K9s](https://k9scli.io/)
 - [Helm — Kubernetes package manager](https://helm.sh/)
