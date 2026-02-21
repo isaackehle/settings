@@ -1,0 +1,7 @@
+{
+  "vaultName": "settings",
+  "userIgnoreFilters": [
+    "node_modules"
+  ],
+  "useMarkdownLinks": false
+}
