@@ -2,60 +2,44 @@
 tags: [terminal]
 ---
 
-# Terminals
+# iTerm2
+
+A feature-rich terminal emulator for macOS, replacing the built-in Terminal app.
+
+## Installation
 
 ```shell
 brew install iterm2
 ```
 
-Starship is a customizable UI for iterm. This is a major departure from the standard terminal experience, so make sure to review the website before installing.
+## Configuration
+
+### Starship prompt
+
+Starship is a fast, customizable cross-shell prompt. Install and add it to your profile:
 
 ```shell
 brew install starship
+echo 'eval "$(starship init zsh)"' >> ~/.zshrc
 ```
 
-After make sure your profile contains the following:
+### Themes
 
-````shell
-eval "$(starship init zsh)"```
-````
+Browse color schemes at [iterm2colorschemes.com](http://iterm2colorschemes.com/).
 
-- Themes are [here](http://iterm2colorschemes.com/)
+## Key Bindings
 
-[iTerm2 + Oh-My-Zsh: Supercharge Your Mac Terminal](https://catalins.tech/improve-mac-terminal/)
+Configure in iTerm2 → Preferences → Profiles → Keys → Key Mappings.
 
-- sync integration (TODO)
+| Action | Shortcut | Type | Value |
+|---|---|---|---|
+| Delete word | `⌥ ⌫` | Send Hex Code | `0x17` |
+| Delete line | `⌥ ↑ ⌫` | Send Hex Code | `0x15` |
+| Jump left (word) | `⌥ ←` | Send Escape Sequence | `b` |
+| Jump right (word) | `⌥ →` | Send Escape Sequence | `f` |
 
-## Key codes
+## References
 
-[Use ⌥ ← and ⌥→ to jump forwards / backwards words in iTerm 2, on OS X](https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x)
-
-```shell
-Delete a word
-Keyboard Shortcut: ⌥←Delete
-Send Hex Code - 0x17
-```
-
-```shell
-Delete a line
-Keyboard Shortcut: ⌥↑←Delete
-Send Hex Code - 0x15
-```
-
-```shell
-Jump Left
-Keyboard Shortcut: ⌥←
-Action: Send Escape Sequence
-Esc+: b
-```
-
-```shell
-Jump Right
-Keyboard Shortcut: ⌥→
-Action: Send Escape Sequence
-Esc+: f
-```
-
-## Plugins
-
-[8 Terminal tips to make you a 2x developer](https://udaraw.com/iterm-plugins/)
+- [iTerm2 + Oh My Zsh guide](https://catalins.tech/improve-mac-terminal/)
+- [Use ⌥← and ⌥→ to jump words in iTerm2](https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x)
+- [8 iTerm plugins to boost productivity](https://udaraw.com/iterm-plugins/)

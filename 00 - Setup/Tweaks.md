@@ -2,101 +2,70 @@
 tags: [setup]
 ---
 
-# Teaks
+# Tweaks
+
+macOS system enhancements, utilities, and productivity tools.
 
 ## Amphetamine
 
-- From Mac App Store
+Prevents the Mac from sleeping. Available from the Mac App Store.
 
-## Middle Mouse Buttons
+## Mouse & Input
 
-BetterTouchTool
+### BetterTouchTool
 
-[Website](https://folivora.ai/downloads/)
+Customize mouse buttons, gestures, and keyboard shortcuts.
 
 ```shell
 brew install bettertouchtool
 ```
 
-## Steermouse
+### SteerMouse
+
+Advanced mouse driver with fine-grained configuration.
 
 ```shell
 brew install --force steermouse
 ```
 
-For issues with scrolling while trying to middle click:
+For scroll issues while middle-clicking: Wheel Mode → Ratchet, uncheck Smooth Scroll.
+
+## CLI Tools
 
 ```shell
-  Wheel Mode: Ratchet, uncheck smooth scroll
+brew install tree pstree rename vim
 ```
 
-## Install more recent versions of some OS X tools
+## Network Drives
 
-```shell
-brew install vim --override-system-vi
-```
-
-## cli apps
-
-```shell
-brew install tree
-brew install pstree
-brew install rename
-
-```
-
-## network drives
-
-Inhibit .DS_Store and .AppleDouble from being created on network drives [Link](http://www.mac-forums.com/forums/switcher-hangout/275107-appledouble-file-directory.html)
+Prevent `.DS_Store` files from being written to network drives:
 
 ```shell
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 
-## performance
+## Cleanup & Performance
 
 ```shell
-brew install ccleaner
-brew install appcleaner
+brew install ccleaner appcleaner
 ```
 
 ## Compression
 
 ```shell
-brew install unrar
-brew install the-unarchiver
+brew install unrar the-unarchiver
 ```
 
-## uncategorized
+## General Utilities
 
 ```shell
-brew install alfred
-brew install path-finder
-brew install xquartz
-brew install ejector
-brew install mounty
-brew install flux
-brew install controlplane
-brew install disk-inventory-x
-brew install airparrot
-brew install macid
-brew install spectacle
+brew install alfred path-finder xquartz flux spectacle disk-inventory-x mounty controlplane
 ```
 
-## Other programs that are not available with homebrew
+## Manual Installs
 
-- cisco any connect
+- Cisco AnyConnect
 - [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
-- [Wallcat](https://beta.wall.cat/)
-- iFax
-- stamps connect
-- Paragon NTFS 14
-
-- Wunderlist
-
-Color Picker
-Microsoft Remote Desktop Beta
-Microsft Office
-iMovie
-Pages, Numbers, etc
-tweetdeck
+- Microsoft Remote Desktop
+- Microsoft Office
+- Paragon NTFS

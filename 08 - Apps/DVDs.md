@@ -2,9 +2,20 @@
 tags: [apps]
 ---
 
-# image burning software
+# DVDs & Disc Burning
+
+Tools for ripping and burning optical media.
+
+## Installation
 
 ```shell
-brew install burn
+# Disc burning
+brew install --cask burn
+
+# Image processing for disc covers / artwork
 brew install imagemagick
 ```
+
+## References
+
+- [Burn](https://burn-osx.sourceforge.io/)

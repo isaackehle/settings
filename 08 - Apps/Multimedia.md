@@ -2,63 +2,64 @@
 tags: [apps]
 ---
 
-# Multimedia, Drawing, Graphics
+# Multimedia
+
+Audio, video, graphics, and image tools.
+
+## Graphics & Image Editing
 
 ```shell
-brew install gimp
-brew install colorpicker colorpicker-hex colorsnapper
-brew install ffmpegx
-# brew install ffmpeg
-brew install ffmpeg --with-libvpx
-brew install imagemagick --with-webp
-brew install inkscape
-brew install handbrake handbrakebatch handbrakecli
-brew install omnigraffle
+brew install --cask gimp
+brew install --cask inkscape
+brew install imagemagick
+brew install --cask omnigraffle
+```
+
+## Color Tools
+
+```shell
+brew install --cask colorsnapper
+```
+
+## Video
+
+```shell
+brew install ffmpeg
+brew install --cask handbrake
+brew install --cask vlc
+brew install --cask kodi
+```
+
+## Audio & Music
+
+```shell
+brew install --cask spotify
+brew install --cask amazon-music
+```
+
+ID3 tag editing:
+
+```shell
 brew install id3-editor
-brew install mp3tag
-brew install kodi
-brew install sling
+brew install --cask mp3tag
 ```
+
+## Video Encoding
 
 ```shell
-brew install faac
+brew install x264
+brew install webp
 ```
 
-## colouriser
+## Terminal Colouriser
 
-[colouriser](http://kassiopeia.juls.savba.sk/~garabik/software/grc/)
+[grc](http://kassiopeia.juls.savba.sk/~garabik/software/grc/) adds colour to common command output:
 
 ```shell
 brew install grc
 ```
 
-## other
+## References
 
-```shell
-brew install openjpeg
-```
-
-```shell
-brew install webp
-brew install x264
-brew install xvid
-```
-
-```shell
-brew install amazon-music
-brew install spotify
-brew install vlc
-brew install pandora
-brew install rdio
-```
-
-```shell
-brew install graphviz
-brew install apg
-brew install gettext
-brew install gmp
-brew install imagemagick
-brew install jpeg
-brew install lame
-brew install openjpeg
-```
+- [FFmpeg](https://ffmpeg.org/)
+- [ImageMagick](https://imagemagick.org/)

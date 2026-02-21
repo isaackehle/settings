@@ -4,47 +4,73 @@ tags: [infrastructure]
 
 # Docker
 
+Container platform for building, shipping, and running applications in isolated environments.
+
+## Installation
+
 ```shell
 brew install docker docker-compose
 ```
 
-## Docker Desktop
+Or install Docker Desktop (includes a GUI and Kubernetes):
 
-[Install page](https://www.docker.com/products/docker-desktop/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## postgresql image
-
-```shell
-brew install postgresql@15
-
-createuser -s postgres
-```
-
-### ~/.docker/config.json
+### Docker CLI config (`~/.docker/config.json`)
 
 ```json
 {
-	"auths": {
-	},
-	"cliPluginsExtraDirs": [
-		"/opt/homebrew/lib/docker/cli-plugins"
-	]
+  "auths": {},
+  "cliPluginsExtraDirs": [
+    "/opt/homebrew/lib/docker/cli-plugins"
+  ]
 }
 ```
 
+## Usage
+
 ```shell
+# Run a container
+docker run -it ubuntu bash
 
+# List running containers
+docker ps
+
+# Stop a container
+docker stop <container-id>
+
+# Build an image
+docker build -t my-image .
+```
+
+## PostgreSQL via Docker
+
+```shell
+brew install postgresql@15
+createuser -s postgres
+```
+
+Example: spin up a local Postgres instance with a schema:
+
+```shell
 #!/usr/bin/env bash
-
 set -euo pipefail
-which psql > /dev/null || (echoerr "Please ensure that postgres client is in your PATH" && exit 1)
 
 mkdir -p $HOME/docker/volumes/postgres
-rm -rf $HOME/docker/volumes/postgres/data
+docker run --rm --name pg-docker \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=dev \
+  -d -p 5432:5432 \
+  -v $HOME/docker/volumes/postgres:/var/lib/postgresql \
+  postgres
 
-docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=dev -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
 sleep 3
 export PGPASSWORD=postgres
 psql -U postgres -d dev -h localhost -f schema.sql
 psql -U postgres -d dev -h localhost -f data.sql
 ```
+
+## References
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
