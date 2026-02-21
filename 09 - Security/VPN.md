@@ -11,13 +11,13 @@ Virtual Private Network clients for secure remote access.
 ```shell
 # OpenVPN client
 brew install --cask tunnelblick
+
+# Proton VPN client
+brew install --cask protonvpn
 ```
-
-### VPN Unlimited
-
-Available from the Mac App Store or [keepsolid.com](https://www.keepsolid.com/vpn-unlimited/).
 
 ## References
 
+- [Proton VPN](https://protonvpn.com/)
 - [Tunnelblick](https://tunnelblick.net/)
-- [Cisco AnyConnect](https://www.cisco.com/c/en/us/products/security/anyconnect-secure-mobility-client/) — manual install
+- [Cisco Secure Client](https://www.cisco.com/site/us/en/products/security/secure-client/index.html) — manual install

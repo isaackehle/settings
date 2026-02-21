@@ -34,6 +34,6 @@ Then restart the terminal to run the configuration wizard.
 
 ## References
 
-- [Oh My Zsh](https://github.com/ohmyzsh/oh-my-zsh)
-- [Theme Gallery](https://github.com/ohmyzsh/oh-my-zsh/wiki/themes)
+- [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh)
+- [Theme Gallery](https://github.com/ohmyzsh/ohmyzsh/wiki/themes)
 - [powerlevel10k](https://github.com/romkatv/powerlevel10k)

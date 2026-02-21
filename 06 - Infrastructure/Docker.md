@@ -9,6 +9,16 @@ Container platform for building, shipping, and running applications in isolated 
 ## Installation
 
 ```shell
+# OrbStack — fast Docker/Desktop alternative on macOS
+brew install --cask orbstack
+
+# Colima + Docker CLI — lightweight local setup
+brew install colima docker docker-compose
+
+# Start Colima VM
+colima start
+
+# Optional: Docker Desktop
 brew install docker docker-compose
 ```
 
@@ -21,9 +31,7 @@ Or install Docker Desktop (includes a GUI and Kubernetes):
 ```json
 {
   "auths": {},
-  "cliPluginsExtraDirs": [
-    "/opt/homebrew/lib/docker/cli-plugins"
-  ]
+  "cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]
 }
 ```
 

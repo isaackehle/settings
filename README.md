@@ -8,14 +8,14 @@ Open the root of this repository as a vault in Obsidian. Start at [[Home]] for t
 
 ## Agent Quick Start
 
-AI agents should use [.github/copilot-instructions.md](.github/copilot-instructions.md) as the canonical rule set for this vault.
+AI agents should use [AGENTS.md](AGENTS.md) as the canonical rule set for this vault.
 
 Equivalent mirrored files for common tools:
 
+- [.github/copilot-instructions.md](.github/copilot-instructions.md)
 - [.cursorrules](.cursorrules)
 - [.clinerules](.clinerules)
 - [.windsurfrules](.windsurfrules)
-- [AGENTS.md](AGENTS.md)
 - [CLAUDE.md](CLAUDE.md)
 - [CONVENTIONS.md](CONVENTIONS.md)
 

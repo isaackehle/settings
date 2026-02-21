@@ -33,5 +33,5 @@ sdk install gradle
 
 ## References
 
-- [Gradle Documentation](https://gradle.org/docs/)
+- [Gradle Documentation](https://docs.gradle.org/current/userguide/userguide.html)
 - [Structuring multi-project builds](https://docs.gradle.org/current/userguide/multi_project_builds.html)

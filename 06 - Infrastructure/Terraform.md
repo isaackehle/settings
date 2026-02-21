@@ -30,5 +30,5 @@ terraform destroy
 
 ## References
 
-- [Terraform Documentation](https://www.terraform.io/docs)
+- [Terraform Documentation](https://developer.hashicorp.com/terraform/docs)
 - [Terraform Registry](https://registry.terraform.io/)

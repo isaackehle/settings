@@ -29,7 +29,8 @@ Then in VS Code: `Ctrl+Shift+P` → **Select TypeScript Version** → **Use Work
 
 ### ESLint + Prettier
 
-- [How to set up ESLint, Prettier, and Husky in Next.js](https://blog.jarrodwatts.com/nextjs-eslint-prettier-husky)
+- [Next.js ESLint configuration](https://nextjs.org/docs/app/api-reference/config/eslint)
+- [Prettier installation](https://prettier.io/docs/install)
 
 ## References
 

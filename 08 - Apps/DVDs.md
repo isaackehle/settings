@@ -9,6 +9,9 @@ Tools for ripping and burning optical media.
 ## Installation
 
 ```shell
+# DVD/Blu-ray ripping and conversion
+brew install --cask handbrake
+
 # Disc burning
 brew install --cask burn
 
@@ -18,4 +21,5 @@ brew install imagemagick
 
 ## References
 
-- [Burn](https://burn-osx.sourceforge.io/)
+- [HandBrake](https://handbrake.fr/)
+- [Burn](https://sourceforge.net/projects/burn-osx/)

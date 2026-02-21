@@ -65,7 +65,7 @@ brew install alfred path-finder xquartz flux spectacle disk-inventory-x mounty c
 ## Manual Installs
 
 - Cisco AnyConnect
-- [MenuMeters](http://www.ragingmenace.com/software/menumeters/)
+- [MenuMeters](https://ragingmenace.com/software/menumeters/)
 - Microsoft Remote Desktop
 - Microsoft Office
 - Paragon NTFS

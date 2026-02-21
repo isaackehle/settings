@@ -22,5 +22,5 @@ brew install insync
 ## References
 
 - [Dropbox](https://www.dropbox.com/)
-- [Google Drive](https://drive.google.com/)
+- [Google Drive](https://workspace.google.com/products/drive/)
 - [InSync](https://www.insynchq.com/)

@@ -19,4 +19,4 @@ jupyter lab
 
 ## References
 
-- [JupyterLab Documentation](https://jupyterlab.readthedocs.io/)
+- [JupyterLab Documentation](https://jupyterlab.readthedocs.io/en/latest/)

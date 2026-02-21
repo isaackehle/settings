@@ -26,5 +26,5 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 ## References
 
-- [Xcode on the Mac App Store](https://apps.apple.com/us/app/xcode/id497799835)
+- [Xcode on the Mac App Store](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
 - [Apple Developer Documentation](https://developer.apple.com/documentation/)

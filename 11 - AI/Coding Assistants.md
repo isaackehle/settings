@@ -19,7 +19,7 @@ gh extension install github/gh-copilot
 
 ## <img src="https://github.com/getcursor.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Cursor
 
-[Cursor](https://cursor.sh/) is an AI-first code editor built as a fork of VS Code. It features deep codebase understanding and an integrated AI chat.
+[Cursor](https://cursor.com/) is an AI-first code editor built as a fork of VS Code. It features deep codebase understanding and an integrated AI chat.
 
 ```shell
 brew install --cask cursor
@@ -27,7 +27,7 @@ brew install --cask cursor
 
 ## <img src="https://github.com/continuedev.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Continue.dev
 
-[Continue](https://continue.dev/) is an open-source AI code assistant for VS Code and JetBrains. It allows you to connect to local models (like Ollama) or commercial APIs (OpenAI, Anthropic).
+[Continue](https://www.continue.dev/) is an open-source AI code assistant for VS Code and JetBrains. It allows you to connect to local models (like Ollama) or commercial APIs (OpenAI, Anthropic).
 
 - **VS Code Extension:** `Continue.continue`
 
@@ -56,9 +56,9 @@ pip install open-interpreter
 interpreter
 ```
 
-### <img src="https://github.com/paul-gauthier.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Aider
+### <img src="https://github.com/Aider-AI.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Aider
 
-[Aider](https://github.com/paul-gauthier/aider) is an AI pair programming tool in your terminal. It works well with local models and commercial APIs, and directly commits changes to your git repo.
+[Aider](https://github.com/Aider-AI/aider) is an AI pair programming tool in your terminal. It works well with local models and commercial APIs, and directly commits changes to your git repo.
 
 ```shell
 pip install aider-chat
@@ -74,9 +74,9 @@ aider
 docker run -it -p 8080:8080 -v $HOME/.tabby:/data tabbyml/tabby serve --model StarCoder-1B
 ```
 
-### <img src="https://github.com/All-Hands-AI.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> OpenHands (formerly OpenDevin)
+### <img src="https://github.com/OpenHands.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> OpenHands (formerly OpenDevin)
 
-[OpenHands](https://github.com/All-Hands-AI/OpenHands) is an open-source platform for AI software developers that can autonomously write code, fix bugs, and ship features.
+[OpenHands](https://github.com/OpenHands/OpenHands) is an open-source platform for AI software developers that can autonomously write code, fix bugs, and ship features.
 
 ```shell
 # Run via Docker

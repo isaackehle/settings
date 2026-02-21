@@ -38,4 +38,4 @@ Projects declare their package manager in `package.json`:
 
 ## References
 
-- [Corepack documentation](https://nodejs.org/api/corepack.html)
+- [Corepack](https://github.com/nodejs/corepack)
