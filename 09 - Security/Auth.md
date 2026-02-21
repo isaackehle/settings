@@ -2,7 +2,7 @@
 tags: [security]
 ---
 
-# Authentication & Passwords
+# <img src="https://github.com/1Password.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Authentication & Passwords
 
 Password managers and MFA tools.
 

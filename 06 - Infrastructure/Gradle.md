@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# Gradle
+# <img src="https://github.com/gradle.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Gradle
 
 Build automation tool for JVM projects (Java, Kotlin, Android). Supports multi-project builds and incremental compilation.
 

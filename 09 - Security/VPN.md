@@ -2,7 +2,7 @@
 tags: [security]
 ---
 
-# VPN
+# <img src="https://github.com/OpenVPN.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> VPN
 
 Virtual Private Network clients for secure remote access.
 

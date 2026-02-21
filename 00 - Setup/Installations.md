@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Installations
+# <img src="https://github.com/apple.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Installations
 
 Legacy reference list of brew packages and setup resources. Most tools are now documented in their own notes — see [[Home]] for the full index.
 

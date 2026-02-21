@@ -2,7 +2,7 @@
 tags: [editors]
 ---
 
-# Editors
+# <img src="https://github.com/microsoft.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Editors
 
 Code editors and IDEs available via Homebrew.
 

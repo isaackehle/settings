@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# Kubernetes
+# <img src="https://github.com/kubernetes.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Kubernetes
 
 Container orchestration system for automating deployment, scaling, and management of containerized applications.
 

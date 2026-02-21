@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Collaborations
+# <img src="https://github.com/jupyter.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Collaborations
 
 Tools for interactive computing and team collaboration.
 

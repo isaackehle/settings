@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Transfer
+# <img src="https://github.com/apple.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Transfer
 
 Steps for migrating settings and connections to a new Mac.
 

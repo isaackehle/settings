@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Flutter
+# <img src="https://github.com/flutter.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Flutter
 
 Google's UI toolkit for building natively compiled apps for mobile, web, and desktop from a single codebase. Uses the Dart language.
 

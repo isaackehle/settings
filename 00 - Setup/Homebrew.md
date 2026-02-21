@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Homebrew
+# <img src="https://github.com/Homebrew.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Homebrew
 
 macOS's missing package manager. Used to install CLI tools and GUI apps (via Cask).
 

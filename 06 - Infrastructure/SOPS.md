@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# SOPS
+# <img src="https://github.com/getsops.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> SOPS
 
 Secrets Operations — encrypts values in YAML, JSON, ENV, and INI files using AWS KMS, GCP KMS, Azure Key Vault, or PGP. Used for storing secrets alongside Helm deployments.
 

@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Load Testing
+# <img src="https://github.com/grafana.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Load Testing
 
 Tools for testing application performance under load.
 

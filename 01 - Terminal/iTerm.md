@@ -2,7 +2,7 @@
 tags: [terminal]
 ---
 
-# iTerm2
+# <img src="https://github.com/gnachman.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> iTerm2
 
 A feature-rich terminal emulator for macOS, replacing the built-in Terminal app.
 

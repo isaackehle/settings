@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Downloaders
+# <img src="https://github.com/transmission.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Downloaders
 
 File transfer, FTP, and torrent tools.
 

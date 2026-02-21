@@ -2,7 +2,7 @@
 tags: [node]
 ---
 
-# FNM
+# <img src="https://github.com/Schniz.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> FNM
 
 Fast Node Manager — a faster, Rust-based alternative to NVM.
 

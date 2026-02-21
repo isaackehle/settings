@@ -97,3 +97,10 @@ Personal macOS development environment setup guide and reference.
 
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
+
+## 11 - AI
+
+- [[Local LLMs]] — Ollama, LM Studio, GPT4All
+- [[Coding Assistants]] — Copilot, Cursor, Cline
+- [[Image Generation]] — Stable Diffusion, ComfyUI
+- [[Frameworks]] — Hugging Face, LangChain, PyTorch

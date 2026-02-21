@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Python
+# <img src="https://github.com/python.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Python
 
 Python 3 managed via `pyenv` for version isolation.
 

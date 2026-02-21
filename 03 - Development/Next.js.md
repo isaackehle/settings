@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Next.js
+# <img src="https://github.com/vercel.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Next.js
 
 React framework with server-side rendering, static site generation, and file-based routing.
 

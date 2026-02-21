@@ -2,7 +2,7 @@
 tags: [languages]
 ---
 
-# Ruby
+# <img src="https://github.com/ruby.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Ruby
 
 Dynamic language popular for scripting and web development (Rails). Managed via RVM.
 

@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# CSS
+# <img src="https://github.com/w3c.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> CSS
 
 Cascading Style Sheets for web styling.
 

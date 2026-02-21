@@ -2,7 +2,7 @@
 tags: [setup]
 ---
 
-# Automation
+# <img src="https://github.com/ansible.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Automation
 
 Tools for automating system configuration and maintaining persistent SSH connections.
 

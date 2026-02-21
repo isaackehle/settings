@@ -2,7 +2,7 @@
 tags: [node]
 ---
 
-# Corepack
+# <img src="https://github.com/nodejs.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Corepack
 
 Built-in Node.js tool (since v16.9) that manages package managers (npm, yarn, pnpm) per project, ensuring teams use consistent versions.
 

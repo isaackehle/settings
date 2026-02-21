@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Internet Utilities
+# <img src="https://github.com/curl.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Internet Utilities
 
 Network analysis and monitoring tools.
 

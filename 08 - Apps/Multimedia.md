@@ -2,7 +2,7 @@
 tags: [apps]
 ---
 
-# Multimedia
+# <img src="https://github.com/obsproject.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Multimedia
 
 Audio, video, graphics, and image tools.
 

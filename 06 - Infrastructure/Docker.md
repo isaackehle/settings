@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# Docker
+# <img src="https://github.com/docker.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Docker
 
 Container platform for building, shipping, and running applications in isolated environments.
 

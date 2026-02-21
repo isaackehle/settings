@@ -2,7 +2,7 @@
 tags: [development]
 ---
 
-# Xcode
+# <img src="https://github.com/apple.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Xcode
 
 Apple's developer tools. The Command Line Tools are required for many brew packages and compilers.
 

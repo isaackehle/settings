@@ -2,7 +2,7 @@
 tags: [infrastructure]
 ---
 
-# Pipelines
+# <img src="https://github.com/github.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Pipelines
 
 CI/CD, workflow, and platform engineering tools.
 
