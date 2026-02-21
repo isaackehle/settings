@@ -185,6 +185,12 @@
   },
   "active": "30fc69fd1399b1fc",
   "lastOpenFiles": [
+    "04 - Languages/Elixir.md",
+    "04 - Languages/Julia.md",
+    "04 - Languages/TypeScript.md",
+    "04 - Languages/Go.md",
+    "04 - Languages/Programming Languages.md",
+    "08 - Apps/Email.md",
     "audit_tool_docs_report.txt",
     "scripts_audit_tool_docs.py",
     "AGENTS.md",
@@ -212,11 +218,6 @@
     "03 - Development/CSS.md",
     "01 - Terminal/Zsh.md",
     "01 - Terminal/SSH.md",
-    "00 - Setup/Tweaks.md",
-    "00 - Setup/Transfer.md",
-    "00 - Setup/Installations.md",
-    "00 - Setup/Homebrew.md",
-    "00 - Setup/Automation.md",
     "add_icons.py",
     "11 - AI"
   ]
