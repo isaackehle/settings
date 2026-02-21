@@ -6,6 +6,10 @@ tags: [home, index]
 
 Personal macOS development environment setup guide and reference.
 
+## Meta
+
+- Agent rules: see [.github/copilot-instructions.md](.github/copilot-instructions.md) (mirrored in [.cursorrules](.cursorrules), [.clinerules](.clinerules), [.windsurfrules](.windsurfrules), [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md), and [CONVENTIONS.md](CONVENTIONS.md)).
+
 ---
 
 ## 00 - Setup
