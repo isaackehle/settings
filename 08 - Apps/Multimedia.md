@@ -30,6 +30,16 @@ brew install --cask vlc
 brew install --cask kodi
 ```
 
+## Optical Media (DVD/Blu-ray)
+
+```shell
+# Ripping and conversion
+brew install --cask handbrake
+
+# Disc burning
+brew install --cask burn
+```
+
 ## Audio & Music
 
 ```shell
@@ -75,3 +85,5 @@ ffmpeg -version
 
 - [FFmpeg](https://ffmpeg.org/)
 - [ImageMagick](https://imagemagick.org/)
+- [HandBrake](https://handbrake.fr/)
+- [Burn](https://sourceforge.net/projects/burn-osx/)

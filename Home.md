@@ -45,10 +45,15 @@ Personal macOS development environment setup guide and reference.
 
 ## 04 - Languages
 
+- [[Programming Languages]] — Broad language overview and quick starts
 - [[Java]] — Java/JDK via SDKMAN
 - [[Python]] — Python 3 setup
 - [[Ruby]] — Ruby via RVM
 - [[Rust]] — Rust language setup
+- [[Go]] — Go language setup
+- [[TypeScript]] — TypeScript setup
+- [[Julia]] — Julia language setup
+- [[Elixir]] — Elixir language setup
 - [[Kotlin]] — Kotlin
 - [[Flutter]] — Flutter mobile framework
 
@@ -86,7 +91,6 @@ Personal macOS development environment setup guide and reference.
 - [[PDF]] — PDF tools
 - [[Downloaders]] — File download utilities
 - [[Calendars]] — Calendar applications
-- [[DVDs]] — DVD tools
 - [[Dashboards]] — Monitoring and dashboards
 - [[Collaborations]] — Team collaboration tools
 - [[Task Managers]] — Project management (ClickUp, etc.)
