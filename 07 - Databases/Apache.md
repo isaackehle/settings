@@ -22,7 +22,7 @@ brew install apr apr-util
 
 The main config file is at:
 
-```
+```text
 /opt/homebrew/etc/httpd/httpd.conf
 ```
 

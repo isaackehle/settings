@@ -185,6 +185,8 @@
   },
   "active": "30fc69fd1399b1fc",
   "lastOpenFiles": [
+    "audit_tool_docs_report.txt",
+    "scripts_audit_tool_docs.py",
     "AGENTS.md",
     "CONVENTIONS.md",
     "CLAUDE.md",

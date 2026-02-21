@@ -38,6 +38,10 @@ Configure in iTerm2 → Preferences → Profiles → Keys → Key Mappings.
 | Jump left (word)  | `⌥ ←`    | Send Escape Sequence | `b`    |
 | Jump right (word) | `⌥ →`    | Send Escape Sequence | `f`    |
 
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [iTerm2 Documentation](https://iterm2.com/documentation.html)

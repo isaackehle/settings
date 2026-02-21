@@ -29,6 +29,10 @@ rvm list
 rvm use 3.2
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## References
 
 - [RVM](https://rvm.io/)

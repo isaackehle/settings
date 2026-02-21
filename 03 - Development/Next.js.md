@@ -32,6 +32,13 @@ Then in VS Code: `Ctrl+Shift+P` → **Select TypeScript Version** → **Use Work
 - [Next.js ESLint configuration](https://nextjs.org/docs/app/api-reference/config/eslint)
 - [Prettier installation](https://prettier.io/docs/install)
 
+## Start / Usage
+
+```shell
+cd my-app
+npm run dev
+```
+
 ## References
 
 - [Next.js Documentation](https://nextjs.org/docs)

@@ -49,6 +49,16 @@ brew install helm
 
 - [JFrog Artifactory](https://jfrog.com/artifactory/)
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+helm version
+```
+
 ## References
 
 - [Prometheus](https://prometheus.io/)

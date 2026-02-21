@@ -13,6 +13,14 @@ brew install --cask adobe-acrobat-reader
 brew install --cask pdf-expert
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Adobe Acrobat Reader](https://get.adobe.com/reader/)

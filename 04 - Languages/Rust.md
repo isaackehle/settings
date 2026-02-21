@@ -31,6 +31,10 @@ cargo run
 cargo test
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## References
 
 - [Rust Programming Language](https://rust-lang.org/)

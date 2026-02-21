@@ -16,6 +16,17 @@ brew install ansible
 brew install autossh
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+ansible --version
+autossh -V
+```
+
 ## References
 
 - [Ansible Documentation](https://docs.ansible.com/)

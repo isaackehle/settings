@@ -28,11 +28,17 @@ ssh-copy-id user@hostname
 
 Add an entry to `~/.ssh/config` for quick access:
 
-```
+```text
 Host myserver
   HostName example.com
   User myuser
   IdentityFile ~/.ssh/id_ed25519
+```
+
+## Start / Usage
+
+```shell
+ssh myserver
 ```
 
 ## References

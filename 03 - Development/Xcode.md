@@ -24,6 +24,16 @@ Point Xcode to the correct developer directory if the full Xcode app is installe
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+xcodebuild -version
+```
+
 ## References
 
 - [Xcode on the Mac App Store](https://apps.apple.com/us/app/xcode/id497799835?mt=12)

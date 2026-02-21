@@ -18,6 +18,10 @@ Or via Corepack (included with Node.js):
 corepack enable pnpm
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 ```shell

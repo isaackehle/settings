@@ -34,6 +34,10 @@ syntax on
 set term=xterm-256color
 ```
 
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [VS Code Documentation](https://code.visualstudio.com/docs)

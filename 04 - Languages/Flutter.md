@@ -24,6 +24,14 @@ Flutter renders its own widgets rather than using platform-native components, gi
 
 Dart is an object-oriented, C-style language developed by Google. It supports classes and interfaces but not arrays — use `List` instead.
 
+## Start / Usage
+
+```shell
+flutter create my_app
+cd my_app
+flutter run
+```
+
 ## References
 
 - [Flutter](https://flutter.dev/)

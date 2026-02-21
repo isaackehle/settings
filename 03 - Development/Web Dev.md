@@ -62,6 +62,16 @@ npm install -g rimraf
 npm install -g @angular/cli
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+npm create vite@latest
+```
+
 ## References
 
 - [NativeScript documentation](https://docs.nativescript.org/)

@@ -14,6 +14,10 @@ brew install md5sha1sum
 brew install mhash
 ```
 
+## Configuration
+
+No basic configuration required.
+
 ## Usage
 
 Generate an MD5 hash:

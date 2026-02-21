@@ -59,6 +59,18 @@ brew install webp
 brew install grc
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+- GUI apps: Open the app from Applications.
+
+```shell
+ffmpeg -version
+```
+
 ## References
 
 - [FFmpeg](https://ffmpeg.org/)

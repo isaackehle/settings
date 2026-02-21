@@ -16,6 +16,18 @@ brew install httpie
 brew install postman
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+```shell
+http --help
+```
+
+Start: Open the app from Applications.
+
 ## Concepts
 
 - **REST** — Resource-based HTTP APIs

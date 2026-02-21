@@ -36,6 +36,12 @@ sdk use java 21.0.2-tem
 sdk default java 21.0.2-tem
 ```
 
+## Start / Usage
+
+```shell
+java -version
+```
+
 ## Concepts
 
 ### Garbage Collection

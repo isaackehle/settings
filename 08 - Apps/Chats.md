@@ -22,6 +22,14 @@ brew install --cask discord
 brew install --cask kiwi-for-gmail
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [Slack](https://slack.com/)

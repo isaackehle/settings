@@ -19,6 +19,14 @@ brew install --cask burn
 brew install imagemagick
 ```
 
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
+
 ## References
 
 - [HandBrake](https://handbrake.fr/)

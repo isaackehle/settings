@@ -28,24 +28,30 @@ aws configure
 
 Credentials are stored in `~/.aws/credentials` and config in `~/.aws/config`.
 
+## Start / Usage
+
+```shell
+aws sts get-caller-identity
+```
+
 ## Key Services
 
-| Service | Description |
-|---|---|
-| **EC2** | Virtual compute instances |
-| **S3** | Object storage |
-| **Lambda** | Serverless functions |
-| **RDS** | Managed relational databases |
-| **DynamoDB** | Managed NoSQL database |
-| **EKS** | Managed Kubernetes |
-| **Cognito** | User authentication |
+| Service            | Description                                |
+| ------------------ | ------------------------------------------ |
+| **EC2**            | Virtual compute instances                  |
+| **S3**             | Object storage                             |
+| **Lambda**         | Serverless functions                       |
+| **RDS**            | Managed relational databases               |
+| **DynamoDB**       | Managed NoSQL database                     |
+| **EKS**            | Managed Kubernetes                         |
+| **Cognito**        | User authentication                        |
 | **CloudFormation** | Infrastructure as code (cf. [[Terraform]]) |
-| **CloudWatch** | Monitoring and observability |
-| **API Gateway** | Managed API hosting |
-| **SNS** | Pub/sub messaging |
-| **Kinesis** | Real-time data streaming |
-| **Step Functions** | Serverless workflow orchestration |
-| **Corretto** | Amazon's OpenJDK distribution |
+| **CloudWatch**     | Monitoring and observability               |
+| **API Gateway**    | Managed API hosting                        |
+| **SNS**            | Pub/sub messaging                          |
+| **Kinesis**        | Real-time data streaming                   |
+| **Step Functions** | Serverless workflow orchestration          |
+| **Corretto**       | Amazon's OpenJDK distribution              |
 
 ## References
 

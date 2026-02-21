@@ -69,3 +69,11 @@ brew install alfred path-finder xquartz flux spectacle disk-inventory-x mounty c
 - Microsoft Remote Desktop
 - Microsoft Office
 - Paragon NTFS
+
+## Configuration
+
+No basic configuration required.
+
+## Start / Usage
+
+Start: Open the app from Applications.
