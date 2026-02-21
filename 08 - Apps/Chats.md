@@ -2,21 +2,27 @@
 tags: [apps]
 ---
 
-# Chats and social media
+# Chats & Communication
+
+Messaging and social apps.
+
+## Installation
 
 ```shell
-brew install tweetdeck
-brew install skype
-brew install slack
-brew install telegram
-# brew install telegram-desktop
-brew install vsee
-brew install gitter
-brew install messenger-for-desktop
-brew install adium
-brew install microsoft-teams
+brew install --cask slack
+brew install --cask microsoft-teams
+brew install --cask telegram
+brew install --cask skype
+brew install --cask discord
 ```
 
+### Email
+
 ```shell
-brew install kiwi-for-gmail
+brew install --cask kiwi-for-gmail
 ```
+
+## References
+
+- [Slack](https://slack.com/)
+- [Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams/group-chat-software)

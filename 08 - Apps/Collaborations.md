@@ -2,11 +2,21 @@
 tags: [apps]
 ---
 
-# Project Jupyter
+# Collaborations
 
-[Project Jupyter | Home](https://jupyter.org/)
+Tools for interactive computing and team collaboration.
 
-JupyterLab: A Next-Generation Notebook Interface
+## Jupyter
+
+Browser-based notebooks for data science and interactive Python.
+
+```shell
 pip3 install jupyterlab
+jupyter lab
+```
 
-[Work Hub | Qatalog](https://qatalog.com/)
+- [Project Jupyter](https://jupyter.org/)
+
+## References
+
+- [JupyterLab Documentation](https://jupyterlab.readthedocs.io/)

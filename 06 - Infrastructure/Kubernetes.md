@@ -4,29 +4,47 @@ tags: [infrastructure]
 
 # Kubernetes
 
+Container orchestration system for automating deployment, scaling, and management of containerized applications.
+
+## Installation
+
 ```shell
-brew install kubernetes-cli
-brew install kubectx
-brew install minikube
+brew install kubernetes-cli kubectx minikube
 brew install derailed/k9s/k9s
 ```
 
-- To test and view contexts run
+## Usage
 
 ```shell
+# List configured clusters
 kubectl config get-clusters
+
+# Switch cluster context
+kubectx <cluster-name>
+
+# Get pods in a namespace
+kubectl get pods -n my-namespace
+
+# Apply a manifest
+kubectl apply -f deployment.yaml
 ```
 
-- The output should look like
+### K9s
+
+Terminal UI for Kubernetes cluster management.
 
 ```shell
-arn:aws:eks:us-east-1:IDIDIDIDIDID:cluster/prd-internal
-arn:aws:eks:us-east-1:IDIDIDIDIDID:cluster/test
-arn:aws:eks:us-east-1:IDIDIDIDIDID:cluster/devtest
-arn:aws:eks:us-east-1:IDIDIDIDIDID:cluster/prd-external
+brew install derailed/k9s/k9s
 ```
 
-## K9s
+Launch with:
 
-- brew install derailed/k9s/k9s
-- [Install (k9scli.io)](https://k9scli.io/topics/install/)
+```shell
+k9s
+```
+
+## References
+
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
+- [K9s](https://k9scli.io/)
+- [Helm — Kubernetes package manager](https://helm.sh/)

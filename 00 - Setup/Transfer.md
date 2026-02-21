@@ -2,79 +2,65 @@
 tags: [setup]
 ---
 
-# Transfer from one mac to another
+# Transfer
 
-## MongoChef
+Steps for migrating settings and connections to a new Mac.
 
-- Export connections
+## Studio 3T (MongoDB)
 
-  1. Open Connect Dialog
-  1. Select all (or desired) connections
-  1. Click `Export`
-  1. Click `Include passwords`
-  1. Save to secure location (local flash drive)
+### Export connections
 
-- Import connections on new computer
+1. Open the Connect dialog
+2. Select all desired connections
+3. Click **Export** → enable **Include passwords**
+4. Save to a secure location (e.g., a local flash drive)
 
-  1. Open Connect Dialog
-  1. Click `Import`
-  1. Select file on flash drive previously saved
-  1. Select all and import. (Note: Names will have the import date appended)
+### Import on new Mac
 
-- Kill the connections file
+1. Open the Connect dialog
+2. Click **Import** → select the previously saved file
+3. Select all and import (note: names will have the import date appended)
 
 ## Navicat
 
-- Copy Settings
+### Copy settings
 
-  1. Create zip file
+```shell
+cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
+zip -r ~/settings-backup/navicat/settings.zip .
+```
 
-     ```shell
-     cd ~/Library/Application\ Support/PremiumSoft\ CyberTech
-     zip -r ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip .
-     ```
+On the new Mac:
 
-  1. Unzip file on new computer
+```shell
+cd ~/Library/Application\ Support/
+mv PremiumSoft\ CyberTech PremiumSoft\ CyberTech.bak
+mkdir PremiumSoft\ CyberTech && cd "$_"
+unzip ~/settings-backup/navicat/settings.zip
+```
 
-     ```shell
-     cd ~/Library/Application\ Support/
-     mv PremiumSoft\ CyberTech PremiumSoft\ CyberTech.bak
-     mkdir PremiumSoft\ CyberTech
-     cd PremiumSoft\ CyberTech
-     unzip ~/insync/pgkehle@gmail.com/settings/navicat/settings.zip
-     ```
+### Oracle TNS configuration
 
-- Kill the settings file
+1. Ensure Navicat is closed
+2. Download `tnsnames.ora` and `sqlnet.ora`, save to `~/Documents`
+3. Create symlinks:
 
-- Save tnsnames.ora, sqlnet.ora
+```shell
+ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
+ln -s ~/Documents/sqlnet.ora ~/.sqlnet.ora
 
-  1. Ensure Navicat Premium is closed
-  1. Download from [Oracle](http://www.ncsu.edu/project/oraclenet/tns.html)
-  1. Save files to ~/Documents
-  1. Link the file(s) to the home folder:
+sudo mkdir -p /opt/oracle/instantclient/network/admin/
+sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
+sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
+```
 
-     ```shell
-     ln -s ~/Documents/tnsnames.ora ~/.tnsnames.ora
-     ln -s ~/Documents/sqlnet.ora ~/.sqlnet.ora
-     ```
+4. In Navicat → Preferences → Environments:
+   - Uncheck **Use Bundled Instant Client**
+   - `ORACLE_HOME` → `/opt/oracle/instantclient`
+   - `DYLD_LIBRARY_PATH` → `/opt/oracle/instantclient`
+   - `TNS_ADMIN` → `/opt/oracle/instantclient/network/admin`
 
-  1. Link the file(s) to the OCI network folder:
-
-     ```shell
-     sudo mkdir -p /opt/oracle/instantclient/network/admin/
-     sudo ln -s ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
-     sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
-     ```
-
-- Update Navicat Settings
-
-  1. Open Navicat->Preferences, Environments tab
-  1. Uncheck 'Use Bundled Instant Client'
-  1. Set ORACLE_HOME to `/opt/oracle/instantclient`
-  1. Set DYLD_LIBRARY_PATH to `/opt/oracle/instantclient`
-  1. Set TNS_ADMIN to `/opt/oracle/instantclient/network/admin`
-
-- Check dns server settings on mac:
+## DNS Check
 
 ```shell
 scutil --dns | grep 'nameserver\[[0-9]*\]'

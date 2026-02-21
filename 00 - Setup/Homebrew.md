@@ -2,38 +2,36 @@
 tags: [setup]
 ---
 
-# Brew
+# Homebrew
 
-[Homepage](http://brew.sh/)
+macOS's missing package manager. Used to install CLI tools and GUI apps (via Cask).
 
-Install via ruby:
+## Installation
 
 ```shell
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Other Base Stuff
-
-- GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed, `sed`
-
-  ```shell
-  brew install coreutils moreutils findutils
-  ```
-
-## brew Installation
-
-A nice way of installing GUI packages, along with [updating them](https://github.com/buo/homebrew-cask-upgrade).
+Install commonly useful GNU tools:
 
 ```shell
-brew install caskroom/cask/brew-cask
-brew tap caskroom/versions
+brew install coreutils moreutils findutils
 ```
 
-To Update Brew and Casks:
+## Usage
 
 ```shell
-brew update
+# Update Homebrew and all packages
+brew update && brew upgrade
+
+# Check for issues
 brew doctor
+
+# Remove old cached versions
 brew cleanup
-brew prune
 ```
+
+## References
+
+- [Homebrew](https://brew.sh/)
+- [Homebrew Cask Upgrade](https://github.com/buo/homebrew-cask-upgrade)

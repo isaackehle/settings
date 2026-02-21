@@ -4,16 +4,19 @@ tags: [setup]
 
 # Fonts
 
+Developer and icon fonts for terminals and editors.
+
+## Installation
+
 ```shell
 brew install fontconfig
 
-brew tap homebrew/cask-fonts
+# Nerd Fonts — includes icons for terminal themes like powerlevel10k
 brew install font-hack-nerd-font
 
-brew install font-roboto font-roboto-mono font-roboto-mono-for-powerline font-roboto-slab
-# brew install font-noto-sans-hebrew
-# brew install font-open-sans-hebrew
-# brew install font-open-sans-hebrew-condensed
+# Google Fonts
+brew install font-roboto font-roboto-mono font-roboto-slab
 
+# Fira Code — programming ligatures
 brew install font-fira-code
 ```

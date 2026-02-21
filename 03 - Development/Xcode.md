@@ -2,12 +2,29 @@
 tags: [development]
 ---
 
-# XCode
+# Xcode
+
+Apple's developer tools. The Command Line Tools are required for many brew packages and compilers.
+
+## Installation
 
 ```shell
-sudo xcodebuild -license
-
 xcode-select --install
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developersudo
-xcodebuild --license accept
 ```
+
+Accept the license:
+
+```shell
+sudo xcodebuild -license accept
+```
+
+Point Xcode to the correct developer directory if the full Xcode app is installed:
+
+```shell
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+## References
+
+- [Xcode on the Mac App Store](https://apps.apple.com/us/app/xcode/id497799835)
+- [Apple Developer Documentation](https://developer.apple.com/documentation/)

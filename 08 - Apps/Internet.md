@@ -2,15 +2,31 @@
 tags: [apps]
 ---
 
-# Internet Utils
+# Internet Utilities
+
+Network analysis and monitoring tools.
+
+## Installation
 
 ```shell
-brew install --force wireshark
+# Packet analyzer
+brew install --cask wireshark
 
+# Port scanner
 brew install nmap
+
+# Network diagnostic
 brew install mtr
-sudo chown root:wheel /usr/local/Cellar/mtr/0.86/sbin/mtr
-sudo chmod u+s /usr/local/Cellar/mtr/0.86/sbin/mtr
+
+# Web vulnerability scanner
 brew install nikto
+
+# DNS mapper
 brew install dnsmap
 ```
+
+## References
+
+- [Wireshark](https://www.wireshark.org/)
+- [nmap](https://nmap.org/)
+- [mtr](https://www.bitwizard.nl/mtr/)

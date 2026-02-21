@@ -4,42 +4,35 @@ tags: [editors]
 
 # Editors
 
-| Tool                                                                | Command                                              | Follow up                       |
-| ------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------- |
-| [VS Code](https://code.visualstudio.com/)                           | `brew install visual-studio-code`                    |                                 |
-| [PyCharm, Community Edition](https://www.jetbrains.com/pycharm/)    | `brew install pycharm-ce`                            |                                 |
-| [IntelliJ IDEA, Community Edition](https://www.jetbrains.com/idea/) | `brew install intellij-idea-ce`                      |                                 |
-| ~~[Atom](https://atom.io/)~~                                        | ~~`brew install atom`~~                              | ~~`apm install sync-settings`~~ |
-| [Sublime](https://www.sublimetext.com/)                             | `brew install sublime-text`                          |                                 |
-| [Mac VIM](https://macvim-dev.github.io/macvim/)                     | `brew install macvim`                                |                                 |
-| [PHP Storm](https://www.jetbrains.com/phpstorm/)                    | `brew install phpstorm`                              |                                 |
-| [Web Storm](https://www.jetbrains.com/webstorm/)                    | `brew install webstorm`                              |                                 |
-| Sketch                                                              | `brew install sketch`                                |                                 |
-| Vanta                                                               | [link](https://app.vanta.com/osquery/download/macOS) |                                 |
-| Libre Office                                                        | `brew install libreoffice`                           |                                 |
-| Microsoft Office                                                    | `brew install microsoft-office`                      |                                 |
-| TextExpander                                                        | `brew install textexpander`                          |                                 |
-| hex                                                                 | `brew install hex`                                   |                                 |
-| Araxis Merge                                                        | `brew install araxis-merge`                          |                                 |
-| Aquamacs                                                            | `brew install aquamacs`                              |                                 |
+Code editors and IDEs available via Homebrew.
 
-iHex - Hex Editor
-brew install visual-studio-code
+## Installation
 
-For vi:
+| Tool | Command |
+|---|---|
+| [VS Code](https://code.visualstudio.com/) | `brew install visual-studio-code` |
+| [PyCharm CE](https://www.jetbrains.com/pycharm/) | `brew install pycharm-ce` |
+| [IntelliJ IDEA CE](https://www.jetbrains.com/idea/) | `brew install intellij-idea-ce` |
+| [Sublime Text](https://www.sublimetext.com/) | `brew install sublime-text` |
+| [MacVim](https://macvim-dev.github.io/macvim/) | `brew install macvim` |
+| [PhpStorm](https://www.jetbrains.com/phpstorm/) | `brew install phpstorm` |
+| [WebStorm](https://www.jetbrains.com/webstorm/) | `brew install webstorm` |
+| [LibreOffice](https://www.libreoffice.org/) | `brew install libreoffice` |
+| [Microsoft Office](https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac) | `brew install microsoft-office` |
+| [TextExpander](https://textexpander.com/) | `brew install textexpander` |
+| [Araxis Merge](https://www.araxis.com/merge/) | `brew install araxis-merge` |
 
-Add the following to your ~/.vimrc:
+## Configuration
 
-```shell
+### Vim (`~/.vimrc`)
+
+```vim
 filetype plugin indent on
-set term=builtin_ansi
 syntax on
-```
-
-For iterm2:
-
-```shell
-filetype plugin indent on
 set term=xterm-256color
-syntax on
 ```
+
+## References
+
+- [VS Code Documentation](https://code.visualstudio.com/docs)
+- [Vim cheat sheet](https://vim.rtorr.com/)

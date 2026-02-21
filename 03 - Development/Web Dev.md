@@ -2,20 +2,25 @@
 tags: [development]
 ---
 
-# Development Tools
+# Web Development
 
-## Installations
+Tools and frameworks for web development. See also: [[Volta]] for Node.js management.
 
-- [[Xcode]]
-- [[SOPS]]
-- [[Gradle]]
-- [[Terraform]]
-- [[Volta]]
-- [loom](https://www.loom.com/) - `brew install loom`
+## Prerequisites
+
+- [[Xcode]] — required for native build tools
+- [[Git]] — version control
+- [[Volta]] — Node.js version management
+
+## Infrastructure Tools
+
+- [[SOPS]] — secrets management
+- [[Gradle]] — JVM build tool
+- [[Terraform]] — infrastructure as code
 
 ## Just
 
-[just](https://just.io)
+[just](https://just.systems) is a command runner (simpler alternative to Make).
 
 ```shell
 brew install just
@@ -23,56 +28,33 @@ brew install just
 
 ## Feature Flags
 
-[launch darkly](https://launchdarkly.com)
+- [LaunchDarkly](https://launchdarkly.com)
 
-## List all NPM global packages installed
+## NPM Global Packages
+
+List all globally installed npm packages:
 
 ```shell
 npm ls -g --depth 0
 ```
 
-## Angular 2+
+Common globals:
 
 ```shell
-npm install -g angular-cli@latest
-npm install -g typescript@beta
-npm install -g typescript@2.0
-npm install -g nativescript
-npm install -g lodash async moment csv-parse
 npm install -g npm-check-updates
+npm install -g typescript
+npm install -g eslint
+npm install -g webpack webpack-dev-server
+npm install -g rimraf
 ```
 
-## Common Global Packages
+## Angular
 
-| Package | Commands                                                 |
-| ------- | -------------------------------------------------------- |
-|         | npm install -g async babel-cli bower csv-parse eslint fs |
-|         | npm install -g nativescript nightwatch protractor        |
-|         | npm install -g typings                                   |
-|         | npm install -g webpack webpack-dev-server                |
-|         | npm install -g yo                                        |
-|         | npm install -g csv-parse                                 |
-|         | npm install -g fs                                        |
-|         | npm install -g moment                                    |
-|         | npm install -g istanbul                                  |
-|         | npm install -g jspm                                      |
-|         | npm install -g lebab                                     |
-|         | npm install -g less                                      |
-|         | npm install -g lodash                                    |
-|         | npm install -g mocha                                     |
-|         | npm install -g rimraf                                    |
-|         | npm install -g babel-cli                                 |
-|         | npm install -g grunt-cli                                 |
-|         | npm install -g gulp-cli                                  |
-|         | npm install -g karma-cli                                 |
-|         | npm install -g pug-cli                                   |
-
-## Nativescript
-
-- <https://docs.nativescript.org/start/ns-setup-os-x>
+```shell
+npm install -g @angular/cli
+```
 
 ## References
 
-- <http://stackoverflow.com/questions/28017374/what-is-the-suggested-way-to-install-brew-node-js-io-js-nvm-npm-on-os-x>
-- <http://stackoverflow.com/questions/11177954/how-do-i-completely-uninstall-node-js-and-reinstall-from-beginning-mac-os-x>
-- <http://marcgrabanski.com/setting-up-mac-osx-web-development/>
+- [Nativescript setup (macOS)](https://docs.nativescript.org/start/ns-setup-os-x)
+- [Setting up macOS for web development](http://marcgrabanski.com/setting-up-mac-osx-web-development/)

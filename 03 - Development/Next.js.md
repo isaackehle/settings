@@ -2,14 +2,35 @@
 tags: [development]
 ---
 
-# next js
+# Next.js
 
-[Cannot find module 'next' or its corresponding type declarations](https://stackoverflow.com/questions/69238794/cannot-find-module-next-or-its-corresponding-type-declarations)
+React framework with server-side rendering, static site generation, and file-based routing.
 
-- Run `yarn dlx @yarnpkg/sdks vscode`
-- Open any TypeScript file
-- Press `ctrl+shift+p`
-- Choose `Select TypeScript Version`
-- Pick `Use Workspace Version`
+## Installation
 
-[How To Style Your Next.JS Projects EXACTLY Like Google (in TypeScript)](https://blog.jarrodwatts.com/nextjs-eslint-prettier-husky)
+```shell
+npm install -g create-next-app
+
+# Create a new project
+npx create-next-app@latest my-app
+```
+
+## Configuration
+
+### Yarn PnP + VS Code TypeScript
+
+If using Yarn PnP and TypeScript types are not resolving:
+
+```shell
+yarn dlx @yarnpkg/sdks vscode
+```
+
+Then in VS Code: `Ctrl+Shift+P` → **Select TypeScript Version** → **Use Workspace Version**.
+
+### ESLint + Prettier
+
+- [How to set up ESLint, Prettier, and Husky in Next.js](https://blog.jarrodwatts.com/nextjs-eslint-prettier-husky)
+
+## References
+
+- [Next.js Documentation](https://nextjs.org/docs)

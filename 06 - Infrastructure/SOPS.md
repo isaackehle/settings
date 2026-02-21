@@ -2,19 +2,39 @@
 tags: [infrastructure]
 ---
 
-# Sops
+# SOPS
 
-SOPS is used for encrypting environment resources for HELM deployments. An example resource file can be seen here. This
-will store such info as the database login/password, api keys, etc.
+Secrets Operations — encrypts values in YAML, JSON, ENV, and INI files using AWS KMS, GCP KMS, Azure Key Vault, or PGP. Used for storing secrets alongside Helm deployments.
 
-Documentation is [here](https://github.com/mozilla/sops)
+## Installation
 
 ```shell
 brew install sops
 ```
 
-After make sure your profile contains the following:
+## Configuration
+
+Set your preferred editor (used when running `sops <file>`):
 
 ```shell
 export EDITOR='code -w'
 ```
+
+Add to `~/.zshrc` to persist it.
+
+## Usage
+
+```shell
+# Encrypt a file
+sops --encrypt secrets.yaml > secrets.enc.yaml
+
+# Edit encrypted file in-place
+sops secrets.enc.yaml
+
+# Decrypt to stdout
+sops --decrypt secrets.enc.yaml
+```
+
+## References
+
+- [SOPS on GitHub](https://github.com/getsops/sops)

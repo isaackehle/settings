@@ -4,44 +4,34 @@ tags: [databases]
 
 # Databases
 
-## Database types
+Setup and GUI tools for common databases.
 
-### MongoDB
+## MongoDB
 
 ```shell
 brew tap mongodb/brew
 brew install mongodb-community
-brew install mongodb
-
-# To have launchd start mongodb at login:
-
-ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
-
-# Then to load mongodb now:
-launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+brew services start mongodb-community
 ```
 
-- Or, for mongodb with a replica set
+GUI: [[Databases#Studio 3T|Studio 3T]]
 
-### Postgresql
-
-- [How to Install Postgresql on Mac using Homebrew](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)
-- [PSQL Fatal: role `postgres` does not exist](https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist)
+## PostgreSQL
 
 ```shell
 brew install postgresql@14
 brew services start postgresql@14
-
 /usr/local/opt/postgresql@14/bin/createuser -s postgres
 ```
 
-```note
-PostgreSQL: Documentation: 13: 9.16. JSON Functions and Operators
-The operator -> returns JSON object field as JSON.
-The operator ->> returns JSON object field as text.
-```
+Useful JSON operators:
 
-## GUIs
+- `->` returns a JSON field as JSON
+- `->>` returns a JSON field as text
+
+- [PostgreSQL JSON Functions](https://www.postgresql.org/docs/current/functions-json.html)
+
+## GUI Tools
 
 ### Navicat
 
@@ -49,38 +39,25 @@ The operator ->> returns JSON object field as text.
 brew install --force navicat-premium
 ```
 
-> Might need to set the TDS for navicat
+If connecting to SQL Server, set the TDS version:
 
 ```shell
-# Current Session
+# Current session
 launchctl setenv TDSVER 7.0
 ```
 
-```shell
-# Permanent
-echo '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
- <key>Label</key>
-     <string>setenv.TDSVER</string>
- <key>ProgramArguments</key>
- <array>
-   <string>/bin/launchctl</string>
-   <string>setenv</string>
-   <string>TDSVER</string>
-   <string>7.0</string>
- </array>
- <key>RunAtLoad</key>
-     <true/>
-</dict>
-</plist>' > ~/Library/LaunchAgents/setenv.TDSVER.plist
-```
+### Studio 3T
 
-### Studio-3T MongoChef
+MongoDB GUI (formerly MongoChef):
 
 ```shell
 brew install --cask studio-3t
+```
+
+### dBeaver (multi-database)
+
+```shell
+brew install --cask dbeaver-community
 ```
 
 ### Robomongo
@@ -89,10 +66,8 @@ brew install --cask studio-3t
 brew install --cask robomongo
 ```
 
-### dBeaver
+## References
 
-```shell
-brew install --cask dbeaver-community
-```
-
-### Cassandra
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [MongoDB Documentation](https://www.mongodb.com/docs/)
+- [How to install PostgreSQL on Mac via Homebrew](https://dyclassroom.com/howto-mac/how-to-install-postgresql-on-mac-using-homebrew)

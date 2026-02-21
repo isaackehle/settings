@@ -4,39 +4,51 @@ tags: [infrastructure]
 
 # Pipelines
 
-## Codefresh
+CI/CD, workflow, and platform engineering tools.
 
-[LocalStack - A fully functional local cloud stack](https://localstack.cloud/)
+## CI/CD
 
-[Backstage Software Catalog and Developer Platform](https://backstage.io/)
+- [Codefresh](https://codefresh.io/) — Kubernetes-native CI/CD
+- [GitHub Actions](https://docs.github.com/en/actions) — built-in CI for GitHub repos
 
-## Celery
+## Task Queues
 
-- [python - How to check task status in Celery? - Stack Overflow](https://stackoverflow.com/questions/9034091/how-to-check-task-status-in-celery)
+### Celery
 
-## Helm
+Distributed task queue for Python.
 
-package manager for k8s
+- [Celery documentation](https://docs.celeryq.dev/)
+- [How to check task status](https://stackoverflow.com/questions/9034091/how-to-check-task-status-in-celery)
+
+## Kubernetes Package Management
+
+### Helm
+
+```shell
+brew install helm
+```
 
 - [Helm](https://helm.sh/)
-- [roboll/helmfile: Deploy Kubernetes Helm Charts (github.com)](https://github.com/roboll/helmfile)
+- [Helmfile](https://github.com/helmfile/helmfile)
 
-## Jfrog
+## Feature Flags
 
-## [Prometheus](https://prometheus.io/)
+- [LaunchDarkly](https://launchdarkly.com)
+- [Flagsmith](https://flagsmith.com/) — open-source alternative
 
-## Terraform
+## Monitoring
 
-- [Terraform by HashiCorp](https://www.terraform.io/)
+- [[Dashboards]] — Grafana, Prometheus
 
-## Launchdarkly
+## Platform Engineering
 
-## Flagsmith
+- [Backstage](https://backstage.io/) — developer portal / software catalog
+- [LocalStack](https://localstack.cloud/) — local AWS cloud stack for testing
 
-- [Flagsmith - Open Source Feature Flag & Remote Config Service](https://flagsmith.com/)
+## Artifact Management
 
-## Prometheus
+- [JFrog Artifactory](https://jfrog.com/artifactory/)
 
-## Gradle
+## References
 
-- [Structuring and Building a Software Component with Gradle](https://docs.gradle.org/current/userguide/multi_project_builds.html)
+- [Prometheus](https://prometheus.io/)

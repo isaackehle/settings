@@ -2,31 +2,38 @@
 tags: [node]
 ---
 
-# FNM - Fast Node Manager
+# FNM
+
+Fast Node Manager — a faster, Rust-based alternative to NVM.
 
 ## Installation
 
-Documentation is at [Schniz/fnm](https://github.com/Schniz/fnm)
-
 ```shell
-brew install nvm
+brew install fnm
 ```
 
+Add to `~/.zshrc`:
+
 ```shell
-❯ eval "$(fnm env)"
-
-❯ fnm --version
-fnm 1.38.1
-
-❯ fnm install
-
-Installing Node v18.20.8 (arm64)
-00:00:02 █████████████████████████████████████████████████████████████████████████████████████████████████████▍ 19.70 MiB/19.81 MiB (5.10 MiB/s, 0s)
-
-❯ fnm use
-Using Node v18.20.8
-
-fnm completions --shell zsh
 eval "$(fnm env --use-on-cd --shell zsh)"
-
 ```
+
+## Usage
+
+```shell
+# Install the version specified in .nvmrc / .node-version
+fnm install
+
+# Use the installed version
+fnm use
+
+# Install a specific version
+fnm install 20
+
+# List installed versions
+fnm list
+```
+
+## References
+
+- [FNM on GitHub](https://github.com/Schniz/fnm)

@@ -2,15 +2,31 @@
 tags: [development]
 ---
 
-# css
+# CSS
 
-## [CSS Tutorial (w3schools.com)](https://www.w3schools.com/Css/default.asp)
+Cascading Style Sheets for web styling.
 
-## [CSS Box Model (w3schools.com)](https://www.w3schools.com/Css/css_boxmodel.asp)
+## Box Model
 
-Explanation of the different parts:
+Every element is a rectangular box composed of:
 
-- Content: The content of the box, where text and images appear
-- Padding: Clears an area around the content. The padding is transparent
-- Border: A border that goes around the padding and content
-- Margin: Clears an area outside the border. The margin is transparent
+- **Content** — where text and images appear
+- **Padding** — transparent space around the content
+- **Border** — surrounds padding and content
+- **Margin** — transparent space outside the border
+
+## Tools & Frameworks
+
+```shell
+# PostCSS processor
+brew install node  # then: npm install -g postcss-cli
+
+# Sass
+npm install -g sass
+```
+
+## References
+
+- [CSS Tutorial — w3schools](https://www.w3schools.com/Css/default.asp)
+- [CSS Box Model — w3schools](https://www.w3schools.com/Css/css_boxmodel.asp)
+- [MDN CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS)

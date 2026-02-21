@@ -2,58 +2,51 @@
 tags: [languages]
 ---
 
-# Python and related tooling
+# Python
 
-https://opensource.com/article/19/5/python-3-default-mac
+Python 3 managed via `pyenv` for version isolation.
+
+## Installation
 
 ```shell
 brew install pyenv
 ```
 
-Add pyenv to your config file (.zshrc or .bash_profile)
+Add to `~/.zshrc`:
 
 ```shell
-echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.zshrc
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
 ```
 
-Determine all versions of python available
+## Usage
+
+List available versions:
 
 ```shell
 pyenv install --list
 ```
 
-Install a version and set it to global
+Install and set a global version:
 
 ```shell
-pyenv install 3.10.6
-pyenv global 3.10.6
-
-echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.zshrc
-
+pyenv install 3.12.0
+pyenv global 3.12.0
 ```
 
-```shell
-brew install py2cairo
-brew install pygobject3
-```
+Common pip packages:
 
 ```shell
-pip install termcolors
-pip install notebook
 pip install --upgrade pip
+pip install pipenv
+pip install notebook       # Jupyter
 ```
 
-Python
+## References
 
-- [FastAPI (tiangolo.com)](https://fastapi.tiangolo.com/)
-- [microsoft/ptvsd: Python debugger package for use with Visual Studio and Visual Studio Code. (github.com)](https://github.com/Microsoft/ptvsd)
-
-```shell
-pip3 install pipenv
-/usr/local/bin/pipenv
-```
-
-Mypy
-
-- [Introduction — Mypy 0.910 documentation](https://mypy.readthedocs.io/en/stable/introduction.html)
-- [Type hints cheat sheet (Python 3) — Mypy 0.910 documentation](https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html)
+- [pyenv on GitHub](https://github.com/pyenv/pyenv)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Mypy — static type checker](https://mypy.readthedocs.io/)
+- [Setting Python 3 as default on macOS](https://opensource.com/article/19/5/python-3-default-mac)

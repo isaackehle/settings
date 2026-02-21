@@ -4,10 +4,28 @@ tags: [languages]
 
 # Flutter
 
-[Flutter - Build apps for any screen](https://flutter.dev/)
+Google's UI toolkit for building natively compiled apps for mobile, web, and desktop from a single codebase. Uses the Dart language.
 
-Flutter gives developers an easy and productive way to build and deploy cross-platform, high-performance mobile apps for both Android and iOS.
+## Installation
 
-[Flutter - Introduction to Dart Programming (tutorialspoint.com)](https://www.tutorialspoint.com/flutter/flutter_introduction_to_dart_programming.htm)
+```shell
+brew install flutter
+```
 
-Dart is an open-source general-purpose programming language. It is originally developed by Google. Dart is an object-oriented language with C-style syntax. It supports programming concepts like interfaces, classes, unlike other programming languages Dart doesn’t support arrays. Dart collections can be used to replicate data structures such as arrays, generics, and optional typing.
+Verify setup:
+
+```shell
+flutter doctor
+```
+
+## Overview
+
+Flutter renders its own widgets rather than using platform-native components, giving pixel-perfect consistency across platforms.
+
+Dart is an object-oriented, C-style language developed by Google. It supports classes and interfaces but not arrays — use `List` instead.
+
+## References
+
+- [Flutter](https://flutter.dev/)
+- [Dart language tour](https://dart.dev/guides/language/language-tour)
+- [Flutter — Introduction to Dart](https://www.tutorialspoint.com/flutter/flutter_introduction_to_dart_programming.htm)

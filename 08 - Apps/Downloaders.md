@@ -2,19 +2,21 @@
 tags: [apps]
 ---
 
-# File Downloading and Uploading Transferring Apps
+# Downloaders
+
+File transfer, FTP, and torrent tools.
 
 ## FTP
 
 ```shell
-brew install filezilla
+brew install --cask filezilla
 ```
 
-## Torrent, Downloaders
+## Torrent
 
 ```shell
-brew install deluge
-brew install folx
+brew install --cask deluge
+brew install --cask folx
 ```
 
 ## wget
@@ -22,3 +24,8 @@ brew install folx
 ```shell
 brew install wget
 ```
+
+## References
+
+- [FileZilla](https://filezilla-project.org/)
+- [Deluge](https://deluge-torrent.org/)

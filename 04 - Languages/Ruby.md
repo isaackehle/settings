@@ -4,12 +4,32 @@ tags: [languages]
 
 # Ruby
 
-## references
+Dynamic language popular for scripting and web development (Rails). Managed via RVM.
 
-- <http://stackoverflow.com/questions/33883615/can-i-upgrade-to-the-current-version-of-ruby-2-2-3-on-os-x-v10-6-8#>
+## Installation
 
 ```shell
 curl -sSL https://get.rvm.io | bash -s stable --ruby
-rvm install 2.2
-rvm use 2.2 --default
 ```
+
+Install and use a specific version:
+
+```shell
+rvm install 3.2
+rvm use 3.2 --default
+```
+
+## Usage
+
+```shell
+# List installed versions
+rvm list
+
+# Switch version
+rvm use 3.2
+```
+
+## References
+
+- [RVM](https://rvm.io/)
+- [Ruby Downloads](https://www.ruby-lang.org/en/downloads/)

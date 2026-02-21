@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "05 - Node/PNPM.md",
+                "file": "06 - Infrastructure/Pipelines.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PNPM"
+              "title": "Pipelines"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "pipeli",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -94,7 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "05 - Node/PNPM.md",
+                "file": "06 - Infrastructure/Pipelines.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +105,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PNPM"
+              "title": "Backlinks for Pipelines"
             }
           },
           {
@@ -113,12 +114,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "05 - Node/PNPM.md",
+                "file": "06 - Infrastructure/Pipelines.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PNPM"
+              "title": "Outgoing links from Pipelines"
             }
           },
           {
@@ -156,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "05 - Node/PNPM.md",
+                "file": "06 - Infrastructure/Pipelines.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PNPM"
+              "title": "Outline of Pipelines"
             }
           }
         ]
@@ -185,14 +186,23 @@
   },
   "active": "30fc69fd1399b1fc",
   "lastOpenFiles": [
-    "05 - Node/FNM.md",
-    "05 - Node/NVM.md",
-    "05 - Node/Corepack.md",
-    "00 - Setup/Transfer.md",
+    "03 - Development/Load Testing.md",
+    "03 - Development/Git.md",
+    "03 - Development/Concepts.md",
+    "03 - Development/APIs.md",
+    "02 - Editors/Editors.md",
+    "01 - Terminal/Zsh.md",
+    "01 - Terminal/SSH.md",
+    "01 - Terminal/iTerm.md",
     "00 - Setup/Tweaks.md",
+    "00 - Setup/Transfer.md",
     "00 - Setup/Installations.md",
     "00 - Setup/Homebrew.md",
     "00 - Setup/Fonts.md",
-    "00 - Setup/Automation.md"
+    "00 - Setup/Automation.md",
+    "05 - Node/PNPM.md",
+    "05 - Node/FNM.md",
+    "05 - Node/NVM.md",
+    "05 - Node/Corepack.md"
   ]
 }
