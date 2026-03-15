@@ -20,10 +20,13 @@ Dotfiles and Claude Code configuration synced across machines.
 ## Setup on a New Machine
 
 ### Prerequisites:
+
 1. **Install Homebrew** (if not already installed):
+
    ```bash
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
+
    See [brew.sh](https://brew.sh/) for details.
 
 ### One-time setup:
