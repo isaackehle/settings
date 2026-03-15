@@ -1,0 +1,6 @@
+{
+  "defaultModel": "gemini-2.0-flash",
+  "modelParams": {
+    "temperature": 0.7
+  }
+}
