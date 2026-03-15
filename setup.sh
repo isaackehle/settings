@@ -58,6 +58,9 @@ fi
 if [ -f "$SETTINGS_DIR/gemini/GEMINI.md" ]; then
     create_symlink "$SETTINGS_DIR/gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
 fi
+if [ -f "$SETTINGS_DIR/gemini/projects.json" ]; then
+    create_symlink "$SETTINGS_DIR/gemini/projects.json" "$HOME/.gemini/projects.json"
+fi
 
 # Create ~/.codeium symlink (Codeium config)
 mkdir -p "$HOME/.codeium"

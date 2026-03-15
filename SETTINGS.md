@@ -73,7 +73,8 @@ settings/
 │   └── local-settings.json        # Groq CLI config (symlinked to ~/.groq/)
 ├── gemini/
 │   ├── settings.json              # Gemini CLI config (symlinked to ~/.gemini/)
-│   └── GEMINI.md                  # Gemini default instructions
+│   ├── GEMINI.md                  # Gemini default instructions
+│   └── projects.json              # Project folder mappings
 ├── codeium/
 │   └── config.json                # Codeium config (symlinked to ~/.codeium/)
 ├── windsurf/
@@ -118,8 +119,9 @@ No manual syncing needed — git handles it.
 
 ### Google Gemini CLI
 
-- `~/.gemini/settings.json` — model defaults, MCP server config
-- `~/.gemini/GEMINI.md` — default instructions for projects
+- `~/.gemini/settings.json` — model defaults, MCP server config (synced)
+- `~/.gemini/GEMINI.md` — default instructions for projects (synced)
+- `~/.gemini/projects.json` — project-to-folder mappings (synced)
 - API key: `GEMINI_API_KEY` in `~/.env.local`
 
 ### Ollama
