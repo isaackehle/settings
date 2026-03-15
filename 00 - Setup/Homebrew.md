@@ -12,12 +12,6 @@ macOS's missing package manager. Used to install CLI tools and GUI apps (via Cas
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Install commonly useful GNU tools:
-
-```shell
-brew install coreutils moreutils findutils
-```
-
 ## Usage
 
 ```shell

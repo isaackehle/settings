@@ -7,3 +7,5 @@ fi
 
 # Load sensitive environment variables from local file (not in git)
 [[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
+
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
