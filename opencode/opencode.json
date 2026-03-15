@@ -1,5 +1,4 @@
 {
-  "_comment": "Model variants documented at: /Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault/AI tools/Model Recommendations 2026.md#Building Custom Model Variants",
   "$schema": "https://opencode.ai/config.json",
   "model": "ollama/qwen3:8b-fast",
   "provider": {
