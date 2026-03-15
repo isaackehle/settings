@@ -5,10 +5,8 @@ if [ -f "$HOME/.bashrc" ]; then
     source "$HOME/.bashrc"
 fi
 
-# Add Homebrew to PATH (Apple Silicon Macs)
-if [ -d "/opt/homebrew/bin" ]; then
-    export PATH="/opt/homebrew/bin:$PATH"
-fi
+# Load Homebrew setup
+[[ -f "$HOME/.brew" ]] && source "$HOME/.brew"
 
 # FNM (Fast Node Manager) - must be in login shell
 eval "$(fnm env)"
