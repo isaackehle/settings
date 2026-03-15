@@ -64,6 +64,7 @@ settings/
 ├── zprofile                       # Zsh login shell (symlinked to ~/.zprofile)
 ├── bash_profile                   # Bash login shell (symlinked to ~/.bash_profile)
 ├── bashrc                         # Bash interactive shell (symlinked to ~/.bashrc)
+├── brew                           # Homebrew environment (symlinked to ~/.brew)
 ├── .env.local.example             # Template for API keys
 ├── claude/
 │   ├── settings.json              # Claude Code model (symlinked to ~/.claude/)

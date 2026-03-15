@@ -36,6 +36,7 @@ create_symlink "$SETTINGS_DIR/zshrc" "$HOME/.zshrc"
 create_symlink "$SETTINGS_DIR/zprofile" "$HOME/.zprofile"
 create_symlink "$SETTINGS_DIR/bash_profile" "$HOME/.bash_profile"
 create_symlink "$SETTINGS_DIR/bashrc" "$HOME/.bashrc"
+create_symlink "$SETTINGS_DIR/brew" "$HOME/.brew"
 
 # Create ~/.claude symlink (Claude Code config)
 mkdir -p "$HOME/.claude"
