@@ -33,14 +33,14 @@ This will:
 2. Generate `~/.env.local` from the template
 3. Back up any existing config files
 
-### Then:
+### Then
 
 1. Edit `~/.env.local` and add your API keys
 2. Reload your shell: `source ~/.zshrc`
 
 ## Updating Configuration
 
-### On either machine:
+### On either machine
 
 1. **For public changes** (zshrc, keybindings, etc.):
    - Edit the file in `~/code/isaackehle/settings/`
@@ -58,7 +58,7 @@ This will:
 
 ## File Structure
 
-```
+```shell
 settings/
 ├── zshrc                          # Zsh interactive shell (symlinked to ~/.zshrc)
 ├── zprofile                       # Zsh login shell (symlinked to ~/.zprofile)
