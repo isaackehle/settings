@@ -24,11 +24,14 @@ Legacy reference list of brew packages and setup resources. Most tools are now d
 Packages not yet categorized into a dedicated note:
 
 ```shell
+brew install coreutils
+brew install findutils
 brew install graphviz
 brew install figlet
 brew install grc
 brew install imagemagick
 brew install jq
+brew install tldr
 brew install moreutils
 brew install mtr
 brew install nmap
