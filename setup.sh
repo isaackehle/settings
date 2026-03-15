@@ -71,6 +71,12 @@ if [ -f "$SETTINGS_DIR/windsurf/argv.json" ]; then
     create_symlink "$SETTINGS_DIR/windsurf/argv.json" "$HOME/.windsurf/argv.json"
 fi
 
+# Create ~/.config/opencode symlink (OpenCode config)
+mkdir -p "$HOME/.config/opencode"
+if [ -f "$SETTINGS_DIR/opencode/opencode.json" ]; then
+    create_symlink "$SETTINGS_DIR/opencode/opencode.json" "$HOME/.config/opencode/opencode.json"
+fi
+
 # Setup .env.local (symlink to ProtonDrive or local)
 PROTON_SYNC_DIR="$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault/sync"
 ENV_LOCAL_FILE="$HOME/.env.local"

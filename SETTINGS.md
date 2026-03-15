@@ -78,6 +78,8 @@ settings/
 │   └── config.json                # Codeium config (symlinked to ~/.codeium/)
 ├── windsurf/
 │   └── argv.json                  # Windsurf editor CLI args (symlinked to ~/.windsurf/)
+├── opencode/
+│   └── opencode.json              # OpenCode config (symlinked to ~/.config/opencode/)
 ├── setup.sh                       # Setup script for new machines
 ├── SETTINGS.md                    # This file
 └── README.md                      # Vault overview
@@ -95,12 +97,14 @@ No manual syncing needed — git handles it.
 ## Supported Tools
 
 ### FNM (Fast Node Manager)
+
 - Faster Rust-based Node.js version manager (replacement for Volta/NVM)
 - Install: `brew install fnm`
 - Per-project versions via `.node-version` files
 - Automatic version switching with `--use-on-cd`
 
 ### Claude Code (Anthropic)
+
 - `~/.claude/settings.json` — model preference (synced)
 - `~/.claude/keybindings.json` — custom keybindings (synced)
 - `~/.claude/CLAUDE.md` — global instructions (synced)
@@ -108,34 +112,54 @@ No manual syncing needed — git handles it.
 - API key: `ANTHROPIC_API_KEY` in `~/.env.local`
 
 ### Groq CLI
+
 - `~/.groq/local-settings.json` — model defaults, preferences
 - API key: `GROQ_API_KEY` in `~/.env.local`
 
 ### Google Gemini CLI
+
 - `~/.gemini/settings.json` — model defaults, MCP server config
 - `~/.gemini/GEMINI.md` — default instructions for projects
 - API key: `GEMINI_API_KEY` in `~/.env.local`
 
 ### Ollama
+
 - Local models stored in `~/.ollama/models/` (NOT synced — large files)
 - Configuration via environment variables: `OLLAMA_KEEP_ALIVE`, `OLLAMA_HOST`, etc.
 - Already configured in `zshrc`
 - **Sync manually**: Document which models to pull on each machine
 
 ### Codeium
+
 - `~/.codeium/config.json` — telemetry and settings
 - API key: Stored securely by Codeium (not in `~/.env.local`)
 - Note: Most Codeium config lives in your editor (VS Code, Vim, Neovim) settings
 
+### OpenCode (AI Assistant)
+
+- `~/.config/opencode/opencode.json` — model defaults, provider configuration (synced)
+- Supports: Anthropic Claude, DeepSeek, Groq, Ollama
+- API keys: Uses environment variables (`${DEEPSEEK_API_KEY}`, etc.) from `~/.env.local`
+- Install: `brew install anomalyco/tap/opencode`
+
 ### Windsurf Editor
+
 - `~/.windsurf/argv.json` — CLI arguments and rendering settings
 - Extensions: NOT synced (`~/.windsurf/extensions/` — install per machine)
 - Settings: Via VS Code Settings Sync (GitHub/Microsoft account) or stored locally
 - Note: `crash-reporter-id` is auto-generated per machine, not synced
 
+### OpenCode
+
+- `~/.config/opencode/opencode.json` — model definitions, provider configs
+- Synced config: default models, Anthropic/DeepSeek/Groq/Ollama provider settings
+- API keys: References `${DEEPSEEK_API_KEY}` from `~/.env.local` (synced via ProtonDrive)
+- Note: `~/.config/opencode/node_modules/` and locks are NOT synced (install per machine)
+
 ### Local LLM Runners
 
 #### Ollama
+
 - Models stored in `~/.ollama/models/` (NOT synced — large files)
 - Configuration via environment variables: `OLLAMA_KEEP_ALIVE`, `OLLAMA_HOST`, etc.
 - `OLLAMA_KEEP_ALIVE` configured in `zshrc`
@@ -143,6 +167,7 @@ No manual syncing needed — git handles it.
 - Per-machine setup: Download and pull desired models on each machine
 
 #### LM Studio
+
 - **Installation**: Download from [lmstudio.ai](https://lmstudio.ai/) and install via DMG (macOS)
 - **Models directory**: `~/.lmstudio/models/` (NOT synced — large files)
 - **Directory structure**: `~/.lmstudio/models/{publisher}/{model-name}/model-file.gguf`
@@ -157,6 +182,7 @@ No manual syncing needed — git handles it.
 - **Per-machine models**: Document which models each machine has (or keep same across both)
 
 ### Other Tools
+
 - DeepSeek: `DEEPSEEK_API_KEY` in `~/.env.local`
 - OpenAI: `OPENAI_API_KEY` in `~/.env.local`
 
@@ -184,7 +210,9 @@ export GROQ_API_KEY="gsk_..."
 ```
 
 ### First-time setup:
+
 If the ProtonDrive sync folder doesn't exist yet:
+
 1. Run `setup.sh` to create the folder structure
 2. Create `$OBSIDIAN_VAULT/sync/env.local` on your first machine
 3. Add your API keys
