@@ -100,8 +100,10 @@ No manual syncing needed — git handles it.
 - Automatic version switching with `--use-on-cd`
 
 ### Claude Code (Anthropic)
-- `~/.claude/settings.json` — model preference
-- `~/.claude/keybindings.json` — custom keybindings
+- `~/.claude/settings.json` — model preference (synced)
+- `~/.claude/keybindings.json` — custom keybindings (synced)
+- `~/.claude/CLAUDE.md` — global instructions (synced)
+- `~/.claude/projects/` — per-project memory (sync separately via ProtonDrive/vault)
 - API key: `ANTHROPIC_API_KEY` in `~/.env.local`
 
 ### Groq CLI

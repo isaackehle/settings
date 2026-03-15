@@ -41,6 +41,7 @@ create_symlink "$SETTINGS_DIR/bashrc" "$HOME/.bashrc"
 mkdir -p "$HOME/.claude"
 create_symlink "$SETTINGS_DIR/claude/settings.json" "$HOME/.claude/settings.json"
 create_symlink "$SETTINGS_DIR/claude/keybindings.json" "$HOME/.claude/keybindings.json"
+create_symlink "$SETTINGS_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
 # Create ~/.groq symlink (Groq CLI config)
 mkdir -p "$HOME/.groq"
