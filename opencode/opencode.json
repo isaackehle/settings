@@ -1,6 +1,7 @@
 {
+  "_comment": "Model variants documented at: /Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault/AI tools/Model Recommendations 2026.md#Building Custom Model Variants",
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/qwen3:8b",
+  "model": "ollama/qwen3:8b-fast",
   "provider": {
     "anthropic": {
       "models": {
@@ -88,7 +89,19 @@
         },
         "qwen3:8b": {
           "maxTokens": 500,
-          "name": "Qwen3 8B (daily driver)",
+          "name": "Qwen3 8B (40k ctx - TOO SLOW, use -fast or -code)",
+          "reasoning": false,
+          "tools": true
+        },
+        "qwen3:8b-fast": {
+          "maxTokens": 500,
+          "name": "Qwen3 8B Fast (4k ctx - quick queries)",
+          "reasoning": false,
+          "tools": true
+        },
+        "qwen3:8b-code": {
+          "maxTokens": 500,
+          "name": "Qwen3 8B Code (8k ctx - coding tasks)",
           "reasoning": false,
           "tools": true
         },

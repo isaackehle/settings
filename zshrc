@@ -152,6 +152,7 @@ export PATH="/Users/isaac/.rd/bin:$PATH"
 
 # Obsidian Vault
 export OBSIDIAN_VAULT="/Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault"
+alias vault='cd "$OBSIDIAN_VAULT" && claude'
 
 # Ollama
 export OLLAMA_KEEP_ALIVE="30m"  # keep models warm in RAM (default is 5m)
