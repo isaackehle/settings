@@ -133,6 +133,29 @@ No manual syncing needed — git handles it.
 - Settings: Via VS Code Settings Sync (GitHub/Microsoft account) or stored locally
 - Note: `crash-reporter-id` is auto-generated per machine, not synced
 
+### Local LLM Runners
+
+#### Ollama
+- Models stored in `~/.ollama/models/` (NOT synced — large files)
+- Configuration via environment variables: `OLLAMA_KEEP_ALIVE`, `OLLAMA_HOST`, etc.
+- `OLLAMA_KEEP_ALIVE` configured in `zshrc`
+- Install: `brew install ollama`
+- Per-machine setup: Download and pull desired models on each machine
+
+#### LM Studio
+- **Installation**: Download from [lmstudio.ai](https://lmstudio.ai/) and install via DMG (macOS)
+- **Models directory**: `~/.lmstudio/models/` (NOT synced — large files)
+- **Directory structure**: `~/.lmstudio/models/{publisher}/{model-name}/model-file.gguf`
+- **Configuration**: Stored in `~/.lmstudio/config/` (machine-specific, local only)
+- **CLI**: `lms` command added to PATH by installer
+- **Setup on new machine**:
+  ```bash
+  # Install LM Studio app
+  # Open LM Studio and download desired models from library
+  # Verify models appear in ~/.lmstudio/models/
+  ```
+- **Per-machine models**: Document which models each machine has (or keep same across both)
+
 ### Other Tools
 - DeepSeek: `DEEPSEEK_API_KEY` in `~/.env.local`
 - OpenAI: `OPENAI_API_KEY` in `~/.env.local`
