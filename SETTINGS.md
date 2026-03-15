@@ -19,6 +19,13 @@ Dotfiles and Claude Code configuration synced across machines.
 
 ## Setup on a New Machine
 
+### Prerequisites:
+1. **Install Homebrew** (if not already installed):
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+   See [brew.sh](https://brew.sh/) for details.
+
 ### One-time setup:
 
 ```bash
@@ -37,6 +44,7 @@ This will:
 
 1. Edit `~/.env.local` and add your API keys
 2. Reload your shell: `source ~/.zshrc`
+3. Install AI tools: See [[AI Tool Installations]]
 
 ## Updating Configuration
 
