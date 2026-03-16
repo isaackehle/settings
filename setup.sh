@@ -54,33 +54,55 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
         SKILLS_REPO="$OBSIDIAN_VAULT/.claude/skills"
         COLLISION_FOUND=0
 
+        echo ""
+        echo "🔍 Checking skills repo for collisions..."
+
         # 1. Check for uncommitted changes
         if ! git diff-index --quiet HEAD --; then
-            echo "⚠️  COLLISION: Uncommitted changes in skills repo"
-            git status --short
+            echo ""
+            echo "⚠️  COLLISION 1: Uncommitted changes"
+            echo "    Files changed:"
+            git status --short | sed 's/^/      /'
+            echo ""
+            echo "    HOW TO FIX:"
+            echo "      Option A (keep local): git add . && git commit -m 'message' && git push"
+            echo "      Option B (discard):    git restore ."
             COLLISION_FOUND=1
         fi
 
         # 2. Check for unmerged paths (merge conflicts)
         if git ls-files --unmerged | grep -q .; then
-            echo "⚠️  COLLISION: Merge conflicts detected in skills"
-            git ls-files --unmerged | cut -f2 | sort -u
+            echo ""
+            echo "⚠️  COLLISION 2: Merge conflicts detected"
+            echo "    Conflicted files:"
+            git ls-files --unmerged | cut -f2 | sort -u | sed 's/^/      /'
+            echo ""
+            echo "    HOW TO FIX:"
+            echo "      1. Open conflicted files and resolve (look for <<<<<<< and >>>>>>>)"
+            echo "      2. git add <resolved-files>"
+            echo "      3. git commit -m 'Resolve skill conflicts'"
+            echo "      4. git push"
             COLLISION_FOUND=1
         fi
 
         # 3. Check for diverged branches (fetch remote changes and check)
         git fetch origin 2>/dev/null || true
         if ! git merge-base --is-ancestor HEAD origin/HEAD 2>/dev/null; then
-            echo "⚠️  COLLISION: Local skills diverged from remote"
-            echo "    Your machine has commits not on origin"
+            echo ""
+            echo "⚠️  COLLISION 3: Local diverged from remote"
+            echo "    Your machine has commits the other doesn't"
+            echo ""
+            echo "    HOW TO FIX:"
+            echo "      Option A (merge): git pull origin && git push"
+            echo "      Option B (rebase): git rebase origin && git push"
             COLLISION_FOUND=1
         fi
 
         if [ $COLLISION_FOUND -eq 1 ]; then
             echo ""
-            echo "    Location: $SKILLS_REPO"
-            echo "    Fix conflicts, commit, and push before continuing"
+            echo "⏸️  Setup paused. Resolve collisions in: $SKILLS_REPO"
             echo ""
+            return 1
         fi
     fi
 fi
