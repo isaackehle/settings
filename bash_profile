@@ -13,3 +13,7 @@ eval "$(fnm env)"
 
 # Load sensitive environment variables from local file (not in git)
 [[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/isaac/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
