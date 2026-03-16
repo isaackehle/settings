@@ -61,7 +61,7 @@
     },
     "ollama": {
       "models": {
-        "deepseek-r1-tool-calling:8b": {
+        "mfdoom/deepseek-r1-tool-calling:8b": {
           "name": "DeepSeek-R1 8B (reasoning + tools)",
           "reasoning": true,
           "tools": true
