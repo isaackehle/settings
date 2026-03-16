@@ -80,6 +80,12 @@ if [ -f "$SETTINGS_DIR/opencode/opencode.json" ]; then
     create_symlink "$SETTINGS_DIR/opencode/opencode.json" "$HOME/.config/opencode/opencode.json"
 fi
 
+# Create ~/.ollama symlink (Ollama config)
+mkdir -p "$HOME/.ollama"
+if [ -f "$SETTINGS_DIR/ollama/config.json" ]; then
+    create_symlink "$SETTINGS_DIR/ollama/config.json" "$HOME/.ollama/config.json"
+fi
+
 # Setup .env.local (symlink to ProtonDrive or local)
 PROTON_SYNC_DIR="$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault/sync"
 ENV_LOCAL_FILE="$HOME/.env.local"

@@ -61,10 +61,10 @@
     },
     "ollama": {
       "models": {
-        "deepseek-r1:8b": {
-          "name": "DeepSeek-R1 8B (reasoning)",
+        "deepseek-r1-tool-calling:8b": {
+          "name": "DeepSeek-R1 8B (reasoning + tools)",
           "reasoning": true,
-          "tools": false
+          "tools": true
         },
         "kimi-k2.5:cloud": {
           "name": "Kimi K2.5 (cloud)",
