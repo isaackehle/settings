@@ -49,12 +49,38 @@ OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/CloudStorage/ProtonDrive-master.
 if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
     create_symlink "$OBSIDIAN_VAULT/.claude/skills" "$HOME/.claude/skills"
 
-    # Check for uncommitted changes in skills repo
+    # Check for collisions in skills repo
     if cd "$OBSIDIAN_VAULT/.claude/skills" 2>/dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
+        SKILLS_REPO="$OBSIDIAN_VAULT/.claude/skills"
+        COLLISION_FOUND=0
+
+        # 1. Check for uncommitted changes
         if ! git diff-index --quiet HEAD --; then
-            echo "⚠️  WARNING: Uncommitted changes in skills repo!"
-            echo "    Location: $OBSIDIAN_VAULT/.claude/skills"
-            echo "    Run 'git status' and commit/push before syncing to other machines"
+            echo "⚠️  COLLISION: Uncommitted changes in skills repo"
+            git status --short
+            COLLISION_FOUND=1
+        fi
+
+        # 2. Check for unmerged paths (merge conflicts)
+        if git ls-files --unmerged | grep -q .; then
+            echo "⚠️  COLLISION: Merge conflicts detected in skills"
+            git ls-files --unmerged | cut -f2 | sort -u
+            COLLISION_FOUND=1
+        fi
+
+        # 3. Check for diverged branches (fetch remote changes and check)
+        git fetch origin 2>/dev/null || true
+        if ! git merge-base --is-ancestor HEAD origin/HEAD 2>/dev/null; then
+            echo "⚠️  COLLISION: Local skills diverged from remote"
+            echo "    Your machine has commits not on origin"
+            COLLISION_FOUND=1
+        fi
+
+        if [ $COLLISION_FOUND -eq 1 ]; then
+            echo ""
+            echo "    Location: $SKILLS_REPO"
+            echo "    Fix conflicts, commit, and push before continuing"
+            echo ""
         fi
     fi
 fi
