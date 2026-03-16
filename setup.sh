@@ -48,6 +48,15 @@ create_symlink "$SETTINGS_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault}"
 if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
     create_symlink "$OBSIDIAN_VAULT/.claude/skills" "$HOME/.claude/skills"
+
+    # Check for uncommitted changes in skills repo
+    if cd "$OBSIDIAN_VAULT/.claude/skills" 2>/dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
+        if ! git diff-index --quiet HEAD --; then
+            echo "⚠️  WARNING: Uncommitted changes in skills repo!"
+            echo "    Location: $OBSIDIAN_VAULT/.claude/skills"
+            echo "    Run 'git status' and commit/push before syncing to other machines"
+        fi
+    fi
 fi
 
 # Create ~/.groq symlink (Groq CLI config)
