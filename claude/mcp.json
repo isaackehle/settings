@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "apple-reminders": {
+      "command": "/usr/local/bin/server-apple-reminders/apple-reminders-mcp"
+    },
+    "noteplan": {
+      "command": "npx",
+      "args": ["-y", "@noteplanco/noteplan-mcp"]
+    }
+  }
+}
