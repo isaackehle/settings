@@ -44,6 +44,9 @@ create_symlink "$SETTINGS_DIR/claude/settings.json" "$HOME/.claude/settings.json
 create_symlink "$SETTINGS_DIR/claude/keybindings.json" "$HOME/.claude/keybindings.json"
 create_symlink "$SETTINGS_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 
+# Create ~/.mcp.json symlink (MCP servers config)
+create_symlink "$SETTINGS_DIR/claude/mcp.json" "$HOME/.mcp.json"
+
 # Create ~/.claude/skills symlink (link to Obsidian vault skills repo)
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault}"
 if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
