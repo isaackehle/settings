@@ -27,6 +27,14 @@ Code editors and IDEs available via Homebrew.
 
 ## Configuration
 
+### Helix
+
+```bash
+# Set as default editor
+export EDITOR=hx
+export VISUAL=hx
+```
+
 ### Vim (`~/.vimrc`)
 
 ```vim
