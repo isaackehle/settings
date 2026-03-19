@@ -27,6 +27,36 @@ git config --global user.name "Your Name"
 git config --global user.email "youremail@yourdomain.com"
 ```
 
+Set the default editor for Git commit messages in your shell profile:
+
+```shell
+# Choose one
+export GIT_EDITOR="windsurf-fed --wait"
+
+# Alternatives
+# export GIT_EDITOR="code --wait"
+# export GIT_EDITOR="hx"
+```
+
+If you want to use the `windsurf` command name, create a symlink to one app variant:
+
+```shell
+# Regular Windsurf
+sudo rm -f /usr/local/bin/windsurf
+sudo ln -s "/Applications/Windsurf.app/Contents/Resources/app/bin/windsurf" /usr/local/bin/windsurf
+
+# Windsurf Fed
+sudo rm -f /usr/local/bin/windsurf
+sudo ln -s "/Applications/Windsurf - Fed.app/Contents/Resources/app/bin/windsurf-fed" /usr/local/bin/windsurf
+```
+
+Or set the editor directly in `~/.gitconfig`:
+
+```ini
+[core]
+  editor = hx
+```
+
 ### Aliases
 
 Add to `~/.gitconfig` under `[alias]`:
@@ -55,11 +85,7 @@ Add to `~/.gitconfig` under `[alias]`:
   pf    = push --force
   bclean = "!f() { git branch --merged ${1-master} | grep -v \" ${1-master}$\" | xargs git branch -d; }; f"
   bdone  = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
-
-
-[core]
-  editor = hx
-
+	rebase-new = "!f() { git rebase --onto \"$1\" HEAD~1 HEAD && git checkout -B \"$2\"; }; f"
 ```
 
 ## Start / Usage
