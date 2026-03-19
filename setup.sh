@@ -73,6 +73,12 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
         echo ""
         echo "🔍 Checking skills repo for collisions..."
 
+        # Silently restore tracked .DS_Store files from HEAD.
+        # Handles both unstaged and staged deletions (e.g. "D  .DS_Store").
+        git ls-tree -r --name-only HEAD | grep '\(^\|/\)\.DS_Store$' | while IFS= read -r f; do
+            git restore --source=HEAD --staged --worktree -- "$f" 2>/dev/null || true
+        done
+
         # 1. Check for uncommitted changes
         if ! git diff-index --quiet HEAD --; then
             echo ""
@@ -118,7 +124,7 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
             echo ""
             echo "⏸️  Setup paused. Resolve collisions in: $SKILLS_REPO"
             echo ""
-            return 1
+            exit 1
         fi
     fi
 fi
