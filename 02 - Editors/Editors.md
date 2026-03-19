@@ -11,6 +11,7 @@ Code editors and IDEs available via Homebrew.
 | Tool                                                                                        | Command                           |
 | ------------------------------------------------------------------------------------------- | --------------------------------- |
 | [Cursor](https://cursor.com/)                                                               | `brew install --cask cursor`      |
+| [Windsurf](https://windsurf.com/)                                                           | `brew install --cask windsurf`    |
 | [Zed](https://zed.dev/)                                                                     | `brew install --cask zed`         |
 | [VS Code](https://code.visualstudio.com/)                                                   | `brew install visual-studio-code` |
 | [PyCharm CE](https://www.jetbrains.com/pycharm/)                                            | `brew install pycharm-ce`         |
