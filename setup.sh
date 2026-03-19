@@ -47,8 +47,21 @@ create_symlink "$SETTINGS_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 # Create ~/.mcp.json symlink (MCP servers config)
 create_symlink "$SETTINGS_DIR/claude/mcp.json" "$HOME/.mcp.json"
 
-# Create ~/.claude/skills symlink (link to Obsidian vault skills repo)
-OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault}"
+# Auto-detect ProtonDrive folder if PROTON_DRIVE is not already set
+if [ -z "$PROTON_DRIVE" ]; then
+    CLOUD_STORAGE="$HOME/Library/CloudStorage"
+    DETECTED=$(find "$CLOUD_STORAGE" -maxdepth 1 -type d -name "ProtonDrive-*-folder" 2>/dev/null | head -1)
+    if [ -n "$DETECTED" ]; then
+        PROTON_DRIVE="$DETECTED"
+        echo "✓ Detected ProtonDrive at: $PROTON_DRIVE"
+    else
+        echo "⚠️  Could not auto-detect ProtonDrive folder."
+        echo "    Set PROTON_DRIVE manually, e.g.:"
+        echo "    export PROTON_DRIVE=\"\$HOME/Library/CloudStorage/ProtonDrive-you@pm.me-folder\""
+        PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-<email>-folder"
+    fi
+fi
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$PROTON_DRIVE/Obsidian/vault}"
 if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
     create_symlink "$OBSIDIAN_VAULT/.claude/skills" "$HOME/.claude/skills"
 
@@ -153,7 +166,7 @@ if [ -f "$SETTINGS_DIR/ollama/config.json" ]; then
 fi
 
 # Setup .env.local (symlink to ProtonDrive or local)
-PROTON_SYNC_DIR="$HOME/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault/sync"
+PROTON_SYNC_DIR="$PROTON_DRIVE/Obsidian/vault/sync"
 ENV_LOCAL_FILE="$HOME/.env.local"
 
 # Create ProtonDrive sync folder if it doesn't exist

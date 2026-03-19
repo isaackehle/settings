@@ -150,8 +150,11 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="/Users/isaac/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
+# ProtonDrive — set PROTON_DRIVE to your actual folder, e.g. ProtonDrive-you@pm.me-folder
+export PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-<email>-folder"
+
 # Obsidian Vault
-export OBSIDIAN_VAULT="/Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault"
+export OBSIDIAN_VAULT="$PROTON_DRIVE/Obsidian/vault"
 alias vault='cd "$OBSIDIAN_VAULT" && claude'
 
 # Ollama

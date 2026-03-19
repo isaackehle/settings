@@ -23,6 +23,7 @@ Code editors and IDEs available via Homebrew.
 | [Microsoft Office](https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac) | `brew install microsoft-office`   |
 | [TextExpander](https://textexpander.com/)                                                   | `brew install textexpander`       |
 | [Araxis Merge](https://www.araxis.com/merge/)                                               | `brew install araxis-merge`       |
+| [Helix](https://helix-editor.com/)                                                          | `brew install helix`              |
 
 ## Configuration
 
@@ -34,6 +35,16 @@ syntax on
 set term=xterm-256color
 ```
 
+### Helix (`~/.config/helix/config.toml`)
+
+```toml
+theme = "catppuccin_mocha"
+
+[editor]
+line-number = "relative"
+mouse = false
+```
+
 ## Start / Usage
 
 Start: Open the app from Applications.
@@ -42,3 +53,4 @@ Start: Open the app from Applications.
 
 - [VS Code Documentation](https://code.visualstudio.com/docs)
 - [Vim cheat sheet](https://vim.rtorr.com/)
+- [Helix Documentation](https://docs.helix-editor.com/)
