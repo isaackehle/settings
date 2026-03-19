@@ -50,7 +50,7 @@ create_symlink "$SETTINGS_DIR/claude/mcp.json" "$HOME/.mcp.json"
 # Auto-detect ProtonDrive folder if PROTON_DRIVE is not already set
 if [ -z "$PROTON_DRIVE" ]; then
     CLOUD_STORAGE="$HOME/Library/CloudStorage"
-    DETECTED=$(find "$CLOUD_STORAGE" -maxdepth 1 -type d -name "ProtonDrive-*-folder" 2>/dev/null | head -1)
+    DETECTED=$(find "$CLOUD_STORAGE" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
     if [ -n "$DETECTED" ]; then
         PROTON_DRIVE="$DETECTED"
         echo "✓ Detected ProtonDrive at: $PROTON_DRIVE"
@@ -58,7 +58,7 @@ if [ -z "$PROTON_DRIVE" ]; then
         echo "⚠️  Could not auto-detect ProtonDrive folder."
         echo "    Set PROTON_DRIVE manually, e.g.:"
         echo "    export PROTON_DRIVE=\"\$HOME/Library/CloudStorage/ProtonDrive-you@pm.me-folder\""
-        PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-<email>-folder"
+        PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-*-folder"
     fi
 fi
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$PROTON_DRIVE/Obsidian/vault}"
