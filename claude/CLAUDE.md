@@ -2,7 +2,9 @@
 
 ## Obsidian Vault
 
-Primary vault: `$OBSIDIAN_VAULT` = `/Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault`
+Primary vault: `$OBSIDIAN_VAULT` = `$PROTON_DRIVE/Obsidian/vault`
+
+`$PROTON_DRIVE` = `$HOME/Library/CloudStorage/ProtonDrive-*-folder`
 
 This is Isaac's single source of truth for personal and professional notes.
 

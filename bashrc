@@ -33,8 +33,11 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Rancher Desktop
 export PATH="/Users/isaac/.rd/bin:$PATH"
 
+# ProtonDrive — set PROTON_DRIVE to your actual folder, e.g. ProtonDrive-you@pm.me-folder
+export PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-*-folder"
+
 # Obsidian Vault
-export OBSIDIAN_VAULT="/Users/isaac/Library/CloudStorage/ProtonDrive-master.icedog@pm.me-folder/Obsidian/vault"
+export OBSIDIAN_VAULT="$PROTON_DRIVE/Obsidian/vault"
 
 # Ollama
 export OLLAMA_KEEP_ALIVE="30m"

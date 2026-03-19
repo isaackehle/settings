@@ -55,6 +55,11 @@ Add to `~/.gitconfig` under `[alias]`:
   pf    = push --force
   bclean = "!f() { git branch --merged ${1-master} | grep -v \" ${1-master}$\" | xargs git branch -d; }; f"
   bdone  = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
+
+
+[core]
+  editor = hx
+
 ```
 
 ## Start / Usage
