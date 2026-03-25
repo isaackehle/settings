@@ -1,6 +1,6 @@
 {
   "projects": {
-    "/Users/isaac/Downloads": "downloads",
-    "~/Library/CloudStorage/ProtonDrive-*-folder/Obsidian/vault": "vault"
+    "~/Downloads": "downloads",
+    "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary": "primary"
   }
 }

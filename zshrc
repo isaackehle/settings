@@ -133,21 +133,21 @@ export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 #export PATH="/usr/local/opt/php@7.3/sbin:$PATH"
 
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/isaac/.docker/completions $fpath)
+fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 export PATH="$HOME/.local/bin:$PATH"
 
 # bun completions
-[ -s "/Users/isaac/.bun/_bun" ] && source "/Users/isaac/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/isaac/.rd/bin:$PATH"
+export PATH="~/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # ProtonDrive — auto-detect by email folder name
@@ -155,15 +155,18 @@ export PROTON_DRIVE
 PROTON_DRIVE=$(find "$HOME/Library/CloudStorage" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
 
 # Obsidian Vault
-export OBSIDIAN_VAULT="$PROTON_DRIVE/Obsidian/vault"
+export OBSIDIAN_ROOT="~/Library/Mobile Documents/iCloud~md~obsidian"
+export OBSIDIAN_VAULT="$OBSIDIAN_ROOT/Documents/primary"
 alias vault='cd "$OBSIDIAN_VAULT" && claude'
 
 # Ollama
 export OLLAMA_KEEP_ALIVE="30m"  # keep models warm in RAM (default is 5m)
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/isaac/.lmstudio/bin"
+export PATH="$PATH:~/.lmstudio/bin"
 # End of LM Studio CLI section
 
 # Load sensitive environment variables from local file (not in git)
 [[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
+
+export TERM=xterm-256color

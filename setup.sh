@@ -17,16 +17,16 @@ echo "🔗 Setting up symlinks..."
 create_symlink() {
     local target="$1"
     local link="$2"
-
+    
     if [ -e "$link" ] && [ ! -L "$link" ]; then
         echo "⚠️  $link exists (not a symlink). Creating backup..."
         mv "$link" "${link}.backup-$(date +%s)"
     fi
-
+    
     if [ -L "$link" ]; then
         rm "$link"
     fi
-
+    
     ln -s "$target" "$link"
     echo "✓ $link → $target"
 }
@@ -61,24 +61,26 @@ if [ -z "$PROTON_DRIVE" ]; then
         PROTON_DRIVE="$HOME/Library/CloudStorage/ProtonDrive-*-folder"
     fi
 fi
-OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$PROTON_DRIVE/Obsidian/vault}"
+
+# Create ~/.claude/skills symlink (link to Obsidian vault skills repo)
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary}"
 if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
     create_symlink "$OBSIDIAN_VAULT/.claude/skills" "$HOME/.claude/skills"
-
+    
     # Check for collisions in skills repo
     if cd "$OBSIDIAN_VAULT/.claude/skills" 2>/dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
         SKILLS_REPO="$OBSIDIAN_VAULT/.claude/skills"
         COLLISION_FOUND=0
-
+        
         echo ""
         echo "🔍 Checking skills repo for collisions..."
-
+        
         # Silently restore tracked .DS_Store files from HEAD.
         # Handles both unstaged and staged deletions (e.g. "D  .DS_Store").
         git ls-tree -r --name-only HEAD | grep '\(^\|/\)\.DS_Store$' | while IFS= read -r f; do
             git restore --source=HEAD --staged --worktree -- "$f" 2>/dev/null || true
         done
-
+        
         # 1. Check for uncommitted changes
         if ! git diff-index --quiet HEAD --; then
             echo ""
@@ -91,7 +93,7 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
             echo "      Option B (discard):    git restore ."
             COLLISION_FOUND=1
         fi
-
+        
         # 2. Check for unmerged paths (merge conflicts)
         if git ls-files --unmerged | grep -q .; then
             echo ""
@@ -106,7 +108,7 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
             echo "      4. git push"
             COLLISION_FOUND=1
         fi
-
+        
         # 3. Check for diverged branches (fetch remote changes and check)
         git fetch origin 2>/dev/null || true
         if ! git merge-base --is-ancestor HEAD origin/HEAD 2>/dev/null; then
@@ -119,7 +121,7 @@ if [ -d "$OBSIDIAN_VAULT/.claude/skills" ]; then
             echo "      Option B (rebase): git rebase origin && git push"
             COLLISION_FOUND=1
         fi
-
+        
         if [ $COLLISION_FOUND -eq 1 ]; then
             echo ""
             echo "⏸️  Setup paused. Resolve collisions in: $SKILLS_REPO"
@@ -172,7 +174,7 @@ if [ -f "$SETTINGS_DIR/ollama/config.json" ]; then
 fi
 
 # Setup .env.local (symlink to ProtonDrive or local)
-PROTON_SYNC_DIR="$PROTON_DRIVE/Obsidian/vault/sync"
+PROTON_SYNC_DIR="$PROTON_DRIVE/sync"
 ENV_LOCAL_FILE="$HOME/.env.local"
 
 # Create ProtonDrive sync folder if it doesn't exist
@@ -203,13 +205,13 @@ if [ "$PROTON_ENV_EXISTS" = "yes" ] && [ "$LOCAL_ENV_EXISTS" = "yes" ] && [ "$LO
         chmod 600 "$PROTON_SYNC_DIR/env.local"
         echo "✓ ~/.env.local → $PROTON_SYNC_DIR/env.local"
     fi
-
-# Case 2: Only ProtonDrive env.local exists
-elif [ "$PROTON_ENV_EXISTS" = "yes" ]; then
+    
+    # Case 2: Only ProtonDrive env.local exists
+    elif [ "$PROTON_ENV_EXISTS" = "yes" ]; then
     echo "📝 Linking ~/.env.local to ProtonDrive sync..."
     if [ -L "$ENV_LOCAL_FILE" ]; then
         rm "$ENV_LOCAL_FILE"
-    elif [ -f "$ENV_LOCAL_FILE" ]; then
+        elif [ -f "$ENV_LOCAL_FILE" ]; then
         # Back up existing local .env.local
         mv "$ENV_LOCAL_FILE" "${ENV_LOCAL_FILE}.backup-$(date +%s)"
         echo "⚠️  Backed up existing ~/.env.local"
@@ -217,9 +219,9 @@ elif [ "$PROTON_ENV_EXISTS" = "yes" ]; then
     ln -s "$PROTON_SYNC_DIR/env.local" "$ENV_LOCAL_FILE"
     chmod 600 "$PROTON_SYNC_DIR/env.local"
     echo "✓ ~/.env.local → $PROTON_SYNC_DIR/env.local"
-
-# Case 3: Only local env.local exists
-elif [ "$LOCAL_ENV_EXISTS" = "yes" ]; then
+    
+    # Case 3: Only local env.local exists
+    elif [ "$LOCAL_ENV_EXISTS" = "yes" ]; then
     echo "📝 Found local ~/.env.local"
     read -p "Copy to ProtonDrive for syncing? (y/n) " -n 1 -r
     echo
@@ -233,8 +235,8 @@ elif [ "$LOCAL_ENV_EXISTS" = "yes" ]; then
         echo "✓ Keeping local ~/.env.local (not synced)"
         chmod 600 "$ENV_LOCAL_FILE"
     fi
-
-# Case 4: Neither exists
+    
+    # Case 4: Neither exists
 else
     echo "📝 Creating ~/.env.local from template..."
     cp "$SETTINGS_DIR/.env.local.example" "$ENV_LOCAL_FILE"

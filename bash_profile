@@ -15,5 +15,5 @@ eval "$(fnm env)"
 [[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/isaac/.rd/bin:$PATH"
+export PATH="~/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

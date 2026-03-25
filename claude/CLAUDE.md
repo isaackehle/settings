@@ -2,9 +2,7 @@
 
 ## Obsidian Vault
 
-Primary vault: `$OBSIDIAN_VAULT` = `$PROTON_DRIVE/Obsidian/vault`
-
-`$PROTON_DRIVE` = `$HOME/Library/CloudStorage/ProtonDrive-*-folder`
+Primary vault: `$OBSIDIAN_VAULT` = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary`
 
 This is Isaac's single source of truth for personal and professional notes.
 

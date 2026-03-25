@@ -22,33 +22,34 @@ export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
 export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
 # Docker CLI completions
-fpath=(/Users/isaac/.docker/completions $fpath)
+fpath=(~/.docker/completions $fpath)
 export PATH="$HOME/.local/bin:$PATH"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-[ -s "/Users/isaac/.bun/_bun" ] && source "/Users/isaac/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
 # Rancher Desktop
-export PATH="/Users/isaac/.rd/bin:$PATH"
+export PATH="~/.rd/bin:$PATH"
 
 # ProtonDrive — auto-detect by email folder name
 export PROTON_DRIVE
 PROTON_DRIVE=$(find "$HOME/Library/CloudStorage" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
 
 # Obsidian Vault
-export OBSIDIAN_VAULT="$PROTON_DRIVE/Obsidian/vault"
+export OBSIDIAN_ROOT="~/Library/Mobile Documents/iCloud~md~obsidian"
+export OBSIDIAN_VAULT="$OBSIDIAN_ROOT/Documents/primary"
 
 # Ollama
 export OLLAMA_KEEP_ALIVE="30m"
 
 # LM Studio
-export PATH="$PATH:/Users/isaac/.lmstudio/bin"
+export PATH="$PATH:~/.lmstudio/bin"
 
 # Load sensitive environment variables from local file (not in git)
 [[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/isaac/.rd/bin:$PATH"
+export PATH="~/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

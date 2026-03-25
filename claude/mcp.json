@@ -6,6 +6,10 @@
     "noteplan": {
       "command": "npx",
       "args": ["-y", "@noteplanco/noteplan-mcp"]
+    },
+    "ticktick": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/jen6/ticktick-mcp.git", "ticktick-mcp"]
     }
   }
 }
