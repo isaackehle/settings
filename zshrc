@@ -155,7 +155,7 @@ export PROTON_DRIVE
 PROTON_DRIVE=$(find "$HOME/Library/CloudStorage" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
 
 # Obsidian Vault
-export OBSIDIAN_ROOT="~/Library/Mobile Documents/iCloud~md~obsidian"
+export OBSIDIAN_ROOT="$HOME/Library/Mobile Documents/iCloud~md~obsidian"
 export OBSIDIAN_VAULT="$OBSIDIAN_ROOT/Documents/primary"
 alias vault='cd "$OBSIDIAN_VAULT" && claude'
 
