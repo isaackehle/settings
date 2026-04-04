@@ -9,7 +9,7 @@ Fast Node Manager — a faster, Rust-based alternative to NVM.
 ## Installation
 
 ```shell
-brew install fnm
+brew install fnm 
 ```
 
 Add to `~/.zshrc`:

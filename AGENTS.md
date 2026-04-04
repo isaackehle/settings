@@ -200,4 +200,34 @@ When adding a new page, also add an entry to `Home.md` under the correct `##` se
 - Do not document every possible option — only the ones actually used or commonly needed.
 - Target: **macOS on Apple Silicon** (M-series). Note Intel differences only when significant.
 
+---
+
+## Ollama Model Maintenance
+
+When working with Ollama-related documentation, **always verify model names**
+against the current installation.
+
+**Before adding/editing Ollama references:**
+
+1. Check installed models: `curl -s http://localhost:11434/api/tags`
+2. Search available models: `ollama search <query>`
+
+**Rules:**
+
+- Use exact model names (e.g., `llama3.2`, `qwen3.2-coder:7b`, not `llama3` or `qwen-coder`)
+- Update `11 - AI/Ollama.md` models table when new models are commonly used
+- Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
+
+**Currently recommended models:**
+
+| Model            | Pull Command                          |
+| ---------------- | ------------------------------------- |
+| Llama 3.2        | `ollama pull llama3.2`                |
+| Qwen 3 Coder     | `ollama pull qwen3.2-coder:7b`        |
+| DeepSeek Coder   | `ollama pull deepseek-coder:6.7b`     |
+| Phi-4            | `ollama pull phi4`                    |
+| Gemma 3          | `ollama pull gemma3:12b`              |
+| GLM-4 Flash      | `ollama pull glm-4-flash`             |
+| Codestral        | `ollama pull codestral:22b`           |
+
 <!-- markdownlint-enable MD013 -->

@@ -24,46 +24,25 @@ Common first-run configuration:
 gh copilot suggest "explain this function"
 ```
 
-## <img src="https://github.com/github.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> GitHub Copilot
-
-The industry standard AI pair programmer. Integrates directly into VS Code, JetBrains, and Neovim.
-
-- **VS Code Extension:** `GitHub.copilot`
-- **CLI:** `gh copilot` (requires GitHub CLI)
-
-```shell
-gh extension install github/gh-copilot
-```
-
-## <img src="https://github.com/getcursor.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Cursor
-
-[Cursor](https://cursor.com/) is an AI-first code editor built as a fork of VS Code. It features deep codebase understanding and an integrated AI chat.
-
-```shell
-brew install --cask cursor
-```
-
-## <img src="https://github.com/continuedev.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Continue.dev
-
-[Continue](https://www.continue.dev/) is an open-source AI code assistant for VS Code and JetBrains. It allows you to connect to local models (like Ollama) or commercial APIs (OpenAI, Anthropic).
-
-- **VS Code Extension:** `Continue.continue`
-
-## <img src="https://github.com/cline.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Claude Dev / Cline
-
-[Cline](https://github.com/cline/cline) (formerly Claude Dev) is an autonomous coding agent right in your IDE that can create and edit files, run commands, and more.
-
-- **VS Code Extension:** `saoudrizwan.claude-dev`
+See more: [[VS Code AI Extensions]]
 
 ## Open Source & Terminal-Based Assistants
 
 ### <img src="https://github.com/charmbracelet.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> OpenCode / Crush
 
-[Crush](https://github.com/charmbracelet/crush) (formerly OpenCode) is a powerful terminal-based AI coding assistant by Charm. It provides a beautiful TUI, supports multiple LLMs, and integrates with LSPs and MCPs for deep context.
+[OpenCode / Crush](https://github.com/charmbracelet/crush) is a powerful terminal-based AI coding assistant by Charm. It provides a beautiful TUI, supports multiple LLMs, and integrates with LSPs and MCPs for deep context.
 
 ```shell
 brew install charmbracelet/tap/crush
 ```
+
+No basic configuration required.
+
+```shell
+crush
+```
+
+See more: [[OpenCode]]
 
 ### <img src="https://github.com/OpenInterpreter.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Open Interpreter
 

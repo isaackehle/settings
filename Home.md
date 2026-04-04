@@ -108,7 +108,14 @@ Personal macOS development environment setup guide and reference.
 
 ## 11 - AI
 
-- [[Local LLMs]] — Ollama, LM Studio, GPT4All
-- [[Coding Assistants]] — Copilot, Cursor, Cline
-- [[Image Generation]] — Stable Diffusion, ComfyUI
-- [[Frameworks]] — Hugging Face, LangChain, PyTorch
+- [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.
+- [[Ollama]] — Local LLM manager for Apple Silicon.
+- [[LM Studio]] — GUI for discovering and running local LLMs.
+- [[GPT4All]] — Privacy-focused local chatbot app.
+- [[vLLM]] — High-throughput local LLM serving engine.
+- [[Llama.cpp]] — Apple Silicon-optimized LLaMA inference library.
+- [[VS Code AI Extensions]] — VS Code extensions for AI coding assistance.
+- [[Continue]] — Open-source AI code assistant for VS Code and JetBrains.
+- [[Claude Code]] — Anthropic code-focused Claude assistant.
+- [[Google Gemini CLI]] — Google's Gemini AI assistant for command-line.
+- [[OpenCode]] — Terminal-based AI coding assistant by Charm.

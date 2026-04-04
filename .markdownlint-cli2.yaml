@@ -1,0 +1,12 @@
+noBanner: true
+noInlineConfig: true
+
+globs:
+  - "**/*.md"
+
+config:
+  default: false
+  MD055: { style: leading_and_trailing }
+  MD056: true
+  MD058: true
+  MD060: true
