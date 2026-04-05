@@ -45,10 +45,15 @@ Personal macOS development environment setup guide and reference.
 - [[SDK]] — SDK management
 - [[Concepts]] — Development concepts and best practices
 - [[Load Testing]] — Load testing tools
-- [[Build Tools/Build Tools]] — Build tools overview
+- [[Build Tools/Build Tools]] — Build tools overview and comparison
 - [[Build Tools/Gradle]] — Gradle build tool
+- [[Build Tools/Grunt]] — Configuration-based task runner
+- [[Build Tools/Gulp]] — Streaming build system
 - [[Build Tools/Just]] — Command runner
+- [[Build Tools/Parcel]] — Zero-config bundler
 - [[Build Tools/Pipelines]] — CI/CD pipelines
+- [[Build Tools/Rollup]] — ES module bundler for libraries
+- [[Build Tools/Webpack]] — Configurable module bundler
 - [[Docker]] — Docker and Docker Compose
 - [[Kubernetes]] — kubectl, helm, minikube
 - [[Rancher Desktop]] — Container and Kubernetes desktop management
