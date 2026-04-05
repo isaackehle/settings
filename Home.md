@@ -48,6 +48,8 @@ Personal macOS development environment setup guide and reference.
 - [[Load Testing]] — Load testing tools
 - [[Gradle]] — Gradle build tool
 - [[Pipelines]] — CI/CD pipelines
+- [[Docker]] — Docker and Docker Compose
+- [[Kubernetes]] — kubectl, helm, minikube
 - [[Rancher Desktop]] — Container and Kubernetes desktop management
 - [[Volta]] — Volta version manager (recommended)
 - [[NVM]] — Node Version Manager
@@ -74,8 +76,6 @@ Personal macOS development environment setup guide and reference.
 
 ## 04 - Infrastructure
 
-- [[Docker]] — Docker and Docker Compose
-- [[Kubernetes]] — kubectl, helm, minikube
 - [[AWS]] — AWS CLI and tools
 - [[Terraform]] — Terraform IaC
 - [[SOPS]] — Secrets management
