@@ -80,20 +80,18 @@ Personal macOS development environment setup guide and reference.
 - [[Flutter]] — Flutter mobile framework
 
 
-## 04 - Infrastructure
+- [[Infrastructure/AWS]] — AWS CLI and tools
+- [[Infrastructure/Cloud]] — Cloud services overview
+- [[Infrastructure/SOPS]] — Secrets management
+- [[Infrastructure/Terraform]] — Terraform IaC
 
-- [[AWS]] — AWS CLI and tools
-- [[Terraform]] — Terraform IaC
-- [[SOPS]] — Secrets management
-- [[Cloud]] — Cloud services
-
-## 05 - Databases
+## 04 - Databases
 
 - [[Databases]] — Database setup and configuration
 - [[Services]] — Microservices and supporting services
 - [[Apache]] — Apache server configuration
 
-## 06 - Apps
+## 05 - Apps
 
 - [[Browsers]] — Browser installation
 - [[Chats]] — Chat applications
@@ -106,18 +104,18 @@ Personal macOS development environment setup guide and reference.
 - [[Collaborations]] — Team collaboration tools
 - [[Task Managers]] — Project management (ClickUp, etc.)
 
-## 07 - Security
+## 06 - Security
 
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
 
-## 08 - System
+## 07 - System
 
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 
-## 09 - AI
+## 08 - AI
 
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.
