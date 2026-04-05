@@ -12,6 +12,11 @@ Autonomous AI coding agent for VS Code that can create and edit files, run termi
 
 Install from the VS Code Marketplace: search **Cline** or install `saoudrizwan.claude-dev`.
 
+```shell
+# CLI (optional)
+npm install -g cline
+```
+
 ## Configuration
 
 Cline settings live in the extension panel (click the gear icon). Each provider requires an API key or a local endpoint.
