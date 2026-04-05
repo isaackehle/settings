@@ -21,32 +21,41 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 ```
 
-## Usage
+## Configuration
 
-List available versions:
-
-```shell
-pyenv install --list
-```
-
-Install and set a global version:
+Install and set a Python version:
 
 ```shell
-pyenv install 3.12.0
-pyenv global 3.12.0
+pyenv install --list           # browse available versions
+pyenv install 3.13.0
+pyenv global 3.13.0            # set system default
+pyenv local 3.11.9             # set per-project (writes .python-version)
+pyenv version                  # confirm active version
 ```
 
-Common pip packages:
+## Start / Usage
+
+Essential packages for every project:
 
 ```shell
 pip install --upgrade pip
-pip install pipenv
-pip install notebook       # Jupyter
+pip install pytest             # testing — see [[Pytest]]
+pip install ruff               # linter + formatter
+pip install mypy               # static type checker
+pip install ipython            # better REPL
+pip install notebook           # Jupyter
+```
+
+### Virtual Environments
+
+```shell
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## References
 
-- [pyenv on GitHub](https://github.com/pyenv/pyenv)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Mypy — static type checker](https://mypy.readthedocs.io/en/stable/)
-- [Setting Python 3 as default on macOS](https://opensource.com/article/19/5/python-3-default-mac)
+- [pyenv](https://github.com/pyenv/pyenv)
+- [Mypy](https://mypy.readthedocs.io/en/stable/)
+- [Ruff](https://docs.astral.sh/ruff/)

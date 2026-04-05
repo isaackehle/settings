@@ -57,7 +57,8 @@ Personal macOS development environment setup guide and reference.
 
 - [[Programming Languages]] — Broad language overview and quick starts
 - [[Java]] — Java/JDK via SDKMAN
-- [[Python]] — Python 3 setup
+- [[Python]] — Python 3 via pyenv
+- [[Pytest]] — Python testing framework
 - [[Ruby]] — Ruby via RVM
 - [[Rust]] — Rust language setup
 - [[Go]] — Go language setup
