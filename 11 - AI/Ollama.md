@@ -44,6 +44,7 @@ ollama pull <model-name>
 | Model          | Command                           | Description          |
 | -------------- | --------------------------------- | -------------------- |
 | Llama 3.2      | `ollama pull llama3.2`            | General purpose, 8B  |
+| Qwen 2.5 Coder | `ollama pull qwen2.5-coder:7b`    | Code-focused, 7B     |
 | Qwen 3 Coder   | `ollama pull qwen3.2-coder:7b`    | Code-focused, 7B     |
 | DeepSeek Coder | `ollama pull deepseek-coder:6.7b` | Code generation      |
 | Phi-4          | `ollama pull phi4`                | Microsoft, efficient |
