@@ -37,7 +37,6 @@ Personal macOS development environment setup guide and reference.
 - [[Front-End/Vitest]] — Fast unit test framework
 - [[Styling/Tailwind CSS]] — Utility-first CSS framework
 - [[Styling/ShadCN]] — Component library for React
-- [[Just]] — Command runner
 - [[Front-End/Angular]] — Angular CLI
 - [[NPM Globals]] — Global npm packages
 - [[APIs]] — API development tools
@@ -46,8 +45,10 @@ Personal macOS development environment setup guide and reference.
 - [[SDK]] — SDK management
 - [[Concepts]] — Development concepts and best practices
 - [[Load Testing]] — Load testing tools
-- [[Gradle]] — Gradle build tool
-- [[Pipelines]] — CI/CD pipelines
+- [[Build Tools/Build Tools]] — Build tools overview
+- [[Build Tools/Gradle]] — Gradle build tool
+- [[Build Tools/Just]] — Command runner
+- [[Build Tools/Pipelines]] — CI/CD pipelines
 - [[Docker]] — Docker and Docker Compose
 - [[Kubernetes]] — kubectl, helm, minikube
 - [[Rancher Desktop]] — Container and Kubernetes desktop management
