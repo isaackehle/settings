@@ -10,64 +10,69 @@ Open-source AI code assistant for VS Code and JetBrains that connects to local m
 
 VS Code: Install the `Continue.continue` extension from the Marketplace.
 
+## Setup
+
+Pull the required Ollama models:
+
+```sh
+ollama pull llama3.1:8b
+ollama pull qwen2.5-coder:1.5b-base
+ollama pull nomic-embed-text:latest
+```
+
 ## Configuration
 
-### Ollama Connection
+Config lives at `~/.continue/config.yaml`.
 
-1. Ensure Ollama is running locally (`ollama serve`)
-2. Pull a model: `ollama pull llama3.2`
-3. Create `~/.continue/config.json`:
-
-```json
-{
-  "models": [
-    {
-      "title": "Ollama",
-      "provider": "ollama",
-      "model": "llama3.2",
-      "apiBase": "http://localhost:11434"
-    }
-  ]
-}
+```yaml
+name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - name: Llama 3.1 8B
+    provider: ollama
+    model: llama3.1:8b
+    roles:
+      - chat
+      - edit
+      - apply
+  - name: Qwen2.5-Coder 1.5B
+    provider: ollama
+    model: qwen2.5-coder:1.5b-base
+    roles:
+      - autocomplete
+  - name: Nomic Embed
+    provider: ollama
+    model: nomic-embed-text:latest
+    roles:
+      - embed
 ```
 
-### Multiple Models
+### Roles
 
-```json
-{
-  "models": [
-    {
-      "title": "Qwen Coder",
-      "provider": "ollama",
-      "model": "qwen3.2-coder:7b"
-    },
-    {
-      "title": "Codestral",
-      "provider": "openai",
-      "model": "codestral-latest",
-      "apiKey": "YOUR_API_KEY"
-    }
-  ],
-  "tabAutocompleteModel": {
-    "provider": "ollama",
-    "model": "qwen3.2-coder:7b"
-  }
-}
-```
+| Role           | Purpose                            |
+| -------------- | ---------------------------------- |
+| `chat`         | Main chat / Q&A                    |
+| `edit`         | Inline edit suggestions            |
+| `apply`        | Apply diffs to files               |
+| `autocomplete` | Tab completion                     |
+| `embed`        | Codebase indexing / context search |
 
 ### Other Providers
 
-- **Anthropic:** `provider: "anthropic"`, `model: "claude-sonnet-4-20250514"`
-- **OpenAI:** `provider: "openai"`, `model: "gpt-4o"`
-- **Google Gemini:** `provider: "google-gemini"`, `model: "gemini-2.5-pro-preview-06-05"`
-- **LM Studio:** `provider: "lmstudio"`, `model: "local-model"`
+- **Anthropic:** `provider: anthropic`, `model: claude-sonnet-4-20250514`
+- **OpenAI:** `provider: openai`, `model: gpt-4o`
+- **Google:** `provider: google-gemini`, `model: gemini-2.5-pro-preview-06-05`
+- **LM Studio:** `provider: lmstudio`, `model: local-model`
+- **Codestral:** `provider: openai`, `model: codestral-latest` (Mistral API key)
 
-## Start / Usage
+## Usage
 
-1. Open VS Code command palette (`Cmd+Shift+P`)
-2. Type `Continue: Focus` to open the sidebar
-3. Use `Cmd+L` to chat with the model
-4. Use `Tab` for autocomplete suggestions
+| Shortcut                          | Action                     |
+| --------------------------------- | -------------------------- |
+| `Cmd+L`                           | Open chat / send selection |
+| `Tab`                             | Accept autocomplete        |
+| `Cmd+Shift+P` → `Continue: Focus` | Open sidebar               |
 
 ## References
 

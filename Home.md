@@ -39,7 +39,7 @@ Personal macOS development environment setup guide and reference.
 - [[Front-End/Vite]] — Modern frontend build tool
 - [[Front-End/Vitest]] — Fast unit test framework
 - [[Styling/Tailwind CSS]] — Utility-first CSS framework
-- [[Styling/Shadcn]] — Component library for React
+- [[Styling/ShadCN]] — Component library for React
 - [[Just]] — Command runner
 - [[Front-End/Angular]] — Angular CLI
 - [[NPM Globals]] — Global npm packages
