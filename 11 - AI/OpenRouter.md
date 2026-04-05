@@ -72,27 +72,30 @@ curl https://openrouter.ai/api/v1/chat/completions \
 
 Models follow `provider/model-name` convention:
 
-| Model | OpenRouter ID |
-| --- | --- |
-| Claude Sonnet 4.6 | `anthropic/claude-sonnet-4-6` |
-| Claude Opus 4.6 | `anthropic/claude-opus-4-6` |
-| GPT-4o | `openai/gpt-4o` |
-| Gemini 2.5 Pro | `google/gemini-2.5-pro` |
-| Llama 3.1 70B | `meta-llama/llama-3.1-70b-instruct` |
-| Mistral Large | `mistralai/mistral-large` |
-| DeepSeek R1 | `deepseek/deepseek-r1` |
+| Model                | OpenRouter ID                             |
+| -------------------- | ----------------------------------------- |
+| Claude Sonnet 4.6    | `anthropic/claude-sonnet-4-6`             |
+| Claude Opus 4.6      | `anthropic/claude-opus-4-6`               |
+| GPT-4o               | `openai/gpt-4o`                           |
+| Gemini 2.5 Pro       | `google/gemini-2.5-pro`                   |
+| Llama 3.1 70B        | `meta-llama/llama-3.1-70b-instruct`       |
+| Mistral Large        | `mistralai/mistral-large`                 |
+| DeepSeek R1          | `deepseek/deepseek-r1`                    |
+| DeepSeek R1 14B      | `deepseek/deepseek-r1-distill-qwen-14b`   |
+| Qwen 2.5 Coder 7B    | `qwen/qwen-2.5-coder-7b-instruct`         |
+| Qwen 3 Coder 7B      | `qwen/qwen3-coder-7b-instruct`            |
 
 ### Model Variants
 
 Append suffixes to tweak behavior:
 
-| Suffix | Meaning |
-| --- | --- |
-| `:free` | Free tier (may be slower) |
-| `:nitro` | Fastest available provider |
-| `:thinking` | Extended reasoning mode |
-| `:online` | Web search enabled |
-| `:extended` | Longer context window |
+| Suffix      | Meaning                    |
+| ----------- | -------------------------- |
+| `:free`     | Free tier (may be slower)  |
+| `:nitro`    | Fastest available provider |
+| `:thinking` | Extended reasoning mode    |
+| `:online`   | Web search enabled         |
+| `:extended` | Longer context window      |
 
 Example: `anthropic/claude-sonnet-4-6:thinking`
 
