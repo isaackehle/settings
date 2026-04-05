@@ -8,23 +8,19 @@ Code editors and IDEs available via Homebrew.
 
 ## Installation
 
-| Tool                                                                                        | Command                           |
-| ------------------------------------------------------------------------------------------- | --------------------------------- |
-| [Cursor](https://cursor.com/)                                                               | `brew install --cask cursor`      |
-| [Windsurf](https://windsurf.com/)                                                           | `brew install --cask windsurf`    |
-| [Zed](https://zed.dev/)                                                                     | `brew install --cask zed`         |
-| [VS Code](https://code.visualstudio.com/)                                                   | `brew install visual-studio-code` |
-| [PyCharm CE](https://www.jetbrains.com/pycharm/)                                            | `brew install pycharm-ce`         |
-| [IntelliJ IDEA CE](https://www.jetbrains.com/idea/)                                         | `brew install intellij-idea-ce`   |
-| [Sublime Text](https://www.sublimetext.com/)                                                | `brew install sublime-text`       |
-| [MacVim](https://macvim.org/macvim/)                                                        | `brew install macvim`             |
-| [PhpStorm](https://www.jetbrains.com/phpstorm/)                                             | `brew install phpstorm`           |
-| [WebStorm](https://www.jetbrains.com/webstorm/)                                             | `brew install webstorm`           |
-| [LibreOffice](https://www.libreoffice.org/)                                                 | `brew install libreoffice`        |
-| [Microsoft Office](https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac) | `brew install microsoft-office`   |
-| [TextExpander](https://textexpander.com/)                                                   | `brew install textexpander`       |
-| [Araxis Merge](https://www.araxis.com/merge/)                                               | `brew install araxis-merge`       |
-| [Helix](https://helix-editor.com/)                                                          | `brew install helix`              |
+| Tool                                                | Command                                  |
+| --------------------------------------------------- | ---------------------------------------- |
+| [Araxis Merge](https://www.araxis.com/merge/)       | `brew install --cask araxis-merge`       |
+| [Cursor](https://cursor.com/)                       | `brew install --cask cursor`             |
+| [Helix](https://helix-editor.com/)                  | `brew install helix`                     |
+| [IntelliJ IDEA CE](https://www.jetbrains.com/idea/) | `brew install --cask intellij-idea-ce`   |
+| [MacVim](https://macvim.org/macvim/)                | `brew install --cask macvim`             |
+| [PyCharm CE](https://www.jetbrains.com/pycharm/)    | `brew install --cask pycharm-ce`         |
+| [Sublime Text](https://www.sublimetext.com/)        | `brew install --cask sublime-text`       |
+| [VS Code](https://code.visualstudio.com/)           | `brew install --cask visual-studio-code` |
+| [WebStorm](https://www.jetbrains.com/webstorm/)     | `brew install --cask webstorm`           |
+| [Windsurf](https://windsurf.com/)                   | `brew install --cask windsurf`           |
+| [Zed](https://zed.dev/)                             | `brew install --cask zed`                |
 
 ## Configuration
 
