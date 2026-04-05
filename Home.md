@@ -53,6 +53,7 @@ Personal macOS development environment setup guide and reference.
 - [[Build Tools/Parcel]] — Zero-config bundler
 - [[Build Tools/Pipelines]] — CI/CD pipelines
 - [[Build Tools/Rollup]] — ES module bundler for libraries
+- [[Build Tools/Turborepo]] — High-performance monorepo build system
 - [[Build Tools/Webpack]] — Configurable module bundler
 - [[Docker]] — Docker and Docker Compose
 - [[Kubernetes]] — kubectl, helm, minikube

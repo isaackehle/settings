@@ -14,6 +14,7 @@ Tools for bundling assets, running tasks, and optimizing applications for produc
 | [[Gulp]] | Custom workflows | Medium | Excellent |
 | [[Parcel]] | Quick projects | None | Good |
 | [[Rollup]] | Libraries | Medium | Excellent |
+| [[Turborepo]] | Monorepos | Low | Excellent |
 | [[Vite]] | Modern apps | Low | Excellent |
 | [[Webpack]] | Complex apps | High | Good |
 
@@ -26,14 +27,6 @@ Extremely fast JavaScript bundler written in Go.
 ```shell
 npm install --save-dev esbuild
 npx esbuild src/app.js --bundle --outfile=dist/app.js
-```
-
-### Turborepo
-
-High-performance build system for monorepos.
-
-```shell
-npx create-turbo@latest
 ```
 
 ### NX
