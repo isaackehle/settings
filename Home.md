@@ -27,7 +27,7 @@ Personal macOS development environment setup guide and reference.
 - [[iTerm]] — iTerm2 setup and keyboard shortcuts
 - [[SSH]] — SSH configuration
 
-## 03 - Development
+## 02 - Development
 
 - [[Editors]] — VS Code, Vim, and other editors
 - [[Git]] — Git setup, gh CLI, aliases
@@ -56,7 +56,7 @@ Personal macOS development environment setup guide and reference.
 - [[Bun]] — Bun runtime and package manager
 - [[Corepack]] — Node.js built-in package manager manager
 
-## 04 - Languages
+## 03 - Languages
 
 - [[Programming Languages]] — Broad language overview and quick starts
 - [[Java]] — Java/JDK via SDKMAN
@@ -72,7 +72,7 @@ Personal macOS development environment setup guide and reference.
 - [[Flutter]] — Flutter mobile framework
 
 
-## 06 - Infrastructure
+## 04 - Infrastructure
 
 - [[Docker]] — Docker and Docker Compose
 - [[Kubernetes]] — kubectl, helm, minikube
@@ -81,13 +81,13 @@ Personal macOS development environment setup guide and reference.
 - [[SOPS]] — Secrets management
 - [[Cloud]] — Cloud services
 
-## 07 - Databases
+## 05 - Databases
 
 - [[Databases]] — Database setup and configuration
 - [[Services]] — Microservices and supporting services
 - [[Apache]] — Apache server configuration
 
-## 08 - Apps
+## 06 - Apps
 
 - [[Browsers]] — Browser installation
 - [[Chats]] — Chat applications
@@ -100,18 +100,18 @@ Personal macOS development environment setup guide and reference.
 - [[Collaborations]] — Team collaboration tools
 - [[Task Managers]] — Project management (ClickUp, etc.)
 
-## 09 - Security
+## 07 - Security
 
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
 
-## 10 - System
+## 08 - System
 
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 
-## 11 - AI
+## 09 - AI
 
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.

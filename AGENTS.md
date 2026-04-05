@@ -20,18 +20,16 @@ Folders are strictly numbered. Always place new files in the most appropriate ex
 
 | Folder                | Topic                                     | Tag              |
 | --------------------- | ----------------------------------------- | ---------------- |
-| `00 - Setup`          | Homebrew, fonts, tweaks, initial installs | `setup`          |
-| `01 - Terminal`       | Zsh, iTerm2, SSH                          | `terminal`       |
-| `02 - Editors`        | VS Code, Vim, editors                     | `editors`        |
-| `03 - Development`    | Git, APIs, CSS, build tools, web dev      | `development`    |
-| `04 - Languages`      | Python, Rust, Java, Ruby, etc.            | `languages`      |
-| `05 - Node`           | Node version managers, pnpm               | `node`           |
-| `06 - Infrastructure` | Docker, Kubernetes, Terraform, AWS        | `infrastructure` |
-| `07 - Databases`      | PostgreSQL, MongoDB, Apache               | `databases`      |
-| `08 - Apps`           | GUI apps — browsers, chat, multimedia     | `apps`           |
-| `09 - Security`       | Auth, encryption, VPN                     | `security`       |
-| `10 - System`         | VMs, VNC, system utilities                | `system`         |
-| `11 - AI`             | Local LLMs, coding assistants, frameworks | `ai`             |
+| `00 - Setup`          | Homebrew, fonts, tweaks, initial installs          | `setup`          |
+| `01 - Terminal`       | Zsh, iTerm2, SSH                                   | `terminal`       |
+| `02 - Development`    | Git, editors, APIs, CSS, build tools, Node, web dev | `development`    |
+| `03 - Languages`      | Python, Rust, Java, Ruby, etc.                     | `languages`      |
+| `04 - Infrastructure` | Docker, Kubernetes, Terraform, AWS                 | `infrastructure` |
+| `05 - Databases`      | PostgreSQL, MongoDB, Apache                        | `databases`      |
+| `06 - Apps`           | GUI apps — browsers, chat, multimedia              | `apps`           |
+| `07 - Security`       | Auth, encryption, VPN                              | `security`       |
+| `08 - System`         | VMs, VNC, system utilities                         | `system`         |
+| `09 - AI`             | Local LLMs, coding assistants, frameworks          | `ai`             |
 
 ---
 
