@@ -52,6 +52,12 @@ Personal macOS development environment setup guide and reference.
 - [[Gradle]] — Gradle build tool
 - [[Pipelines]] — CI/CD pipelines
 - [[Rancher Desktop]] — Container and Kubernetes desktop management
+- [[Volta]] — Volta version manager (recommended)
+- [[NVM]] — Node Version Manager
+- [[FNM]] — Fast Node Manager
+- [[PNPM]] — PNPM package manager
+- [[Bun]] — Bun runtime and package manager
+- [[Corepack]] — Node.js built-in package manager manager
 
 ## 04 - Languages
 
@@ -68,14 +74,6 @@ Personal macOS development environment setup guide and reference.
 - [[Kotlin]] — Kotlin
 - [[Flutter]] — Flutter mobile framework
 
-## 05 - Node
-
-- [[Volta]] — Volta version manager (recommended)
-- [[NVM]] — Node Version Manager
-- [[FNM]] — Fast Node Manager
-- [[PNPM]] — PNPM package manager
-- [[Bun]] — Bun runtime and package manager
-- [[Corepack]] — Node.js built-in package manager manager
 
 ## 06 - Infrastructure
 
