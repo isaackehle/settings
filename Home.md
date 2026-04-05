@@ -128,3 +128,7 @@ Personal macOS development environment setup guide and reference.
 - [[Claude Code]] — Anthropic code-focused Claude assistant.
 - [[Google Gemini CLI]] — Google's Gemini AI assistant for command-line.
 - [[OpenCode]] — Terminal-based AI coding assistant by Charm.
+- [[Cline]] — Autonomous AI coding agent for VS Code with MCP and browser support.
+- [[OpenShell]] — NVIDIA's sandboxed runtime for running AI coding agents safely.
+- [[OpenRouter]] — Unified API gateway for hundreds of AI models with provider routing and fallbacks.
+- [[Perplexity]] — AI search with real-time web grounding and cited answers.
