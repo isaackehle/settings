@@ -2,29 +2,30 @@
 tags: [infrastructure]
 ---
 
-# <img src="https://github.com/docker.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Docker
+# Container Platforms
 
-Container platform for building, shipping, and running applications in isolated environments.
+Tools for containerizing applications and managing containerized environments.
 
-## Installation
+## <img src="https://github.com/docker.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Docker Desktop
+
+Official Docker GUI application for macOS with Kubernetes support.
 
 ```shell
-# OrbStack — fast Docker/Desktop alternative on macOS
-brew install --cask orbstack
-
-# Colima + Docker CLI — lightweight local setup
-brew install colima docker docker-compose
-
-# Start Colima VM
-colima start
-
-# Optional: Docker Desktop
-brew install docker docker-compose
+brew install --cask docker
 ```
 
-Or install Docker Desktop (includes a GUI and Kubernetes):
+```shell
+# Start Docker Desktop from Applications
+open -a Docker
+```
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+## <img src="https://github.com/docker.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Docker CLI
+
+Command-line interface for Docker container management.
+
+```shell
+brew install docker docker-compose
+```
 
 ### Docker CLI config (`~/.docker/config.json`)
 
@@ -34,8 +35,6 @@ Or install Docker Desktop (includes a GUI and Kubernetes):
   "cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"]
 }
 ```
-
-## Usage
 
 ```shell
 # Run a container
@@ -49,6 +48,32 @@ docker stop <container-id>
 
 # Build an image
 docker build -t my-image .
+```
+
+## <img src="https://github.com/abiosoft.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> OrbStack
+
+Fast Docker Desktop alternative optimized for macOS.
+
+```shell
+brew install --cask orbstack
+```
+
+```shell
+# Start OrbStack from Applications
+open -a OrbStack
+```
+
+## <img src="https://github.com/abiosoft.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Colima
+
+Lightweight container runtime using Lima for macOS.
+
+```shell
+brew install colima docker docker-compose
+```
+
+```shell
+# Start Colima VM
+colima start
 ```
 
 ## PostgreSQL via Docker

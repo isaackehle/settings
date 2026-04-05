@@ -54,6 +54,8 @@ VS Code supports Bring Your Own Key (BYOK) to replace the default chat with cust
 }
 ```
 
+> **Note:** These settings may show as "Unknown Configuration Setting" in the VS Code settings editor — this is expected as they are marked *(Experimental)*. They still function correctly.
+
 ### Ollama Setup
 
 ```shell
@@ -65,3 +67,41 @@ ollama pull qwen3.2-coder:7b
 ```
 
 Note: BYOK chat works with custom models, but completions (inline suggestions) still require GitHub Copilot.
+
+## <img src="https://github.com/ollama.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Ollama VS Code Integration
+
+VS Code has native integration with Ollama — no separate extension needed. Works with GitHub Copilot Chat to provide local model selection.
+
+### Quick Setup
+
+```shell
+ollama launch vscode
+```
+
+This will recommend models and configure VS Code automatically. Select **Local** at the bottom of the Copilot Chat panel.
+
+### Manual Setup
+
+1. Open **Copilot Chat** sidebar
+2. Click the settings gear icon
+3. Click **Add Models** → select **Ollama**
+4. Click **Unhide** to show your Ollama models
+
+### Requirements
+
+- Ollama v0.18.3+
+- VS Code 1.113+
+- GitHub Copilot Chat extension 0.41.0+
+- GitHub Copilot Free or paid (required for model selector)
+
+### Models
+
+Use a coding model for best results:
+
+```shell
+ollama pull qwen3.2-coder:7b
+ollama pull deepseek-coder:6.7b
+ollama pull codestral:22b
+```
+
+See: [[Ollama]]

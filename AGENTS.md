@@ -180,7 +180,7 @@ After creating or editing markdown files, run markdown linting and fix any issue
 
 ### Wikilinks
 
-When referencing another page in this vault, always use Obsidian wikilinks: `[[Page Name]]`. Never use relative Markdown paths like `[Page](./file.md)`.
+When referencing another page in this vault, always use Obsidian wikilinks: `[[Page Name]]`. Never use relative Markdown paths like `[Page](./file.md)`. This ensures compatibility with Obsidian while maintaining readability in other environments.
 
 ### Home.md index
 
@@ -220,14 +220,14 @@ against the current installation.
 
 **Currently recommended models:**
 
-| Model            | Pull Command                          |
-| ---------------- | ------------------------------------- |
-| Llama 3.2        | `ollama pull llama3.2`                |
-| Qwen 3 Coder     | `ollama pull qwen3.2-coder:7b`        |
-| DeepSeek Coder   | `ollama pull deepseek-coder:6.7b`     |
-| Phi-4            | `ollama pull phi4`                    |
-| Gemma 3          | `ollama pull gemma3:12b`              |
-| GLM-4 Flash      | `ollama pull glm-4-flash`             |
-| Codestral        | `ollama pull codestral:22b`           |
+| Model          | Pull Command                      |
+| -------------- | --------------------------------- |
+| Llama 3.2      | `ollama pull llama3.2`            |
+| Qwen 3 Coder   | `ollama pull qwen3.2-coder:7b`    |
+| DeepSeek Coder | `ollama pull deepseek-coder:6.7b` |
+| Phi-4          | `ollama pull phi4`                |
+| Gemma 3        | `ollama pull gemma3:12b`          |
+| GLM-4 Flash    | `ollama pull glm-4-flash`         |
+| Codestral      | `ollama pull codestral:22b`       |
 
 <!-- markdownlint-enable MD013 -->

@@ -18,61 +18,20 @@ Tools and frameworks for web development. See also: [[Volta]] for Node.js manage
 - [[Gradle]] — JVM build tool
 - [[Terraform]] — infrastructure as code
 
-## Vite
+## Web Development Tools
 
-[Vite](https://vite.dev/) is a modern frontend build tool and dev server with very fast startup.
-
-```shell
-npm create vite@latest
-```
-
-## Just
-
-[just](https://just.systems) is a command runner (simpler alternative to Make).
-
-```shell
-brew install just
-```
+- [[Front-End/Vite]] — Modern frontend build tool
+- [[Front-End/Vitest]] — Fast unit test framework
+- [[Styling/Tailwind CSS]] — Utility-first CSS framework
+- [[Styling/Shadcn]] — Component library for React
+- [[Just]] — Command runner
+- [[Front-End/Angular]] — Angular CLI
+- [[NPM Globals]] — Global npm packages
 
 ## Feature Flags
 
 - [LaunchDarkly](https://launchdarkly.com)
 
-## NPM Global Packages
-
-List all globally installed npm packages:
-
-```shell
-npm ls -g --depth 0
-```
-
-Common globals:
-
-```shell
-npm install -g npm-check-updates
-npm install -g typescript
-npm install -g eslint
-npm install -g webpack webpack-dev-server
-npm install -g rimraf
-```
-
-## Angular
-
-```shell
-npm install -g @angular/cli
-```
-
-## Configuration
-
-No basic configuration required.
-
-## Start / Usage
-
-```shell
-npm create vite@latest
-```
-
 ## References
 
 - [NativeScript documentation](https://docs.nativescript.org/)
-- [Frontend tooling with Vite](https://vite.dev/guide/)

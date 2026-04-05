@@ -35,13 +35,23 @@ Personal macOS development environment setup guide and reference.
 
 - [[Git]] — Git setup, gh CLI, aliases
 - [[Xcode]] — Xcode Command Line Tools
-- [[Web Dev]] — Angular, npm globals, build tools
+- [[Web Dev]] — Web development overview
+- [[Front-End/Vite]] — Modern frontend build tool
+- [[Front-End/Vitest]] — Fast unit test framework
+- [[Styling/Tailwind CSS]] — Utility-first CSS framework
+- [[Styling/Shadcn]] — Component library for React
+- [[Just]] — Command runner
+- [[Front-End/Angular]] — Angular CLI
+- [[NPM Globals]] — Global npm packages
 - [[APIs]] — API development tools
-- [[CSS]] — CSS frameworks and tools
-- [[Next.js]] — Next.js framework
+- [[CSS]] — CSS overview and styling tools
+- [[Front-End/Next.js]] — Next.js framework
 - [[SDK]] — SDK management
 - [[Concepts]] — Development concepts and best practices
 - [[Load Testing]] — Load testing tools
+- [[Gradle]] — Gradle build tool
+- [[Pipelines]] — CI/CD pipelines
+- [[Rancher Desktop]] — Container and Kubernetes desktop management
 
 ## 04 - Languages
 
@@ -63,6 +73,7 @@ Personal macOS development environment setup guide and reference.
 - [[NVM]] — Node Version Manager
 - [[FNM]] — Fast Node Manager
 - [[PNPM]] — PNPM package manager
+- [[Bun]] — Bun runtime and package manager
 - [[Corepack]] — Node.js built-in package manager manager
 
 ## 06 - Infrastructure
@@ -71,9 +82,7 @@ Personal macOS development environment setup guide and reference.
 - [[Kubernetes]] — kubectl, helm, minikube
 - [[AWS]] — AWS CLI and tools
 - [[Terraform]] — Terraform IaC
-- [[Gradle]] — Gradle build tool
 - [[SOPS]] — Secrets management
-- [[Pipelines]] — CI/CD pipelines
 - [[Cloud]] — Cloud services
 
 ## 07 - Databases
