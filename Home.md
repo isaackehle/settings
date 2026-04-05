@@ -67,34 +67,27 @@ Personal macOS development environment setup guide and reference.
 - [[Bun]] — Bun runtime and package manager
 - [[Corepack]] — Node.js built-in package manager manager
 
-## 03 - Languages
-
-- [[Programming Languages]] — Broad language overview and quick starts
-- [[Java]] — Java/JDK via SDKMAN
-- [[Python]] — Python 3 via pyenv
-- [[Pytest]] — Python testing framework
-- [[Ruby]] — Ruby via RVM
-- [[Rust]] — Rust language setup
-- [[Go]] — Go language setup
-- [[TypeScript]] — TypeScript setup
-- [[Julia]] — Julia language setup
-- [[Elixir]] — Elixir language setup
-- [[Kotlin]] — Kotlin
-- [[Flutter]] — Flutter mobile framework
-
-
+- [[Languages/Programming Languages]] — Broad language overview and quick starts
+- [[Languages/Java]] — Java/JDK via SDKMAN
+- [[Languages/Python/Python]] — Python 3 via pyenv
+- [[Languages/Python/Pytest]] — Python testing framework
+- [[Languages/Ruby]] — Ruby via RVM
+- [[Languages/Rust]] — Rust language setup
+- [[Languages/Go]] — Go language setup
+- [[Languages/TypeScript]] — TypeScript setup
+- [[Languages/Julia]] — Julia language setup
+- [[Languages/Elixir]] — Elixir language setup
+- [[Languages/Kotlin]] — Kotlin
+- [[Languages/Flutter]] — Flutter mobile framework
 - [[Infrastructure/AWS]] — AWS CLI and tools
 - [[Infrastructure/Cloud]] — Cloud services overview
 - [[Infrastructure/SOPS]] — Secrets management
 - [[Infrastructure/Terraform]] — Terraform IaC
+- [[Databases/Databases]] — Database setup and configuration
+- [[Databases/Services]] — Microservices and supporting services
+- [[Databases/Apache]] — Apache server configuration
 
-## 04 - Databases
-
-- [[Databases]] — Database setup and configuration
-- [[Services]] — Microservices and supporting services
-- [[Apache]] — Apache server configuration
-
-## 05 - Apps
+## 03 - Apps
 
 - [[Browsers]] — Browser installation
 - [[Chats]] — Chat applications
@@ -107,18 +100,18 @@ Personal macOS development environment setup guide and reference.
 - [[Collaborations]] — Team collaboration tools
 - [[Task Managers]] — Project management (ClickUp, etc.)
 
-## 06 - Security
+## 04 - Security
 
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
 
-## 07 - System
+## 05 - System
 
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 
-## 08 - AI
+## 06 - AI
 
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.

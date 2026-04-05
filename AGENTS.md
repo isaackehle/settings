@@ -20,15 +20,13 @@ Folders are strictly numbered. Always place new files in the most appropriate ex
 
 | Folder                | Topic                                     | Tag              |
 | --------------------- | ----------------------------------------- | ---------------- |
-| `00 - Setup`       | Homebrew, fonts, tweaks, initial installs                        | `setup`       |
-| `01 - Terminal`    | Zsh, iTerm2, SSH                                                 | `terminal`    |
-| `02 - Development` | Git, editors, APIs, build tools, Node, containers, infra, web dev | `development` |
-| `03 - Languages`   | Python, Rust, Java, Ruby, etc.                                   | `languages`   |
-| `04 - Databases`   | PostgreSQL, MongoDB, Apache                                      | `databases`   |
-| `05 - Apps`        | GUI apps — browsers, chat, multimedia                            | `apps`        |
-| `06 - Security`    | Auth, encryption, VPN                                            | `security`    |
-| `07 - System`      | VMs, VNC, system utilities                                       | `system`      |
-| `08 - AI`          | Local LLMs, coding assistants, frameworks                        | `ai`          |
+| `00 - Setup`       | Homebrew, fonts, tweaks, initial installs                                          | `setup`       |
+| `01 - Terminal`    | Zsh, iTerm2, SSH                                                                   | `terminal`    |
+| `02 - Development` | Git, editors, APIs, build tools, Node, containers, infra, languages, DBs, web dev | `development` |
+| `03 - Apps`        | GUI apps — browsers, chat, multimedia                                              | `apps`        |
+| `04 - Security`    | Auth, encryption, VPN                                                              | `security`    |
+| `05 - System`      | VMs, VNC, system utilities                                                         | `system`      |
+| `06 - AI`          | Local LLMs, coding assistants, frameworks                                          | `ai`          |
 
 ---
 
