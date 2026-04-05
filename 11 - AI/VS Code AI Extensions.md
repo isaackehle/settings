@@ -24,11 +24,12 @@ gh extension install github/gh-copilot
 - **VS Code Extension:** `Continue.continue`
 - See [[Continue]] for full configuration with Ollama.
 
-## <img src="https://github.com/cline.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Claude Dev / Cline
+## <img src="https://github.com/cline.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Cline
 
-[Cline](https://github.com/cline/cline) is an autonomous coding agent for your IDE that can create and edit files and run commands.
+[Cline](https://github.com/cline/cline) is an autonomous coding agent for your IDE that can create and edit files, run terminal commands, use a browser, and call MCP tools.
 
 - **VS Code Extension:** `saoudrizwan.claude-dev`
+- See [[Cline]] for full configuration with Ollama, Claude, and other providers.
 
 ## Built-in Chat (BYOK)
 
