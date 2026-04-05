@@ -8,23 +8,43 @@ A modern frontend build tool and dev server with very fast startup.
 
 ## Installation
 
-Vite is typically installed per-project. For new projects:
-
 ```shell
-npm create vite@latest
+npm create vite@latest my-app
+cd my-app
+npm install
 ```
 
 ## Configuration
 
-No basic configuration required.
+No basic configuration required. Vite auto-detects the framework from your project.
 
-## Usage
+Optional `vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  build: {
+    outDir: 'dist',
+  },
+})
+```
+
+## Start / Usage
 
 ```shell
-npm create vite@latest
+npm run dev      # Start dev server (instant startup, HMR)
+npm run build    # Production build via Rollup
+npm run preview  # Preview production build locally
 ```
+
+**Key features:**
+- Native ES modules in dev — no bundling, instant startup
+- Hot Module Replacement without page refresh
+- Rollup-based production builds with tree shaking
 
 ## References
 
 - [Vite](https://vite.dev/)
-- [Frontend tooling with Vite](https://vite.dev/guide/)
+- [Vite Guide](https://vite.dev/guide/)
+- [Vite Config Reference](https://vite.dev/config/)

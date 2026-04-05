@@ -47,27 +47,7 @@ module.exports = {
 
 ### Vite
 
-A fast build tool that leverages native ES modules for instant server start and lightning-fast hot module replacement.
-
-**Installation:**
-```bash
-npm create vite@latest my-app
-cd my-app
-npm install
-```
-
-**Key Features:**
-- **Instant Startup** — No bundling required in development
-- **ESM-based** — Native ES modules for faster development
-- **Hot Module Replacement** — Instant updates without page refresh
-- **Optimized Production Builds** — Uses Rollup for production
-
-**Usage:**
-```bash
-npm run dev    # Start development server
-npm run build  # Build for production
-npm run preview # Preview production build
-```
+See [[Vite]] for full setup and configuration.
 
 ### Rollup
 
