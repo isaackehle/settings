@@ -202,6 +202,13 @@ When adding a new page, also add an entry to `Home.md` under the correct `##` se
 
 ---
 
+## Git Commits
+
+- **Never** add a `Co-Authored-By` trailer to commit messages.
+- Keep commit messages concise: a short imperative subject line only.
+
+---
+
 ## Ollama Model Maintenance
 
 When working with Ollama-related documentation, **always verify model names**
