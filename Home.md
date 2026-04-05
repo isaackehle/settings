@@ -27,12 +27,9 @@ Personal macOS development environment setup guide and reference.
 - [[iTerm]] — iTerm2 setup and keyboard shortcuts
 - [[SSH]] — SSH configuration
 
-## 02 - Editors
-
-- [[Editors]] — VS Code, Vim, and other editors
-
 ## 03 - Development
 
+- [[Editors]] — VS Code, Vim, and other editors
 - [[Git]] — Git setup, gh CLI, aliases
 - [[Xcode]] — Xcode Command Line Tools
 - [[Web Dev]] — Web development overview
