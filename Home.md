@@ -117,6 +117,7 @@ Personal macOS development environment setup guide and reference.
 
 ## 11 - AI
 
+- [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.
 - [[Ollama]] — Local LLM manager for Apple Silicon.
 - [[LM Studio]] — GUI for discovering and running local LLMs.

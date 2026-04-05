@@ -23,13 +23,7 @@ Cline settings live in the extension panel (click the gear icon). Each provider 
 3. Paste your `ANTHROPIC_API_KEY`
 4. Choose a model (e.g. `claude-sonnet-4-6`)
 
-Recommended models:
-
-| Model               | Use case                    |
-| ------------------- | --------------------------- |
-| `claude-opus-4-6`   | Complex tasks, best quality |
-| `claude-sonnet-4-6` | Balanced speed and quality  |
-| `claude-haiku-4-5`  | Fast, lightweight tasks     |
+See [[Models]] for full model reference.
 
 ### Ollama (Local Models)
 

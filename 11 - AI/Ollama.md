@@ -41,17 +41,16 @@ ollama pull <model-name>
 
 ### Recommended Models
 
-| Model          | Command                           | Description          |
-| -------------- | --------------------------------- | -------------------- |
-| Llama 3.2      | `ollama pull llama3.2`            | General purpose, 8B  |
-| Qwen 2.5 Coder | `ollama pull qwen2.5-coder:7b`    | Code-focused, 7B     |
-| Qwen 3 Coder   | `ollama pull qwen3.2-coder:7b`    | Code-focused, 7B     |
-| DeepSeek Coder | `ollama pull deepseek-coder:6.7b` | Code generation      |
-| Phi-4          | `ollama pull phi4`                | Microsoft, efficient |
-| Gemma 3        | `ollama pull gemma3:12b`          | Google, 12B          |
-| GLM-4 Flash    | `ollama pull glm-4-flash`         | Chinese, fast        |
-| Codestral      | `ollama pull codestral:22b`       | Mistral code model   |
-| Qwen 3         | `ollama pull qwen3:30b-a3b`       | Large, reasoning     |
+See [[Models]] for the full model reference. Quick pulls:
+
+```shell
+ollama pull llama3.2
+ollama pull qwen2.5-coder:7b
+ollama pull qwen3.2-coder:7b
+ollama pull deepseek-r1:14b
+ollama pull phi4
+ollama pull gemma3:12b
+```
 
 ### Browse Available Models
 
