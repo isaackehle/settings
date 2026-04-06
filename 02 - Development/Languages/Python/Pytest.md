@@ -9,7 +9,14 @@ Python testing framework. Simple to start, powerful for large projects.
 ## Installation
 
 ```shell
+# For Python projects (recommended)
 pip install pytest pytest-cov
+```
+
+```shell
+# For system-wide pytest (Homebrew)
+brew install pytest
+brew link pytest
 ```
 
 Or add to `pyproject.toml`:
@@ -94,12 +101,12 @@ def test_divide_by_zero():
 
 ## Useful Plugins
 
-| Plugin | Install | Purpose |
-| --- | --- | --- |
-| `pytest-cov` | `pip install pytest-cov` | Coverage reports |
-| `pytest-xdist` | `pip install pytest-xdist` | Parallel test runs (`-n auto`) |
-| `pytest-mock` | `pip install pytest-mock` | `mocker` fixture for mocking |
-| `pytest-asyncio` | `pip install pytest-asyncio` | Async test support |
+| Plugin           | Install                      | Purpose                        |
+| ---------------- | ---------------------------- | ------------------------------ |
+| `pytest-cov`     | `pip install pytest-cov`     | Coverage reports               |
+| `pytest-xdist`   | `pip install pytest-xdist`   | Parallel test runs (`-n auto`) |
+| `pytest-mock`    | `pip install pytest-mock`    | `mocker` fixture for mocking   |
+| `pytest-asyncio` | `pip install pytest-asyncio` | Async test support             |
 
 ## Project Layout
 
