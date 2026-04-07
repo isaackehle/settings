@@ -66,6 +66,11 @@ Personal macOS development environment setup guide and reference.
 - [[PNPM]] — PNPM package manager
 - [[Bun]] — Bun runtime and package manager
 - [[Corepack]] — Node.js built-in package manager manager
+- [[Agent Config]] — AGENTS.md templates for AI coding agents
+- [[AGENTS.md Monorepo Root]] — Root-level template for multi-stack repos
+- [[AGENTS.md Next.js TypeScript]] — Frontend template for Next.js 15 / React 19 / TypeScript
+- [[AGENTS.md Python FastAPI]] — Backend template for Python / FastAPI / Pydantic
+- [[AGENTS.md Embedded Edge ML]] — Embedded systems and edge ML template
 
 - [[Languages/Programming Languages]] — Broad language overview and quick starts
 - [[Languages/Java]] — Java/JDK via SDKMAN
