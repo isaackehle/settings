@@ -1,5 +1,5 @@
 ---
-tags: [ai, image-generation, stable-diffusion]
+tags: [ai, image-generation, local]
 ---
 
 # Image Generation

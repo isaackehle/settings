@@ -115,18 +115,36 @@ Personal macOS development environment setup guide and reference.
 ## 06 - AI
 
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
+
+### Local Runtimes
+
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.
 - [[Ollama]] — Local LLM manager for Apple Silicon.
 - [[LM Studio]] — GUI for discovering and running local LLMs.
 - [[GPT4All]] — Privacy-focused local chatbot app.
 - [[vLLM]] — High-throughput local LLM serving engine.
 - [[Llama.cpp]] — Apple Silicon-optimized LLaMA inference library.
-- [[VS Code AI Extensions]] — VS Code extensions for AI coding assistance.
-- [[Continue]] — Open-source AI code assistant for VS Code and JetBrains.
+
+### Coding Assistants
+
+- [[Coding Assistants]] — Overview of AI coding assistants: Copilot, OpenCode, Aider, Tabby, and more.
 - [[Claude Code]] — Anthropic code-focused Claude assistant.
+- [[Cline]] — Autonomous AI coding agent for VS Code with MCP and browser support.
+- [[Continue]] — Open-source AI code assistant for VS Code and JetBrains.
 - [[Google Gemini CLI]] — Google's Gemini AI assistant for command-line.
 - [[OpenCode]] — Terminal-based AI coding assistant by Charm.
-- [[Cline]] — Autonomous AI coding agent for VS Code with MCP and browser support.
 - [[OpenShell]] — NVIDIA's sandboxed runtime for running AI coding agents safely.
+- [[VS Code AI Extensions]] — VS Code extensions for AI coding assistance.
+
+### APIs & Services
+
 - [[OpenRouter]] — Unified API gateway for hundreds of AI models with provider routing and fallbacks.
 - [[Perplexity]] — AI search with real-time web grounding and cited answers.
+
+### Frameworks
+
+- [[Frameworks]] — AI frameworks and libraries: Hugging Face, LangChain, LlamaIndex, PyTorch.
+
+### Image Generation
+
+- [[Image Generation]] — Local image generation tools: Automatic1111, ComfyUI, Draw Things.

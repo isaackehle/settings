@@ -1,5 +1,5 @@
 ---
-tags: [ai, frameworks, python]
+tags: [ai, frameworks, libraries]
 ---
 
 # AI Frameworks & Libraries

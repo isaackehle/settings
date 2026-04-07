@@ -1,5 +1,5 @@
 ---
-tags: [ai, llm]
+tags: [ai, llm, coding, productivity]
 ---
 
 # <img src="https://github.com/anthropic.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Claude Code

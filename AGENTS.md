@@ -137,7 +137,7 @@ If any one of these is not applicable, explicitly say so in one short line rathe
 
 ### Frontmatter
 
-Every file starts with YAML frontmatter. Use the tag from the folder table above. Multi-topic files (especially in `11 - AI`) may have multiple tags.
+Every file starts with YAML frontmatter. Use the tag from the folder table above. Multi-topic files (especially in `06 - AI`) may have multiple tags.
 
 ```yaml
 ---
@@ -217,7 +217,7 @@ against the current installation.
 **Rules:**
 
 - Use exact model names (e.g., `llama3.2`, `qwen3.2-coder:7b`, not `llama3` or `qwen-coder`)
-- Update `11 - AI/Ollama.md` models table when new models are commonly used
+- Update `06 - AI/Ollama.md` models table when new models are commonly used
 - Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
 
 **Currently recommended models:**
