@@ -26,3 +26,6 @@ vllm serve llama3
 
 - [vLLM](https://github.com/vllm-project/vllm)
 - [vLLM docs](https://github.com/vllm-project/vllm#readme)
+- [vllm.ai](https://vllm.ai/)
+https://medium.com/@rohitkhatana/installing-vllm-on-macos-a-step-by-step-guide-bbbf673461af
+- [Installing vLLM on macOS: A Step-by-Step Guide](https://medium.com/@rohitkhatana/installing-vllm-on-macos-a-step-by-step-guide-bbbf673461af)

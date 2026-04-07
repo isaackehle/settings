@@ -36,3 +36,15 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+# Obsidian volatile state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Obsidian cache
+.obsidian/cache/
+
+# If you ever add community plugins, ignore their binaries
+.obsidian/plugins/*/main.js
+.obsidian/plugins/*/manifest.json
+.obsidian/plugins/*/styles.css
