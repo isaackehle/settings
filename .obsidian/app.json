@@ -3,5 +3,6 @@
   "userIgnoreFilters": [
     "node_modules"
   ],
-  "useMarkdownLinks": false
+  "useMarkdownLinks": false,
+  "readableLineLength": false
 }
