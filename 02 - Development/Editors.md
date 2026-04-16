@@ -15,6 +15,7 @@ Code editors and IDEs available via Homebrew.
 | [Helix](https://helix-editor.com/)                  | `brew install helix`                     |
 | [IntelliJ IDEA CE](https://www.jetbrains.com/idea/) | `brew install --cask intellij-idea-ce`   |
 | [MacVim](https://macvim.org/macvim/)                | `brew install --cask macvim`             |
+| [Obsidian](https://obsidian.md/)                    | `brew install --cask obsidian`           |
 | [PyCharm CE](https://www.jetbrains.com/pycharm/)    | `brew install --cask pycharm-ce`         |
 | [Sublime Text](https://www.sublimetext.com/)        | `brew install --cask sublime-text`       |
 | [VS Code](https://code.visualstudio.com/)           | `brew install --cask visual-studio-code` |
@@ -28,7 +29,7 @@ Code editors and IDEs available via Homebrew.
 
 ```bash
 # Set as default editor
-export EDITOR=hx
+export EDITOR=hx 
 export VISUAL=hx
 ```
 

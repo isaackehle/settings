@@ -31,9 +31,8 @@ Set the default editor for Git commit messages in your shell profile:
 
 ```shell
 # Choose one
-export GIT_EDITOR="windsurf-fed --wait"
-
-# Alternatives
+# export GIT_EDITOR="windsurf-fed --wait"
+export GIT_EDITOR="nano"
 # export GIT_EDITOR="code --wait"
 # export GIT_EDITOR="hx"
 ```

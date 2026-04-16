@@ -38,16 +38,6 @@ No basic configuration required.
 
 Start: Open the app from Applications.
 
-## <img src="https://github.com/skype.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Skype
-
-```shell
-brew install --cask skype
-```
-
-No basic configuration required.
-
-Start: Open the app from Applications.
-
 ## <img src="https://github.com/discord.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Discord
 
 ```shell
@@ -60,5 +50,4 @@ Start: Open the app from Applications.
 
 ## References
 
-- [Slack](https://slack.com/)
 - [Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams/group-chat-software)

@@ -18,6 +18,10 @@ brew install --cask 2fas
 
 # KeePassXC — open-source password manager
 brew install --cask keepassxc
+
+# Proton Pass
+brew install --cask proton-pass
+
 ```
 
 ## Configuration

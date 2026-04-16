@@ -11,6 +11,7 @@ Common web browsers for daily browsing and development testing.
 ```shell
 brew install --cask arc
 brew install --cask brave-browser
+brew install --cask comet
 brew install --cask firefox
 brew install --cask google-chrome
 brew install --cask microsoft-edge
@@ -29,6 +30,7 @@ Start: Open the app from Applications.
 
 - [Arc](https://arc.net/)
 - [Brave](https://brave.com/)
+- [Comet](https://www.perplexity.ai/comet)
 - [Firefox](https://www.firefox.com/)
 - [Chrome](https://www.google.com/chrome/)
 - [Microsoft Edge](https://www.microsoft.com/en-us/edge)
