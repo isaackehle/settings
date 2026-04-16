@@ -15,12 +15,12 @@ brew install pyenv
 ```
 
 ```shell
-pyenv install 3.12.0
-pyenv global 3.12.0
+pyenv install 3.14.4
+pyenv global 3.14.4
 ```
 
 ```shell
-python3 -q
+python -q
 ```
 
 See more: [[Python]]

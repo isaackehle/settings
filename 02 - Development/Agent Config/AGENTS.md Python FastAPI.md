@@ -18,20 +18,20 @@ orchestration, and vector-search endpoints."
 -->
 
 ## Tech Stack
-
-| Layer | Choice |
-|---|---|
-| Language | Python 3.12+ |
-| Framework | FastAPI |
-| Validation | Pydantic v2 |
-| Package manager | **uv** — always `uv add / uv run`; never invoke `pip` directly |
-| Linter / formatter | Ruff |
-| Database | PostgreSQL |
-| ORM | SQLAlchemy 2.x (async) + Alembic |
-| Vector DB | Qdrant (optional) |
-| Local LLM inference | Ollama |
-| Containers | Docker Compose |
-| Target platform | macOS Apple Silicon (arm64) |
+ 
+| Layer               | Choice                                                         |
+| ------------------- | -------------------------------------------------------------- |
+| Language            | Python 3.12+                                                   |
+| Framework           | FastAPI                                                        |
+| Validation          | Pydantic v2                                                    |
+| Package manager     | **uv** — always `uv add / uv run`; never invoke `pip` directly |
+| Linter / formatter  | Ruff                                                           |
+| Database            | PostgreSQL                                                     |
+| ORM                 | SQLAlchemy 2.x (async) + Alembic                               |
+| Vector DB           | Qdrant (optional)                                              |
+| Local LLM inference | Ollama                                                         |
+| Containers          | Docker Compose                                                 |
+| Target platform     | macOS Apple Silicon (arm64)                                    |
 
 > All container images must be `linux/arm64` or multi-arch.
 
@@ -159,12 +159,12 @@ it explicitly states "overrides parent `AGENTS.md`".
 
 ## Tool-Specific Symlinks
 
-| Tool | Symlink / setting |
-|---|---|
-| Cursor | `.cursor/rules/backend.mdc` → `../../AGENTS.md` |
+| Tool           | Symlink / setting                                  |
+| -------------- | -------------------------------------------------- |
+| Cursor         | `.cursor/rules/backend.mdc` → `../../AGENTS.md`    |
 | GitHub Copilot | `.github/copilot-instructions.md` → `../AGENTS.md` |
-| Windsurf | `.windsurf/rules/backend.md` → `../../AGENTS.md` |
-| Claude Code | reads `AGENTS.md` natively — no symlink needed |
-| Codex / OpenAI | reads `AGENTS.md` natively — no symlink needed |
+| Windsurf       | `.windsurf/rules/backend.md` → `../../AGENTS.md`   |
+| Claude Code    | reads `AGENTS.md` natively — no symlink needed     |
+| Codex / OpenAI | reads `AGENTS.md` natively — no symlink needed     |
 
 <!-- markdownlint-enable MD013 -->

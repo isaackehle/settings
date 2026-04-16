@@ -26,9 +26,13 @@ fi
 Install and set a Python version:
 
 ```shell
+
+# This warning occurs when Python is built or installed without the necessary XZ/LZMA development headers on your system. Without these headers, Python skips compiling the _lzma C-extension, leading to an incomplete installation that cannot handle .xz or .lzma compression. 
+brew install xz
+
 pyenv install --list           # browse available versions
-pyenv install 3.13.0
-pyenv global 3.13.0            # set system default
+pyenv install 3.14.4
+pyenv global 3.14.4            # set system default
 pyenv local 3.11.9             # set per-project (writes .python-version)
 pyenv version                  # confirm active version
 ```
@@ -59,3 +63,4 @@ pip install -r requirements.txt
 - [pyenv](https://github.com/pyenv/pyenv)
 - [Mypy](https://mypy.readthedocs.io/en/stable/)
 - [Ruff](https://docs.astral.sh/ruff/)
+- [xv](https://github.com/python/xv) - Image viewer and manipulator for X
