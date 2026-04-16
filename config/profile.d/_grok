@@ -1,0 +1,3 @@
+# Grok CLI Configuration
+export GROK_BASE_URL=http://localhost:11434
+export GROK_MODEL=llama3

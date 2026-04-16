@@ -1,0 +1,70 @@
+name: "Continue Config - Local Models"
+version: "1.0.0"
+schema: "v1"
+
+models:
+  # Primary coding model — tool-capable
+  - name: "Qwen3 Coder 30B A3B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3-coder-30b-32k:latest"
+    roles:
+      - "chat"
+      - "edit"
+      - "summarize"
+
+  # Chat/think model — Mistral Small 24B, strong tool calling
+  - name: "Qwen3.5 27B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3.5:27b"
+    roles:
+      - "chat"
+
+  # Apply/insert — Codestral 22B, best code insertion (no tool calls needed for apply)
+  - name: "Codestral 22B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "codestral:22b-v0.1-q8_0" 
+    roles:
+      - "apply"
+
+  # Autocomplete (light) — fast, low RAM
+  - name: "Qwen2.5 Coder 1.5B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:1.5b"
+    roles:
+      - "autocomplete"
+
+  # Autocomplete (heavy) — better quality when resources allow
+  - name: "Qwen2.5 Coder 7B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:7b"
+    roles:
+      - "autocomplete"
+
+  # Embedding model for semantic search
+  - name: "Nomic Embed Text"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "nomic-embed-text:latest"
+    roles:
+      - "embed"
+
+  # Reranking model
+  - name: "Qwen3 Reranker 0.6B Q8"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "dengcao/Qwen3-Reranker-0.6B:Q8_0"
+    roles:
+      - "rerank"
+
+  # Fast planning / small tasks
+  - name: "Qwen3 4B Instruct 2507 Q8"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3-4b-q8"
+    roles:
+      - "chat"

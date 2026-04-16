@@ -1,0 +1,22 @@
+# Zsh prompt: p10k if installed, starship otherwise
+# Also loads autosuggestions + syntax-highlighting
+
+BREW_PREFIX=$(brew --prefix 2>/dev/null) || return 0
+
+[ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+  source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+  source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+if [ -f "$HOME/powerlevel10k/powerlevel10k.zsh-theme" ]; then
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
+  source "$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+elif command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+command -v fnm >/dev/null 2>&1 && eval "$(fnm env --use-on-cd --shell zsh)"

@@ -64,3 +64,4 @@ pip install -r requirements.txt
 - [Mypy](https://mypy.readthedocs.io/en/stable/)
 - [Ruff](https://docs.astral.sh/ruff/)
 - [xv](https://github.com/python/xv) - Image viewer and manipulator for X
+

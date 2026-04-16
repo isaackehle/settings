@@ -1,0 +1,107 @@
+# =============================================================================
+# Ghostty Config
+# Reload without restart: cmd+shift+,
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Font
+# -----------------------------------------------------------------------------
+font-family = "JetBrainsMono Nerd Font"
+# font-family = "Geist Mono"
+# font-family = "Maple Mono NF"
+# font-family = "Monaspace Neon"
+font-size = 14
+font-thicken = true
+
+# -----------------------------------------------------------------------------
+# Theme  (pick one, or use light/dark auto-switching)
+# -----------------------------------------------------------------------------
+
+# Auto light/dark (follows macOS appearance)
+theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+
+# --- Single theme options (uncomment to override auto-switch above) ---
+# theme = Catppuccin Mocha
+# theme = Catppuccin Macchiato
+# theme = Catppuccin Frappe
+# theme = Catppuccin Latte
+# theme = tokyonight
+# theme = tokyonight-storm
+# theme = tokyonight-moon
+# theme = nord
+# theme = Dracula
+# theme = Gruvbox Dark
+# theme = OneDark
+# theme = rose-pine
+# theme = rose-pine-moon
+# theme = Solarized Dark
+
+# -----------------------------------------------------------------------------
+# Window / Appearance
+# -----------------------------------------------------------------------------
+background-opacity = 0.92
+background-blur = 20
+unfocused-split-opacity = 0.7
+
+window-padding-x = 8
+window-padding-y = 8
+window-padding-balance = true
+
+macos-titlebar-style = transparent
+# macos-titlebar-style = hidden
+
+# Keep window open after last process exits (useful for inspecting output)
+window-close-confirmation = always
+
+# -----------------------------------------------------------------------------
+# Cursor
+# -----------------------------------------------------------------------------
+cursor-style = block
+cursor-style-blink = true
+
+# -----------------------------------------------------------------------------
+# Scrollback
+# -----------------------------------------------------------------------------
+scrollback-limit = 10000
+
+# -----------------------------------------------------------------------------
+# Shell integration
+# -----------------------------------------------------------------------------
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# -----------------------------------------------------------------------------
+# macOS
+# -----------------------------------------------------------------------------
+macos-option-as-alt = true        # needed for tmux alt-key bindings
+copy-on-select = clipboard
+
+# -----------------------------------------------------------------------------
+# Keybindings — word/line deletion (zsh)
+# Note: the bindkey lines below belong in ~/.zshrc, not here.
+#   bindkey '^U' backward-kill-line
+#   bindkey '\ew' backward-kill-line
+# -----------------------------------------------------------------------------
+keybind = cmd+backspace=esc:w      # delete word back (requires bindkey '\ew' in zshrc)
+keybind = cmd+delete=text:\u000B   # delete to end of line (Ctrl-K)
+
+# -----------------------------------------------------------------------------
+# Keybindings — splits & tabs
+# -----------------------------------------------------------------------------
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+shift+enter=new_window
+
+keybind = cmd+alt+left=goto_split:left
+keybind = cmd+alt+right=goto_split:right
+keybind = cmd+alt+up=goto_split:up
+keybind = cmd+alt+down=goto_split:down
+
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+
+# -----------------------------------------------------------------------------
+# Keybindings — tmux passthrough (prefix: ctrl+a)
+# -----------------------------------------------------------------------------
+keybind = cmd+s=text:\x01\x73       # ctrl-a s  (session list)
+keybind = ctrl+shift+w=close_window

@@ -1,0 +1,27 @@
+# ~/.bash_profile: executed by login shells
+
+# Load ~/.bashrc if it exists
+if [ -f "$HOME/.bashrc" ]; then
+    source "$HOME/.bashrc"
+fi
+
+# Load Homebrew setup
+[[ -f "$HOME/.brew" ]] && source "$HOME/.brew"
+
+# FNM (Fast Node Manager) - must be in login shell
+eval "$(fnm env)"
+
+# Load sensitive environment variables from local file (not in git)
+[[ -f "$HOME/.env.local" ]] && source "$HOME/.env.local"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="$HOME/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:$HOME/.lmstudio/bin"
+# End of LM Studio CLI section

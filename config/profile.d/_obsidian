@@ -1,0 +1,18 @@
+# Obsidian Vault
+command -v opencode >/dev/null 2>&1 || return 0
+
+# Detect machine type to pick the right default model
+_hw_model=$(sysctl -n hw.model 2>/dev/null)
+_hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null) / 1024 / 1024 / 1024 ))
+
+if [[ "$_hw_model" == Mac17* || "$_hw_mem_gb" -ge 32 ]]; then
+  _vault_model="qwen3:32b-vault"                       # macbook-m5 (Mac17,6 / 64GB)
+elif [[ "$_hw_model" == Macmini* || "$_hw_model" == Mac14* ]]; then
+  _vault_model="mfdoom/deepseek-r1-tool-calling:8b"    # macmini-m2
+else
+  _vault_model="mfdoom/deepseek-r1-tool-calling:8b"    # macbook-m1 (default)
+fi
+
+alias vault="cd \"\$OBSIDIAN_VAULT\" && opencode --model $_vault_model"
+
+unset _hw_model _hw_mem_gb _vault_model

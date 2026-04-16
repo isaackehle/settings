@@ -1,0 +1,3 @@
+# job_search workspace
+export JOB_SEARCH_WORKSPACE="$OBSIDIAN_VAULT/job_search"
+export PRIVATE_CONFIG_ROOT="$OBSIDIAN_VAULT/private"
