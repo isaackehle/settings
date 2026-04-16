@@ -1,0 +1,15 @@
+# Shared preamble — installed to ~/.shellrc by setup.sh, sourced by bashrc and zshrc
+
+export OBSIDIAN_BASE="$HOME/Obsidian"
+export OBSIDIAN_ROOT="$OBSIDIAN_BASE/Documents"
+export SYNC_DIR="$HOME/code/isaackehle/settings"
+export PATH="$HOME/.local/bin:$PATH"
+
+# Load sensitive environment variables (not in git)
+[ -f "$HOME/.env.local" ] && source "$HOME/.env.local"
+
+# Load shared tool configs (installed by setup.sh)
+for _f in "$HOME/.profile.d"/_*; do
+  [ -s "$_f" ] && source "$_f"
+done
+unset _f

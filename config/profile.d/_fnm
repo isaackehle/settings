@@ -1,0 +1,5 @@
+# FNM (Fast Node Manager)
+command -v fnm >/dev/null 2>&1 || return 0
+eval "$(fnm env --use-on-cd)"
+
+command -v pnpm >/dev/null 2>&1 && alias pn=pnpm

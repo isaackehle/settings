@@ -18,12 +18,16 @@ Generate a new key pair:
 
 ```shell
 ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# or
+
+ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)"
 ```
 
 Copy your public key to a remote host:
 
 ```shell
-ssh-copy-id user@hostname
+ssh-copy-id $(whoami)@hostname
 ```
 
 Add an entry to `~/.ssh/config` for quick access:

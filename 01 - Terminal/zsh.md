@@ -21,6 +21,12 @@ Recommended plugins in `~/.zshrc`:
 plugins=(git bundler macos rake ruby)
 ```
 
+```shell
+brew install zsh-autosuggestions zsh-syntax-highlighting
+```
+
+
+
 ## Theme
 
 [powerlevel10k](https://github.com/romkatv/powerlevel10k) is a fast, feature-rich theme with an interactive setup wizard.

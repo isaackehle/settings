@@ -1,0 +1,8 @@
+# ~/.zshrc — zsh interactive shell config
+[ -f "$HOME/.shellrc" ] && source "$HOME/.shellrc"
+
+# Load zsh-specific configs (installed by setup.sh)
+for _f in "$HOME/.zshrc.d"/_*; do
+  [ -s "$_f" ] && source "$_f"
+done
+unset _f
