@@ -13,9 +13,13 @@ Version control system. The `gh` CLI and GUI tools make GitHub workflows faster.
 brew install gh
 gh auth login
 
+brew install git-filter-repo
+
+
 # GUI tools
 brew install github-desktop
 brew install sourcetree
+
 ```
 
 ## Configuration
