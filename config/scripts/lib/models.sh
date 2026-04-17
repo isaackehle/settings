@@ -72,7 +72,7 @@ MODELS_16GB=(
 
 # ----------------------------------------------
 # opencode
-# Config: scripts/configs/opencode.jsonc → ~/.config/opencode/config.jsonc
+# Config: opencode/opencode.jsonc → ~/.config/opencode/config.jsonc
 # Invoke agents with: /agent <name>  or select in sidebar
 # Switch model mid-session: Ctrl+M or sidebar model picker
 # Use qwen3-coder-30b-220k manually when you need >32K context
@@ -146,7 +146,7 @@ CLINE_MODEL_64GB="qwen3-coder-30b-32k"    # set in Cline UI — UD-Q6_K_XL weigh
 
 # ----------------------------------------------
 # Claude Code
-# Config: scripts/configs/claude_code.json → ~/.claude/settings.json (global) or .claude/settings.json (project)
+# Config: claude_code/config.json → ~/.claude/settings.json (global) or .claude/settings.json (project)
 # Requires LiteLLM on port 4000 — translates Anthropic API format → Ollama OpenAI format
 # Quick ref:
 #   /model qwen3-coder-30b-32k                                  switch to coding model
@@ -167,7 +167,7 @@ CLAUDE_CODE_OPUS_64GB="qwen3-coder-30b-220k"                # ANTHROPIC_DEFAULT_
 
 # ----------------------------------------------
 # LiteLLM
-# Config: scripts/configs/litellm.yaml → ~/.config/litellm/config.yaml
+# Config: litellm/litellm.yaml → ~/.config/litellm/config.yaml
 # Bridges Claude Code (Anthropic format) to Ollama (OpenAI format)
 # Setup: pip install litellm
 # Note: drop_params: true in config silently drops Anthropic-specific params (e.g. betas) Ollama rejects

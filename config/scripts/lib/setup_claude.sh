@@ -2,20 +2,22 @@
 
 # Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh)
 
-# Install Claude Code CLI (try npm first, then Homebrew, then manual)
+_uninstall_claude_code_legacy() {
+    if npm list -g @anthropic-ai/claude-code &>/dev/null 2>&1; then
+        print_info "Removing legacy npm install of Claude Code..."
+        npm uninstall -g @anthropic-ai/claude-code
+    fi
+    if command_exists brew && brew list --formula 2>/dev/null | grep -q '^claude'; then
+        print_info "Removing legacy Homebrew install of Claude Code..."
+        brew uninstall claude 2>/dev/null || brew uninstall claude-code 2>/dev/null || true
+    fi
+}
+
 _install_claude_code_cli() {
-    if command_exists "npm"; then
-        install_via_npm "Anthropic Claude Code" "@anthropic-ai/claude-code" && return 0
-        install_via_npm "Claude Code" "@ai-sdk/claude-code" && return 0
-        install_via_npm "Claude Code" "claude-code" && return 0
-    fi
-    if command_exists "brew"; then
-        print_info "Attempting Homebrew install..."
-        brew install --cask claude-code && { print_status "Claude Code installed via Homebrew"; return 0; }
-    fi
-    print_info "Please manually install Claude Code from:"
-    print_info "  https://github.com/claude-code/claude-code"
-    print_info "  Documentation: https://docs.claudecode.com/"
+    _uninstall_claude_code_legacy
+    print_info "Installing Claude Code via curl..."
+    curl -fsSL https://claude.ai/install.sh | bash && return 0
+    print_info "Please manually install Claude Code from https://claude.ai/install.sh"
     return 1
 }
 
@@ -31,11 +33,11 @@ setup_claude() {
         cp "$HOME/.claude-code/config.json" "$BACKUP_DIR/claude_code_config_backup_$DATE.json" && \
         print_status "Backed up Claude Code config"
     mkdir -p "$HOME/.claude-code"
-    if [ -f "$NEW_CFG_DIR/claude_code.json" ]; then
-        cp "$NEW_CFG_DIR/claude_code.json" "$HOME/.claude-code/config.json"
+    if [ -f "$NEW_CFG_DIR/claude_code/config.json" ]; then
+        cp "$NEW_CFG_DIR/claude_code/config.json" "$HOME/.claude-code/config.json"
         print_status "Copied Claude Code config"
     else
-        print_warning "No claude_code.json found in $NEW_CFG_DIR"
+        print_warning "No claude_code/config.json found in $NEW_CFG_DIR"
     fi
 }
 
