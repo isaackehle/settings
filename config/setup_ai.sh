@@ -4,22 +4,21 @@
 echo "=== AI TOOL CONFIGURATION BACKUP AND RESTORE SCRIPT ==="
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "$SCRIPT_DIR/scripts/lib/helpers.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_ollama.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_grok.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_olol.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_exo.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_continue.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_opencode.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_crush.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_claude.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_all.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_codex.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_gemini.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_litellm.sh"
-. "$SCRIPT_DIR/scripts/lib/setup_anythingllm.sh"
-. "$SCRIPT_DIR/scripts/lib/check_system_requirements.sh"
-. "$SCRIPT_DIR/scripts/lib/install_models.sh"
+. "$SCRIPT_DIR/helpers.sh"
+. "$SCRIPT_DIR/ollama/setup_ollama.sh"
+. "$SCRIPT_DIR/grok/setup_grok.sh"
+. "$SCRIPT_DIR/groq/setup_groq.sh"
+. "$SCRIPT_DIR/olol/setup_olol.sh"
+. "$SCRIPT_DIR/exo/setup_exo.sh"
+. "$SCRIPT_DIR/continue/setup_continue.sh"
+. "$SCRIPT_DIR/opencode/setup_opencode.sh"
+. "$SCRIPT_DIR/crush/setup_crush.sh"
+. "$SCRIPT_DIR/claude/setup_claude.sh"
+. "$SCRIPT_DIR/codex/setup_codex.sh"
+. "$SCRIPT_DIR/gemini/setup_gemini.sh"
+. "$SCRIPT_DIR/litellm/setup_litellm.sh"
+. "$SCRIPT_DIR/anythingllm/setup_anythingllm.sh"
+. "$SCRIPT_DIR/install_models.sh"
 
 # Configuration directory
 NEW_CFG_DIR="$SCRIPT_DIR"
@@ -109,13 +108,27 @@ deploy_configs() {
     _install_file "claude/keybindings.json" "$HOME/.claude/keybindings.json"
     _install_file "claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
 
+    # Skills: copy external skill symlinks (find-skills, conventional-commit, create-agentsmd)
+    # then create live symlinks for personal skills from ~/code/isaackehle/skills
     local skills_src="$SCRIPT_DIR/$MAC_MODEL/claude/skills"
     [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/claude/skills"
     if [ -d "$skills_src" ]; then
-        [ -L "$HOME/.claude/skills" ] && rm "$HOME/.claude/skills"
         mkdir -p "$HOME/.claude/skills"
         cp -R "$skills_src/." "$HOME/.claude/skills/"
-        echo "  copied skills/ -> $HOME/.claude/skills/"
+        echo "  copied external skill entries -> $HOME/.claude/skills/"
+    fi
+
+    local personal_skills_repo="$HOME/code/isaackehle/skills"
+    if [ -d "$personal_skills_repo" ]; then
+        for skill in job-search resume-formatter; do
+            local target="$HOME/.claude/skills/$skill"
+            [ -L "$target" ] && rm "$target"
+            [ -d "$target" ] && rm -rf "$target"
+            ln -s "$personal_skills_repo/$skill" "$target"
+            echo "  linked $skill -> $personal_skills_repo/$skill"
+        done
+    else
+        echo "  (skip) personal skills repo not found at $personal_skills_repo"
     fi
 
     # --- MCP config (~/.mcp.json) ---
@@ -253,6 +266,7 @@ install_tools() {
     verify_codex        || setup_codex     || print_error "Failed to install Codex"
     verify_gemini       || setup_gemini    || print_error "Failed to install Gemini"
     verify_grok         || setup_grok      || print_error "Failed to install Grok"
+    verify_groq         || setup_groq      || print_error "Failed to install Groq"
     verify_litellm      || setup_litellm      || print_error "Failed to install LiteLLM"
     verify_anythingllm  || setup_anythingllm  || print_error "Failed to install AnythingLLM"
     verify_installations
@@ -269,6 +283,7 @@ _run_one() {
         setup:exo)        setup_exo ;;
         setup:gemini)     setup_gemini ;;
         setup:grok)       setup_grok ;;
+        setup:groq)       setup_groq ;;
         setup:models)     install_coding_assistants ;;
         setup:ollama)     setup_ollama ;;
         setup:olol)       setup_olol ;;
@@ -279,6 +294,7 @@ _run_one() {
         restore:continue) restore_continue ;;
         restore:crush)    restore_crush ;;
         restore:grok)     restore_grok ;;
+        restore:groq)     restore_groq ;;
         restore:litellm)  restore_litellm ;;
         restore:olol)     restore_olol ;;
         restore:opencode) restore_opencode ;;
@@ -287,6 +303,7 @@ _run_one() {
         backup:continue)  backup_continue ;;
         backup:crush)     backup_crush ;;
         backup:grok)      backup_grok ;;
+        backup:groq)      backup_groq ;;
         backup:litellm)   backup_litellm ;;
         backup:olol)      backup_olol ;;
         backup:opencode)  backup_opencode ;;
@@ -312,6 +329,7 @@ interactive_menu() {
         crush
         gemini
         grok
+        groq
         opencode
         continue
         litellm
@@ -327,6 +345,7 @@ interactive_menu() {
         "crush       - install + deploy config"
         "gemini      - install Gemini CLI"
         "grok        - install + deploy config"
+        "groq        - deploy Groq config + API key instructions"
         "opencode    - install + deploy config"
         "continue    - deploy Continue.dev config"
         "litellm     - install proxy + deploy config"
@@ -335,7 +354,7 @@ interactive_menu() {
         "olol        - install Ollama load balancer"
     )
     # Default selections
-    local sel=(0 0 0 0 0 0 0 0 0 0 0 0 0)
+    local sel=(0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 
     while true; do
         echo ""
@@ -412,13 +431,20 @@ main() {
             setup_claude
             ;;
         setup)
-            setup_all
+            setup_continue
+            setup_opencode
+            setup_crush
+            setup_claude
+            print_status "All tool configurations applied"
             ;;
         ollama)
             setup_ollama
             ;;
         grok)
             setup_grok
+            ;;
+        groq)
+            setup_groq
             ;;
         olol)
             setup_olol
