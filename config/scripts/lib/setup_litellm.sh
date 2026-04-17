@@ -2,6 +2,7 @@
 
 # Set up LiteLLM proxy — unified OpenAI-compatible API gateway in front of Ollama (and other providers).
 # Reads model_list from a YAML config and exposes a single :4000 endpoint for all tools.
+# PostgreSQL runs as a Docker container (Rancher Desktop or Colima).
 
 _install_litellm() {
     if command_exists "uv"; then
@@ -23,9 +24,71 @@ verify_litellm() {
 _litellm_cfg_dir="$HOME/.config/litellm"
 _litellm_cfg="$_litellm_cfg_dir/config.yaml"
 
+# Start PostgreSQL container for LiteLLM (works with Rancher Desktop or Colima)
+setup_litellm_postgres() {
+    if ! command_exists "docker"; then
+        print_warning "Docker not found — skipping PostgreSQL setup (install Rancher Desktop or Colima)"
+        return 1
+    fi
+
+    if docker ps -a --format '{{.Names}}' | grep -q '^litellm-postgres$'; then
+        if docker ps --format '{{.Names}}' | grep -q '^litellm-postgres$'; then
+            print_status "litellm-postgres container already running"
+        else
+            print_info "Starting existing litellm-postgres container..."
+            docker start litellm-postgres
+            print_status "litellm-postgres started"
+        fi
+        return 0
+    fi
+
+    print_info "Creating litellm-postgres container..."
+    docker run -d \
+        --name litellm-postgres \
+        --restart unless-stopped \
+        -e POSTGRES_DB=litellm_db \
+        -e POSTGRES_USER=litellm \
+        -e POSTGRES_PASSWORD=litellm \
+        -p 5432:5432 \
+        postgres:16
+
+    print_status "litellm-postgres container created and running"
+    print_info "DATABASE_URL=postgresql://litellm:litellm@localhost:5432/litellm_db"
+}
+
+# Generate Prisma client (required for web UI / DB features; re-run after litellm upgrades)
+_generate_prisma_client() {
+    if ! command_exists "python3" && ! command_exists "python"; then
+        print_warning "Python not found — skipping Prisma client generation"
+        return 1
+    fi
+
+    local schema
+    schema=$(find "$(uv tool dir litellm 2>/dev/null)" -name "schema.prisma" -path "*/litellm/*" 2>/dev/null | head -1)
+
+    if [ -z "$schema" ]; then
+        # Fallback: search site-packages
+        schema=$(python3 -c "import litellm, os; print(os.path.join(os.path.dirname(litellm.__file__), 'proxy', 'schema.prisma'))" 2>/dev/null)
+    fi
+
+    if [ -z "$schema" ] || [ ! -f "$schema" ]; then
+        print_warning "schema.prisma not found — skipping Prisma client generation"
+        return 1
+    fi
+
+    print_info "Generating Prisma client from $schema..."
+    python3 -m prisma generate --schema "$schema" \
+        || { print_warning "Prisma generate failed — run: python3 -m prisma generate --schema $schema"; return 1; }
+    print_status "Prisma client generated"
+}
+
 setup_litellm() {
     print_info "Setting up LiteLLM proxy..."
     verify_litellm || _install_litellm || { print_error "Failed to install litellm"; return 1; }
+
+    setup_litellm_postgres
+
+    _generate_prisma_client
 
     mkdir -p "$_litellm_cfg_dir"
 
@@ -40,12 +103,31 @@ setup_litellm() {
         print_warning "No source config found at $src_cfg — skipping config deploy"
     fi
 
+    # Write .env if it doesn't exist yet
+    local env_file="$_litellm_cfg_dir/.env"
+    if [ ! -f "$env_file" ]; then
+        print_info "Creating default .env at $env_file (edit to add API keys)..."
+        cat > "$env_file" <<'EOF'
+LITELLM_MASTER_KEY="sk-local"
+LITELLM_SALT_KEY="sk-local-salt"
+LITELLM_DROP_PARAMS=True
+STORE_MODEL_IN_DB=True
+PORT=4000
+DATABASE_URL=postgresql://litellm:litellm@localhost:5432/litellm_db
+# OPENAI_API_KEY=""
+# ANTHROPIC_API_KEY=""
+# GROQ_API_KEY=""
+EOF
+        print_status "Created $env_file"
+    fi
+
     print_info ""
     print_info "=== LiteLLM usage ==="
-    print_info "Start proxy:   litellm --config $_litellm_cfg"
+    print_info "Start proxy:   litellm --config $_litellm_cfg --port 4000"
+    print_info "Web UI:        http://localhost:4000"
     print_info "API endpoint:  http://localhost:4000/v1  (OpenAI-compatible)"
-    print_info "Master key:    set in config under general_settings.master_key"
-    print_info "Edit models:   $_litellm_cfg"
+    print_info "Master key:    set LITELLM_MASTER_KEY in $_litellm_cfg_dir/.env"
+    print_info "DB container:  docker start litellm-postgres"
     print_info ""
 }
 
