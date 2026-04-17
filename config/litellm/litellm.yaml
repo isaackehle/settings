@@ -1,0 +1,87 @@
+model_list:
+  # --- Coding ---
+  - model_name: qwen3-coder-30b-32k
+    litellm_params:
+      model: ollama/qwen3-coder-30b-32k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3-coder-30b-220k
+    litellm_params:
+      model: ollama/qwen3-coder-30b-220k
+      api_base: http://localhost:11434
+
+  - model_name: codestral:22b
+    litellm_params:
+      model: ollama/codestral:22b
+      api_base: http://localhost:11434
+
+  - model_name: qwen2.5-coder:7b
+    litellm_params:
+      model: ollama/qwen2.5-coder:7b
+      api_base: http://localhost:11434
+
+  - model_name: qwen2.5-coder:1.5b
+    litellm_params:
+      model: ollama/qwen2.5-coder:1.5b
+      api_base: http://localhost:11434
+
+  # --- Writing / general ---
+  - model_name: qwen3.5:27b
+    litellm_params:
+      model: ollama/qwen3.5:27b
+      api_base: http://localhost:11434
+
+  # --- Research ---
+  - model_name: dengcao/Qwen3-14B:Q5_K_M
+    litellm_params:
+      model: ollama/dengcao/Qwen3-14B:Q5_K_M
+      api_base: http://localhost:11434
+
+  # --- Reasoning ---
+  - model_name: mfdoom/deepseek-r1-tool-calling:8b
+    litellm_params:
+      model: ollama/mfdoom/deepseek-r1-tool-calling:8b
+      api_base: http://localhost:11434
+
+  - model_name: deepseek-r1:8b
+    litellm_params:
+      model: ollama/deepseek-r1:8b
+      api_base: http://localhost:11434
+
+  # --- Planning / fast ---
+  - model_name: hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
+    litellm_params:
+      model: ollama/hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
+      api_base: http://localhost:11434
+
+  # --- Embeddings ---
+  - model_name: nomic-embed-text
+    litellm_params:
+      model: ollama/nomic-embed-text
+      api_base: http://localhost:11434
+
+litellm_settings:
+  set_verbose: false
+  drop_params: true
+
+general_settings:
+  master_key: ollama
+
+
+
+model_list:
+  - model_name: local-model
+    litellm_params:
+      model: ollama_chat/qwen2.5:3b
+      api_base: "http://localhost:11434"
+
+router_settings:
+  model_group_alias:
+    "gemini-3.1-pro-preview": "local-model"
+    "gemini-3.1-pro-preview-customtools": "local-model"
+    "gemini-3-flash-preview": "local-model"
+    "gemini-3-flash-preview-customtools": "local-model"
+    "gemini-2.5-pro": "local-model"
+    "gemini-2.5-flash": "local-model"
+    "gemini-2.5-flash-lite": "local-model"
+    

@@ -2,6 +2,7 @@
 
 export OBSIDIAN_BASE="$HOME/Obsidian"
 export OBSIDIAN_ROOT="$OBSIDIAN_BASE/Documents"
+export OBSIDIAN_VAULT="$OBSIDIAN_ROOT/primary"
 export SYNC_DIR="$HOME/code/isaackehle/settings"
 export PATH="$HOME/.local/bin:$PATH"
 
