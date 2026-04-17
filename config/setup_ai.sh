@@ -17,6 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/scripts/lib/setup_codex.sh"
 . "$SCRIPT_DIR/scripts/lib/setup_gemini.sh"
 . "$SCRIPT_DIR/scripts/lib/setup_litellm.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_anythingllm.sh"
 . "$SCRIPT_DIR/scripts/lib/check_system_requirements.sh"
 . "$SCRIPT_DIR/scripts/lib/install_models.sh"
 
@@ -252,7 +253,8 @@ install_tools() {
     verify_codex        || setup_codex     || print_error "Failed to install Codex"
     verify_gemini       || setup_gemini    || print_error "Failed to install Gemini"
     verify_grok         || setup_grok      || print_error "Failed to install Grok"
-    verify_litellm      || setup_litellm   || print_error "Failed to install LiteLLM"
+    verify_litellm      || setup_litellm      || print_error "Failed to install LiteLLM"
+    verify_anythingllm  || setup_anythingllm  || print_error "Failed to install AnythingLLM"
     verify_installations
 }
 
@@ -270,6 +272,7 @@ _run_one() {
         setup:models)     install_coding_assistants ;;
         setup:ollama)     setup_ollama ;;
         setup:olol)       setup_olol ;;
+        setup:anythingllm) setup_anythingllm ;;
         setup:litellm)    setup_litellm ;;
         setup:opencode)   setup_opencode ;;
         restore:claude)   restore_claude ;;
@@ -302,18 +305,19 @@ _run_for_tools() {
 interactive_menu() {
     # All available tools and their descriptions
     local tools=(
-        ollama 
-        models 
-        claude 
-        codex 
-        crush 
-        gemini 
-        grok 
+        ollama
+        models
+        claude
+        codex
+        crush
+        gemini
+        grok
         opencode
-        continue 
-        litellm 
-        exo 
-        olol 
+        continue
+        litellm
+        anythingllm
+        exo
+        olol
         )
     local descs=(
         "ollama      - start server + pull base model"
@@ -326,11 +330,12 @@ interactive_menu() {
         "opencode    - install + deploy config"
         "continue    - deploy Continue.dev config"
         "litellm     - install proxy + deploy config"
+        "anythingllm - install + configure Ollama provider"
         "exo         - install exo distributed inference"
         "olol        - install Ollama load balancer"
     )
-    # Default selections: claude(0), codex(1), continue(2), gemini(5), litellm(7), ollama(8), opencode(10)
-    local sel=(0 0 0 0 0 0 0 0 0 0 0 0)
+    # Default selections
+    local sel=(0 0 0 0 0 0 0 0 0 0 0 0 0)
 
     while true; do
         echo ""
@@ -430,6 +435,9 @@ main() {
         litellm)
             setup_litellm
             ;;
+        anythingllm)
+            setup_anythingllm
+            ;;
         check)
             check_system_requirements
             ;;
@@ -449,7 +457,7 @@ main() {
             interactive_menu
             ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo "  backup      - Backup all existing configurations"
@@ -466,6 +474,7 @@ main() {
             echo "  codex       - Install Codex CLI"
             echo "  gemini      - Install Gemini CLI"
             echo "  litellm     - Setup LiteLLM proxy (install + deploy config)"
+            echo "  anythingllm - Install AnythingLLM + print Ollama provider config"
             echo "  check       - Check system requirements"
             echo "  verify      - Verify all tool installations"
             echo "  install     - Install all tools (check + install-if-missing + verify)"
