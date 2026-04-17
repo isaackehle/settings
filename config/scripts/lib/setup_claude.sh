@@ -1,6 +1,6 @@
 . "$(dirname "${BASH_SOURCE[0]}")/helpers.sh"
 
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by configure_devtools.sh)
+# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh)
 
 # Install Claude Code CLI (try npm first, then Homebrew, then manual)
 _install_claude_code_cli() {
