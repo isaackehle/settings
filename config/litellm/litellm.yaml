@@ -1,57 +1,58 @@
 model_list:
   # --- Coding ---
+  # ollama_chat/ prefix uses /api/chat endpoint (required for tool calling)
   - model_name: qwen3-coder-30b-32k
     litellm_params:
-      model: ollama/qwen3-coder-30b-32k
+      model: ollama_chat/qwen3-coder-30b-32k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-30b-220k
     litellm_params:
-      model: ollama/qwen3-coder-30b-220k
+      model: ollama_chat/qwen3-coder-30b-220k
       api_base: http://localhost:11434
 
   - model_name: codestral:22b
     litellm_params:
-      model: ollama/codestral:22b
+      model: ollama_chat/codestral:22b
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder:7b
     litellm_params:
-      model: ollama/qwen2.5-coder:7b
+      model: ollama_chat/qwen2.5-coder:7b
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder:1.5b
     litellm_params:
-      model: ollama/qwen2.5-coder:1.5b
+      model: ollama_chat/qwen2.5-coder:1.5b
       api_base: http://localhost:11434
 
   # --- Writing / general ---
   - model_name: qwen3.5:27b
     litellm_params:
-      model: ollama/qwen3.5:27b
+      model: ollama_chat/qwen3.5:27b
       api_base: http://localhost:11434
 
   # --- Research ---
   - model_name: dengcao/Qwen3-14B:Q5_K_M
     litellm_params:
-      model: ollama/dengcao/Qwen3-14B:Q5_K_M
+      model: ollama_chat/dengcao/Qwen3-14B:Q5_K_M
       api_base: http://localhost:11434
 
   # --- Reasoning ---
   - model_name: mfdoom/deepseek-r1-tool-calling:8b
     litellm_params:
-      model: ollama/mfdoom/deepseek-r1-tool-calling:8b
+      model: ollama_chat/mfdoom/deepseek-r1-tool-calling:8b
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1:8b
     litellm_params:
-      model: ollama/deepseek-r1:8b
+      model: ollama_chat/deepseek-r1:8b
       api_base: http://localhost:11434
 
   # --- Planning / fast ---
   - model_name: qwen3-4b
     litellm_params:
-      model: ollama/hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
+      model: ollama_chat/hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M
       api_base: http://localhost:11434
 
   # --- Embeddings ---
