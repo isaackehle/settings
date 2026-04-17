@@ -159,121 +159,8 @@ if [ -d "$ZSHRCD_SRC" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Claude Code config  (~/.claude/)
+# Ghostty config
 # ---------------------------------------------------------------------------
-echo ""
-echo "Copying Claude config files..."
-
-[ -L "$HOME/.claude" ] && rm "$HOME/.claude"
-mkdir -p "$HOME/.claude"
-install_file "claude/settings.json"      "$HOME/.claude/settings.json"
-install_file "claude/keybindings.json"   "$HOME/.claude/keybindings.json"
-install_file "claude/CLAUDE.md"          "$HOME/.claude/CLAUDE.md"
-
-# skills directory — copy the whole tree
-SKILLS_SRC="$SETTINGS_REPO/$MAC_MODEL/claude/skills"
-[ ! -d "$SKILLS_SRC" ] && SKILLS_SRC="$SETTINGS_REPO/claude/skills"
-
-OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary}"
-[ ! -d "$SKILLS_SRC" ] && SKILLS_SRC="$OBSIDIAN_VAULT/.claude/skills"
-
-if [ -d "$SKILLS_SRC" ]; then
-    [ -L "$HOME/.claude/skills" ] && rm "$HOME/.claude/skills"
-    mkdir -p "$HOME/.claude/skills"
-    cp -R "$SKILLS_SRC/." "$HOME/.claude/skills/"
-    echo "  copied skills/ -> $HOME/.claude/skills/"
-fi
-
-# ---------------------------------------------------------------------------
-# MCP config  (interactive)
-# ---------------------------------------------------------------------------
-echo ""
-echo "MCP Servers"
-echo "-----------"
-
-read -p "Install Claude MCP servers? (y/n) " -n 1 -r; echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-
-    MCP_DEST="$HOME/.mcp.json"
-    MCP_SRC=$(find_source "mcp.json")
-    [ -z "$MCP_SRC" ] && MCP_SRC="$SYNC_DIR/mcp.json"
-
-    _do_install_mcp=true
-    if [ -f "$MCP_DEST" ]; then
-        read -p "  ~/.mcp.json already exists. Overwrite? (y/n) " -n 1 -r; echo
-        [[ ! $REPLY =~ ^[Yy]$ ]] && _do_install_mcp=false
-    fi
-
-    if [ "$_do_install_mcp" = true ] && [ -f "$MCP_SRC" ]; then
-        [ -L "$MCP_DEST" ] && rm "$MCP_DEST"
-        cp "$MCP_SRC" "$MCP_DEST"
-        echo "  copied $MCP_SRC -> $MCP_DEST"
-
-        # ---- Home Assistant server ----
-        if grep -q "home-assistant" "$MCP_DEST"; then
-            echo ""
-            echo "  Home Assistant server detected."
-
-            read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
-            HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
-            if [ -n "$HA_URL" ]; then
-                sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$MCP_DEST"
-                echo "    Set HOMEASSISTANT_URL."
-            fi
-
-            read -p "    Long-lived token (enter = ${HOMEASSISTANT_TOKEN:+use from .env.local --> }${HOMEASSISTANT_TOKEN:-keep placeholder}): " HA_TOKEN
-            HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
-            if [ -n "$HA_TOKEN" ]; then
-                sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$MCP_DEST"
-                echo "    Set HOMEASSISTANT_TOKEN."
-            fi
-        fi
-
-        chmod 600 "$MCP_DEST"
-    else
-        [ "$_do_install_mcp" = false ] && echo "  Skipped."
-        [ ! -f "$MCP_SRC" ] && echo "  (skip) source not found: $MCP_SRC"
-    fi
-fi
-
-# ---------------------------------------------------------------------------
-# Tool configs
-# ---------------------------------------------------------------------------
-echo ""
-echo "Copying tool configs..."
-
-[ -L "$HOME/.groq" ] && rm "$HOME/.groq"
-mkdir -p "$HOME/.groq"
-install_file "groq/local-settings.json"          "$HOME/.groq/local-settings.json"
-
-[ -L "$HOME/.gemini" ] && rm "$HOME/.gemini"
-mkdir -p "$HOME/.gemini"
-install_file "gemini/settings.json"              "$HOME/.gemini/settings.json"
-install_file "gemini/GEMINI.md"                  "$HOME/.gemini/GEMINI.md"
-install_file "gemini/projects.json"              "$HOME/.gemini/projects.json"
-
-[ -L "$HOME/.continue" ] && rm "$HOME/.continue"
-mkdir -p "$HOME/.continue"
-src=$(find_source "continue/config.yaml")
-[ -z "$src" ] && src="$SYNC_DIR/continue/config.yaml"
-copy_file "$src" "$HOME/.continue/config.yaml"
-
-[ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
-mkdir -p "$HOME/.codeium"
-install_file "codeium/config.json"               "$HOME/.codeium/config.json"
-
-[ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
-mkdir -p "$HOME/.windsurf"
-install_file "windsurf/argv.json"                "$HOME/.windsurf/argv.json"
-
-[ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
-mkdir -p "$HOME/.config/opencode"
-install_file "opencode/opencode.jsonc"           "$HOME/.config/opencode/opencode.jsonc"
-
-[ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
-mkdir -p "$HOME/.ollama"
-install_file "ollama/config.json"                "$HOME/.ollama/config.json"
-
 [ -L "$HOME/.config/ghostty" ] && rm "$HOME/.config/ghostty"
 mkdir -p "$HOME/.config/ghostty"
 src=$(find_source "ghostty/config")
@@ -323,6 +210,7 @@ echo ""
 echo "Next steps:"
 echo "  1. Edit ~/.env.local and verify your API keys"
 echo "  2. Reload your shell: source ~/.zshrc"
+echo "  3. Run ./setup_ai.sh deploy to copy AI tool configs (Claude, Gemini, Continue, etc.)"
 echo ""
 echo "Model-specific overrides live in: $SETTINGS_REPO/$MAC_MODEL/"
 echo ""

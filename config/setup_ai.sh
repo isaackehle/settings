@@ -4,29 +4,197 @@
 echo "=== AI TOOL CONFIGURATION BACKUP AND RESTORE SCRIPT ==="
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "$SCRIPT_DIR/lib/helpers.sh"
-. "$SCRIPT_DIR/lib/setup_ollama.sh"
-. "$SCRIPT_DIR/lib/setup_grok.sh"
-. "$SCRIPT_DIR/lib/setup_olol.sh"
-. "$SCRIPT_DIR/lib/setup_exo.sh"
-. "$SCRIPT_DIR/lib/setup_continue.sh"
-. "$SCRIPT_DIR/lib/setup_opencode.sh"
-. "$SCRIPT_DIR/lib/setup_crush.sh"
-. "$SCRIPT_DIR/lib/setup_claude.sh"
-. "$SCRIPT_DIR/lib/setup_all.sh"
-. "$SCRIPT_DIR/lib/setup_codex.sh"
-. "$SCRIPT_DIR/lib/setup_gemini.sh"
-. "$SCRIPT_DIR/lib/setup_litellm.sh"
-. "$SCRIPT_DIR/lib/check_system_requirements.sh"
-. "$SCRIPT_DIR/lib/install_models.sh"
+. "$SCRIPT_DIR/scripts/lib/helpers.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_ollama.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_grok.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_olol.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_exo.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_continue.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_opencode.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_crush.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_claude.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_all.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_codex.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_gemini.sh"
+. "$SCRIPT_DIR/scripts/lib/setup_litellm.sh"
+. "$SCRIPT_DIR/scripts/lib/check_system_requirements.sh"
+. "$SCRIPT_DIR/scripts/lib/install_models.sh"
 
 # Configuration directory
-NEW_CFG_DIR="$SCRIPT_DIR/configs"
+NEW_CFG_DIR="$SCRIPT_DIR/scripts/configs"
 DATE="$(date +%Y-%m-%d)"
 BACKUP_DIR="$HOME/ai_tool_backups"
 
 # Create backup directory
 mkdir -p "$BACKUP_DIR"
+
+# ---------------------------------------------------------------------------
+# Helpers for config file deployment (used by deploy_configs)
+# ---------------------------------------------------------------------------
+
+_detect_mac_model() {
+    local hw_model hw_mem_gb
+    hw_model=$(sysctl -n hw.model)
+    hw_mem_gb=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
+    if [[ "$hw_model" == Mac17* || "$hw_mem_gb" -ge 32 ]]; then
+        echo "macbook-m5"
+    elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
+        echo "macmini-m2"
+    elif [[ "$hw_model" == MacBookPro* ]]; then
+        echo "macbook-m1"
+    else
+        echo "default"
+    fi
+}
+
+# Find best source file: model-specific takes precedence over default.
+_find_source() {
+    local rel="$1"
+    local model_path="$SCRIPT_DIR/$MAC_MODEL/$rel"
+    local default_path="$SCRIPT_DIR/$rel"
+    if [ -f "$model_path" ]; then
+        echo "$model_path"
+    elif [ -f "$default_path" ]; then
+        echo "$default_path"
+    else
+        echo ""
+    fi
+}
+
+# Copy src to dest, backing up any existing non-symlink file first.
+_copy_file() {
+    local src="$1" dest="$2"
+    if [ -z "$src" ] || [ ! -f "$src" ]; then
+        echo "  (skip) source not found for $dest"
+        return
+    fi
+    if [ -L "$dest" ]; then
+        rm "$dest"
+    elif [ -f "$dest" ]; then
+        if ! cmp -s "$src" "$dest"; then
+            mv "$dest" "${dest}.backup-$(date +%s)"
+            echo "  backed up existing $(basename "$dest")"
+        fi
+    fi
+    mkdir -p "$(dirname "$dest")"
+    cp "$src" "$dest"
+    echo "  copied $src -> $dest"
+}
+
+# Look up source via _find_source and copy.
+_install_file() {
+    local rel="$1" dest="$2"
+    _copy_file "$(_find_source "$rel")" "$dest"
+}
+
+# ---------------------------------------------------------------------------
+# deploy_configs — copy AI tool config files to their home-directory locations
+# ---------------------------------------------------------------------------
+deploy_configs() {
+    MAC_MODEL=$(_detect_mac_model)
+    print_info "Deploying AI tool configs ($MAC_MODEL)..."
+
+    if [ -f "$HOME/.env.local" ]; then
+        # shellcheck disable=SC1091
+        source "$HOME/.env.local"
+    fi
+
+    # --- Claude Code (~/.claude/) ---
+    echo ""
+    echo "Copying Claude config files..."
+    [ -L "$HOME/.claude" ] && rm "$HOME/.claude"
+    mkdir -p "$HOME/.claude"
+    _install_file "claude/settings.json"    "$HOME/.claude/settings.json"
+    _install_file "claude/keybindings.json" "$HOME/.claude/keybindings.json"
+    _install_file "claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
+
+    local skills_src="$SCRIPT_DIR/$MAC_MODEL/claude/skills"
+    [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/claude/skills"
+    if [ -d "$skills_src" ]; then
+        [ -L "$HOME/.claude/skills" ] && rm "$HOME/.claude/skills"
+        mkdir -p "$HOME/.claude/skills"
+        cp -R "$skills_src/." "$HOME/.claude/skills/"
+        echo "  copied skills/ -> $HOME/.claude/skills/"
+    fi
+
+    # --- MCP config (~/.mcp.json) ---
+    echo ""
+    echo "MCP Servers"
+    echo "-----------"
+    read -p "Install Claude MCP servers? (y/n) " -n 1 -r; echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        local mcp_dest="$HOME/.mcp.json"
+        local mcp_src
+        mcp_src=$(_find_source "mcp.json")
+        [ -z "$mcp_src" ] && mcp_src="$SCRIPT_DIR/mcp.json"
+
+        local do_install=true
+        if [ -f "$mcp_dest" ]; then
+            read -p "  ~/.mcp.json already exists. Overwrite? (y/n) " -n 1 -r; echo
+            [[ ! $REPLY =~ ^[Yy]$ ]] && do_install=false
+        fi
+
+        if [ "$do_install" = true ] && [ -f "$mcp_src" ]; then
+            [ -L "$mcp_dest" ] && rm "$mcp_dest"
+            cp "$mcp_src" "$mcp_dest"
+            echo "  copied $mcp_src -> $mcp_dest"
+
+            if grep -q "home-assistant" "$mcp_dest"; then
+                echo ""
+                echo "  Home Assistant server detected."
+                read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
+                HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
+                [ -n "$HA_URL" ] && sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$mcp_dest" && echo "    Set HOMEASSISTANT_URL."
+                read -p "    Long-lived token (enter = keep placeholder): " HA_TOKEN
+                HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
+                [ -n "$HA_TOKEN" ] && sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$mcp_dest" && echo "    Set HOMEASSISTANT_TOKEN."
+            fi
+            chmod 600 "$mcp_dest"
+        else
+            [ "$do_install" = false ] && echo "  Skipped."
+            [ ! -f "$mcp_src" ] && echo "  (skip) source not found: $mcp_src"
+        fi
+    fi
+
+    # --- AI tool configs ---
+    echo ""
+    echo "Copying AI tool configs..."
+
+    [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
+    mkdir -p "$HOME/.groq"
+    _install_file "groq/local-settings.json" "$HOME/.groq/local-settings.json"
+
+    [ -L "$HOME/.gemini" ] && rm "$HOME/.gemini"
+    mkdir -p "$HOME/.gemini"
+    _install_file "gemini/settings.json"  "$HOME/.gemini/settings.json"
+    _install_file "gemini/GEMINI.md"      "$HOME/.gemini/GEMINI.md"
+    _install_file "gemini/projects.json"  "$HOME/.gemini/projects.json"
+
+    [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
+    mkdir -p "$HOME/.continue"
+    local cont_src
+    cont_src=$(_find_source "continue/config.yaml")
+    [ -z "$cont_src" ] && cont_src="$SCRIPT_DIR/continue/config.yaml"
+    _copy_file "$cont_src" "$HOME/.continue/config.yaml"
+
+    [ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
+    mkdir -p "$HOME/.codeium"
+    _install_file "codeium/config.json" "$HOME/.codeium/config.json"
+
+    [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
+    mkdir -p "$HOME/.windsurf"
+    _install_file "windsurf/argv.json" "$HOME/.windsurf/argv.json"
+
+    [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
+    mkdir -p "$HOME/.config/opencode"
+    _install_file "opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+
+    [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
+    mkdir -p "$HOME/.ollama"
+    _install_file "ollama/config.json" "$HOME/.ollama/config.json"
+
+    print_status "AI tool configs deployed."
+}
 
 # Function to backup existing configurations
 backup_existing_configs() {
@@ -274,12 +442,16 @@ main() {
         models)
             install_coding_assistants
             ;;
+        deploy)
+            deploy_configs
+            ;;
         "")
             interactive_menu
             ;;
         *)
-            echo "Usage: $0 {backup|restore|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
+            echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo "  backup      - Backup all existing configurations"
             echo "  restore     - Restore all configurations from backup"
             echo "  continue    - Setup Continue.dev (backup + copy config)"
