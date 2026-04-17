@@ -17,8 +17,8 @@
           "name": "Qwen3-Coder 30B A3B 220k (code, large ctx — solo only)"
         },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
-        "qwen3-4b-q4": {
-          "name": "Qwen3 4B Q4 (plan, fast)"
+        "qwen3-4b-q8": {
+          "name": "Qwen3 4B Q8 (plan, fast)"
         },
         // --- Code ---
         "codestral:22b-v0.1-q8_0": {
@@ -62,7 +62,7 @@
   "default_agent": "code",
   // qwen3-coder-30b-32k: same UD-Q5_K_XL weights as 220k but capped at 32K ctx (~21 GB vs ~38 GB loaded)
   "model": "ollama/qwen3-coder-30b-32k",
-  "small_model": "ollama/qwen3-4b-q4",
+  "small_model": "ollama/qwen3-4b-q8",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -140,7 +140,7 @@
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, sequencing, and lightweight routing.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b-q4",
+      "model": "ollama/qwen3-4b-q8",
       "temperature": 0.25,
       "permission": {
         "read": "allow",

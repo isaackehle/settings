@@ -1,0 +1,15 @@
+{
+  "provider": {
+    "ollama": {
+      "name": "Ollama (Local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "mfdoom/deepseek-r1-tool-calling:8b": {
+          "name": "DeepSeek R1 Tool-Calling 8B (reason+tools)"
+        }
+      }
+    }
+  }
+}

@@ -7,11 +7,11 @@ models:
   - name: "Qwen3 Coder 30B A3B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-coder-30b-32k:latest"
+    model: "qwen3-coder-30b-32k"
     roles:
-      - "chat"
-      - "edit"
-      - "summarize"
+      - chat
+      - edit
+      - summarize
 
   # Chat/think model — Mistral Small 24B, strong tool calling
   - name: "Qwen3.5 27B"
@@ -19,15 +19,15 @@ models:
     apiBase: http://localhost:11434
     model: "qwen3.5:27b"
     roles:
-      - "chat"
+      - chat
 
   # Apply/insert — Codestral 22B, best code insertion (no tool calls needed for apply)
   - name: "Codestral 22B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "codestral:22b-v0.1-q8_0" 
+    model: "codestral:22b-v0.1-q8_0"
     roles:
-      - "apply"
+      - apply
 
   # Autocomplete (light) — fast, low RAM
   - name: "Qwen2.5 Coder 1.5B"
@@ -35,7 +35,7 @@ models:
     apiBase: http://localhost:11434
     model: "qwen2.5-coder:1.5b"
     roles:
-      - "autocomplete"
+      - autocomplete
 
   # Autocomplete (heavy) — better quality when resources allow
   - name: "Qwen2.5 Coder 7B"
@@ -43,7 +43,7 @@ models:
     apiBase: http://localhost:11434
     model: "qwen2.5-coder:7b"
     roles:
-      - "autocomplete"
+      - autocomplete
 
   # Embedding model for semantic search
   - name: "Nomic Embed Text"
@@ -51,20 +51,64 @@ models:
     apiBase: http://localhost:11434
     model: "nomic-embed-text:latest"
     roles:
-      - "embed"
+      - embed
 
   # Reranking model
-  - name: "Qwen3 Reranker 0.6B Q8"
+  - name: Qwen3 Reranker 0.6B Q8
     provider: ollama
     apiBase: http://localhost:11434
-    model: "dengcao/Qwen3-Reranker-0.6B:Q8_0"
+    model: dengcao/Qwen3-Reranker-0.6B:Q8_0
     roles:
-      - "rerank"
+      - rerank
 
   # Fast planning / small tasks
-  - name: "Qwen3 4B Instruct 2507 Q8"
+  - name: "Qwen3 4B Instruct 2507"
     provider: ollama
     apiBase: http://localhost:11434
     model: "qwen3-4b-q8"
     roles:
-      - "chat"
+      - chat
+
+  # Use AUTODETECT to automatically list all models available in Ollama
+  - name: My Ollama Models
+    provider: ollama
+    model: AUTODETECT
+    apiBase: http://localhost:11434
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+
+  # Or, define specific models manually
+  - name: Llama 3.1 70B
+    provider: ollama
+    model: llama3.1:70b
+    apiBase: http://localhost:11434
+    roles:
+      - chat
+      - edit
+
+  - name: Qwen3.5 27B
+    provider: ollama
+    model: qwen3.5:27b
+    apiBase: http://localhost:11434
+    roles:
+      - chat
+      - edit
+
+  - name: GPT-OSS 20B
+    provider: ollama
+    model: gpt-oss:20b
+    apiBase: http://localhost:11434
+    roles:
+      - chat
+      - edit
+
+  - name: GPT-OSS 120B
+    provider: ollama
+    model: gpt-oss:120b
+    apiBase: http://localhost:11434
+    roles:
+      - chat
+      - edit   
