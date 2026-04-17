@@ -1,9 +1,10 @@
 {
   "env": {
-    "ANTHROPIC_BASE_URL": "http://localhost:4000",
+    "ANTHROPIC_BASE_URL": "http://localhost:11434",
+    "ANTHROPIC_AUTH_TOKEN": "ollama",
     "ANTHROPIC_API_KEY": "ollama",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder-30b-32k",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-4b-q8",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-coder-30b-220k"
   },
   "model": "qwen3-coder-30b-32k",
