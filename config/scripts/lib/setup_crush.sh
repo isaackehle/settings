@@ -27,11 +27,11 @@ setup_crush() {
         cp "$HOME/.crush/config.json" "$BACKUP_DIR/crush_config_backup_$DATE.json" && \
         print_status "Backed up Crush config"
     mkdir -p "$HOME/.crush"
-    if [ -f "$NEW_CFG_DIR/crush.json" ]; then
-        cp "$NEW_CFG_DIR/crush.json" "$HOME/.crush/config.json"
+    if [ -f "$NEW_CFG_DIR/crush/crush.json" ]; then
+        cp "$NEW_CFG_DIR/crush/crush.json" "$HOME/.crush/config.json"
         print_status "Copied Crush config"
     else
-        print_warning "No crush.json found in $NEW_CFG_DIR"
+        print_warning "No crush/crush.json found in $NEW_CFG_DIR"
     fi
 }
 

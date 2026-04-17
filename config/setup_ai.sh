@@ -21,7 +21,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/scripts/lib/install_models.sh"
 
 # Configuration directory
-NEW_CFG_DIR="$SCRIPT_DIR/scripts/configs"
+NEW_CFG_DIR="$SCRIPT_DIR"
 DATE="$(date +%Y-%m-%d)"
 BACKUP_DIR="$HOME/ai_tool_backups"
 

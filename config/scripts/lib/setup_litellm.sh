@@ -4,12 +4,16 @@
 # Reads model_list from a YAML config and exposes a single :4000 endpoint for all tools.
 
 _install_litellm() {
-    if ! command_exists "pip3" && ! command_exists "pip"; then
-        print_error "pip is required to install litellm. Install Python 3 first."
-        return 1
+    if command_exists "uv"; then
+        print_info "Installing litellm[proxy] via uv..."
+        uv tool install 'litellm[proxy]' && return 0
     fi
-    print_info "Installing litellm[proxy]..."
-    pip3 install 'litellm[proxy]' 2>/dev/null || pip install 'litellm[proxy]'
+    if command_exists "pip3" || command_exists "pip"; then
+        print_info "Installing litellm[proxy] via pip..."
+        pip3 install 'litellm[proxy]' 2>/dev/null || pip install 'litellm[proxy]' && return 0
+    fi
+    print_error "Neither uv nor pip found. Install Python 3 or uv first."
+    return 1
 }
 
 verify_litellm() {
@@ -25,7 +29,7 @@ setup_litellm() {
 
     mkdir -p "$_litellm_cfg_dir"
 
-    local src_cfg="$SCRIPT_DIR/configs/litellm.yaml"
+    local src_cfg="$SCRIPT_DIR/litellm/litellm.yaml"
     if [ -f "$src_cfg" ]; then
         if [ -f "$_litellm_cfg" ]; then
             backup_litellm

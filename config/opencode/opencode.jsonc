@@ -48,9 +48,16 @@
         "dengcao/Qwen3-32B:Q5_K_M": {
           "name": "Qwen3 32B Q5 (research, larger, 22 GB)"
         },
+        // --- Gemma 4 ---
+        "gemma4:26b-iq4_xs": {
+          "name": "Gemma 4 26B IQ4_XS (code, 6.2% err, ~17 GB)"
+        },
+        "gemma4:31b-iq3_xxs": {
+          "name": "Gemma 4 31B IQ3_XXS (code, 7.4% err, ~15 GB)"
+        },
         // --- Writing / general ---
         "qwen3.5:27b": {
-          "name": "Qwen 3.5 27B (write+vision, 20 GB)"
+          "name": "Qwen 3.5 27B Q3 (code #1 + write+vision, 5.0% err, 20 GB)"
         },
         // --- General purpose (large — solo use only) ---
         "llama3.3:70b": {
@@ -60,8 +67,8 @@
     }
   },
   "default_agent": "code",
-  // qwen3-coder-30b-32k: same UD-Q5_K_XL weights as 220k but capped at 32K ctx (~21 GB vs ~38 GB loaded)
-  "model": "ollama/qwen3-coder-30b-32k",
+  // qwen3.5:27b: #1 on OpenCode IndexNow benchmark (5.0% errors); qwen3-coder-30b fails that benchmark
+  "model": "ollama/qwen3.5:27b",
   "small_model": "ollama/qwen3-4b-q8",
   "permission": {
     "read": "allow",
@@ -76,7 +83,7 @@
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-32k",
+      "model": "ollama/qwen3.5:27b",
       "temperature": 0.2,
       "permission": {
         "read": "allow",

@@ -8,11 +8,11 @@ setup_continue() {
         print_status "Backed up Continue.dev config"
     mkdir -p "$HOME/.continue"
 
-    if [ -f "$NEW_CFG_DIR/continue_config.yaml" ]; then
-        cp "$NEW_CFG_DIR/continue_config.yaml" "$HOME/.continue/config.yaml"
+    if [ -f "$NEW_CFG_DIR/continue/config.yaml" ]; then
+        cp "$NEW_CFG_DIR/continue/config.yaml" "$HOME/.continue/config.yaml"
         print_status "Copied Continue.dev config"
     else
-        print_warning "No continue_config.yaml found in $NEW_CFG_DIR"
+        print_warning "No continue/config.yaml found in $NEW_CFG_DIR"
     fi
 }
 

@@ -8,22 +8,22 @@ Anthropic's code-focused Claude assistant for local workflows.
 
 ## Installation
 
-```shell
-brew install claude-code
-```
-
-## Configuration
+curl is the only supported install method. If previously installed via npm or Homebrew, uninstall first:
 
 ```shell
-# Sign in or complete first-run setup
-open /Applications/Claude.app
+# Remove legacy npm install (if present)
+npm uninstall -g @anthropic-ai/claude-code
+
+# Remove legacy Homebrew install (if present)
+brew uninstall claude 2>/dev/null || brew uninstall claude-code 2>/dev/null || true
 ```
 
-## Start / Usage
+Then install:
 
 ```shell
-open /Applications/Claude.app
+curl -fsSL https://claude.ai/install.sh | bash
 ```
+
 
 ## References
 
