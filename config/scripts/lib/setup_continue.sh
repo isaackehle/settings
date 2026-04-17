@@ -1,6 +1,6 @@
 . "$(dirname "${BASH_SOURCE[0]}")/helpers.sh"
 
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by configure_devtools.sh)
+# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh)
 setup_continue() {
     print_info "Setting up Continue.dev..."
     [ -f "$HOME/.continue/config.yaml" ] && \

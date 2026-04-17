@@ -51,7 +51,7 @@ macos-titlebar-style = transparent
 # macos-titlebar-style = hidden
 
 # Keep window open after last process exits (useful for inspecting output)
-window-close-confirmation = always
+# window-close-confirmation = always
 
 # -----------------------------------------------------------------------------
 # Cursor
@@ -73,7 +73,7 @@ shell-integration-features = cursor,sudo,title
 # -----------------------------------------------------------------------------
 # macOS
 # -----------------------------------------------------------------------------
-macos-option-as-alt = true        # needed for tmux alt-key bindings
+# macos-option-as-alt = true        # needed for tmux alt-key bindings
 copy-on-select = clipboard
 
 # -----------------------------------------------------------------------------
@@ -82,8 +82,9 @@ copy-on-select = clipboard
 #   bindkey '^U' backward-kill-line
 #   bindkey '\ew' backward-kill-line
 # -----------------------------------------------------------------------------
-keybind = cmd+backspace=esc:w      # delete word back (requires bindkey '\ew' in zshrc)
-keybind = cmd+delete=text:\u000B   # delete to end of line (Ctrl-K)
+keybind = cmd+backspace=esc:w
+keybind = cmd+delete=text:\u000B
+keybind = cmd+option+backspace=backward-kill-word
 
 # -----------------------------------------------------------------------------
 # Keybindings — splits & tabs

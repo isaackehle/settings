@@ -32,12 +32,12 @@ cd scripts
 # Make the scripts executable
 chmod +x install_devtools.sh
 chmod +x install_ollama.sh
-chmod +x configure_devtools.sh
+chmod +x setup_ai.sh
 
 # Run the setup process
 ./install_ollama.sh
 ./install_devtools.sh setup
-./configure_devtools.sh setup
+./setup_ai.sh setup
 ```
 
 ## Configuration Files
@@ -85,7 +85,7 @@ This setup enables fully offline AI coding assistance:
 ### Backup Configuration
 
 ```bash
-./configure_devtools.sh backup
+./setup_ai.sh backup
 ```
 
 Creates backups in `$HOME/ai_tool_backups` directory containing:
@@ -95,7 +95,7 @@ Creates backups in `$HOME/ai_tool_backups` directory containing:
 ### Restore Configuration
 
 ```bash
-./configure_devtools.sh restore
+./setup_ai.sh restore
 ```
 
 Restores configurations from backups, preserving all previous settings.
@@ -103,7 +103,7 @@ Restores configurations from backups, preserving all previous settings.
 ### Complete Setup
 
 ```bash
-./configure_devtools.sh setup
+./setup_ai.sh setup
 ```
 
 Performs a complete backup and configuration process, including:
@@ -243,20 +243,20 @@ export GROK_MODEL=llama3
 
 ```bash
 # Backup all existing configurations
-./configure_devtools.sh backup
+./setup_ai.sh backup
 
 # Restore configurations from backup
-./configure_devtools.sh restore
+./setup_ai.sh restore
 
 # Perform complete setup with backups
-./configure_devtools.sh setup
+./setup_ai.sh setup
 ```
 
 ### Offline AI Usage
 
 ```bash
 # Setup Ollama and Grok for offline use
-./configure_devtools.sh ollama
+./setup_ai.sh ollama
 
 # Source the environment (after setup)
 source grok_setup.sh
@@ -278,7 +278,7 @@ grok --prompt "Explain this codebase"
 
 ```
 scripts/
-├── configure_devtools.sh        # Main entry point — interactive picker, backup, restore, per-tool setup
+├── setup_ai.sh        # Main entry point — interactive picker, backup, restore, per-tool setup
 ├── README.md                    # This file
 ├── configs/                     # Config files deployed to tool directories on setup
 │   ├── CHEATSHEET.md            # Quick-reference for models and agent roles
@@ -290,7 +290,7 @@ scripts/
 ├── modelfiles/                  # Ollama Modelfiles for custom context-window aliases
 │   ├── qwen3-coder-30b-32k.txt  # Qwen3-Coder 30B @ 32k ctx  (~21 GB loaded)
 │   └── qwen3-coder-30b-220k.txt # Qwen3-Coder 30B @ 220k ctx (~38 GB loaded)
-└── lib/                         # Sourced by configure_devtools.sh — one file per tool
+└── lib/                         # Sourced by setup_ai.sh — one file per tool
     ├── helpers.sh               # print_status/info/warning/error, command_exists
     ├── check_system_requirements.sh
     ├── install-models.sh        # Ollama model pull/management functions
@@ -330,7 +330,7 @@ The configuration system prioritizes privacy:
 ls -la $HOME/ai_tool_backups/
 
 # Restore from backup if needed
-./configure_devtools.sh restore
+./setup_ai.sh restore
 ```
 
 ### Grok CLI Setup Issues
