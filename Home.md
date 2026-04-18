@@ -119,6 +119,7 @@ Personal macOS development environment setup guide and reference.
 
 ## 06 - AI
 
+- [[AI Setup Architecture]] — Layered stack design, tool conflict map, machine-type model selection, and VS Code troubleshooting.
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
 
 ### Local Runtimes
