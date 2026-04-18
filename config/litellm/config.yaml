@@ -1,13 +1,13 @@
 model_list:
-  - model_name: qwen3-coder-30b-32k
+  - model_name: qwen3-coder-30b-32k-q5
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b-32k
+      model: ollama_chat/qwen3-coder-30b-32k-q5
       api_base: http://localhost:11434
       custom_llm_provider: ollama_chat
 
-  - model_name: qwen3-coder-30b-220k
+  - model_name: qwen3-coder-30b-220k-q5
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b-220k
+      model: ollama_chat/qwen3-coder-30b-220k-q5
       api_base: http://localhost:11434
       custom_llm_provider: ollama_chat
 
@@ -37,16 +37,16 @@ model_list:
       custom_llm_provider: ollama_chat
 
   # --- Research ---
-  - model_name: Qwen3-14B-Q5_K_M
+  - model_name: qwen3-14b-q5
     litellm_params:
-      model: ollama_chat/dengcao/Qwen3-14B:Q5_K_M
+      model: ollama_chat/qwen3-14b-q5
       api_base: http://localhost:11434
       custom_llm_provider: ollama_chat
 
   # --- Reasoning ---
-  - model_name: deepseek-r1-tool-calling-8b
+  - model_name: deepseek-r1-tools:8b
     litellm_params:
-      model: ollama_chat/mfdoom/deepseek-r1-tool-calling:8b
+      model: ollama_chat/deepseek-r1-tools:8b
       api_base: http://localhost:11434
       custom_llm_provider: ollama_chat
 
@@ -84,6 +84,6 @@ router_settings:
     "gemini-2.5-flash":                    "qwen3.5-27b"
     "gemini-2.5-flash-lite":               "qwen3-4b"
     "gemini-3-flash-preview":              "qwen3.5-27b"
-    "gemini-3-flash-preview-customtools":  "qwen3.5-  27b"
-    "gemini-3.1-pro-preview":              "qwen3-coder-30b-32k"
-    "gemini-3.1-pro-preview-customtools":  "qwen3-coder-30b-32k"
+    "gemini-3-flash-preview-customtools":  "qwen3.5-27b"
+    "gemini-3.1-pro-preview":              "qwen3-coder-30b-32k-q5"
+    "gemini-3.1-pro-preview-customtools":  "qwen3-coder-30b-32k-q5"

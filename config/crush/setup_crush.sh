@@ -4,15 +4,7 @@
 # Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh) for config deploy
 
 _install_crush() {
-    if command_exists "npm"; then
-        install_via_npm "Charmland Crush" "@charmland/crush" && return 0
-        install_via_npm "AI SDK Crush" "@ai-sdk/crush" && return 0
-        install_via_npm "Crush" "crush" && return 0
-    fi
-    if command_exists "brew"; then
-        brew install charmland/tap/crush && return 0
-    fi
-    print_warning "Crush not found — install manually from https://github.com/charmverse/crush"
+    print_warning "Crush not found — install manually: https://github.com/charmverse/crush"
     return 1
 }
 
@@ -27,8 +19,13 @@ setup_crush() {
         cp "$HOME/.crush/config.json" "$BACKUP_DIR/crush_config_backup_$DATE.json" && \
         print_status "Backed up Crush config"
     mkdir -p "$HOME/.crush"
-    if [ -f "$NEW_CFG_DIR/crush/crush.json" ]; then
-        cp "$NEW_CFG_DIR/crush/crush.json" "$HOME/.crush/config.json"
+    local crush_src=""
+    if declare -f _find_source > /dev/null 2>&1; then
+        crush_src=$(_find_source "crush/crush.json")
+    fi
+    [ -z "$crush_src" ] && crush_src="$NEW_CFG_DIR/crush/crush.json"
+    if [ -f "$crush_src" ]; then
+        cp "$crush_src" "$HOME/.crush/config.json"
         print_status "Copied Crush config"
     else
         print_warning "No crush/crush.json found in $NEW_CFG_DIR"

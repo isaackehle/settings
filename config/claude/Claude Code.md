@@ -34,9 +34,9 @@ Deployed to `~/.claude/config.json` by `setup_claude.sh`.
 | `ANTHROPIC_BASE_URL` | `http://localhost:11434` | Route requests to local Ollama |
 | `ANTHROPIC_AUTH_TOKEN` | `ollama` | Dummy token (Ollama doesn't auth) |
 | `ANTHROPIC_API_KEY` | `ollama` | Duplicate for SDK compatibility |
-| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `qwen3-coder-30b-32k` | Maps Sonnet tier → local model |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `qwen3-coder-30b-32k-q5` | Maps Sonnet tier → local model |
 | `ANTHROPIC_DEFAULT_HAIKU_MODEL` | `qwen3-4b-q8` | Maps Haiku tier → local model |
-| `ANTHROPIC_DEFAULT_OPUS_MODEL` | `qwen3-coder-30b-220k` | Maps Opus tier → local model |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | `qwen3-coder-30b-220k-q5` | Maps Opus tier → local model |
 
 ### Model Aliases
 
@@ -50,7 +50,7 @@ cat > /tmp/Modelfile << 'EOF'
 FROM qwen2.5-coder:32b-instruct-q4_K_M
 PARAMETER num_ctx 32768
 EOF
-ollama create qwen3-coder-30b-32k -f /tmp/Modelfile
+ollama create qwen3-coder-30b-32k-q5 -f /tmp/Modelfile
 ```
 
 ### Permissions

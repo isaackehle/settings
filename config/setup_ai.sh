@@ -209,6 +209,13 @@ deploy_configs() {
     mkdir -p "$HOME/.ollama"
     _install_file "ollama/config.json" "$HOME/.ollama/config.json"
 
+    [ -L "$HOME/.crush" ] && rm "$HOME/.crush"
+    mkdir -p "$HOME/.crush"
+    _install_file "crush/crush.json" "$HOME/.crush/config.json"
+
+    mkdir -p "$HOME/.config/grok"
+    _install_file "grok/grok.json" "$HOME/.config/grok/config.json"
+
     print_status "AI tool configs deployed."
 }
 

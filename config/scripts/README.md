@@ -127,13 +127,13 @@ baseURL: "http://localhost:11434/v1"
 Tool-capable instruct models (work with all opencode agents):
 
 - **Code agent** (`code`):
-  - `qwen3-coder-30b-220k` — purpose-built agentic coder, MoE 30B, 220k ctx (Modelfile alias)
+  - `qwen3-coder-30b-220k-q5` — purpose-built agentic coder, MoE 30B, 220k ctx (Modelfile alias)
 - **Think agent** (`think`):
   - `hf.co/bartowski/Mistral-Small-24B-Instruct-2501-GGUF:Q4_K_M` — Mistral Small 24B, strong tool calling
 - **Write agent** (`write`):
   - `qwen3.5:35b-a3b` — Qwen 3.5 35B MoE via Ollama
 - **Research agent** (`research`):
-  - `dengcao/Qwen3-14B:Q5_K_M` — Qwen 3.5 14B via Ollama
+  - `qwen3-14b-q5` — Qwen 3.5 14B via Ollama
 - **Plan agent** (`plan` / `small_model`):
   - `hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q4_K_M` — fast 4B for planning and routing
 
@@ -157,44 +157,44 @@ weight. Pull the base first, then create both aliases:
 ollama pull hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL
 ollama pull hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M
 
-ollama create qwen3-coder-30b-32k  -f ./modelfiles/qwen3-coder-30b-32k-UD-Q5_K_XL.txt   # num_ctx 32768
-ollama create qwen3-coder-30b-220k -f ./modelfiles/qwen3-coder-30b-220k-UD-Q5_K_XL.txt  # num_ctx 220000
+ollama create qwen3-coder-30b-32k-q5  -f ./modelfiles/qwen3-coder-30b-32k-q5-UD-Q5_K_XL.txt   # num_ctx 32768
+ollama create qwen3-coder-30b-220k-q5 -f ./modelfiles/qwen3-coder-30b-220k-q5-UD-Q5_K_XL.txt  # num_ctx 220000
 ollama create qwen3-4b-q4 -f ./modelfiles/qwen3-4b-UD-Q4_K_M.txt                        # no num_ctx override
 
 # M5 Max 64GB — Q6_K_XL weights (higher quality)
 ollama pull hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL
 ollama pull hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL
 
-ollama create qwen3-coder-30b-32k  -f ./modelfiles/qwen3-coder-30b-32k-UD-Q6_K_XL.txt   # num_ctx 134217728
-ollama create qwen3-coder-30b-220k -f ./modelfiles/qwen3-coder-30b-220k-UD-Q6_K_XL.txt  # num_ctx 220000
+ollama create qwen3-coder-30b-32k-q5  -f ./modelfiles/qwen3-coder-30b-32k-q5-UD-Q6_K_XL.txt   # num_ctx 134217728
+ollama create qwen3-coder-30b-220k-q5 -f ./modelfiles/qwen3-coder-30b-220k-q5-UD-Q6_K_XL.txt  # num_ctx 220000
 ollama create qwen3-4b-q8 -f ./modelfiles/qwen3-4b-UD-Q8_K_XL.txt                       # no num_ctx override
 ```
 
 The Modelfiles simply set `num_ctx`; you can inspect or edit them directly:
 
 ```
-modelfiles/qwen3-coder-30b-32k.txt    → num_ctx 32768
-modelfiles/qwen3-coder-30b-220k.txt   → num_ctx 220000
+modelfiles/qwen3-coder-30b-32k-q5.txt    → num_ctx 32768
+modelfiles/qwen3-coder-30b-220k-q5.txt   → num_ctx 220000
 ```
 
 #### Agent models (tool-capable — work with all opencode agents)
 
 ```shell
 # code agent variants (see above for Modelfile-based install)
-# qwen3-coder-30b-32k   ← default
-# qwen3-coder-30b-220k  ← large context
+# qwen3-coder-30b-32k-q5   ← default
+# qwen3-coder-30b-220k-q5  ← large context
 
 # think agent
 ollama pull hf.co/bartowski/Mistral-Small-24B-Instruct-2501-GGUF:Q4_K_M
 ollama pull mistral-small3.2:latest
-ollama pull mfdoom/deepseek-r1-tool-calling:8b
+ollama pull deepseek-r1-tools:8b
 
 # write agent
 ollama pull qwen3.5:27b
 ollama pull qwen3.5:35b-a3b
 
 # research agent
-ollama pull dengcao/Qwen3-14B:Q5_K_M
+ollama pull qwen3-14b-q5
 ollama pull mistral-nemo:latest
 
 # plan agent / small_model
@@ -288,8 +288,8 @@ scripts/
 │   ├── grok.json                # Grok config
 │   └── opencode.jsonc           # OpenCode config (providers, models, agents)
 ├── modelfiles/                  # Ollama Modelfiles for custom context-window aliases
-│   ├── qwen3-coder-30b-32k.txt  # Qwen3-Coder 30B @ 32k ctx  (~21 GB loaded)
-│   └── qwen3-coder-30b-220k.txt # Qwen3-Coder 30B @ 220k ctx (~38 GB loaded)
+│   ├── qwen3-coder-30b-32k-q5.txt  # Qwen3-Coder 30B @ 32k ctx  (~21 GB loaded)
+│   └── qwen3-coder-30b-220k-q5.txt # Qwen3-Coder 30B @ 220k ctx (~38 GB loaded)
 └── lib/                         # Sourced by setup_ai.sh — one file per tool
     ├── helpers.sh               # print_status/info/warning/error, command_exists
     ├── check_system_requirements.sh
