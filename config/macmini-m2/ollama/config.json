@@ -1,0 +1,27 @@
+{
+  "integrations": {
+    "claude": {
+      "models": [
+        "deepseek-r1-tools:8b",
+        "qwen2.5-coder:7b",
+        "qwen3:14b"
+      ],
+      "aliases": {
+        "fast": "qwen2.5-coder:7b",
+        "coding": "qwen2.5-coder:7b",
+        "reasoning": "deepseek-r1-tools:8b",
+        "primary": "qwen3:14b"
+      }
+    },
+    "opencode": {
+      "models": [
+        "qwen3:14b",
+        "deepseek-r1-tools:8b",
+        "qwen2.5-coder:7b",
+        "qwen2.5-coder:1.5b"
+      ]
+    }
+  },
+  "last_model": "qwen3:14b",
+  "last_selection": "run"
+}
