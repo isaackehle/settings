@@ -26,7 +26,7 @@ Add to `~/.zshrc.d/_grok` (handled by `setup_grok.sh`).
 Ensure Ollama is running with a tool-capable model:
 
 ```shell
-ollama pull mfdoom/deepseek-r1-tool-calling:8b
+ollama pull deepseek-r1-tools:8b
 ollama serve
 ```
 

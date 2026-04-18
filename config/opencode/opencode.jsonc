@@ -10,10 +10,10 @@
       "models": {
         // --- Custom aliases (ollama create — see CUSTOM_MODELS_48GB in models.sh) ---
         // Qwen3-Coder-30B A3B: UD-Q5_K_XL base (~21 GB). 32k ctx loads ~25 GB; 220k loads ~38 GB (solo only)
-        "qwen3-coder-30b-32k": {
+        "qwen3-coder-30b-32k-q5": {
           "name": "Qwen3-Coder 30B A3B 32k (code, default)"
         },
-        "qwen3-coder-30b-220k": {
+        "qwen3-coder-30b-220k-q5": {
           "name": "Qwen3-Coder 30B A3B 220k (code, large ctx — solo only)"
         },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
@@ -31,10 +31,10 @@
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
         },
         // --- Reasoning + tool calls ---
-        "mfdoom/deepseek-r1-tool-calling:14b": {
+        "deepseek-r1-tools:14b": {
           "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
         },
-        "mfdoom/deepseek-r1-tool-calling:32b": {
+        "deepseek-r1-tools:32b": {
           "name": "DeepSeek R1 Tool-Calling 32B (reason+tools, larger, 20 GB)"
         },
         // --- Reasoning / chat-only (no tool support) ---
@@ -42,10 +42,10 @@
           "name": "DeepSeek R1 14B (reasoning, no tools, 10 GB)"
         },
         // --- Research ---
-        "dengcao/Qwen3-14B:Q8_0": {
+        "qwen3-14b-q8": {
           "name": "Qwen3 14B Q8 (research, high quality, 15 GB)"
         },
-        "dengcao/Qwen3-32B:Q5_K_M": {
+        "qwen3-32b-q5": {
           "name": "Qwen3 32B Q5 (research, larger, 22 GB)"
         },
         // --- Gemma 4 ---
@@ -99,7 +99,7 @@
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/mfdoom/deepseek-r1-tool-calling:14b",
+      "model": "ollama/deepseek-r1-tools:14b",
       "temperature": 0.3,
       "permission": {
         "read": "allow",
@@ -131,7 +131,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings. Saves output to Obsidian vault.",
       "mode": "primary",
-      "model": "ollama/dengcao/Qwen3-32B:Q5_K_M",
+      "model": "ollama/qwen3-32b-q5",
       "temperature": 0.25,
       "permission": {
         "read": "allow",

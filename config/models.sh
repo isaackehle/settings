@@ -5,16 +5,16 @@
 # ==============================================
 
 # M5 Max 48GB - Standard configuration
-# M5 Max 48GB - Base configuration
 MODELS_M5_48GB=(
-    # qwen3-coder-30b-32k and qwen3-coder-30b-220k are local aliases — see CUSTOM_MODELS_48GB below
-    # qwen3-4b-q4 is a local alias — see CUSTOM_MODELS_48GB below
+    # Custom aliases built via CUSTOM_MODELS_48GB below:
+    #   qwen3-coder-30b-32k-q5
+    #   qwen3-coder-30b-220k-q5
+    #   qwen3-4b-q4
+    #   qwen3-14b-q5
+    #   deepseek-r1-tools:8b
 
     "qwen3.5:27b"                                        # ~20 GB | Writing, docs, cover letters
 
-    "dengcao/Qwen3-14B:Q5_K_M"                           # ~12 GB | Research / read-only analysis
-
-    "mfdoom/deepseek-r1-tool-calling:8b"                 # ~5 GB  | Reasoning + tool calls
     "deepseek-r1:8b"                                     # ~5 GB  | Reasoning, chat-only (no tools)
 
     "codestral:22b"                                      # ~14 GB | Code apply/insert, light coding
@@ -27,16 +27,17 @@ MODELS_M5_48GB=(
 
 # M5 Max 64GB - Extended configuration
 MODELS_M5_64GB=(
-    # qwen3-coder-30b-32k and qwen3-coder-30b-220k are local aliases — see CUSTOM_MODELS_64GB below
-    # qwen3-4b-q8 is a local alias — see CUSTOM_MODELS_64GB below
+    # Custom aliases built via CUSTOM_MODELS_64GB below:
+    #   qwen3-coder-30b-32k-q6
+    #   qwen3-coder-30b-220k-q6
+    #   qwen3-4b-q8
+    #   qwen3-14b-q8
+    #   qwen3-32b-q5
+    #   deepseek-r1-tools:14b
+    #   deepseek-r1-tools:32b
 
     "qwen3.5:27b"                                       # ~20 GB | Writing, docs, cover letters
 
-    "dengcao/Qwen3-14B:Q8_0"                            # ~15 GB | Research / read-only analysis (high quality)
-    "dengcao/Qwen3-32B:Q5_K_M"                          # ~22 GB | Research / read-only analysis (larger)
-
-    "mfdoom/deepseek-r1-tool-calling:14b"               # ~10 GB | Reasoning + tool calls
-    "mfdoom/deepseek-r1-tool-calling:32b"               # ~20 GB | Reasoning + tool calls (larger)
     "deepseek-r1:14b"                                   # ~10 GB | Reasoning, chat-only (no tools)
 
     "codestral:22b-v0.1-q8_0"                           # ~23 GB | Code apply/insert, light coding
@@ -51,10 +52,12 @@ MODELS_M5_64GB=(
 
 # M1/M2/M3 16GB - Optimized for smaller memory
 MODELS_16GB=(
+    # Custom aliases built via CUSTOM_MODELS_16GB below:
+    #   deepseek-r1-tools:8b
+
     "qwen3:14b"                                         # ~10 GB | General purpose coding + chat (Q4_K_M)
 
     "deepseek-r1:8b"                                    # ~5 GB  | Reasoning, chat-only (no tools)
-    "mfdoom/deepseek-r1-tool-calling:8b"                # ~5 GB  | Reasoning + tool calls
 
     "qwen2.5-coder:7b"                                  # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                                # ~1 GB  | Autocomplete
@@ -75,24 +78,24 @@ MODELS_16GB=(
 # Config: opencode/opencode.jsonc → ~/.config/opencode/config.jsonc
 # Invoke agents with: /agent <name>  or select in sidebar
 # Switch model mid-session: Ctrl+M or sidebar model picker
-# Use qwen3-coder-30b-220k manually when you need >32K context
+# Use qwen3-coder-30b-220k-q5 manually when you need >32K context
 # ----------------------------------------------
 # 48GB agent map
 declare -A OPENCODE_AGENTS_48GB=(
-    [code]="qwen3-coder-30b-32k"                                  # editing, refactoring, debugging, tool calls — UD-Q5_K_XL
-    [think]="mfdoom/deepseek-r1-tool-calling:8b"                  # tradeoff analysis, debugging strategy, scoring
+    [code]="qwen3-coder-30b-32k-q5"                               # editing, refactoring, debugging, tool calls
+    [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
-    [research]="dengcao/Qwen3-14B:Q5_K_M"                         # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b-q4"     # next steps, task breakdown, routing
+    [research]="qwen3-14b-q5"                                     # codebase/web investigation — saves to Obsidian Research/
+    [plan]="qwen3-4b-q4"                                          # next steps, task breakdown, routing
 )
 
 # 64GB agent map
 declare -A OPENCODE_AGENTS_64GB=(
-    [code]="qwen3-coder-30b-32k"                                  # editing, refactoring, debugging, tool calls — UD-Q6_K_XL
-    [think]="mfdoom/deepseek-r1-tool-calling:14b"                 # tradeoff analysis, debugging strategy, scoring
+    [code]="qwen3-coder-30b-32k-q6"                               # editing, refactoring, debugging, tool calls
+    [think]="deepseek-r1-tools:32b"                               # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
-    [research]="dengcao/Qwen3-32B:Q5_K_M"                         # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b-q8" # next steps, task breakdown, routing
+    [research]="qwen3-32b-q5"                                     # codebase/web investigation — saves to Obsidian Research/
+    [plan]="qwen3-4b-q8"                                          # next steps, task breakdown, routing
 )
 
 # ----------------------------------------------
@@ -109,7 +112,7 @@ declare -A OPENCODE_AGENTS_64GB=(
 # ----------------------------------------------
 # 48GB Continue roles
 declare -A CONTINUE_ROLES_48GB=(
-    [chat]="qwen3-coder-30b-32k"                     # chat panel + inline edit (Ctrl+I) — UD-Q5_K_XL
+    [chat]="qwen3-coder-30b-32k-q5"                  # chat panel + inline edit (Ctrl+I)
     [chat_alt]="qwen3.5:27b"                         # manual model switch in chat
     [apply]="codestral:22b"                          # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
@@ -119,7 +122,7 @@ declare -A CONTINUE_ROLES_48GB=(
 
 # 64GB Continue roles
 declare -A CONTINUE_ROLES_64GB=(
-    [chat]="qwen3-coder-30b-32k"                     # chat panel + inline edit (Ctrl+I) — UD-Q6_K_XL
+    [chat]="qwen3-coder-30b-32k-q6"                  # chat panel + inline edit (Ctrl+I)
     [chat_alt]="qwen3.5:27b"                         # manual model switch in chat
     [apply]="codestral:22b-v0.1-q8_0"                # applying suggested code to file (Q8_0, highest quality)
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
@@ -139,38 +142,54 @@ declare -A CONTINUE_ROLES_64GB=(
 #   Resume Task                     continue a previous task from history
 # ----------------------------------------------
 # 48GB
-CLINE_MODEL_48GB="qwen3-coder-30b-32k"    # set in Cline UI — UD-Q5_K_XL weights
+CLINE_MODEL_48GB="qwen3-coder-30b-32k-q5"   # set in Cline UI
 
 # 64GB
-CLINE_MODEL_64GB="qwen3-coder-30b-32k"    # set in Cline UI — UD-Q6_K_XL weights
+CLINE_MODEL_64GB="qwen3-coder-30b-32k-q6"   # set in Cline UI
+
+# 16GB
+CLINE_MODEL_16GB="qwen3:14b"
 
 # ----------------------------------------------
 # Claude Code
 # Config: claude_code/config.json → ~/.claude/settings.json (global) or .claude/settings.json (project)
 # Requires LiteLLM on port 4000 — translates Anthropic API format → Ollama OpenAI format
 # Quick ref:
-#   /model qwen3-coder-30b-32k                                  switch to coding model
-#   /model mfdoom/deepseek-r1-tool-calling:8b                   switch to reasoning model
-#   /model qwen3.5:27b                                          switch to writing model
-#   /model dengcao/Qwen3-14B:Q5_K_M                             switch to research model
-#   /model qwen3-4b-q4     switch to planning model
+#   /model qwen3-coder-30b-32k-q5    switch to coding model
+#   /model deepseek-r1-tools:8b      switch to reasoning model
+#   /model qwen3.5:27b               switch to writing model
+#   /model qwen3-14b-q5              switch to research model
+#   /model qwen3-4b-q4               switch to planning model
 # ----------------------------------------------
 # 48GB — Claude Code model mapping
-CLAUDE_CODE_SONNET_48GB="qwen3-coder-30b-32k"               # ANTHROPIC_DEFAULT_SONNET_MODEL — UD-Q5_K_XL
+CLAUDE_CODE_SONNET_48GB="qwen3-coder-30b-32k-q5"            # ANTHROPIC_DEFAULT_SONNET_MODEL
 CLAUDE_CODE_HAIKU_48GB="qwen3-4b-q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
-CLAUDE_CODE_OPUS_48GB="qwen3-coder-30b-220k"                # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+CLAUDE_CODE_OPUS_48GB="qwen3-coder-30b-220k-q5"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 # 64GB — Claude Code model mapping
-CLAUDE_CODE_SONNET_64GB="qwen3-coder-30b-32k"               # ANTHROPIC_DEFAULT_SONNET_MODEL — UD-Q6_K_XL
-CLAUDE_CODE_HAIKU_64GB="qwen3-4b-q8"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing UD-Q8_K_XL
-CLAUDE_CODE_OPUS_64GB="qwen3-coder-30b-220k"                # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+CLAUDE_CODE_SONNET_64GB="qwen3-coder-30b-32k-q6"            # ANTHROPIC_DEFAULT_SONNET_MODEL
+CLAUDE_CODE_HAIKU_64GB="qwen3-4b-q8"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_OPUS_64GB="qwen3-coder-30b-220k-q6"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+
+# 16GB
+CLAUDE_CODE_SONNET_16GB="qwen3:14b"                         # ANTHROPIC_DEFAULT_SONNET_MODEL
+CLAUDE_CODE_HAIKU_16GB="qwen3-4b-q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_OPUS_16GB="qwen3:14b"                           # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+
+
+# RAM	Recommended Model	Pull Command	Performance Notes
+# 8GB	Qwen2.5-Coder 7B	ollama pull qwen2.5-coder:7b	~76% HumanEval; best for tight budgets.
+# 16GB	Qwen2.5-Coder 14B	ollama pull qwen2.5-coder:14b	~85% HumanEval; excellent for multi-file tasks.
+# 24GB	Devstral Small 2	ollama pull devstral-small-2	68% SWE-bench Verified; strong on single GPU.
+# 32GB+	Qwen3-Coder 30B	ollama pull qwen3-coder:30b	256K context; ideal for complex agentic workflows.
+# 64GB+	Qwen3 Coder Next	ollama pull qwen3-coder-next	70.6% SWE-bench Verified; exceptional tool use.
 
 # ----------------------------------------------
 # LiteLLM
-# Config: litellm/litellm.yaml → ~/.config/litellm/config.yaml
+# Config: litellm/config.yaml → ~/.config/litellm/config.yaml
 # Bridges Claude Code (Anthropic format) to Ollama (OpenAI format)
-# Setup: pip install litellm
-# Note: drop_params: true in config silently drops Anthropic-specific params (e.g. betas) Ollama rejects
+# Setup: uv tool install 'litellm[proxy]'
+# Note: drop_params: true in config silently drops Anthropic-specific params Ollama rejects
 # Start before launching Claude Code — must be up when Claude Code initializes
 # Quick ref:
 #   litellm --config ~/.config/litellm/config.yaml --port 4000    start proxy
@@ -182,36 +201,78 @@ CLAUDE_CODE_OPUS_64GB="qwen3-coder-30b-220k"                # ANTHROPIC_DEFAULT_
 # ==============================================
 # CUSTOM MODEL DEFINITIONS (pull base + ollama create)
 # ==============================================
-# Format: "base_hf_url|alias_name|modelfile_filename"
-# install_custom_models in install-models.sh processes these:
-#   - pulls each unique base_hf_url once
+# Format: "base_url|alias_name|modelfile_filename"
+# install_custom_models in install_models.sh processes these:
+#   - pulls each unique base_url once
 #   - runs: ollama create <alias_name> -f <modelfiles_dir>/<modelfile_filename>
-# Modelfiles live in scripts/modelfiles/
+# Modelfiles live in modelfiles/ at repo root.
+#
+# Alias naming conventions:
+#   HuggingFace GGUFs:  <model>-<size>-<ctx>-<quant>   e.g. qwen3-coder-30b-32k-q5
+#   Ollama community:   <model>-<size>-<quant>          e.g. qwen3-14b-q5
+#   Tool-calling:       <family>-tools:<size>           e.g. deepseek-r1-tools:8b
 
 CUSTOM_MODELS_48GB=(
-    # Qwen3-Coder-30B — UD-Q5_K_XL base (~21 GB loaded)
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-32k|qwen3-coder-30b-32k-UD-Q5_K_XL.txt"   # num_ctx 32768
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-220k|qwen3-coder-30b-220k-UD-Q5_K_XL.txt" # num_ctx 220000 (solo use only)
+    # Format: "source|alias|num_ctx"  (num_ctx empty = model default)
+    # HF base aliases must come before derived aliases that reference them.
 
-    # Qwen3-4B — UD-Q4_K_M base (~3 GB loaded)
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-q4|qwen3-4b-UD-Q4_K_M.txt"
+    # ── HF base aliases ───────────────────────────────────────────────────────
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5|"  # ~21 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4|"                # ~3 GB
+
+    # ── Derived context aliases ───────────────────────────────────────────────
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k-q5|32768"   # ~25 GB loaded
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-220k-q5|220000" # ~38 GB — solo only
+
+    # ── Backward-compat aliases ───────────────────────────────────────────────
+    "qwen3-4b-2507:q4|qwen3-4b-q4|"
+
+    # ── Community model aliases ───────────────────────────────────────────────
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b-q5|"                  # ~12 GB
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b|" # ~5 GB
 )
 
 CUSTOM_MODELS_64GB=(
-    # Qwen3-Coder-30B — UD-Q6_K_XL base (~26 GB loaded, higher quality)
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-32k|qwen3-coder-30b-32k-UD-Q6_K_XL.txt"   # num_ctx 134217728
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-220k|qwen3-coder-30b-220k-UD-Q6_K_XL.txt" # num_ctx 220000 (solo use only)
+    # Format: "source|alias|num_ctx"
 
-    # Qwen3-4B — UD-Q8_K_XL base (~5 GB loaded, highest quality)
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-q8|qwen3-4b-UD-Q8_K_XL.txt"
+    # ── HF base aliases ───────────────────────────────────────────────────────
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6|"  # ~26 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8|"               # ~5 GB
+
+    # ── Derived context aliases ───────────────────────────────────────────────
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-32k-q6|32768"   # ~28 GB loaded
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k-q6|220000" # ~42 GB — solo only
+
+    # ── Backward-compat aliases ───────────────────────────────────────────────
+    "qwen3-4b-2507:q8|qwen3-4b-q8|"
+
+    # ── Community model aliases ───────────────────────────────────────────────
+    "dengcao/Qwen3-14B:Q8_0|qwen3-14b-q8|"                    # ~15 GB
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b-q5|"                  # ~22 GB
+    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b|" # ~10 GB
+    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b|" # ~20 GB
+)
+
+CUSTOM_MODELS_16GB=(
+    # Format: "source|alias|num_ctx"
+    # HF base aliases must come before derived aliases that reference them.
+
+    # ── HF base aliases ───────────────────────────────────────────────────────
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4|"  # ~3 GB
+
+    # ── Backward-compat aliases ───────────────────────────────────────────────
+    "qwen3-4b-2507:q4|qwen3-4b-q4|"
+
+    # ── Community model aliases ───────────────────────────────────────────────
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b|" # ~5 GB
 )
 
 # ----------------------------------------------
 # Ollama direct
-#   ollama list                          all installed models
-#   ollama ps                            currently loaded + memory usage
-#   ollama run qwen3-coder-30b-32k       interactive shell with model
-#   ollama stop <model>                  force-unload to free memory
-#   OLLAMA_KEEP_ALIVE=0 ollama serve     unload models immediately when idle
+#   ollama list                              all installed models
+#   ollama ps                                currently loaded + memory usage
+#   ollama run qwen3-coder-30b-32k-q5        interactive shell with model
+#   ollama run qwen3-coder-30b-32k-q6        interactive shell with model
+#   ollama stop <model>                      force-unload to free memory
+#   OLLAMA_KEEP_ALIVE=0 ollama serve         unload models immediately when idle
 # ----------------------------------------------
-

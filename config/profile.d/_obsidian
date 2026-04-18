@@ -8,9 +8,9 @@ _hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null) / 1024 / 1024 / 1024 ))
 if [[ "$_hw_model" == Mac17* || "$_hw_mem_gb" -ge 32 ]]; then
   _vault_model="qwen3:32b-vault"                       # macbook-m5 (Mac17,6 / 64GB)
 elif [[ "$_hw_model" == Macmini* || "$_hw_model" == Mac14* ]]; then
-  _vault_model="mfdoom/deepseek-r1-tool-calling:8b"    # macmini-m2
+  _vault_model="deepseek-r1-tools:8b"    # macmini-m2
 else
-  _vault_model="mfdoom/deepseek-r1-tool-calling:8b"    # macbook-m1 (default)
+  _vault_model="deepseek-r1-tools:8b"    # macbook-m1 (default)
 fi
 
 alias vault="cd \"\$OBSIDIAN_VAULT\" && opencode --model $_vault_model"
