@@ -61,6 +61,13 @@ check_tool_with_version() {
         return 0
     fi
 
+    # Check for uv tools (for tools that might be installed via uv)
+
+    if command_exists "uv" && uv tool list | grep -q "$command_name"; then
+        print_status "$tool_name uv tool found"
+        return 0
+    fi
+
     # Check for executable in common locations
     local common_paths=(
         "/usr/local/bin/$command_name"
