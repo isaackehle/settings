@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "lmstudio": {
+      "type": "openai",
+      "base_url": "http://localhost:1234/v1",
+      "api_key": "sk-local",
+      "models": [
+        {
+          "id": "qwen3-8b-thinking",
+          "name": "Qwen3 8B Thinking",
+          "context_window": 131072,
+          "default_max_tokens": 4096
+        },
+        {
+          "id": "mistralai/devstral-small-2507@4bit",
+          "name": "Devstral Small 2507 4bit",
+          "context_window": 131072,
+          "default_max_tokens": 4096
+        },
+        {
+          "id": "qwen/Qwen3-Coder-30B-A3B-Instruct-MLX@8bit",
+          "name": "Qwen3 Coder 30B A3B 8bit",
+          "context_window": 262144,
+          "default_max_tokens": 4096
+        }
+      ]
+    }
+  },
+  "default_provider": "lmstudio",
+  "default_model": "mistralai/devstral-small-2507@4bit"
+}
