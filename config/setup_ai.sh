@@ -33,11 +33,13 @@ mkdir -p "$BACKUP_DIR"
 # ---------------------------------------------------------------------------
 
 _detect_mac_model() {
-    local hw_model hw_mem_gb
-    hw_model=$(sysctl -n hw.model)
+    local hw_mem_gb hw_model
     hw_mem_gb=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
-    if [[ "$hw_model" == Mac17* || "$hw_mem_gb" -ge 32 ]]; then
-        echo "macbook-m5"
+    hw_model=$(sysctl -n hw.model)
+    if [[ "$hw_mem_gb" -ge 56 ]]; then
+        echo "macbook-m5-64gb"
+    elif [[ "$hw_mem_gb" -ge 40 ]]; then
+        echo "macbook-m5-48gb"
     elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
         echo "macmini-m2"
     elif [[ "$hw_model" == MacBookPro* ]]; then
