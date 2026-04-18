@@ -1,0 +1,47 @@
+name: "Continue Config - Local Models (16GB)"
+version: "1.0.0"
+schema: "v1"
+
+models:
+  # Primary coding model — fits in 16GB, tool-capable
+  - name: "Qwen2.5 Coder 7B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:7b"
+    roles:
+      - chat
+      - edit
+      - apply
+      - summarize
+
+  # Reasoning with tool calls
+  - name: "DeepSeek R1 Tool-Calling 8B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "deepseek-r1-tools:8b"
+    roles:
+      - chat
+
+  # Fast planning
+  - name: "Qwen3 4B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3-4b-q8"
+    roles:
+      - chat
+
+  # Autocomplete — 1.5B, very fast
+  - name: "Qwen2.5 Coder 1.5B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:1.5b"
+    roles:
+      - autocomplete
+
+  # Embedding model for semantic search
+  - name: "Nomic Embed Text"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "nomic-embed-text:latest"
+    roles:
+      - embed
