@@ -73,7 +73,7 @@ shell-integration-features = cursor,sudo,title
 # -----------------------------------------------------------------------------
 # macOS
 # -----------------------------------------------------------------------------
-# macos-option-as-alt = true        # needed for tmux alt-key bindings
+# macos-option-as-alt = true
 copy-on-select = clipboard
 
 # -----------------------------------------------------------------------------
@@ -104,5 +104,5 @@ keybind = ctrl+shift+tab=previous_tab
 # -----------------------------------------------------------------------------
 # Keybindings — tmux passthrough (prefix: ctrl+a)
 # -----------------------------------------------------------------------------
-keybind = cmd+s=text:\x01\x73       # ctrl-a s  (session list)
+keybind = cmd+s=text:\x01\x73
 keybind = ctrl+shift+w=close_window
