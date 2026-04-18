@@ -87,7 +87,12 @@ Route Gemini CLI to local Ollama models through the [[LiteLLM]] proxy. LiteLLM t
 
 ```shell
 # Start LiteLLM proxy
-litellm --config ~/.config/litellm/litellm.yaml --port 4000
+# litellm --config ~/.config/litellm/config.yaml --port 4000
+
+# See ../setup_litellm.sh
+launchctl start ai.litellm.proxy
+
+
 
 # Point Gemini CLI at it (any dummy API key works)
 export GOOGLE_GEMINI_BASE_URL="http://localhost:4000"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.litellm.proxy</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/isaac/.local/bin:/Users/isaac/.local/share/uv/tools/litellm/bin</string>
+        <key>LITELLM_MASTER_KEY</key>
+        <string>sk-local</string>
+        <key>LITELLM_SALT_KEY</key>
+        <string>sk-local-salt</string>
+        <key>UI_USERNAME</key>
+        <string>admin</string>
+        <key>UI_PASSWORD</key>
+        <string>admin</string>
+        <key>LITELLM_DROP_PARAMS</key>
+        <string>True</string>
+        <key>STORE_MODEL_IN_DB</key>
+        <string>True</string>
+        <key>PORT</key>
+        <string>4000</string>
+        <key>DATABASE_URL</key>
+        <string>postgresql://litellm:litellm@localhost:5432/litellm_db</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/litellm</string>
+        <string>--config</string>
+        <string>/usr/local/bin/litellm.yaml</string>
+        <string>--port</string>
+        <string>4000</string>
+    </array>
+	<key>StandardErrorPath</key>
+	<string>/tmp/litellm.stderr.log</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/litellm.stdout.log</string>
+	<key>WorkingDirectory</key>
+	<string>/opt/homebrew/var</string>
+</dict>
+</plist>
