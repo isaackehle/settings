@@ -1,0 +1,21 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:11434",
+    "ANTHROPIC_AUTH_TOKEN": "ollama",
+    "ANTHROPIC_API_KEY": "ollama",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder-30b-32k-q5",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-4b-q8",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-coder-30b-220k-q5"
+  },
+  "model": "qwen3-coder-30b-32k-q5",
+  "permissions": {
+    "allow": [
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git show:*)",
+      "Bash(git blame:*)"
+    ],
+    "deny": []
+  }
+}
