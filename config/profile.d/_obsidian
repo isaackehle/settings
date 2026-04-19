@@ -5,8 +5,10 @@ command -v opencode >/dev/null 2>&1 || return 0
 _hw_model=$(sysctl -n hw.model 2>/dev/null)
 _hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null) / 1024 / 1024 / 1024 ))
 
-if [[ "$_hw_model" == Mac17* || "$_hw_mem_gb" -ge 32 ]]; then
-  _vault_model="qwen3:32b-vault"                       # macbook-m5 (Mac17,6 / 64GB)
+if [[ "$_hw_model" == Mac17* && "$_hw_mem_gb" -ge 60 ]]; then
+  _vault_model="qwen3-32b:q5"            # macbook-m5 64GB — research model
+elif [[ "$_hw_model" == Mac17* ]]; then
+  _vault_model="qwen3-14b:q5"            # macbook-m5 48GB — research model
 elif [[ "$_hw_model" == Macmini* || "$_hw_model" == Mac14* ]]; then
   _vault_model="deepseek-r1-tools:8b"    # macmini-m2
 else
