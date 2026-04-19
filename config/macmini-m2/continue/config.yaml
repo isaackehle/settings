@@ -3,11 +3,11 @@ version: "1.0.0"
 schema: "v1"
 
 models:
-  # Primary coding model — fits in 16GB, tool-capable
-  - name: "Qwen2.5 Coder 7B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen2.5-coder:7b"
+  # Primary chat / edit / apply model
+  - name: "Qwen3 14B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    model: "qwen3:14b"
     roles:
       - chat
       - edit
@@ -16,29 +16,37 @@ models:
 
   # Reasoning with tool calls
   - name: "DeepSeek R1 Tool-Calling 8B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "deepseek-r1-tools:8b"
     roles:
       - chat
 
   # Fast planning
   - name: "Qwen3 4B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3-4b-q8"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    model: "qwen3-4b-q4"
     roles:
       - chat
 
-  # Autocomplete — 1.5B, very fast
+  # Autocomplete — default (fast, safe on 16GB with 14B loaded)
   - name: "Qwen2.5 Coder 1.5B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen2.5-coder:1.5b"
     roles:
       - autocomplete
 
-  # Embedding model for semantic search
+  # Autocomplete — quality (use when 14B is not loaded)
+  - name: "Qwen2.5 Coder 7B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    model: "qwen2.5-coder:7b"
+    roles:
+      - autocomplete
+
+  # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434

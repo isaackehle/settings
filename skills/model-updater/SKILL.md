@@ -234,9 +234,13 @@ Each machine has a `config/<machine>/MODELS.md` with the Model Matrix table. Upd
 - The **RAM loaded** row: if the new quant changes memory footprint
 - The **Alias chain** section: if filenames or source URLs changed
 - The **Install** section: if the quant tag appears in any code example
+- The **`Models last updated:`** header line: bump to today's date (format: `YYYY-MM-DD`)
 
 The matrix table uses model names as column headers — those don't change unless the alias name
 changes. If an alias name changes, update the column header and every row that references it.
+
+Always bump the date even for minor source-URL-only changes — the date signals the last time
+the installed stack was reviewed and verified, not just when the documentation was touched.
 
 ---
 
@@ -258,7 +262,7 @@ changes. If an alias name changes, update the column header and every row that r
 
 After presenting the report, offer to:
 
-1. Apply the upgrade (all three files — modelfile + models.sh + MODELS.md) — show a diff first.
+1. Apply the upgrade (all three files — modelfile + models.sh + MODELS.md, including the `Models last updated:` date) — show a diff first.
 2. Run `llmfit` on each candidate if available.
 3. Re-run the install: `bash config/install_models.sh` → select profile.
 4. Verify with `ollama list` and `ollama ps` after pulling.
