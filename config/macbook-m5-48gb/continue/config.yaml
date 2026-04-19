@@ -5,55 +5,56 @@ schema: "v1"
 models:
   # Primary coding model — 30B, tool-capable
   - name: "Qwen3 Coder 30B A3B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen3-coder-30b-32k-q5"
     roles:
       - chat
       - edit
+      - apply
       - summarize
 
   # General chat / writing
   - name: "Qwen3.5 27B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen3.5:27b"
     roles:
       - chat
 
   # Apply/insert — best code insertion
   - name: "Codestral 22B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "codestral:22b-v0.1-q8_0"
     roles:
       - apply
 
   # Reasoning with tool calls
   - name: "DeepSeek R1 Tool-Calling 14B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "deepseek-r1-tools:14b"
     roles:
       - chat
 
-  # Autocomplete — fast, low RAM
+  # Autocomplete — default (fast, low RAM)
   - name: "Qwen2.5 Coder 1.5B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen2.5-coder:1.5b"
     roles:
       - autocomplete
 
-  # Autocomplete — better quality
+  # Autocomplete — quality
   - name: "Qwen2.5 Coder 7B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen2.5-coder:7b"
     roles:
       - autocomplete
 
-  # Embedding model for semantic search
+  # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434
@@ -61,7 +62,7 @@ models:
     roles:
       - embed
 
-  # Reranking
+  # Reranking — stay on Ollama directly
   - name: "Qwen3 Reranker 0.6B"
     provider: ollama
     apiBase: http://localhost:11434
@@ -71,8 +72,8 @@ models:
 
   # Fast planning
   - name: "Qwen3 4B"
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:4000/v1
     model: "qwen3-4b-q8"
     roles:
       - chat
