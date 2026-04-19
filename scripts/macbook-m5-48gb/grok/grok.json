@@ -1,15 +1,15 @@
 {
   "provider": {
     "ollama": {
-      "name": "Ollama (Local)",
+      "name": "Ollama (Local via LiteLLM)",
       "options": {
-        "baseURL": "http://localhost:11434/v1"
+        "baseURL": "http://localhost:4000/v1"
       },
       "models": {
-        "deepseek-r1-tools:14b": {
+        "deepseek-r1-tools-14b": {
           "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
         },
-        "deepseek-r1-tools:8b": {
+        "deepseek-r1-tools-8b": {
           "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
         }
       }

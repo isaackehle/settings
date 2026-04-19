@@ -1,3 +1,5 @@
-# Grok CLI Configuration
-export GROK_BASE_URL=http://localhost:11434
-export GROK_MODEL=llama3
+# Grok CLI — route through LiteLLM proxy
+command -v grok >/dev/null 2>&1 || return 0
+export GROKCLI_PROVIDER=openai
+export GROKCLI_BASE_URL=http://localhost:4000/v1
+export GROKCLI_API_KEY=sk-local
