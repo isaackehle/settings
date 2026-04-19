@@ -75,6 +75,52 @@ setup_exo() {
     print_info "Docs: https://github.com/exo-explore/exo"
 }
 
+teardown_exo() {
+    print_info "Removing exo..."
+
+    local exo_dir="$HOME/code/exo"
+
+    # Stop any running exo processes
+    if pgrep -f "exo" &>/dev/null; then
+        print_info "Stopping exo processes..."
+        pkill -f "exo" || true
+    fi
+
+    # Remove cloned repo
+    if [ -d "$exo_dir" ]; then
+        print_info "Removing $exo_dir..."
+        rm -rf "$exo_dir"
+        print_status "Removed exo repo"
+    else
+        print_info "exo repo not found at $exo_dir — skipping"
+    fi
+
+    # Remove exo data/config/cache
+    for dir in \
+        "$HOME/.config/exo" \
+        "$HOME/.local/share/exo" \
+        "$HOME/.cache/exo"; do
+        if [ -d "$dir" ]; then
+            rm -rf "$dir"
+            print_status "Removed $dir"
+        fi
+    done
+
+    # Remove macmon (only if installed via cargo for exo)
+    if command_exists "macmon"; then
+        read -p "  Remove macmon (installed for exo)? (y/n) " -n 1 -r; echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            cargo uninstall macmon 2>/dev/null && print_status "Removed macmon" || print_warning "macmon uninstall failed — remove manually: cargo uninstall macmon"
+        fi
+    fi
+
+    print_status "exo removed. LiteLLM/Ollama configs unchanged."
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    setup_exo
+    case "${1:-setup}" in
+        setup)    setup_exo ;;
+        teardown) teardown_exo ;;
+        *) echo "Usage: $0 [setup|teardown]"; exit 1 ;;
+    esac
 fi

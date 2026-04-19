@@ -95,7 +95,7 @@ Use `http://localhost:52415/v1` as the base URL wherever you'd normally point at
 | Thunderbolt RDMA | 99% latency reduction vs WiFi | N/A |
 | Setup | All machines on same network | Just one machine |
 
-Wired (Thunderbolt or Ethernet) is strongly preferred over WiFi. RDMA over Thunderbolt requires macOS ≥26.2.
+Wired (Thunderbolt or Ethernet) is strongly preferred over WiFi. RDMA over Thunderbolt is available on macOS 26.2+.
 
 ## File Locations (macOS/Linux)
 
