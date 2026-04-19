@@ -1,6 +1,6 @@
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh)
+# Expects: BACKUP_DIR, DATE, SCRIPT_DIR (set by setup_ai.sh)
 setup_continue() {
     print_info "Setting up Continue.dev..."
     [ -f "$HOME/.continue/config.yaml" ] && \
@@ -8,11 +8,24 @@ setup_continue() {
         print_status "Backed up Continue.dev config"
     mkdir -p "$HOME/.continue"
 
-    if [ -f "$NEW_CFG_DIR/continue/config.yaml" ]; then
-        cp "$NEW_CFG_DIR/continue/config.yaml" "$HOME/.continue/config.yaml"
+    local src_cfg script_dir mac_model
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f detect_mac_model &>/dev/null; then
+        mac_model="$(detect_mac_model)"
+    else
+        mac_model=""
+    fi
+    if [ -f "$script_dir/$mac_model/continue/config.yaml" ]; then
+        src_cfg="$script_dir/$mac_model/continue/config.yaml"
+    else
+        print_warning "No continue/$mac_model/config.yaml found"
+    fi
+    if [ -f "$src_cfg" ]; then
+        cp "$src_cfg" "$HOME/.continue/config.yaml"
         print_status "Copied Continue.dev config"
     else
-        print_warning "No continue/config.yaml found in $NEW_CFG_DIR"
+        print_warning "No continue/config.yaml found"
     fi
 }
 

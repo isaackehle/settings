@@ -1,7 +1,7 @@
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
 # Install and configure OpenCode
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh) for config deploy
+# Expects: BACKUP_DIR, DATE, SCRIPT_DIR (set by setup_ai.sh) for config deploy
 
 _install_opencode() {
     if command_exists "npm"; then
@@ -22,15 +22,18 @@ verify_opencode() {
 setup_opencode() {
     print_info "Setting up OpenCode..."
     verify_opencode || _install_opencode || print_warning "OpenCode CLI not installed — skipping"
+
     [ -f "$HOME/.config/opencode/config.jsonc" ] && \
         cp "$HOME/.config/opencode/config.jsonc" "$BACKUP_DIR/opencode_config_backup_$DATE.jsonc" && \
         print_status "Backed up OpenCode config"
+
     mkdir -p "$HOME/.config/opencode"
-    if [ -f "$NEW_CFG_DIR/opencode/opencode.jsonc" ]; then
-        cp "$NEW_CFG_DIR/opencode/opencode.jsonc" "$HOME/.config/opencode/config.jsonc"
+
+    if [ -f "$SCRIPT_DIR/opencode/opencode.jsonc" ]; then
+        cp "$SCRIPT_DIR/opencode/opencode.jsonc" "$HOME/.config/opencode/config.jsonc"
         print_status "Copied OpenCode config"
     else
-        print_warning "No opencode/opencode.jsonc found in $NEW_CFG_DIR"
+        print_warning "No opencode/opencode.jsonc found in $SCRIPT_DIR"
     fi
 }
 

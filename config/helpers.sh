@@ -42,6 +42,25 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
+
+detect_mac_model() {
+    local hw_mem_gb hw_model
+    hw_mem_gb=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
+    hw_model=$(sysctl -n hw.model)
+    if [[ "$hw_mem_gb" -ge 56 ]]; then
+        echo "macbook-m5-64gb"
+    elif [[ "$hw_mem_gb" -ge 40 ]]; then
+        echo "macbook-m5-48gb"
+    elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
+        echo "macmini-m2"
+    elif [[ "$hw_model" == MacBookPro* ]]; then
+        echo "macbook-m1"
+    else
+        echo "default"
+    fi
+}
+
+
 # Enhanced tool check with version information
 check_tool_with_version() {
     local tool_name="$1"

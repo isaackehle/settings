@@ -75,7 +75,7 @@ MODELS_16GB=(
 
 # ----------------------------------------------
 # opencode
-# Config: opencode/opencode.jsonc → ~/.config/opencode/config.jsonc
+# Config: scripts/opencode/opencode.jsonc → ~/.config/opencode/config.jsonc
 # Invoke agents with: /agent <name>  or select in sidebar
 # Switch model mid-session: Ctrl+M or sidebar model picker
 # Use qwen3-coder-30b-220k-q5 manually when you need >32K context
@@ -186,7 +186,7 @@ CLAUDE_CODE_OPUS_16GB="qwen3:14b"                           # ANTHROPIC_DEFAULT_
 
 # ----------------------------------------------
 # LiteLLM
-# Config: litellm/config.yaml → ~/.config/litellm/config.yaml
+# Config: scripts/litellm/config.yaml → ~/.config/litellm/config.yaml
 # Bridges Claude Code (Anthropic format) to Ollama (OpenAI format)
 # Setup: uv tool install 'litellm[proxy]'
 # Note: drop_params: true in config silently drops Anthropic-specific params Ollama rejects

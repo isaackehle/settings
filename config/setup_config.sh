@@ -50,7 +50,7 @@ fi
 # Prints the resolved path, or empty string if not found.
 find_source() {
     local rel="$1"
-    local model_path="$SETTINGS_REPO/$MAC_MODEL/$rel"
+    local model_path="$SETTINGS_REPO/../scripts/$MAC_MODEL/$rel"
     local default_path="$SETTINGS_REPO/$rel"
     if [ -f "$model_path" ]; then
         echo "$model_path"
@@ -116,7 +116,7 @@ done
 install_file "shellrc" "$HOME/.shellrc"
 
 # profile.d — mirror to ~/.profile.d/ (sourced by shellrc)
-PROFILED_SRC="$SETTINGS_REPO/$MAC_MODEL/profile.d"
+PROFILED_SRC="$SETTINGS_REPO/../scripts/$MAC_MODEL/profile.d"
 [ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_REPO/profile.d"
 if [ -d "$PROFILED_SRC" ]; then
     [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
@@ -149,7 +149,7 @@ if [ -d "$PROFILED_SRC" ]; then
 fi
 
 # zshrc.d — mirror to ~/.zshrc.d/ (sourced by zshrc)
-ZSHRCD_SRC="$SETTINGS_REPO/$MAC_MODEL/zshrc.d"
+ZSHRCD_SRC="$SETTINGS_REPO/../scripts/$MAC_MODEL/zshrc.d"
 [ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_REPO/zshrc.d"
 if [ -d "$ZSHRCD_SRC" ]; then
     [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
@@ -175,7 +175,7 @@ echo "Copying .env.local..."
 
 ENV_DEST="$HOME/.env.local"
 ENV_SRC=$(find_source "env.local")
-[ -z "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/$MAC_MODEL/env.local"
+[ -z "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/../scripts/$MAC_MODEL/env.local"
 [ ! -f "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/env.local"
 
 if [ ! -f "$ENV_SRC" ]; then
@@ -212,5 +212,5 @@ echo "  1. Edit ~/.env.local and verify your API keys"
 echo "  2. Reload your shell: source ~/.zshrc"
 echo "  3. Run ./setup_ai.sh deploy to copy AI tool configs (Claude, Gemini, Continue, etc.)"
 echo ""
-echo "Model-specific overrides live in: $SETTINGS_REPO/$MAC_MODEL/"
+echo "Model-specific overrides live in: $SETTINGS_REPO/../scripts/$MAC_MODEL/"
 echo ""

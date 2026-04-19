@@ -5,25 +5,24 @@ echo "=== AI TOOL CONFIGURATION BACKUP AND RESTORE SCRIPT ==="
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/helpers.sh"
-. "$SCRIPT_DIR/ollama/setup_ollama.sh"
-. "$SCRIPT_DIR/grok/setup_grok.sh"
-. "$SCRIPT_DIR/groq/setup_groq.sh"
-. "$SCRIPT_DIR/olol/setup_olol.sh"
-. "$SCRIPT_DIR/exo/setup_exo.sh"
-. "$SCRIPT_DIR/continue/setup_continue.sh"
-. "$SCRIPT_DIR/opencode/setup_opencode.sh"
-. "$SCRIPT_DIR/crush/setup_crush.sh"
-. "$SCRIPT_DIR/claude/setup_claude.sh"
-. "$SCRIPT_DIR/codex/setup_codex.sh"
-. "$SCRIPT_DIR/gemini/setup_gemini.sh"
-. "$SCRIPT_DIR/litellm/setup_litellm.sh"
-. "$SCRIPT_DIR/anythingllm/setup_anythingllm.sh"
-. "$SCRIPT_DIR/vscode/setup_vscode.sh"
-. "$SCRIPT_DIR/windsurf/setup_windsurf.sh"
+. "$SCRIPT_DIR/../scripts/ollama/setup_ollama.sh"
+. "$SCRIPT_DIR/../scripts/grok/setup_grok.sh"
+. "$SCRIPT_DIR/../scripts/groq/setup_groq.sh"
+. "$SCRIPT_DIR/../scripts/olol/setup_olol.sh"
+. "$SCRIPT_DIR/../scripts/exo/setup_exo.sh"
+. "$SCRIPT_DIR/../scripts/continue/setup_continue.sh"
+. "$SCRIPT_DIR/../scripts/opencode/setup_opencode.sh"
+. "$SCRIPT_DIR/../scripts/crush/crush.sh"
+. "$SCRIPT_DIR/../scripts/claude/setup_claude.sh"
+. "$SCRIPT_DIR/../scripts/codex/setup_codex.sh"
+. "$SCRIPT_DIR/../scripts/gemini/setup_gemini.sh"
+. "$SCRIPT_DIR/../scripts/litellm/setup_litellm.sh"
+. "$SCRIPT_DIR/../scripts/anythingllm/setup_anythingllm.sh"
+. "$SCRIPT_DIR/../scripts/vscode/setup_vscode.sh"
+. "$SCRIPT_DIR/../scripts/windsurf/setup_windsurf.sh"
 . "$SCRIPT_DIR/install_models.sh"
 
 # Configuration directory
-NEW_CFG_DIR="$SCRIPT_DIR"
 DATE="$(date +%Y-%m-%d)"
 BACKUP_DIR="$HOME/ai_tool_backups"
 
@@ -34,27 +33,11 @@ mkdir -p "$BACKUP_DIR"
 # Helpers for config file deployment (used by deploy_configs)
 # ---------------------------------------------------------------------------
 
-_detect_mac_model() {
-    local hw_mem_gb hw_model
-    hw_mem_gb=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
-    hw_model=$(sysctl -n hw.model)
-    if [[ "$hw_mem_gb" -ge 56 ]]; then
-        echo "macbook-m5-64gb"
-    elif [[ "$hw_mem_gb" -ge 40 ]]; then
-        echo "macbook-m5-48gb"
-    elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
-        echo "macmini-m2"
-    elif [[ "$hw_model" == MacBookPro* ]]; then
-        echo "macbook-m1"
-    else
-        echo "default"
-    fi
-}
 
 # Find best source file: model-specific takes precedence over default.
-_find_source() {
+find_source() {
     local rel="$1"
-    local model_path="$SCRIPT_DIR/$MAC_MODEL/$rel"
+    local model_path="$SCRIPT_DIR/../scripts/$MAC_MODEL/$rel"
     local default_path="$SCRIPT_DIR/$rel"
     if [ -f "$model_path" ]; then
         echo "$model_path"
@@ -85,17 +68,17 @@ _copy_file() {
     echo "  copied $src -> $dest"
 }
 
-# Look up source via _find_source and copy.
+# Look up source via find_source and copy.
 _install_file() {
     local rel="$1" dest="$2"
-    _copy_file "$(_find_source "$rel")" "$dest"
+    _copy_file "$(find_source "$rel")" "$dest"
 }
 
 # ---------------------------------------------------------------------------
 # deploy_configs — copy AI tool config files to their home-directory locations
 # ---------------------------------------------------------------------------
 deploy_configs() {
-    MAC_MODEL=$(_detect_mac_model)
+    MAC_MODEL=$(detect_mac_model)
     print_info "Deploying AI tool configs ($MAC_MODEL)..."
 
     if [ -f "$HOME/.env.local" ]; then
@@ -108,14 +91,14 @@ deploy_configs() {
     echo "Copying Claude config files..."
     [ -L "$HOME/.claude" ] && rm "$HOME/.claude"
     mkdir -p "$HOME/.claude"
-    _install_file "claude/settings.json"    "$HOME/.claude/settings.json"
-    _install_file "claude/keybindings.json" "$HOME/.claude/keybindings.json"
-    _install_file "claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
+    _install_file "scripts/claude/settings.json"    "$HOME/.claude/settings.json"
+    _install_file "scripts/claude/keybindings.json" "$HOME/.claude/keybindings.json"
+    _install_file "scripts/claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
 
     # Skills: copy external skill symlinks (find-skills, conventional-commit, create-agentsmd)
     # then create live symlinks for personal skills from ~/code/isaackehle/skills
-    local skills_src="$SCRIPT_DIR/$MAC_MODEL/claude/skills"
-    [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/claude/skills"
+    local skills_src="$SCRIPT_DIR/../scripts/$MAC_MODEL/claude/skills"
+    [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/../scripts/claude/skills"
     if [ -d "$skills_src" ]; then
         mkdir -p "$HOME/.claude/skills"
         cp -R "$skills_src/." "$HOME/.claude/skills/"
@@ -143,7 +126,7 @@ deploy_configs() {
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         local mcp_dest="$HOME/.mcp.json"
         local mcp_src
-        mcp_src=$(_find_source "mcp.json")
+        mcp_src=$(find_source "mcp.json")
         [ -z "$mcp_src" ] && mcp_src="$SCRIPT_DIR/mcp.json"
 
         local do_install=true
@@ -191,7 +174,7 @@ deploy_configs() {
     [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
     mkdir -p "$HOME/.continue"
     local cont_src
-    cont_src=$(_find_source "continue/config.yaml")
+    cont_src=$(find_source "continue/config.yaml")
     [ -z "$cont_src" ] && cont_src="$SCRIPT_DIR/continue/config.yaml"
     _copy_file "$cont_src" "$HOME/.continue/config.yaml"
 
@@ -224,15 +207,15 @@ deploy_configs() {
 
     [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
     mkdir -p "$HOME/.config/opencode"
-    _install_file "opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+    _install_file "scripts/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
 
     [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
     mkdir -p "$HOME/.ollama"
-    _install_file "ollama/config.json" "$HOME/.ollama/config.json"
+    _install_file "scripts/ollama/config.json" "$HOME/.ollama/config.json"
 
     [ -L "$HOME/.crush" ] && rm "$HOME/.crush"
     mkdir -p "$HOME/.crush"
-    _install_file "crush/crush.json" "$HOME/.crush/config.json"
+    _install_file "scripts/crush/crush.json" "$HOME/.crush/config.json"
 
     mkdir -p "$HOME/.config/grok"
     _install_file "grok/grok.json" "$HOME/.config/grok/config.json"

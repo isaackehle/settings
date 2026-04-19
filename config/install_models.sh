@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 . "$(dirname "${BASH_SOURCE[0]}")/models.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/exo/setup_exo.sh"
+. "$(dirname "${BASH_SOURCE[0]}")/../scripts/exo/setup_exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose

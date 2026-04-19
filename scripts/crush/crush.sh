@@ -1,7 +1,7 @@
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
 # Install and configure Crush
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh) for config deploy
+# Expects: BACKUP_DIR, DATE, SCRIPT_DIR (set by setup_ai.sh) for config deploy
 
 _install_crush() {
     print_warning "Crush not found — install manually: https://github.com/charmverse/crush"
@@ -20,15 +20,15 @@ setup_crush() {
         print_status "Backed up Crush config"
     mkdir -p "$HOME/.crush"
     local crush_src=""
-    if declare -f _find_source > /dev/null 2>&1; then
-        crush_src=$(_find_source "crush/crush.json")
+    if declare -f find_source > /dev/null 2>&1; then
+        crush_src=$(find_source "crush/crush.json")
     fi
-    [ -z "$crush_src" ] && crush_src="$NEW_CFG_DIR/crush/crush.json"
+    [ -z "$crush_src" ] && crush_src="$SCRIPT_DIR/crush/crush.json"
     if [ -f "$crush_src" ]; then
         cp "$crush_src" "$HOME/.crush/config.json"
         print_status "Copied Crush config"
     else
-        print_warning "No crush/crush.json found in $NEW_CFG_DIR"
+        print_warning "No crush/crush.json found in $SCRIPT_DIR"
     fi
 }
 
