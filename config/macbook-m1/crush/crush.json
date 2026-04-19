@@ -1,26 +1,33 @@
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://charm.land/crush.json",
   "providers": {
-    "lmstudio": {
-      "type": "openai",
-      "base_url": "http://localhost:1234/v1",
+    "litellm": {
+      "name": "LiteLLM (local)",
+      "type": "openai-compat",
+      "base_url": "http://localhost:4000/v1",
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-8b-thinking",
-          "name": "Qwen3 8B Thinking",
-          "context_window": 131072,
-          "default_max_tokens": 4096
+          "id": "qwen3:14b",
+          "name": "Qwen3 14B",
+          "context_window": 32768,
+          "default_max_tokens": 8192
         },
         {
-          "id": "mistralai/devstral-small-2507@4bit",
-          "name": "Devstral Small 2507 4bit",
-          "context_window": 131072,
+          "id": "deepseek-r1-tools:8b",
+          "name": "DeepSeek R1 Tools 8B",
+          "context_window": 32768,
+          "default_max_tokens": 8192
+        },
+        {
+          "id": "qwen3-4b-q4",
+          "name": "Qwen3 4B (fast)",
+          "context_window": 32768,
           "default_max_tokens": 4096
         }
       ]
     }
   },
-  "default_provider": "lmstudio",
-  "default_model": "mistralai/devstral-small-2507@4bit"
+  "default_provider": "litellm",
+  "default_model": "qwen3:14b"
 }
