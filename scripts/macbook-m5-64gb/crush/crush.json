@@ -8,13 +8,13 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-coder-30b-32k-q6",
+          "id": "qwen3-coder-30b-32k:q6",
           "name": "Qwen3 Coder 30B (32k)",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-coder-30b-220k-q6",
+          "id": "qwen3-coder-30b-220k:q6",
           "name": "Qwen3 Coder 30B (220k, solo)",
           "context_window": 220000,
           "default_max_tokens": 8192
@@ -38,7 +38,7 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-4b-q8",
+          "id": "qwen3-4b:q8",
           "name": "Qwen3 4B (fast)",
           "context_window": 32768,
           "default_max_tokens": 4096
@@ -47,5 +47,5 @@
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-coder-30b-32k-q6"
+  "default_model": "qwen3-coder-30b-32k:q6"
 }

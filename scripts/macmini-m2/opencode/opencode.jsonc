@@ -21,7 +21,7 @@
           "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
         },
         // --- Planning / fast (~3 GB) ---
-        "qwen3-4b-q4": {
+        "qwen3-4b:q4": {
           "name": "Qwen3 4B Q8 (plan, fast, 3 GB)"
         }
       }
@@ -107,7 +107,7 @@
     "plan": {
       "description": "Fast planning agent for next steps and breakdowns.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b-q4",
+      "model": "ollama/qwen3-4b:q4",
       "temperature": 0.25,
       "permission": {
         "read": "allow",

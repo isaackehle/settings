@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/opt/homebrew/bin/bash
 # AI Tool Configuration Backup and Restore Script with Ollama Provider
 
 echo "=== AI TOOL CONFIGURATION BACKUP AND RESTORE SCRIPT ==="
@@ -91,9 +91,9 @@ deploy_configs() {
     echo "Copying Claude config files..."
     [ -L "$HOME/.claude" ] && rm "$HOME/.claude"
     mkdir -p "$HOME/.claude"
-    _install_file "scripts/claude/settings.json"    "$HOME/.claude/settings.json"
-    _install_file "scripts/claude/keybindings.json" "$HOME/.claude/keybindings.json"
-    _install_file "scripts/claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
+    _install_file "claude/settings.json"    "$HOME/.claude/settings.json"
+    _install_file "claude/keybindings.json" "$HOME/.claude/keybindings.json"
+    _install_file "claude/CLAUDE.md"        "$HOME/.claude/CLAUDE.md"
 
     # Skills: copy external skill symlinks (find-skills, conventional-commit, create-agentsmd)
     # then create live symlinks for personal skills from ~/code/isaackehle/skills
@@ -207,18 +207,21 @@ deploy_configs() {
 
     [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
     mkdir -p "$HOME/.config/opencode"
-    _install_file "scripts/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+    _install_file "opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
 
     [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
     mkdir -p "$HOME/.ollama"
-    _install_file "scripts/ollama/config.json" "$HOME/.ollama/config.json"
+    _install_file "ollama/config.json" "$HOME/.ollama/config.json"
 
-    [ -L "$HOME/.crush" ] && rm "$HOME/.crush"
-    mkdir -p "$HOME/.crush"
-    _install_file "scripts/crush/crush.json" "$HOME/.crush/config.json"
+    mkdir -p "$HOME/.config/crush"
+    _install_file "crush/crush.json" "$HOME/.config/crush/crush.json"
 
     mkdir -p "$HOME/.config/grok"
-    _install_file "grok/grok.json" "$HOME/.config/grok/config.json"
+    _install_file "grok/grok.json" "$HOME/.config/grok/grok.json"
+
+    mkdir -p "$HOME/.config/litellm"
+    _install_file "litellm/.env"       "$HOME/.config/litellm/.env"
+    _install_file "litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
 
     print_status "AI tool configs deployed."
 }

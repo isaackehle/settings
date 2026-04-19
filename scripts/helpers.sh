@@ -53,10 +53,8 @@ detect_mac_model() {
         echo "macbook-m5-48gb"
     elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
         echo "macmini-m2"
-    elif [[ "$hw_model" == MacBookPro* ]]; then
-        echo "macbook-m1"
     else
-        echo "default"
+        echo "macbook-m1"   # 16GB fallback for all other machines
     fi
 }
 

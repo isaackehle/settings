@@ -9,7 +9,7 @@
 
 One row per property, one column per model. The alias chain shows how each model is built.
 
-| Property               | `qwen3-4b-2507:q4`                                    | `deepseek-r1-tools:8b`               | `qwen3-4b-q4`        | `qwen3:14b`           | `deepseek-r1:8b`     | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `nomic-embed-text` |
+| Property               | `qwen3-4b-2507:q4`                                    | `deepseek-r1-tools:8b`               | `qwen3-4b:q4`        | `qwen3:14b`           | `deepseek-r1:8b`     | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `nomic-embed-text` |
 | ---------------------- | ----------------------------------------------------- | ------------------------------------ | -------------------- | --------------------- | -------------------- | ---------------------- | -------------------- | ------------------ |
 | **Source**             | `hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M` | `mfdoom/deepseek-r1-tool-calling:8b` | ← `qwen3-4b-2507:q4` | (direct pull)         | (direct pull)        | (direct pull)          | (direct pull)        | (direct pull)      |
 | **Modelfile params**   | —                                                     | —                                    | —                    | —                     | —                    | —                      | —                    | —                  |
@@ -19,7 +19,7 @@ One row per property, one column per model. The alias chain shows how each model
 | **Cline: role**        | —                                                     | —                                    | —                    | primary               | —                    | —                      | —                    | —                  |
 | **Claude Code: tier**  | —                                                     | —                                    | haiku                | sonnet, opus          | —                    | —                      | —                    | —                  |
 | **OpenCode: agent**    | —                                                     | think                                | plan                 | code, write, research | —                    | —                      | —                    | —                  |
-| **LiteLLM model_name** | —                                                     | `deepseek-r1-tools:8b`               | `qwen3-4b-q4`        | `qwen3:14b`           | `deepseek-r1:8b`     | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `nomic-embed-text` |
+| **LiteLLM model_name** | —                                                     | `deepseek-r1-tools:8b`               | `qwen3-4b:q4`        | `qwen3:14b`           | `deepseek-r1:8b`     | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `nomic-embed-text` |
 | **Ollama alias type**  | HF base                                               | community                            | compat               | direct                | direct               | direct                 | direct               | direct             |
 
 > **Memory note:** 16 GB is tight. qwen3:14b (~10 GB) + deepseek-r1-tools:8b (~5 GB) = 15 GB — just fits with nothing else running. Avoid loading both simultaneously under sustained workloads. qwen3:14b alone is the safest daily driver. The Mac mini's fan-less thermal profile means sustained inference on the 14B model will throttle under load — prefer the 7B coder or 4B planning model for long sessions.
@@ -31,7 +31,7 @@ One row per property, one column per model. The alias chain shows how each model
 ```
 hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M
   └── qwen3-4b-2507:q4   (HF base)
-        └── qwen3-4b-q4  (compat alias used by configs)
+        └── qwen3-4b:q4  (compat alias used by configs)
 
 mfdoom/deepseek-r1-tool-calling:8b  →  deepseek-r1-tools:8b
 ```
@@ -47,7 +47,7 @@ Build order matters — `install_custom_models` in `install_models.sh` processes
 | Tier             | Model         | Notes                   |
 | ---------------- | ------------- | ----------------------- |
 | Sonnet (default) | `qwen3:14b`   | ~10 GB, general coding  |
-| Haiku (fast)     | `qwen3-4b-q4` | ~3 GB, planning/routing |
+| Haiku (fast)     | `qwen3-4b:q4` | ~3 GB, planning/routing |
 | Opus (large)     | `qwen3:14b`   | same as sonnet          |
 
 Routes through LiteLLM `:4000`.
@@ -61,7 +61,7 @@ Routes through LiteLLM `:4000`.
 | autocomplete (fast)    | `qwen2.5-coder:1.5b`   |
 | autocomplete (quality) | `qwen2.5-coder:7b`     |
 | embed                  | `nomic-embed-text`     |
-| chat (planning)        | `qwen3-4b-q4`          |
+| chat (planning)        | `qwen3-4b:q4`          |
 
 ### Cline
 
@@ -76,7 +76,7 @@ Set in sidebar → gear → API Provider: Ollama, Base URL: `http://localhost:11
 | `think`    | `deepseek-r1-tools:8b` | Reasoning, read-only               |
 | `write`    | `qwen2.5-coder:7b`     | Docs, resumes, prose               |
 | `research` | `qwen3:14b`            | Discovery, saves to Obsidian       |
-| `plan`     | `qwen3-4b-q4`          | Next steps, breakdowns             |
+| `plan`     | `qwen3-4b:q4`          | Next steps, breakdowns             |
 
 Default model: `qwen2.5-coder:7b` · Small model: `qwen2.5-coder:1.5b`
 
@@ -84,7 +84,7 @@ Default model: `qwen2.5-coder:7b` · Small model: `qwen2.5-coder:1.5b`
 
 Gemini model aliases (router_settings):
 - `gemini-2.5-pro / flash / flash-preview` → `qwen3:14b`
-- `gemini-2.5-flash-lite` → `qwen3-4b-q4`
+- `gemini-2.5-flash-lite` → `qwen3-4b:q4`
 - `gemini-3.1-pro-preview` → `qwen3:14b`
 
 ### Ollama convenience aliases
@@ -93,7 +93,7 @@ Gemini model aliases (router_settings):
 | ----------- | ---------------------- |
 | `primary`   | `qwen3:14b`            |
 | `coding`    | `qwen2.5-coder:7b`     |
-| `fast`      | `qwen3-4b-q4`          |
+| `fast`      | `qwen3-4b:q4`          |
 | `reasoning` | `deepseek-r1-tools:8b` |
 
 ---
@@ -101,7 +101,7 @@ Gemini model aliases (router_settings):
 ## Install
 
 ```shell
-bash config/install_models.sh   # select option 3 (16GB)
+bash scripts/install_models.sh   # select option 3 (16GB)
 ```
 
 Pulls direct models, then builds alias chain from CUSTOM_MODELS_16GB in `models.sh`.

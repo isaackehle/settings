@@ -26,7 +26,7 @@ setup_ollama() {
     print_info "Verifying Ollama installation..."
     ollama --version
 
-    print_status "Ollama setup complete. Run 'bash config/install_models.sh' to install models."
+    print_status "Ollama setup complete. Run 'bash scripts/install_models.sh' to install models."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

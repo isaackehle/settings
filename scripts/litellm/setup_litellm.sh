@@ -116,35 +116,41 @@ setup_litellm() {
 
     mkdir -p "$_local_dir"
 
-    local src_cfg="$SCRIPT_DIR/litellm/config.yaml"
+    local src_cfg mac_model script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f find_source > /dev/null 2>&1; then
+        src_cfg=$(find_source "litellm/litellm.yaml")
+    fi
+    if [ -z "$src_cfg" ]; then
+        if declare -f detect_mac_model &>/dev/null; then
+            mac_model="$(detect_mac_model)"
+        else
+            mac_model="macbook-m1"
+        fi
+        src_cfg="$script_dir/$mac_model/litellm/litellm.yaml"
+    fi
+
     if [ -f "$src_cfg" ]; then
         if [ -f "$_local_cfg" ]; then
             backup_litellm
         fi
         cp "$src_cfg" "$_local_cfg"
-        print_status "Deployed litellm config to $_local_cfg"
+        print_status "Deployed litellm config ($mac_model) to $_local_cfg"
     else
         print_warning "No source config found at $src_cfg — skipping config deploy"
     fi
 
-    # Write .env if it doesn't exist yet
+    # Deploy .env (always overwrite so repo changes take effect)
     local env_file="$_local_dir/.env"
-    if [ ! -f "$env_file" ]; then
-        print_info "Creating default .env at $env_file (edit to add API keys)..."
-        cat > "$env_file" <<'EOF'
-LITELLM_MASTER_KEY="sk-local"
-LITELLM_SALT_KEY="sk-local-salt"
-UI_USERNAME="admin"
-UI_PASSWORD="admin"
-LITELLM_DROP_PARAMS=True
-STORE_MODEL_IN_DB=True
-PORT=4000
-DATABASE_URL=postgresql://litellm:litellm@localhost:5432/litellm_db
-# OPENAI_API_KEY=""
-# ANTHROPIC_API_KEY=""
-# GROQ_API_KEY=""
-EOF
-        print_status "Created $env_file"
+    local env_src
+    env_src="$(find_source "litellm/.env" 2>/dev/null)"
+    [ -z "$env_src" ] && env_src="$SCRIPT_DIR/litellm/.env"
+    if [ -f "$env_src" ]; then
+        cp "$env_src" "$env_file"
+        print_status "Deployed .env to $env_file"
+    else
+        print_warning "No .env source found at $env_src — skipping .env deploy"
     fi
 
     # Configure litellm to run as a user-level service on port 4000 (optional)

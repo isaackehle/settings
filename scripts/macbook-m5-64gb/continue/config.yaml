@@ -7,6 +7,7 @@ models:
   - name: "Qwen3 Coder 30B A3B"
     provider: openai
     apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
     model: "qwen3-coder-30b-32k-q6"
     roles:
       - chat
@@ -18,7 +19,8 @@ models:
   - name: "Qwen3.5 27B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen3.5:27b"
+    apiKey: "sk-local"
+    model: "qwen3.5-27b"
     roles:
       - chat
 
@@ -26,7 +28,8 @@ models:
   - name: "Codestral 22B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "codestral:22b-v0.1-q8_0"
+    apiKey: "sk-local"
+    model: "codestral-22b-v0.1-q8_0"
     roles:
       - apply
 
@@ -34,7 +37,8 @@ models:
   - name: "DeepSeek R1 Tool-Calling 32B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "deepseek-r1-tools:32b"
+    apiKey: "sk-local"
+    model: "deepseek-r1-tools-32b"
     roles:
       - chat
 
@@ -42,7 +46,8 @@ models:
   - name: "DeepSeek R1 Tool-Calling 14B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "deepseek-r1-tools:14b"
+    apiKey: "sk-local"
+    model: "deepseek-r1-tools-14b"
     roles:
       - chat
 
@@ -50,26 +55,34 @@ models:
   - name: "Llama 3.3 70B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "llama3.3:70b"
+    apiKey: "sk-local"
+    model: "llama3.3-70b"
     roles:
       - chat
       - edit
 
   # Autocomplete — default (fast, low RAM)
+  # Short timeout: fail fast when Ollama is busy (model load / pull) to prevent VS Code freeze
   - name: "Qwen2.5 Coder 1.5B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:1.5b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-1.5b"
     roles:
       - autocomplete
+    requestOptions:
+      timeout: 8000
 
   # Autocomplete — quality
   - name: "Qwen2.5 Coder 7B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:7b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-7b"
     roles:
       - autocomplete
+    requestOptions:
+      timeout: 8000
 
   # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
   - name: "Nomic Embed Text"
@@ -91,6 +104,16 @@ models:
   - name: "Qwen3 4B"
     provider: openai
     apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
     model: "qwen3-4b-q8"
     roles:
       - chat
+
+tabAutocompleteOptions:
+  debounceDelay: 500         # ms to wait after keystroke before firing (reduces request rate)
+  maxPromptTokens: 1024      # keep context small → faster completions
+  disable: false
+
+# Set to true to stop Continue indexing files for @codebase search.
+# Indexing runs nomic-embed-text on every file change — disable if you don't use @codebase.
+disableIndexing: false

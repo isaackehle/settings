@@ -7,7 +7,8 @@ models:
   - name: "Qwen3 14B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen3:14b"
+    apiKey: "sk-local"
+    model: "qwen3-14b"
     roles:
       - chat
       - edit
@@ -18,7 +19,8 @@ models:
   - name: "DeepSeek R1 Tool-Calling 8B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "deepseek-r1-tools:8b"
+    apiKey: "sk-local"
+    model: "deepseek-r1-tools-8b"
     roles:
       - chat
 
@@ -26,6 +28,7 @@ models:
   - name: "Qwen3 4B"
     provider: openai
     apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
     model: "qwen3-4b-q4"
     roles:
       - chat
@@ -34,7 +37,10 @@ models:
   - name: "Qwen2.5 Coder 1.5B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:1.5b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-1.5b"
+    requestOptions:
+      timeout: 8000
     roles:
       - autocomplete
 
@@ -42,7 +48,10 @@ models:
   - name: "Qwen2.5 Coder 7B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:7b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-7b"
+    requestOptions:
+      timeout: 8000
     roles:
       - autocomplete
 
@@ -53,3 +62,8 @@ models:
     model: "nomic-embed-text:latest"
     roles:
       - embed
+
+tabAutocompleteOptions:
+  debounceDelay: 500
+  maxPromptTokens: 1024
+  disable: false

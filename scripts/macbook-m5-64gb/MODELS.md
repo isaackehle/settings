@@ -9,7 +9,7 @@
 
 One row per property, one column per model. The alias chain shows how each model is built.
 
-| Property               | `qwen3-coder-30b-a3b:q6`                                     | `qwen3-4b-2507:q8`                                     | `qwen3-coder-30b-32k-q6`   | `qwen3-coder-30b-220k-q6`  | `qwen3-4b-q8`        | `deepseek-r1-tools:14b`               | `deepseek-r1-tools:32b`               | `qwen3-14b-q8`           | `qwen3-32b-q5`             | `qwen3.5:27b`    | `deepseek-r1:14b`    | `codestral:22b-v0.1-q8_0` | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `llama3.3:70b` | `nomic-embed-text` |
+| Property               | `qwen3-coder-30b-a3b:q6`                                     | `qwen3-4b-2507:q8`                                     | `qwen3-coder-30b-32k:q6`   | `qwen3-coder-30b-220k:q6`  | `qwen3-4b:q8`        | `deepseek-r1-tools:14b`               | `deepseek-r1-tools:32b`               | `qwen3-14b:q8`           | `qwen3-32b:q5`             | `qwen3.5:27b`    | `deepseek-r1:14b`    | `codestral:22b-v0.1-q8_0` | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `llama3.3:70b` | `nomic-embed-text` |
 | ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------ | -------------------------- | -------------------------- | -------------------- | ------------------------------------- | ------------------------------------- | ------------------------ | -------------------------- | ---------------- | -------------------- | ------------------------- | ---------------------- | -------------------- | -------------- | ------------------ |
 | **Source**             | `hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL` | `hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL` | ← `qwen3-coder-30b-a3b:q6` | ← `qwen3-coder-30b-a3b:q6` | ← `qwen3-4b-2507:q8` | `mfdoom/deepseek-r1-tool-calling:14b` | `mfdoom/deepseek-r1-tool-calling:32b` | `dengcao/Qwen3-14B:Q8_0` | `dengcao/Qwen3-32B:Q5_K_M` | (direct pull)    | (direct pull)        | (direct pull)             | (direct pull)          | (direct pull)        | (direct pull)  | (direct pull)      |
 | **Modelfile params**   | —                                                            | —                                                      | `num_ctx 32768`            | `num_ctx 220000`           | —                    | —                                     | —                                     | —                        | —                          | —                | —                    | —                         | —                      | —                    | —              | —                  |
@@ -19,7 +19,7 @@ One row per property, one column per model. The alias chain shows how each model
 | **Cline: role**        | —                                                            | —                                                      | primary                    | —                          | —                    | —                                     | —                                     | —                        | —                          | —                | —                    | —                         | —                      | —                    | —              | —                  |
 | **Claude Code: tier**  | —                                                            | —                                                      | sonnet                     | opus                       | haiku                | —                                     | —                                     | —                        | —                          | —                | —                    | —                         | —                      | —                    | —              | —                  |
 | **OpenCode: agent**    | —                                                            | —                                                      | code                       | —                          | plan                 | think                                 | —                                     | —                        | research                   | write, code      | —                    | —                         | —                      | —                    | —              | —                  |
-| **LiteLLM model_name** | —                                                            | —                                                      | `qwen3-coder-30b-32k-q6`   | `qwen3-coder-30b-220k-q6`  | `qwen3-4b-q8`        | `deepseek-r1-tools:14b`               | `deepseek-r1-tools:32b`               | `qwen3-14b-q8`           | `qwen3-32b-q5`             | `qwen3.5:27b`    | `deepseek-r1:14b`    | `codestral:22b-v0.1-q8_0` | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `llama3.3:70b` | `nomic-embed-text` |
+| **LiteLLM model_name** | —                                                            | —                                                      | `qwen3-coder-30b-32k:q6`   | `qwen3-coder-30b-220k:q6`  | `qwen3-4b:q8`        | `deepseek-r1-tools:14b`               | `deepseek-r1-tools:32b`               | `qwen3-14b:q8`           | `qwen3-32b:q5`             | `qwen3.5:27b`    | `deepseek-r1:14b`    | `codestral:22b-v0.1-q8_0` | `qwen2.5-coder:7b`     | `qwen2.5-coder:1.5b` | `llama3.3:70b` | `nomic-embed-text` |
 | **Ollama alias type**  | HF base                                                      | HF base                                                | derived (ctx)              | derived (ctx)              | compat               | community                             | community                             | community                | community                  | direct           | direct               | direct                    | direct                 | direct               | direct         | direct             |
 
 > **Memory note:** code + think (~48 GB) is the outer limit — nothing else loads. code + write (~48 GB) same. 220k alias is solo-only (42 GB alone). 70b is solo-only (43 GB alone). Pair code (28 GB) + research (22 GB) = 50 GB — swap Ollama evicts the idle one automatically after 5 min.
@@ -31,17 +31,17 @@ One row per property, one column per model. The alias chain shows how each model
 ```
 hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL
   └── qwen3-coder-30b-a3b:q6   (HF base — use for ad-hoc or future derived aliases)
-        ├── qwen3-coder-30b-32k-q6   (num_ctx 32768 — daily driver)
-        └── qwen3-coder-30b-220k-q6  (num_ctx 220000 — solo, large context)
+        ├── qwen3-coder-30b-32k:q6   (num_ctx 32768 — daily driver)
+        └── qwen3-coder-30b-220k:q6  (num_ctx 220000 — solo, large context)
 
 hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL
   └── qwen3-4b-2507:q8   (HF base)
-        └── qwen3-4b-q8  (compat alias used by configs)
+        └── qwen3-4b:q8  (compat alias used by configs)
 
 mfdoom/deepseek-r1-tool-calling:14b  →  deepseek-r1-tools:14b
 mfdoom/deepseek-r1-tool-calling:32b  →  deepseek-r1-tools:32b
-dengcao/Qwen3-14B:Q8_0               →  qwen3-14b-q8
-dengcao/Qwen3-32B:Q5_K_M             →  qwen3-32b-q5
+dengcao/Qwen3-14B:Q8_0               →  qwen3-14b:q8
+dengcao/Qwen3-32B:Q5_K_M             →  qwen3-32b:q5
 ```
 
 Build order matters — `install_custom_models` in `install_models.sh` processes CUSTOM_MODELS_64GB top-to-bottom, so HF base aliases are created before derived aliases.
@@ -54,9 +54,9 @@ Build order matters — `install_custom_models` in `install_models.sh` processes
 
 | Tier             | Model                     | Notes                   |
 | ---------------- | ------------------------- | ----------------------- |
-| Sonnet (default) | `qwen3-coder-30b-32k-q6`  | 32k ctx, ~28 GB         |
-| Haiku (fast)     | `qwen3-4b-q8`             | ~5 GB, planning/routing |
-| Opus (large ctx) | `qwen3-coder-30b-220k-q6` | 220k ctx — solo only    |
+| Sonnet (default) | `qwen3-coder-30b-32k:q6`  | 32k ctx, ~28 GB         |
+| Haiku (fast)     | `qwen3-4b:q8`             | ~5 GB, planning/routing |
+| Opus (large ctx) | `qwen3-coder-30b-220k:q6` | 220k ctx — solo only    |
 
 Routes through LiteLLM `:4000`.
 
@@ -64,7 +64,7 @@ Routes through LiteLLM `:4000`.
 
 | Role                    | Model                              |
 | ----------------------- | ---------------------------------- |
-| chat / edit / summarize | `qwen3-coder-30b-32k-q6`           |
+| chat / edit / summarize | `qwen3-coder-30b-32k:q6`           |
 | chat (alt)              | `qwen3.5:27b`                      |
 | chat (reasoning)        | `deepseek-r1-tools:14b`            |
 | apply / insert          | `codestral:22b-v0.1-q8_0`          |
@@ -72,49 +72,49 @@ Routes through LiteLLM `:4000`.
 | autocomplete (quality)  | `qwen2.5-coder:7b`                 |
 | embed                   | `nomic-embed-text`                 |
 | rerank                  | `dengcao/Qwen3-Reranker-0.6B:Q8_0` |
-| chat (planning)         | `qwen3-4b-q8`                      |
+| chat (planning)         | `qwen3-4b:q8`                      |
 | large (solo)            | `llama3.3:70b`                     |
 
 ### Cline
 
-Primary model: `qwen3-coder-30b-32k-q6`
+Primary model: `qwen3-coder-30b-32k:q6`
 Set in sidebar → gear → API Provider: Ollama, Base URL: `http://localhost:11434`
 
 ### OpenCode `~/.config/opencode/opencode.jsonc`
 
 | Agent      | Model                    | Purpose                            |
 | ---------- | ------------------------ | ---------------------------------- |
-| `code`     | `qwen3-coder-30b-32k-q6` | Implementation, editing, debugging |
+| `code`     | `qwen3-coder-30b-32k:q6` | Implementation, editing, debugging |
 | `think`    | `deepseek-r1-tools:14b`  | Reasoning, read-only               |
 | `write`    | `qwen3.5:27b`            | Docs, resumes, prose               |
-| `research` | `qwen3-32b-q5`           | Discovery, saves to Obsidian       |
-| `plan`     | `qwen3-4b-q8`            | Next steps, breakdowns             |
+| `research` | `qwen3-32b:q5`           | Discovery, saves to Obsidian       |
+| `plan`     | `qwen3-4b:q8`            | Next steps, breakdowns             |
 
-Default model: `qwen3.5:27b` · Small model: `qwen3-4b-q8`
+Default model: `qwen3.5:27b` · Small model: `qwen3-4b:q8`
 
 ### LiteLLM `~/.config/litellm/config.yaml`
 
 Gemini model aliases (router_settings):
 - `gemini-2.5-pro / flash / flash-preview` → `qwen3.5:27b`
-- `gemini-2.5-flash-lite` → `qwen3-4b-q8`
-- `gemini-3.1-pro-preview` → `qwen3-coder-30b-32k-q6`
+- `gemini-2.5-flash-lite` → `qwen3-4b:q8`
+- `gemini-3.1-pro-preview` → `qwen3-coder-30b-32k:q6`
 
 ### Ollama convenience aliases `~/.ollama/config.json`
 
 | Tag         | Model                    |
 | ----------- | ------------------------ |
-| `coding`    | `qwen3-coder-30b-32k-q6` |
+| `coding`    | `qwen3-coder-30b-32k:q6` |
 | `primary`   | `qwen3.5:27b`            |
-| `fast`      | `qwen3-4b-q8`            |
+| `fast`      | `qwen3-4b:q8`            |
 | `reasoning` | `deepseek-r1-tools:14b`  |
-| `research`  | `qwen3-32b-q5`           |
+| `research`  | `qwen3-32b:q5`           |
 
 ---
 
 ## Install
 
 ```shell
-bash config/install_models.sh   # select option 2 (M5 64GB)
+bash scripts/install_models.sh   # select option 2 (M5 64GB)
 ```
 
 Pulls direct models, then builds alias chain from CUSTOM_MODELS_64GB in `models.sh`.

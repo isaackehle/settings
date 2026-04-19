@@ -10,14 +10,14 @@
       "models": {
         // --- Custom aliases (ollama create — see CUSTOM_MODELS_48GB in models.sh) ---
         // Qwen3-Coder-30B A3B: UD-Q5_K_XL base (~21 GB). 32k ctx loads ~25 GB; 220k loads ~38 GB
-        "qwen3-coder-30b-32k-q6": {
+        "qwen3-coder-30b-32k:q6": {
           "name": "Qwen3-Coder 30B A3B 32k (code, default)"
         },
-        "qwen3-coder-30b-220k-q6": {
+        "qwen3-coder-30b-220k:q6": {
           "name": "Qwen3-Coder 30B A3B 220k (code, large ctx)"
         },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
-        "qwen3-4b-q8": {
+        "qwen3-4b:q8": {
           "name": "Qwen3 4B Q8 (plan, fast)"
         },
         // --- Code ---
@@ -38,10 +38,10 @@
           "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
         },
         // --- Research ---
-        "qwen3-32b-q5": {
+        "qwen3-32b:q5": {
           "name": "Qwen3 32B Q5 (research, 22 GB)"
         },
-        "qwen3-14b-q8": {
+        "qwen3-14b:q8": {
           "name": "Qwen3 14B Q8 (research, 15 GB)"
         },
         // --- Writing / general ---
@@ -58,7 +58,7 @@
   "default_agent": "code",
   // qwen3.5:27b: #1 on OpenCode IndexNow benchmark (5.0% errors)
   "model": "ollama/qwen3.5:27b",
-  "small_model": "ollama/qwen3-4b-q8",
+  "small_model": "ollama/qwen3-4b:q8",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -120,7 +120,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-32b-q5",
+      "model": "ollama/qwen3-32b:q5",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
@@ -136,7 +136,7 @@
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b-q8",
+      "model": "ollama/qwen3-4b:q8",
       "temperature": 0.25,
       "permission": {
         "read": "allow",

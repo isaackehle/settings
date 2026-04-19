@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/opt/homebrew/bin/bash
 set -e
 
 # Setup script for Isaac's dotfiles and Claude Code config
