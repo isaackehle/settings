@@ -3,7 +3,7 @@
     "ollama": {
       "name": "Ollama (Local)",
       "options": {
-        "baseURL": "http://localhost:11434/v1"
+        "baseURL": "http://localhost:4000/v1"
       },
       "models": {
         "deepseek-r1-tools:32b": {

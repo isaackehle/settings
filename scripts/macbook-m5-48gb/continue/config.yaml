@@ -7,6 +7,7 @@ models:
   - name: "Qwen3 Coder 30B A3B"
     provider: openai
     apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
     model: "qwen3-coder-30b-32k-q5"
     roles:
       - chat
@@ -18,7 +19,8 @@ models:
   - name: "Qwen3.5 27B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen3.5:27b"
+    apiKey: "sk-local"
+    model: "qwen3.5-27b"
     roles:
       - chat
 
@@ -26,15 +28,17 @@ models:
   - name: "Codestral 22B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "codestral:22b-v0.1-q8_0"
+    apiKey: "sk-local"
+    model: "codestral-22b"
     roles:
       - apply
 
   # Reasoning with tool calls
-  - name: "DeepSeek R1 Tool-Calling 14B"
+  - name: "DeepSeek R1 Tool-Calling 8B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "deepseek-r1-tools:14b"
+    apiKey: "sk-local"
+    model: "deepseek-r1-tools-8b"
     roles:
       - chat
 
@@ -42,7 +46,10 @@ models:
   - name: "Qwen2.5 Coder 1.5B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:1.5b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-1.5b"
+    requestOptions:
+      timeout: 8000
     roles:
       - autocomplete
 
@@ -50,7 +57,10 @@ models:
   - name: "Qwen2.5 Coder 7B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen2.5-coder:7b"
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-7b"
+    requestOptions:
+      timeout: 8000
     roles:
       - autocomplete
 
@@ -74,6 +84,16 @@ models:
   - name: "Qwen3 4B"
     provider: openai
     apiBase: http://localhost:4000/v1
-    model: "qwen3-4b-q8"
+    apiKey: "sk-local"
+    model: "qwen3-4b-q4"
     roles:
       - chat
+
+tabAutocompleteOptions:
+  debounceDelay: 500         # ms to wait after keystroke before firing (reduces request rate)
+  maxPromptTokens: 1024      # keep context small → faster completions
+  disable: false
+
+# Set to true to stop Continue indexing files for @codebase search.
+# Indexing runs nomic-embed-text on every file change — disable if you don't use @codebase.
+disableIndexing: false

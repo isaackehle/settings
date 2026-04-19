@@ -21,13 +21,37 @@ setup_grok() {
     print_info "Setting up Grok CLI..."
     verify_grok || _install_grok || print_warning "Grok CLI not installed — skipping"
 
-    local env_file="$HOME/.config/grok/_grok"
     mkdir -p "$HOME/.config/grok"
 
+    # Deploy machine-specific grok.json
+    local src_cfg mac_model script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f find_source > /dev/null 2>&1; then
+        src_cfg=$(find_source "grok/grok.json")
+    fi
+    if [ -z "$src_cfg" ]; then
+        if declare -f detect_mac_model &>/dev/null; then
+            mac_model="$(detect_mac_model)"
+        else
+            mac_model="macbook-m1"
+        fi
+        src_cfg="$script_dir/$mac_model/grok/grok.json"
+    fi
+
+    if [ -f "$src_cfg" ]; then
+        cp "$src_cfg" "$HOME/.config/grok/grok.json"
+        print_status "Deployed Grok config ($mac_model) to ~/.config/grok/grok.json"
+    else
+        print_warning "No grok/grok.json found for $mac_model"
+    fi
+
+    local env_file="$HOME/.config/grok/_grok"
     cat > "$env_file" << 'EOF'
-# Grok CLI — use Ollama as the local provider
-export GROKCLI_PROVIDER=ollama
-export OLLAMA_BASE_URL=http://localhost:11434
+# Grok CLI — route through LiteLLM proxy
+export GROKCLI_PROVIDER=openai
+export GROKCLI_BASE_URL=http://localhost:4000/v1
+export GROKCLI_API_KEY=sk-local
 EOF
 
     if [ -n "$ZSH_VERSION" ]; then
@@ -43,8 +67,7 @@ EOF
     print_info ""
     print_info "=== Grok CLI usage ==="
     print_info "Start:   grok"
-    print_info "Provider: Ollama (http://localhost:11434)"
-    print_info "Model:   set via OLLAMA_BASE_URL or pick in-session"
+    print_info "Provider: LiteLLM (http://localhost:4000/v1)"
     print_info "Repo:    https://github.com/superagent-ai/grok-cli"
     print_info ""
 }

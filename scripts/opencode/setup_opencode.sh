@@ -29,11 +29,26 @@ setup_opencode() {
 
     mkdir -p "$HOME/.config/opencode"
 
-    if [ -f "$SCRIPT_DIR/opencode/opencode.jsonc" ]; then
-        cp "$SCRIPT_DIR/opencode/opencode.jsonc" "$HOME/.config/opencode/config.jsonc"
-        print_status "Copied OpenCode config"
+    local src_cfg mac_model script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f find_source > /dev/null 2>&1; then
+        src_cfg=$(find_source "opencode/opencode.jsonc")
+    fi
+    if [ -z "$src_cfg" ]; then
+        if declare -f detect_mac_model &>/dev/null; then
+            mac_model="$(detect_mac_model)"
+        else
+            mac_model="macbook-m1"
+        fi
+        src_cfg="$script_dir/$mac_model/opencode/opencode.jsonc"
+    fi
+
+    if [ -f "$src_cfg" ]; then
+        cp "$src_cfg" "$HOME/.config/opencode/config.jsonc"
+        print_status "Copied OpenCode config ($mac_model)"
     else
-        print_warning "No opencode/opencode.jsonc found in $SCRIPT_DIR"
+        print_warning "No opencode/opencode.jsonc found for $mac_model"
     fi
 }
 

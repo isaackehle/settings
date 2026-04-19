@@ -13,9 +13,9 @@ description: >
 # Model Updater
 
 A skill for finding new model releases and suggesting upgrades to the local model stack defined
-in `config/models.sh`. When a custom GGUF alias changes, this skill keeps three things in sync:
+in `scripts/models.sh`. When a custom GGUF alias changes, this skill keeps three things in sync:
 
-1. `config/models.sh` — the `CUSTOM_MODELS_*` source array entries
+1. `scripts/models.sh` — the `CUSTOM_MODELS_*` source array entries
 2. `modelfiles/<filename>.txt` — the persistent Modelfile for that alias
 3. Per-machine `MODELS.md` files — the Model Matrix documentation tables
 
@@ -29,7 +29,7 @@ benchmark, or a smaller model that fits better in available RAM with similar qua
 
 ### Step 1 — Read the current model config and modelfiles
 
-Read `config/models.sh` from the settings repo. Extract:
+Read `scripts/models.sh` from the settings repo. Extract:
 
 - Which hardware profiles exist (m5-48gb, m5-64gb, m1, macmini-m2, etc.)
 - Which models are assigned to each profile and role (chat, autocomplete, apply, embed, reasoning)
@@ -204,7 +204,7 @@ Delete the old file after creating the new one (`git mv` to preserve history if 
 If only the Ollama alias changes (not the HF source), the modelfile content stays the same but
 the filename may need updating to match the new alias convention.
 
-### 2. Update `config/models.sh`
+### 2. Update `scripts/models.sh`
 
 Find the relevant `CUSTOM_MODELS_*` array entry and update the source field:
 

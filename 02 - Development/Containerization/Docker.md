@@ -86,7 +86,7 @@ createuser -s postgres
 Example: spin up a local Postgres instance with a schema:
 
 ```shell
-#!/usr/bin/env bash
+#!/opt/homebrew/bin/bash
 set -euo pipefail
 
 mkdir -p $HOME/docker/volumes/postgres

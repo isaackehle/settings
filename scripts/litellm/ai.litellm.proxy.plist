@@ -19,7 +19,7 @@
         <key>LITELLM_DROP_PARAMS</key>
         <string>True</string>
         <key>STORE_MODEL_IN_DB</key>
-        <string>True</string>
+        <string>False</string>
         <key>PORT</key>
         <string>4000</string>
         <key>DATABASE_URL</key>

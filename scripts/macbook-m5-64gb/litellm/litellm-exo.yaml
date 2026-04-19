@@ -1,37 +1,34 @@
+## LiteLLM config — Ollama + exo distributed inference
+##
+## Use this when exo is running across multiple Macs.
+## Deploy: cp scripts/macbook-m5-64gb/litellm/litellm-exo.yaml ~/.config/litellm/config.yaml
+##
+## Startup order:
+##   1. uv run exo          (on each Mac — peers auto-discover)
+##   2. ollama serve        (local models)
+##   3. litellm --config ~/.config/litellm/config.yaml --port 4000
+
 model_list:
-  # --- Coding ---
+  # --- Coding (local Ollama) ---
   - model_name: qwen3-coder-30b-32k-q6
     litellm_params:
       model: ollama_chat/qwen3-coder-30b-32k:q6
       api_base: http://localhost:11434
 
+  # --- Coding large ctx (exo — distributed) ---
   - model_name: qwen3-coder-30b-220k-q6
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b-220k:q6
-      api_base: http://localhost:11434
+      model: openai/qwen3-coder-30b-220k:q6
+      api_base: http://localhost:52415/v1
+      api_key: sk-local
 
-  - model_name: codestral-22b-v0.1-q8_0
-    litellm_params:
-      model: ollama_chat/codestral:22b-v0.1-q8_0
-      api_base: http://localhost:11434
-
-  - model_name: qwen2.5-coder-7b
-    litellm_params:
-      model: ollama_chat/qwen2.5-coder:7b
-      api_base: http://localhost:11434
-
-  - model_name: qwen2.5-coder-1.5b
-    litellm_params:
-      model: ollama_chat/qwen2.5-coder:1.5b
-      api_base: http://localhost:11434
-
-  # --- Writing / general ---
+  # --- Writing / general (local Ollama) ---
   - model_name: qwen3.5-27b
     litellm_params:
       model: ollama_chat/qwen3.5:27b
       api_base: http://localhost:11434
 
-  # --- Research ---
+  # --- Research (local Ollama) ---
   - model_name: qwen3-14b-q8
     litellm_params:
       model: ollama_chat/qwen3-14b:q8
@@ -42,7 +39,7 @@ model_list:
       model: ollama_chat/qwen3-32b:q5
       api_base: http://localhost:11434
 
-  # --- Reasoning / tool calls ---
+  # --- Reasoning / tool calls (local Ollama) ---
   - model_name: deepseek-r1-tools-14b
     litellm_params:
       model: ollama_chat/deepseek-r1-tools:14b
@@ -58,19 +55,37 @@ model_list:
       model: ollama_chat/deepseek-r1:14b
       api_base: http://localhost:11434
 
-  # --- Planning / fast ---
+  # --- Code apply/insert (local Ollama) ---
+  - model_name: codestral-22b-v0.1-q8_0
+    litellm_params:
+      model: ollama_chat/codestral:22b-v0.1-q8_0
+      api_base: http://localhost:11434
+
+  # --- Coding fast (local Ollama) ---
+  - model_name: qwen2.5-coder-7b
+    litellm_params:
+      model: ollama_chat/qwen2.5-coder:7b
+      api_base: http://localhost:11434
+
+  - model_name: qwen2.5-coder-1.5b
+    litellm_params:
+      model: ollama_chat/qwen2.5-coder:1.5b
+      api_base: http://localhost:11434
+
+  # --- Planning / fast (local Ollama) ---
   - model_name: qwen3-4b-q8
     litellm_params:
       model: ollama_chat/qwen3-4b:q8
       api_base: http://localhost:11434
 
-  # --- General / large (solo use) ---
+  # --- General large (exo — distributed, solo-only on single machine) ---
   - model_name: llama3.3-70b
     litellm_params:
-      model: ollama_chat/llama3.3:70b
-      api_base: http://localhost:11434
+      model: openai/llama3.3:70b
+      api_base: http://localhost:52415/v1
+      api_key: sk-local
 
-  # --- Embeddings ---
+  # --- Embeddings (local Ollama) ---
   - model_name: nomic-embed-text
     litellm_params:
       model: ollama/nomic-embed-text

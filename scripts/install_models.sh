@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/opt/homebrew/bin/bash
 
 . "$(dirname "${BASH_SOURCE[0]}")/models.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../scripts/exo/setup_exo.sh"
+. "$(dirname "${BASH_SOURCE[0]}")/exo/setup_exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose
@@ -34,15 +34,19 @@ _profile_label() {
 # ==============================================
 
 # Pull direct Ollama models for a profile.
+# $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
 install_models() {
     local profile_name="$1"
-    local -n models="$2"
+    local arr_name="$2"
+    local -a _models
+    eval "_models=(\"\${${arr_name}[@]}\")"
 
     echo "Installing Ollama models for $profile_name configuration..."
     echo "===================================================="
     echo ""
 
-    for model in "${models[@]}"; do
+    local model
+    for model in "${_models[@]}"; do
         echo "▶ Installing: $model"
         ollama pull "$model"
         echo ""
@@ -62,9 +66,12 @@ install_models() {
 # Modelfiles are written to a temp file and deleted after each alias is created.
 # Entries that derive from a local alias (created earlier in the same array) are
 # recognised automatically — no network pull is attempted for them.
+# $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
 install_custom_models() {
     local profile_name="$1"
-    local -n custom_models="$2"
+    local arr_name="$2"
+    local -a _custom
+    eval "_custom=(\"\${${arr_name}[@]}\")"
     local -a pulled_sources=()
     local -a created_aliases=()
 
@@ -72,11 +79,13 @@ install_custom_models() {
     echo "===================================================="
     echo ""
 
-    for entry in "${custom_models[@]}"; do
+    local entry source alias_name num_ctx
+    for entry in "${_custom[@]}"; do
         IFS='|' read -r source alias_name num_ctx <<< "$entry"
 
         # Determine if source is a local alias we already created this run
         local is_local=0
+        local a
         for a in "${created_aliases[@]}"; do
             [[ "$a" == "$source" ]] && is_local=1 && break
         done
@@ -84,6 +93,7 @@ install_custom_models() {
         # Pull remote source once (skip if local alias or already pulled)
         if (( !is_local )); then
             local already_pulled=0
+            local s
             for s in "${pulled_sources[@]}"; do
                 [[ "$s" == "$source" ]] && already_pulled=1 && break
             done
@@ -121,19 +131,27 @@ install_custom_models() {
 # so it knows exactly what "should" be present.
 #
 # Usage: prune_models "M5 Max 64GB" MODELS_M5_64GB CUSTOM_MODELS_64GB
+# $1 = profile label  $2 = direct array name  $3 = custom array name (bash 3.2 compat)
 prune_models() {
     local profile_name="$1"
-    local -n _direct="$2"
-    local -n _custom="$3"
+    local direct_name="$2"
+    local custom_name="$3"
+    local -a _direct _custom
+    eval "_direct=(\"\${${direct_name}[@]}\")"
+    eval "_custom=(\"\${${custom_name}[@]}\")"
 
     # Build the full set of expected model names for this profile
     local -a expected=()
+    local m entry _src alias_name _ctx
     for m in "${_direct[@]}"; do
         expected+=("$m")
         expected+=("${m}:latest")  # Ollama appends :latest to untagged names
     done
     for entry in "${_custom[@]}"; do
         IFS='|' read -r _src alias_name _ctx <<< "$entry"
+        # Keep both the source (HF pull / community model) and the created alias
+        expected+=("$_src")
+        expected+=("${_src}:latest")
         expected+=("$alias_name")
         expected+=("${alias_name}:latest")
     done

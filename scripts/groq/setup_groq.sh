@@ -19,13 +19,28 @@ setup_groq() {
     print_info "Setting up Groq..."
     mkdir -p "$_groq_cfg_dir"
 
-    local src_cfg="$(dirname "${BASH_SOURCE[0]}")/local-settings.json"
+    local src_cfg mac_model script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f find_source > /dev/null 2>&1; then
+        src_cfg=$(find_source "groq/local-settings.json")
+    fi
+
+    if [ -z "$src_cfg" ]; then
+        if declare -f detect_mac_model &>/dev/null; then
+            mac_model="$(detect_mac_model)"
+        else
+            mac_model="macbook-m1"
+        fi
+        src_cfg="$script_dir/$mac_model/groq/local-settings.json"
+    fi
+
     if [ -f "$src_cfg" ]; then
         [ -f "$_groq_cfg" ] && backup_groq
         cp "$src_cfg" "$_groq_cfg"
         print_status "Deployed Groq config to $_groq_cfg"
     else
-        print_warning "No source config found at $src_cfg"
+        print_warning "No Groq config found at $src_cfg"
     fi
 
     print_info ""

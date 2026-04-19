@@ -3,13 +3,13 @@
         "ollama": {
             "name": "Ollama (Local)",
             "options": {
-                "baseURL": "http://localhost:11434/v1"
+                "baseURL": "http://localhost:4000/v1"
             },
             "models": {
-                "qwen3-32b-q5": {
+                "qwen3-32b:q5": {
                     "name": "Qwen3 32B Q5 (research, 22 GB)"
                 },
-                "qwen3-14b-q8": {
+                "qwen3-14b:q8": {
                     "name": "Qwen3 14B Q8 (research, 15 GB)"
                 },
                 "qwen3.5:27b": {

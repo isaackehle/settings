@@ -19,6 +19,30 @@ setup_gemini() {
     print_info "Setting up Gemini CLI..."
     verify_gemini || _install_gemini || print_warning "Gemini CLI not installed — skipping"
 
+    # Deploy machine-specific settings.json
+    local src_cfg mac_model script_dir gemini_cfg_dir="$HOME/.gemini"
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if declare -f find_source > /dev/null 2>&1; then
+        src_cfg=$(find_source "gemini/settings.json")
+    fi
+    if [ -z "$src_cfg" ]; then
+        if declare -f detect_mac_model &>/dev/null; then
+            mac_model="$(detect_mac_model)"
+        else
+            mac_model="macbook-m1"
+        fi
+        src_cfg="$script_dir/$mac_model/gemini/settings.json"
+    fi
+
+    if [ -f "$src_cfg" ]; then
+        mkdir -p "$gemini_cfg_dir"
+        cp "$src_cfg" "$gemini_cfg_dir/settings.json"
+        print_status "Deployed Gemini settings ($mac_model) to $gemini_cfg_dir/settings.json"
+    else
+        print_warning "No gemini/settings.json found for $mac_model"
+    fi
+
     # Write env file for local-model mode via LiteLLM proxy
     local env_file
     if [ -n "$ZSH_VERSION" ]; then
