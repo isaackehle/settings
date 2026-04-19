@@ -60,6 +60,17 @@ sudo ln -s ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
    - `DYLD_LIBRARY_PATH` → `/opt/oracle/instantclient`
    - `TNS_ADMIN` → `/opt/oracle/instantclient/network/admin`
 
+## AI Stack
+
+Run the interactive setup script — it auto-detects hardware and handles everything:
+
+```shell
+cd ~/code/isaackehle/settings
+bash config/setup_ai.sh
+```
+
+See [[AI Setup Architecture]] for the recommended menu order and the one manual step (LiteLLM's Postgres container).
+
 ## DNS Check
 
 ```shell
