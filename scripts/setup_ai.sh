@@ -220,8 +220,19 @@ deploy_configs() {
     _install_file "grok/grok.json" "$HOME/.config/grok/grok.json"
 
     mkdir -p "$HOME/.config/litellm"
-    _install_file "litellm/.env"       "$HOME/.config/litellm/.env"
+    _install_file "litellm/.env"         "$HOME/.config/litellm/.env"
     _install_file "litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
+
+    # --- Shell profile.d ---
+    echo ""
+    echo "Copying profile.d files..."
+    local profiled_src="$SCRIPT_DIR/../scripts/$MAC_MODEL/profile.d"
+    [ ! -d "$profiled_src" ] && profiled_src="$SCRIPT_DIR/../config/profile.d"
+    if [ -d "$profiled_src" ]; then
+        mkdir -p "$HOME/.profile.d"
+        cp -R "$profiled_src/." "$HOME/.profile.d/"
+        echo "  copied profile.d/ -> $HOME/.profile.d/"
+    fi
 
     print_status "AI tool configs deployed."
 }
@@ -297,6 +308,7 @@ _run_one() {
         setup:continue)   setup_continue ;;
         setup:crush)      setup_crush ;;
         setup:exo)        setup_exo ;;
+        teardown:exo)     teardown_exo ;;
         setup:gemini)     setup_gemini ;;
         setup:grok)       setup_grok ;;
         setup:groq)       setup_groq ;;
@@ -479,6 +491,9 @@ main() {
             ;;
         exo)
             setup_exo
+            ;;
+        teardown-exo)
+            teardown_exo
             ;;
         codex)
             setup_codex
