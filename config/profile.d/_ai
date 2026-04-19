@@ -1,3 +1,17 @@
-# job_search workspace
+# AI workspace paths
 export JOB_SEARCH_WORKSPACE="$OBSIDIAN_VAULT/job_search"
 export PRIVATE_CONFIG_ROOT="$OBSIDIAN_VAULT/private"
+
+# Monthly model review reminder
+_ai_stamp="${XDG_CONFIG_HOME:-$HOME/.config}/ai/models-last-checked"
+if [ -f "$_ai_stamp" ]; then
+    _ai_last=$(cat "$_ai_stamp" 2>/dev/null)
+    _ai_now=$(date +%s)
+    _ai_days=$(( (_ai_now - _ai_last) / 86400 ))
+    if (( _ai_days > 30 )); then
+        echo "⚠ AI models last reviewed ${_ai_days} days ago — run: model-review" >&2
+    fi
+else
+    echo "⚠ AI model benchmarks never reviewed — run: model-review" >&2
+fi
+unset _ai_stamp _ai_last _ai_now _ai_days
