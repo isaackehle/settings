@@ -1,6 +1,6 @@
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
-# Expects: BACKUP_DIR, DATE, NEW_CFG_DIR (set by setup_ai.sh)
+# Expects: BACKUP_DIR, DATE, SCRIPT_DIR (set by setup_ai.sh)
 
 _uninstall_claude_code_legacy() {
     if npm list -g @anthropic-ai/claude-code &>/dev/null 2>&1; then
@@ -30,11 +30,11 @@ setup_claude() {
     print_info "Setting up Claude Code..."
     verify_claude_code || _install_claude_code_cli || print_warning "Claude Code CLI not installed — skipping"
 
-    # Resolve model-specific settings.json if _find_source is available (sourced via setup_ai.sh),
+    # Resolve model-specific settings.json if find_source is available (sourced via setup_ai.sh),
     # otherwise fall back to the file beside this script.
     local src_cfg
-    if declare -f _find_source &>/dev/null; then
-        src_cfg="$(_find_source "claude/settings.json")"
+    if declare -f find_source &>/dev/null; then
+        src_cfg="$(find_source "claude/settings.json")"
     else
         src_cfg="$(dirname "${BASH_SOURCE[0]}")/settings.json"
     fi
