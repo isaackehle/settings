@@ -18,6 +18,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/gemini/setup_gemini.sh"
 . "$SCRIPT_DIR/litellm/setup_litellm.sh"
 . "$SCRIPT_DIR/anythingllm/setup_anythingllm.sh"
+. "$SCRIPT_DIR/vscode/setup_vscode.sh"
+. "$SCRIPT_DIR/windsurf/setup_windsurf.sh"
 . "$SCRIPT_DIR/install_models.sh"
 
 # Configuration directory
@@ -193,13 +195,32 @@ deploy_configs() {
     [ -z "$cont_src" ] && cont_src="$SCRIPT_DIR/continue/config.yaml"
     _copy_file "$cont_src" "$HOME/.continue/config.yaml"
 
-    [ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
-    mkdir -p "$HOME/.codeium"
-    _install_file "codeium/config.json" "$HOME/.codeium/config.json"
+    # --- IDE selection ---
+    echo ""
+    echo "IDE Selection"
+    echo "-------------"
+    echo "  1) VS Code   (recommended — broader extension ecosystem)"
+    echo "  2) Windsurf  (VS Code fork with built-in Codeium AI)"
+    echo "  3) Both      (deploy configs for both, install neither)"
+    echo ""
+    read -p "Which IDE? [1/2/3] (Enter = 1): " IDE_CHOICE
+    IDE_CHOICE="${IDE_CHOICE:-1}"
 
-    [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
-    mkdir -p "$HOME/.windsurf"
-    _install_file "windsurf/argv.json" "$HOME/.windsurf/argv.json"
+    if [[ "$IDE_CHOICE" == "2" || "$IDE_CHOICE" == "3" ]]; then
+        [ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
+        mkdir -p "$HOME/.codeium"
+        _install_file "windsurf/codeium-config.json" "$HOME/.codeium/config.json"
+
+        [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
+        mkdir -p "$HOME/.windsurf"
+        _install_file "windsurf/argv.json" "$HOME/.windsurf/argv.json"
+        print_status "Windsurf config deployed."
+    fi
+
+    if [[ "$IDE_CHOICE" == "1" || "$IDE_CHOICE" == "3" ]]; then
+        print_info "VS Code config: extensions are installed via 'setup vscode' in the menu."
+        print_info "Continue config is shared with both IDEs at ~/.continue/config.yaml."
+    fi
 
     [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
     mkdir -p "$HOME/.config/opencode"
@@ -299,6 +320,8 @@ _run_one() {
         setup:anythingllm) setup_anythingllm ;;
         setup:litellm)    setup_litellm ;;
         setup:opencode)   setup_opencode ;;
+        setup:vscode)     setup_vscode ;;
+        setup:windsurf)   setup_windsurf ;;
         restore:claude)   restore_claude ;;
         restore:continue) restore_continue ;;
         restore:crush)    restore_crush ;;
@@ -333,6 +356,8 @@ interactive_menu() {
     local tools=(
         ollama
         models
+        vscode
+        windsurf
         claude
         codex
         crush
@@ -347,8 +372,10 @@ interactive_menu() {
         olol
         )
     local descs=(
-        "ollama      - start server + pull base model"
-        "models      - install Ollama models"
+        "ollama      - install server + start via brew services"
+        "models      - install / prune Ollama models (auto-detects hardware)"
+        "vscode      - install VS Code + Continue + Cline extensions"
+        "windsurf    - install Windsurf IDE + deploy argv.json"
         "claude      - install CLI + deploy config"
         "codex       - install Codex CLI"
         "crush       - install + deploy config"
@@ -446,6 +473,12 @@ main() {
             setup_claude
             print_status "All tool configurations applied"
             ;;
+        vscode)
+            setup_vscode
+            ;;
+        windsurf)
+            setup_windsurf
+            ;;
         ollama)
             setup_ollama
             ;;
@@ -492,17 +525,20 @@ main() {
             interactive_menu
             ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo "  backup      - Backup all existing configurations"
             echo "  restore     - Restore all configurations from backup"
+            echo "  vscode      - Install VS Code + Continue + Cline extensions"
+            echo "  windsurf    - Install Windsurf IDE + deploy configs"
             echo "  continue    - Setup Continue.dev (backup + copy config)"
             echo "  opencode    - Setup OpenCode (backup + copy config)"
             echo "  crush       - Setup Crush (backup + copy config)"
             echo "  claude      - Setup Claude Code (install CLI + copy config)"
             echo "  setup       - Setup all tool configs at once"
-            echo "  ollama      - Setup Ollama server"
+            echo "  ollama      - Install + start Ollama server"
+            echo "  models      - Install / prune Ollama models (auto-detects hardware)"
             echo "  grok        - Setup Grok CLI (offline AI via Ollama)"
             echo "  olol        - Setup olol: Ollama load balancer across multiple machines"
             echo "  exo         - Setup exo: split inference across Apple Silicon devices"
@@ -513,7 +549,6 @@ main() {
             echo "  check       - Check system requirements"
             echo "  verify      - Verify all tool installations"
             echo "  install     - Install all tools (check + install-if-missing + verify)"
-            echo "  models      - Install Ollama models"
             exit 1
             ;;
     esac

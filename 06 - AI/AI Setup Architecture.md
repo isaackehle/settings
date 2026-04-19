@@ -184,40 +184,41 @@ Quick reference:
 
 ## Setup Checklist (new machine)
 
-Run in order:
+Everything except LiteLLM's Postgres container is handled by the interactive setup script:
 
 ```shell
-# 1. Base inference
-brew install ollama
-ollama serve &
-
-# 2. Pull models for your hardware
-bash config/install_models.sh <profile>
-
-# 3. LiteLLM proxy
-uv tool install 'litellm[proxy]'
-cp config/litellm/config.yaml ~/.config/litellm/config.yaml
-# start postgres (see [[LiteLLM]])
-litellm --config ~/.config/litellm/config.yaml --port 4000 &
-
-# 4. AnythingLLM (RAG UI)
-brew install --cask anythingllm
-# in app: LLM provider → LiteLLM → http://localhost:4000
-
-# 5. VS Code extensions
-# Install: Continue.continue, saoudrizwan.claude-dev (Cline)
-# Configure both to point at http://localhost:4000/v1
-# (see [[VS Code AI Extensions]] for exact settings)
-
-# 6. Terminal agents
-bash config/opencode/setup_opencode.sh
-bash config/crush/setup_crush.sh
-
-# 7. Claude Code (via LiteLLM)
-npm install -g @anthropic-ai/claude-code
-export ANTHROPIC_BASE_URL=http://localhost:4000
-export ANTHROPIC_API_KEY=sk-local
+cd ~/code/isaackehle/settings
+bash config/setup_ai.sh
 ```
+
+The menu covers: **ollama · models · vscode · windsurf · claude · opencode · continue · litellm · crush · exo · anythingllm**. Hardware is auto-detected — selecting `models` will pre-select the right profile (48 GB, 64 GB, or 16 GB) and offer install + prune in one step.
+
+**One manual prerequisite — LiteLLM's Postgres container:**
+
+LiteLLM needs a running Postgres instance for spend tracking and the web UI. Start it once before running `setup litellm`:
+
+```shell
+docker run -d \
+  --name litellm-postgres \
+  --restart unless-stopped \
+  -e POSTGRES_DB=litellm_db \
+  -e POSTGRES_USER=litellm \
+  -e POSTGRES_PASSWORD=litellm \
+  -p 5432:5432 \
+  postgres:16
+```
+
+Then in the setup menu select `litellm` — it installs the proxy, deploys the config, and generates the Prisma client. See [[LiteLLM]] for full Postgres management commands.
+
+**Recommended run order in the menu:**
+
+1. `ollama` — install + start server
+2. `models` — pull and alias the model stack for your hardware
+3. `litellm` — install proxy + deploy config (requires Postgres above)
+4. `vscode` or `windsurf` — IDE + extensions
+5. `claude` — install CLI + deploy config
+6. `opencode`, `continue`, `crush` — remaining terminal/editor agents
+7. `anythingllm` — RAG UI (optional)
 
 ---
 

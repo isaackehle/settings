@@ -76,4 +76,4 @@ tags: [ai, index]
 ## Reference
 
 - [[02 - Models]] — model IDs for local (Ollama) and cloud (OpenRouter) providers
-- [[01 - CHEATSHEET]] — quick reference for the local stack (Ollama, opencode, Continue, Claude Code, LiteLLM)
+- [[AI Setup Architecture]] — stack overview, tool conflict map, and setup checklist
