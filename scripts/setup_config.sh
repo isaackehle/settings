@@ -192,6 +192,68 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# PHP version selection
+# ---------------------------------------------------------------------------
+echo ""
+echo "PHP  (shivammathur/php — https://github.com/shivammathur/homebrew-php)"
+echo "---"
+echo "  Versions: 5.6  7.0  7.1  7.2  7.3  7.4"
+echo "            8.0  8.1  8.2  8.3  8.4  8.5  8.6-dev"
+echo ""
+read -p "  PHP version (e.g. 8.4) or Enter to skip: " PHP_VER
+PHP_VER="${PHP_VER:-}"
+
+if [ -n "$PHP_VER" ]; then
+    echo ""
+    echo "  Variant:"
+    echo "    1) standard"
+    echo "    2) debug      (enables PECL debug extensions)"
+    echo "    3) zts        (Zend Thread Safety)"
+    echo "    4) debug-zts  (both)"
+    echo ""
+    read -p "  Variant [1-4] (Enter = 1): " PHP_VARIANT_CHOICE
+    PHP_VARIANT_CHOICE="${PHP_VARIANT_CHOICE:-1}"
+
+    case "$PHP_VARIANT_CHOICE" in
+        2) PHP_VARIANT="-debug" ;;
+        3) PHP_VARIANT="-zts" ;;
+        4) PHP_VARIANT="-debug-zts" ;;
+        *) PHP_VARIANT="" ;;
+    esac
+
+    # 8.5 formula is 'php' (not 'php@8.5'); opt path matches formula name
+    if [[ "$PHP_VER" == "8.5" ]]; then
+        PHP_FORMULA="php${PHP_VARIANT}"
+        PHP_OPT_PATH="/opt/homebrew/opt/php${PHP_VARIANT}"
+    else
+        PHP_FORMULA="php@${PHP_VER}${PHP_VARIANT}"
+        PHP_OPT_PATH="/opt/homebrew/opt/php@${PHP_VER}${PHP_VARIANT}"
+    fi
+
+    echo ""
+    echo "  Tapping shivammathur/php..."
+    brew tap shivammathur/php
+
+    echo "  Installing shivammathur/php/${PHP_FORMULA}..."
+    brew install "shivammathur/php/${PHP_FORMULA}"
+    brew link --overwrite --force "shivammathur/php/${PHP_FORMULA}" 2>/dev/null || true
+
+    # Write _php directly with the active path (overwrite, no comment/uncomment)
+    PHP_PROFILED="$HOME/.profile.d/_php"
+    mkdir -p "$(dirname "$PHP_PROFILED")"
+    cat > "$PHP_PROFILED" <<EOF
+# PHP ${PHP_VER}${PHP_VARIANT} — written by setup_config.sh $(date +%Y-%m-%d)
+# Re-run setup_config.sh to change version or variant.
+# Source: shivammathur/php tap (https://github.com/shivammathur/homebrew-php)
+[ -d "${PHP_OPT_PATH}" ] && export PATH="${PHP_OPT_PATH}/bin:\$PATH"
+[ -d "${PHP_OPT_PATH}" ] && export PATH="${PHP_OPT_PATH}/sbin:\$PATH"
+EOF
+    echo "  PHP ${PHP_VER}${PHP_VARIANT} → ${PHP_OPT_PATH}"
+else
+    echo "  PHP skipped"
+fi
+
+# ---------------------------------------------------------------------------
 # ProtonDrive detection (informational)
 # ---------------------------------------------------------------------------
 if [ -z "$PROTON_DRIVE" ]; then
