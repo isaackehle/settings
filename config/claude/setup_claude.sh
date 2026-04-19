@@ -30,24 +30,31 @@ setup_claude() {
     print_info "Setting up Claude Code..."
     verify_claude_code || _install_claude_code_cli || print_warning "Claude Code CLI not installed — skipping"
 
-    local src_cfg="$(dirname "${BASH_SOURCE[0]}")/config.json"
-    local dest_cfg="$HOME/.claude/config.json"
+    # Resolve model-specific settings.json if _find_source is available (sourced via setup_ai.sh),
+    # otherwise fall back to the file beside this script.
+    local src_cfg
+    if declare -f _find_source &>/dev/null; then
+        src_cfg="$(_find_source "claude/settings.json")"
+    else
+        src_cfg="$(dirname "${BASH_SOURCE[0]}")/settings.json"
+    fi
+    local dest_cfg="$HOME/.claude/settings.json"
     mkdir -p "$HOME/.claude"
     if [ -f "$src_cfg" ]; then
         [ -f "$dest_cfg" ] && backup_claude
         cp "$src_cfg" "$dest_cfg"
         print_status "Deployed Claude Code config to $dest_cfg"
     else
-        print_warning "No config.json found at $src_cfg"
+        print_warning "No settings.json found at $src_cfg"
     fi
 }
 
 restore_claude() {
     local latest_file
-    latest_file=$(ls -t "$BACKUP_DIR"/claude_config_backup_*.json 2>/dev/null | head -1)
+    latest_file=$(ls -t "$BACKUP_DIR"/claude_settings_backup_*.json 2>/dev/null | head -1)
     if [ -n "$latest_file" ]; then
         mkdir -p "$HOME/.claude"
-        cp "$latest_file" "$HOME/.claude/config.json"
+        cp "$latest_file" "$HOME/.claude/settings.json"
         print_status "Restored Claude Code config from $(basename "$latest_file")"
     else
         print_warning "No Claude Code config backup found in $BACKUP_DIR"
@@ -55,8 +62,8 @@ restore_claude() {
 }
 
 backup_claude() {
-    if [ -f "$HOME/.claude/config.json" ]; then
-        cp "$HOME/.claude/config.json" "$BACKUP_DIR/claude_config_backup_$DATE.json"
+    if [ -f "$HOME/.claude/settings.json" ]; then
+        cp "$HOME/.claude/settings.json" "$BACKUP_DIR/claude_settings_backup_$DATE.json"
         print_status "Backed up Claude Code config"
     fi
 }
