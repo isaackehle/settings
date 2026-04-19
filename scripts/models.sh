@@ -3,6 +3,51 @@
 # ==============================================
 # MODEL LISTS BY HARDWARE PLATFORM
 # ==============================================
+#
+# When adding, removing, or renaming models here, also update:
+#
+#   config/profile.d/_obsidian     vault alias — per-machine model selection
+#   scripts/*/grok/grok.json       grok CLI model list — LiteLLM dash-form names
+#   scripts/*/litellm/litellm.yaml model_name entries + router_settings aliases
+#   scripts/*/continue/config.yaml model: fields for LiteLLM-routed models
+#   scripts/*/claude/settings.json ANTHROPIC_DEFAULT_*_MODEL env vars
+#   scripts/*/opencode/opencode.jsonc model IDs in provider.ollama.models + agents
+#
+# Model name conventions:
+#   Ollama / opencode direct (port 11434): colon form  e.g. qwen3-32b:q5
+#   LiteLLM-routed (port 4000):            dash form   e.g. qwen3-32b-q5
+#   (continue, claude, grok all go through LiteLLM → dash form)
+#
+# ==============================================
+# OLLAMA ↔ LITELLM NAME MAPPING
+# ==============================================
+#
+# Ollama name (colon form)              LiteLLM model_name (dash form)        Machines
+# ──────────────────────────────────────────────────────────────────────────────────────
+# qwen3-coder-30b-32k:q6               qwen3-coder-30b-32k-q6                64GB
+# qwen3-coder-30b-220k:q6              qwen3-coder-30b-220k-q6               64GB
+# qwen3-coder-30b-32k:q5               qwen3-coder-30b-32k-q5                48GB
+# qwen3-coder-30b-220k:q5              qwen3-coder-30b-220k-q5               48GB
+# codestral:22b-v0.1-q8_0              codestral-22b-v0.1-q8_0               64GB
+# codestral:22b                        codestral-22b                         48GB, M1, M2
+# qwen3-32b:q5                         qwen3-32b-q5                          64GB
+# qwen3-14b:q8                         qwen3-14b-q8                          64GB
+# qwen3-14b:q5                         qwen3-14b-q5                          48GB
+# qwen3-14b (stock)                    qwen3-14b                             M1, M2
+# qwen3.5:27b                          qwen3.5-27b                           48GB, 64GB
+# qwen3-4b:q8                          qwen3-4b-q8                           64GB
+# qwen3-4b:q4                          qwen3-4b-q4                           48GB, M1, M2
+# deepseek-r1-tools:32b                deepseek-r1-tools-32b                 64GB
+# deepseek-r1-tools:14b                deepseek-r1-tools-14b                 64GB, 48GB
+# deepseek-r1-tools:8b                 deepseek-r1-tools-8b                  48GB, M1, M2
+# deepseek-r1:14b                      deepseek-r1-14b                       64GB
+# deepseek-r1:8b                       deepseek-r1-8b                        48GB, M1, M2
+# llama3.3:70b                         llama3.3-70b                          64GB
+# qwen2.5-coder:7b                     qwen2.5-coder-7b                      all
+# qwen2.5-coder:1.5b                   qwen2.5-coder-1.5b                    all
+# nomic-embed-text                     nomic-embed-text                      all (embed)
+#
+# ==============================================
 
 # M5 Max 48GB - Standard configuration
 MODELS_M5_48GB=(
