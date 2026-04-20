@@ -1,3 +1,4 @@
+. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
 # Install llama.cpp — C++ LLM inference engine with OpenAI-compatible server.

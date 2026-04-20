@@ -1,3 +1,4 @@
+. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
 _install_ollama() {

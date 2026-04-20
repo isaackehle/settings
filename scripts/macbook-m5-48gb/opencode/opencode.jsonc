@@ -17,12 +17,12 @@
           "name": "Qwen3-Coder 30B A3B 220k (code, large ctx — solo only)"
         },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
-        "qwen3-4b:q8": {
-          "name": "Qwen3 4B Q8 (plan, fast)"
+        "qwen3-4b:q4": {
+          "name": "Qwen3 4B Q4 (plan, fast)"
         },
         // --- Code ---
-        "codestral:22b-v0.1-q8_0": {
-          "name": "Codestral 22B Q8 (code apply/insert, 23 GB)"
+        "codestral:22b": {
+          "name": "Codestral 22B (code apply/insert, ~14 GB)"
         },
         "qwen2.5-coder:7b": {
           "name": "Qwen2.5 Coder 7B (fast code, 5 GB)"
@@ -31,12 +31,12 @@
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
         },
         // --- Reasoning + tool calls ---
-        "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
+        "deepseek-r1-tools:8b": {
+          "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
         },
         // --- Research ---
-        "qwen3-14b:q8": {
-          "name": "Qwen3 14B Q8 (research, 15 GB)"
+        "qwen3-14b:q5": {
+          "name": "Qwen3 14B Q5 (research, ~12 GB)"
         },
         // --- Writing / general ---
         "qwen3.5:27b": {
@@ -48,7 +48,7 @@
   "default_agent": "code",
   // qwen3.5:27b: #1 on OpenCode IndexNow benchmark (5.0% errors)
   "model": "ollama/qwen3.5:27b",
-  "small_model": "ollama/qwen3-4b:q8",
+  "small_model": "ollama/qwen3-4b:q4",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -78,7 +78,7 @@
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/deepseek-r1-tools:14b",
+      "model": "ollama/deepseek-r1-tools:8b",
       "temperature": 0.3,
       "permission": {
         "read": "allow",
@@ -110,7 +110,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-14b:q8",
+      "model": "ollama/qwen3-14b:q5",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
@@ -126,7 +126,7 @@
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b:q8",
+      "model": "ollama/qwen3-4b:q4",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
