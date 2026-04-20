@@ -148,3 +148,11 @@ echo "────────────────────────�
 echo "  ✓ Marked as reviewed: $(date '+%Y-%m-%d')"
 echo "    Shell will remind you again in 30 days."
 echo ""
+
+# Offer to replace any models
+echo ""
+read -p "Replace any models? (y/n): " replace_models
+if [[ "$replace_models" == "y" || "$replace_models" == "Y" ]]; then
+    "$SCRIPT_DIR/swap-model.sh"
+fi
+echo ""

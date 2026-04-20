@@ -127,8 +127,10 @@ MODELS_16GB=(
 # Use qwen3-coder-30b-220k:q5 manually when you need >32K context
 # ----------------------------------------------
 # 48GB agent map
+# Note: opencode [code] agent uses qwen3.5:27b — #1 on OpenCode IndexNow benchmark.
+# The qwen3-coder-30b-32k:q5 model is available in the model picker for manual selection.
 declare -A OPENCODE_AGENTS_48GB=(
-    [code]="qwen3-coder-30b-32k:q5"                               # editing, refactoring, debugging, tool calls
+    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b-32k:q5 via picker
     [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
@@ -136,12 +138,23 @@ declare -A OPENCODE_AGENTS_48GB=(
 )
 
 # 64GB agent map
+# Note: opencode [code] agent uses qwen3.5:27b — #1 on OpenCode IndexNow benchmark.
+# The qwen3-coder-30b-32k:q6 model is available in the model picker for manual selection.
 declare -A OPENCODE_AGENTS_64GB=(
-    [code]="qwen3-coder-30b-32k:q6"                               # editing, refactoring, debugging, tool calls
+    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b-32k:q6 via picker
     [think]="deepseek-r1-tools:32b"                               # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-32b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
     [plan]="qwen3-4b:q8"                                          # next steps, task breakdown, routing
+)
+
+# 16GB agent map (shared for M1 MacBook + M2 Mac mini)
+declare -A OPENCODE_AGENTS_16GB=(
+    [code]="qwen3:14b"                                            # editing, refactoring, debugging (stock Q4_K_M)
+    [think]="deepseek-r1-tools:8b"                               # tradeoff analysis, debugging strategy
+    [write]="qwen3:14b"                                           # writing/docs (shared with coding slot)
+    [research]="qwen3:14b"                                        # research (shared — only one large model fits)
+    [plan]="qwen3-4b:q4"                                          # next steps, task breakdown, routing
 )
 
 # ----------------------------------------------

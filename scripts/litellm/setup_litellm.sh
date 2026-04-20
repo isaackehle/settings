@@ -1,3 +1,4 @@
+. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
 . "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
 
 # Set up LiteLLM proxy — unified OpenAI-compatible API gateway in front of Ollama (and other providers).
