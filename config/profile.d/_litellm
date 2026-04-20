@@ -1,0 +1,2 @@
+# LiteLLM
+alias litellm_list='curl -s http://localhost:4000/v1/models -H "Authorization: Bearer sk-local" | python3 -m json.tool | grep '"'"'"id"'"'"''

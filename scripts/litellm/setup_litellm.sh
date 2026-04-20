@@ -85,9 +85,20 @@ _generate_prisma_client() {
 
     print_info "Generating Prisma client from $schema..."
     # Prepend venv bin so pyenv resolves prisma-client-py from the venv, not the system
-    PATH="$litellm_bin:$PATH" "$litellm_bin/prisma" generate --schema "$schema" \
+    # Filter the benign "binaryTargets is not officially supported" advisory from stderr
+    PATH="$litellm_bin:$PATH" "$litellm_bin/prisma" generate --schema "$schema" 2>&1 \
+        | grep -v "binaryTargets option is not officially supported" >&2 \
         || { print_warning "Prisma generate failed — run: PATH=$litellm_bin:\$PATH $litellm_bin/prisma generate --schema $schema"; return 1; }
     print_status "Prisma client generated"
+
+    # SOURCE ~/.config/litellm/.env so DATABASE_URL is available even if not
+    # exported in the calling shell (the file is read by LiteLLM at runtime but
+    # not automatically sourced by the shell).
+    local env_file="${XDG_CONFIG_HOME:-$HOME/.config}/litellm/.env"
+    if [ -z "$DATABASE_URL" ] && [ -f "$env_file" ]; then
+        # shellcheck source=/dev/null
+        set -a; . "$env_file"; set +a
+    fi
 
     if [ -n "$DATABASE_URL" ]; then
         print_info "Pushing Prisma schema to database..."
@@ -95,7 +106,7 @@ _generate_prisma_client() {
             || print_warning "Prisma db push failed — run manually after setting DATABASE_URL"
         print_status "Database schema synced"
     else
-        print_warning "DATABASE_URL not set — skipping prisma db push (run after starting postgres)"
+        print_info "DATABASE_URL not set — skipping prisma db push (run after starting postgres)"
     fi
 }
 

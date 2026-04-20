@@ -1,1 +1,0 @@
-FROM dengcao/Qwen3-14B:Q8_0

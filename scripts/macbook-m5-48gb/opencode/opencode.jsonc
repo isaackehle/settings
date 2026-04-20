@@ -16,6 +16,13 @@
         "qwen3-coder-30b-220k:q5": {
           "name": "Qwen3-Coder 30B A3B 220k (code, large ctx — solo only)"
         },
+        // Qwen3.6-35B A3B: UD-Q5_K_XL base (~27 GB). 32k ctx loads ~27 GB; 220k loads ~38 GB (solo only)
+        "qwen3.6-35b-32k:q5": {
+          "name": "Qwen3.6 35B A3B 32k (code, agentic)"
+        },
+        "qwen3.6-35b-220k:q5": {
+          "name": "Qwen3.6 35B A3B 220k (code, 262k native ctx — solo only)"
+        },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
         "qwen3-4b:q4": {
           "name": "Qwen3 4B Q4 (plan, fast)"

@@ -15,6 +15,17 @@ models:
       - apply
       - summarize
 
+  - name: "Qwen3.6 30B A3B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen3.6-35b-32k-q6"
+    roles:
+      - chat
+      - edit
+      - apply
+      - summarize
+
   # General chat / writing
   - name: "Qwen3.5 27B"
     provider: openai
@@ -110,8 +121,8 @@ models:
       - chat
 
 tabAutocompleteOptions:
-  debounceDelay: 500         # ms to wait after keystroke before firing (reduces request rate)
-  maxPromptTokens: 1024      # keep context small → faster completions
+  debounceDelay: 500 # ms to wait after keystroke before firing (reduces request rate)
+  maxPromptTokens: 1024 # keep context small → faster completions
   disable: false
 
 # Set to true to stop Continue indexing files for @codebase search.
