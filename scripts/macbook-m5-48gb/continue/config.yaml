@@ -90,8 +90,8 @@ models:
       - chat
 
 tabAutocompleteOptions:
-  debounceDelay: 500         # ms to wait after keystroke before firing (reduces request rate)
-  maxPromptTokens: 1024      # keep context small → faster completions
+  debounceDelay: 500 # ms to wait after keystroke before firing (reduces request rate)
+  maxPromptTokens: 1024 # keep context small → faster completions
   disable: false
 
 # Set to true to stop Continue indexing files for @codebase search.
