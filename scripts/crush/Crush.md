@@ -33,7 +33,7 @@ All configs point at LiteLLM on `:4000` so model changes only need updating in o
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-coder-30b-32k:q6",
+          "id": "qwen3.6-35b-32k:q6",
           "name": "Qwen3 Coder 30B (32k)",
           "context_window": 32768,
           "default_max_tokens": 8192
@@ -42,7 +42,7 @@ All configs point at LiteLLM on `:4000` so model changes only need updating in o
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-coder-30b-32k:q6"
+  "default_model": "qwen3.6-35b-32k:q6"
 }
 ```
 

@@ -203,13 +203,13 @@ update_litellm_yaml() {
 
     log_info "Updating $(basename "$machine_dir")/litellm/litellm.yaml..."
 
-    # model_name: qwen3-coder-30b-32k-q5   (unquoted dash form)
+    # model_name: qwen3.6-35b-32k-q5   (unquoted dash form)
     sed -i '' "s|model_name: ${old_dash}|model_name: ${new_dash}|g" "$litellm_file"
 
-    # model: ollama_chat/qwen3-coder-30b-32k:q5   (colon form)
+    # model: ollama_chat/qwen3.6-35b-32k:q5   (colon form)
     sed -i '' "s|ollama_chat/${old_colon}|ollama_chat/${new_colon}|g" "$litellm_file"
 
-    # router alias values: "qwen3-coder-30b-32k-q5"  (quoted dash form)
+    # router alias values: "qwen3.6-35b-32k-q5"  (quoted dash form)
     sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$litellm_file"
 
     log_success "  $(basename "$machine_dir")/litellm/litellm.yaml"
@@ -232,7 +232,7 @@ update_continue_config() {
 
     log_info "Updating $(basename "$machine_dir")/continue/config.yaml..."
 
-    # model: "qwen3-coder-30b-32k-q5"  (quoted dash form)
+    # model: "qwen3.6-35b-32k-q5"  (quoted dash form)
     sed -i '' "s|model: \"${old_dash}\"|model: \"${new_dash}\"|g" "$continue_file"
 
     log_success "  $(basename "$machine_dir")/continue/config.yaml"
@@ -255,7 +255,7 @@ update_claude_settings() {
 
     log_info "Updating $(basename "$machine_dir")/claude/settings.json..."
 
-    # "qwen3-coder-30b-32k-q5"  (quoted dash form — both env values and "model" key)
+    # "qwen3.6-35b-32k-q5"  (quoted dash form — both env values and "model" key)
     sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$claude_file"
 
     log_success "  $(basename "$machine_dir")/claude/settings.json"
@@ -276,9 +276,9 @@ update_opencode_config() {
     log_info "Updating $(basename "$machine_dir")/opencode/opencode.jsonc..."
 
     # Model list keys + agent values use colon form (direct Ollama, port 11434)
-    # "qwen3-coder-30b-32k:q5": { ... }
+    # "qwen3.6-35b-32k:q5": { ... }
     sed -i '' "s|\"${old_colon}\"|\"${new_colon}\"|g" "$opencode_file"
-    # ollama/qwen3-coder-30b-32k:q5
+    # ollama/qwen3.6-35b-32k:q5
     sed -i '' "s|ollama/${old_colon}|ollama/${new_colon}|g" "$opencode_file"
 
     log_success "  $(basename "$machine_dir")/opencode/opencode.jsonc"

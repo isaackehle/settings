@@ -42,7 +42,7 @@ setup_cline() {
     print_info "Extension:  saoudrizwan.claude-dev"
     print_info "Configure:  Cline panel → Settings → API Provider"
     print_info "LiteLLM:    API Provider = OpenAI Compatible, Base URL = http://localhost:4000/v1"
-    print_info "Model:      qwen3-coder-30b-32k:q6 (64GB) / qwen3:14b (16GB)"
+    print_info "Model:      qwen3.6-35b-32k:q6 (64GB) / qwen3:14b (16GB)"
     print_info "Docs:       https://docs.cline.bot"
     print_info ""
 }

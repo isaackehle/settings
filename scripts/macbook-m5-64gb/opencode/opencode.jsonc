@@ -9,12 +9,12 @@
       },
       "models": {
         // --- Custom aliases (ollama create — see CUSTOM_MODELS_48GB in models.sh) ---
-        // Qwen3-Coder-30B A3B: UD-Q5_K_XL base (~21 GB). 32k ctx loads ~25 GB; 220k loads ~38 GB
-        "qwen3-coder-30b-32k:q6": {
-          "name": "Qwen3-Coder 30B A3B 32k (code, default)"
+        // Qwen3.6-35B A3B: UD-Q6_K_XL base (~32 GB). 32k ctx loads ~32 GB; 220k loads ~45 GB (solo only)
+        "qwen3.6-35b-32k:q6": {
+          "name": "Qwen3.6 35B A3B 32k (code, agentic)"
         },
-        "qwen3-coder-30b-220k:q6": {
-          "name": "Qwen3-Coder 30B A3B 220k (code, large ctx)"
+        "qwen3.6-35b-220k:q6": {
+          "name": "Qwen3.6 35B A3B 220k (code, 262k native ctx — solo only)"
         },
         // Qwen3-4B UD-Q4_K_M (~3 GB loaded)
         "qwen3-4b:q8": {

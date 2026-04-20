@@ -23,7 +23,7 @@ _install_claude_code_cli() {
 }
 
 verify_claude_code() {
-    check_tool_with_version "Claude Code" "claude-code"
+    check_tool_with_version "Claude Code" "claude"
 }
 
 # Install CLI if needed, then deploy config

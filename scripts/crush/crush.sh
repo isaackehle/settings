@@ -30,6 +30,10 @@ setup_crush() {
 
     local crush_src=""
     if declare -f find_source > /dev/null 2>&1; then
+        # find_source requires MAC_MODEL — detect it here if not already set
+        if [ -z "${MAC_MODEL:-}" ] && declare -f detect_mac_model > /dev/null 2>&1; then
+            MAC_MODEL="$(detect_mac_model)"
+        fi
         crush_src=$(find_source "crush/crush.json")
     fi
     [ -z "$crush_src" ] && crush_src="$SCRIPT_DIR/crush/crush.json"
