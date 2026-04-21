@@ -21,7 +21,7 @@ in `scripts/models.sh`. When a custom GGUF alias changes, this skill keeps two t
 Custom GGUF aliases are created at install time by `install_custom_models` in `scripts/install_models.sh`,
 which writes a temp Modelfile, calls `ollama create`, then deletes the temp file. There are no persistent
 Modelfile templates — `CUSTOM_MODELS_*` entries in `models.sh` are the single source of truth for the
-`source|alias|num_ctx` tuple.
+`source|alias|num_ctx|thinking_mode` tuple.
 
 The goal is not to replace every model on every run — it's to surface meaningful upgrades: a newer
 version of something already installed, a new model that beats the current one on the relevant

@@ -287,23 +287,23 @@ CUSTOM_MODELS_48GB=(
     # HF base aliases must come before derived aliases that reference them.
 
     # ── HF base aliases ───────────────────────────────────────────────────────
-    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M|qwen3.6-35b-a3b:q5|"                  # ~25 GB (standard Q5_K_M — Unsloth UD format unsupported pre-Ollama 0.7)
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5|"    # ~21 GB
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4|"                 # ~3 GB
+    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M|qwen3.6-35b-a3b:q5||"                  # ~25 GB (standard Q5_K_M — Unsloth UD format unsupported pre-Ollama 0.7)
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"    # ~21 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
 
     # ── Derived context aliases ───────────────────────────────────────────────
-    "qwen3.6-35b-a3b:q5|qwen3.6-35b-32k:q5|32768"           # ~25 GB loaded
-    "qwen3.6-35b-a3b:q5|qwen3.6-35b-220k:q5|220000"         # ~38 GB — solo only
-    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k:q5|32768"   # ~25 GB loaded
-    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-220k:q5|220000" # ~38 GB — solo only
+    "qwen3.6-35b-a3b:q5|qwen3.6-35b-32k:q5|32768|"           # ~25 GB loaded
+    "qwen3.6-35b-a3b:q5|qwen3.6-35b-220k:q5|220000|"         # ~38 GB — solo only
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k:q5|32768|"   # ~25 GB loaded
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-220k:q5|220000|" # ~38 GB — solo only
 
     # ── Backward-compat aliases ───────────────────────────────────────────────
-    "qwen3-4b-2507:q4|qwen3-4b:q4|"
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"
 
     # ── Community model aliases ───────────────────────────────────────────────
-    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5|"                  # ~12 GB
-    "Qwen3-14B-Q5_K_M|qwen3-14b:q5|"                          # auto-registered short name → lowercase alias
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b|" # ~5 GB
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                  # ~12 GB
+    "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                          # auto-registered short name → lowercase alias
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
 )
 
 CUSTOM_MODELS_64GB=(
@@ -312,32 +312,33 @@ CUSTOM_MODELS_64GB=(
     # ollama pull is idempotent — re-running won't re-download if already cached.
 
     # ── HF base alias (30B coder) ─────────────────────────────────────────────
-    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q6_K|qwen3.6-35b-a3b:q6|"                    # ~35 GB
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6|"    # ~26 GB
+    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q6_K|qwen3.6-35b-a3b:q6||"                   # ~35 GB
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6||"   # ~26 GB
 
     # ── Context-window aliases (derived from base above) ──────────────────────
-    "qwen3.6-35b-a3b:q6|qwen3.6-35b-32k:q6|32768"               # 32K ctx  — primary coding model
-    "qwen3.6-35b-a3b:q6|qwen3.6-35b-220k:q6|220000"             # 220K ctx — large context, solo only
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-32k:q6|32768"       # 32K ctx  — primary coding model
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k:q6|220000"     # 220K ctx — large context, solo only
+    "qwen3.6-35b-a3b:q6|qwen3.6-35b-32k:q6|32768|"              # 32K ctx  — primary coding model
+    "qwen3.6-35b-a3b:q6|qwen3.6-35b-220k:q6|220000|"            # 220K ctx — large context, solo only
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-32k:q6|32768|"      # 32K ctx  — primary coding model
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k:q6|220000|"    # 220K ctx — large context, solo only
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k:q6|8196|false" # 8K ctx — small context, no thinking
 
     # ── HF base alias (4B) ────────────────────────────────────────────────────
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8|"  # ~5 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8||"  # ~5 GB
 
     # ── Backward-compat aliases ───────────────────────────────────────────────
-    "qwen3-4b-2507:q8|qwen3-4b:q8|"
+    "qwen3-4b-2507:q8|qwen3-4b:q8||"
 
     # ── Community model aliases ───────────────────────────────────────────────
     # Ollama auto-registers a capitalized short name alongside each community pull
     # (e.g. dengcao/Qwen3-14B:Q8_0 also appears as Qwen3-14B:q8 in ollama list).
     # The extra entries below let prune recognise those names as expected,
     # and re-alias them to lowercase for consistent referencing.
-    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8|"                          # ~15 GB
-    "Qwen3-14B:q8|qwen3-14b:q8|"                                    # auto-registered short name → lowercase alias
-    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5|"                        # ~22 GB
-    "Qwen3-32B:q5|qwen3-32b:q5|"                                    # auto-registered short name → lowercase alias
-    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b|"    # ~10 GB
-    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b|"    # ~20 GB
+    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8||"                          # ~15 GB
+    "Qwen3-14B:q8|qwen3-14b:q8||"                                    # auto-registered short name → lowercase alias
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5||"                        # ~22 GB
+    "Qwen3-32B:q5|qwen3-32b:q5||"                                    # auto-registered short name → lowercase alias
+    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"    # ~10 GB
+    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b||"    # ~20 GB
 )
 
 CUSTOM_MODELS_16GB=(
@@ -345,13 +346,13 @@ CUSTOM_MODELS_16GB=(
     # HF base aliases must come before derived aliases that reference them.
 
     # ── HF base aliases ───────────────────────────────────────────────────────
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4|"  # ~3 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"  # ~3 GB
 
     # ── Backward-compat aliases ───────────────────────────────────────────────
-    "qwen3-4b-2507:q4|qwen3-4b:q4|"
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"
 
     # ── Community model aliases ───────────────────────────────────────────────
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b|" # ~5 GB
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
 )
 
 # ----------------------------------------------

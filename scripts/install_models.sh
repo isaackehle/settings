@@ -79,9 +79,9 @@ install_custom_models() {
     echo "===================================================="
     echo ""
 
-    local entry source alias_name num_ctx
+    local entry source alias_name num_ctx thinking_mode
     for entry in "${_custom[@]}"; do
-        IFS='|' read -r source alias_name num_ctx <<< "$entry"
+        IFS='|' read -r source alias_name num_ctx thinking_mode <<< "$entry"
 
         # Determine if source is a local alias we already created this run
         local is_local=0
@@ -110,6 +110,7 @@ install_custom_models() {
         tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
         printf 'FROM %s\n' "$source" > "$tmp_mf"
         [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
+        # [[ -n "$thinking_mode" ]] && printf 'PARAMETER thinking %s\n' "$thinking_mode" >> "$tmp_mf"
 
         echo "▶ Creating alias: $alias_name"
         ollama create "$alias_name" -f "$tmp_mf"
