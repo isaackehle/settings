@@ -18,15 +18,15 @@ This vault is a personal reference for setting up a new Mac from scratch. Pages 
 
 Folders are strictly numbered. Always place new files in the most appropriate existing folder. Do not create new top-level folders without being asked.
 
-| Folder                | Topic                                     | Tag              |
-| --------------------- | ----------------------------------------- | ---------------- |
-| `00 - Setup`       | Homebrew, fonts, tweaks, initial installs                                          | `setup`       |
-| `01 - Terminal`    | Zsh, iTerm2, SSH                                                                   | `terminal`    |
+| Folder             | Topic                                                                             | Tag           |
+| ------------------ | --------------------------------------------------------------------------------- | ------------- |
+| `00 - Setup`       | Homebrew, fonts, tweaks, initial installs                                         | `setup`       |
+| `01 - Terminal`    | Zsh, iTerm2, SSH                                                                  | `terminal`    |
 | `02 - Development` | Git, editors, APIs, build tools, Node, containers, infra, languages, DBs, web dev | `development` |
-| `03 - Apps`        | GUI apps — browsers, chat, multimedia                                              | `apps`        |
-| `04 - Security`    | Auth, encryption, VPN                                                              | `security`    |
-| `05 - System`      | VMs, VNC, system utilities                                                         | `system`      |
-| `06 - AI`          | Local LLMs, coding assistants, frameworks                                          | `ai`          |
+| `03 - Apps`        | GUI apps — browsers, chat, multimedia                                             | `apps`        |
+| `04 - Security`    | Auth, encryption, VPN                                                             | `security`    |
+| `05 - System`      | VMs, VNC, system utilities                                                        | `system`      |
+| `06 - AI`          | Local LLMs, coding assistants, frameworks                                         | `ai`          |
 
 ---
 
@@ -201,6 +201,22 @@ When adding a new page, also add an entry to `Home.md` under the correct `##` se
 
 - **Never** add a `Co-Authored-By` trailer to commit messages.
 - Keep commit messages concise: a short imperative subject line only.
+- Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+`feat(api): add /v1/chat streaming endpoint` — scope is the affected layer
+(`api`, `models`, `services`, `core`). Subject ≤ 72 chars. No `Co-Authored-By`.
+
+## Agent Skills
+
+```bash
+ls .agents/skills/       # repo-scoped skills
+ls ~/.agents/skills/     # user-global skills
+npx skills list          # discover all skills
+npx skills run <skill>   # execute a skill
+```
+
+Prefer project-local skills for domain tasks (new router, migration).
+Use global skills for cross-cutting concerns (commit linting, PR descriptions).
 
 ---
 
