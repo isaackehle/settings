@@ -1,0 +1,82 @@
+name: "Continue Config - Local Models (M2 32GB)"
+version: "1.0.0"
+schema: "v1"
+
+models:
+  # Primary coding model — 30B, tool-capable
+  - name: "Qwen3 Coder 30B A3B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen3-coder-30b-32k-q5"
+    roles:
+      - chat
+      - edit
+      - apply
+      - summarize
+
+  # General chat / writing
+  - name: "Qwen3.5 27B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen3.5-27b"
+    roles:
+      - chat
+
+  # Reasoning with tool calls
+  - name: "DeepSeek R1 Tool-Calling 8B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "deepseek-r1-tools-8b"
+    roles:
+      - chat
+
+  # Autocomplete — default (fast, low RAM)
+  - name: "Qwen2.5 Coder 1.5B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-1.5b"
+    requestOptions:
+      timeout: 8000
+    roles:
+      - autocomplete
+
+  # Autocomplete — quality
+  - name: "Qwen2.5 Coder 7B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen2.5-coder-7b"
+    requestOptions:
+      timeout: 8000
+    roles:
+      - autocomplete
+
+  # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
+  - name: "Nomic Embed Text"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "nomic-embed-text:latest"
+    roles:
+      - embed
+
+  # Fast planning
+  - name: "Qwen3 4B"
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: "sk-local"
+    model: "qwen3-4b-q4"
+    roles:
+      - chat
+
+tabAutocompleteOptions:
+  debounceDelay: 500 # ms to wait after keystroke before firing (reduces request rate)
+  maxPromptTokens: 1024 # keep context small → faster completions
+  disable: false
+
+# Set to true to stop Continue indexing files for @codebase search.
+# Indexing runs nomic-embed-text on every file change — disable if you don't use @codebase.
+disableIndexing: false

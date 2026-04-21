@@ -1,0 +1,18 @@
+{
+    "provider": {
+        "ollama": {
+            "name": "Ollama (Local)",
+            "options": {
+                "baseURL": "http://localhost:11434/v1"
+            },
+            "models": {
+                "qwen3-14b:q5": {
+                    "name": "Qwen3 14B Q5 (research, 12 GB)"
+                },
+                "qwen3.5:27b": {
+                    "name": "Qwen3.5 27B (general, 20 GB)"
+                }
+            }
+        }
+    }
+}
