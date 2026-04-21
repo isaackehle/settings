@@ -14,12 +14,14 @@ HW_MODEL=$(sysctl -n hw.model)
 HW_MEM_BYTES=$(sysctl -n hw.memsize)
 HW_MEM_GB=$((HW_MEM_BYTES / 1024 / 1024 / 1024))
 
-if [[ "$HW_MODEL" == Mac17* || "$HW_MEM_GB" -ge 32 ]]; then
+if [[ "$HW_MODEL" == Mac17* || "$HW_MEM_GB" -ge 64 ]]; then
     MAC_MODEL="macbook-m5"                              # Mac17,6 (M5) / 64GB
 elif [[ "$HW_MODEL" == Macmini* || "$HW_MODEL" == Mac14* ]]; then
     MAC_MODEL="macmini-m2"
+elif [[ "$HW_MODEL" == MacBookPro* && "$HW_MEM_GB" -ge 32 ]]; then
+    MAC_MODEL="macbook-m2-32gb"                       # M2/M3 32GB
 elif [[ "$HW_MODEL" == MacBookPro* ]]; then
-    MAC_MODEL="macbook-m1"
+    MAC_MODEL="macbook-m1"                             # M1/M2 16GB
 else
     MAC_MODEL="default"
 fi

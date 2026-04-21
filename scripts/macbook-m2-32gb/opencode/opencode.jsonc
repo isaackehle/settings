@@ -1,0 +1,157 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM (local)",
+      "options": {
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "sk-local"
+      },
+      "models": {
+        // Primary coding model (32k, ~25 GB)
+        "qwen3-coder-30b-32k-q5": {
+          "name": "Qwen3-Coder 30B A3B 32k (code, default)",
+          "limit": {
+            "context": 32768,
+            "output": 4096
+          }
+        },
+        // Large context (220k, solo only)
+        "qwen3-coder-30b-220k-q5": {
+          "name": "Qwen3-Coder 30B A3B 220k (code, large ctx — solo only)"
+        },
+        // 35B variant
+        "qwen3.6-35b-32k-q5": {
+          "name": "Qwen3.6 35B A3B 32k (code, agentic)"
+        },
+        // Autocomplete (~1 GB)
+        "qwen2.5-coder-1.5b": {
+          "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
+        },
+        // Reasoning + tool calls (~5-10 GB)
+        "deepseek-r1-tools-8b": {
+          "name": "DeepSeek R1 8B (reason+tools, 5 GB)",
+          "limit": {
+            "context": 8192,
+            "output": 2048
+          }
+        },
+        "deepseek-r1-tools-14b": {
+          "name": "DeepSeek R1 14B (reason+tools, 10 GB)"
+        },
+        // Planning (~3 GB)
+        "qwen3-4b-q4": {
+          "name": "Qwen3 4B Q4 (plan, fast)",
+          "limit": {
+            "context": 4096,
+            "output": 1024
+          }
+        },
+        // Research (~12 GB)
+        "qwen3-14b-q5": {
+          "name": "Qwen3 14B Q5 (research, ~12 GB)"
+        },
+        // Writing (~20 GB)
+        "qwen3.5-27b": {
+          "name": "Qwen 3.5 27B (code #1 + write+vision, 5.0% err)"
+        }
+      }
+    }
+  },
+  "default_agent": "code",
+  // qwen3.5-27b: #1 on OpenCode IndexNow benchmark (5.0% errors)
+  "model": "litellm/qwen3.5-27b",
+  "small_model": "litellm/qwen3-4b-q4",
+  "permission": {
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "webfetch": "allow",
+    "edit": "ask",
+    "bash": "ask"
+  },
+  "agent": {
+    "code": {
+      "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
+      "mode": "primary",
+      "model": "litellm/qwen3.5-27b",
+      "temperature": 0.2,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "edit": "ask",
+        "bash": "ask"
+      },
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly."
+    },
+    "think": {
+      "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
+      "mode": "primary",
+      "model": "litellm/deepseek-r1-tools-8b",
+      "temperature": 0.3,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations."
+    },
+    "write": {
+      "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
+      "mode": "primary",
+      "model": "litellm/qwen3.5-27b",
+      "temperature": 0.65,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "edit": "ask",
+        "bash": "deny"
+      },
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific."
+    },
+    "research": {
+      "description": "Research agent for company research, technical discovery, and structured findings.",
+      "mode": "primary",
+      "model": "litellm/qwen3-14b-q5",
+      "temperature": 0.25,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "edit": "ask",
+        "bash": "deny"
+      },
+      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n## Findings\n<bullet points, organized by sub-topic>\n## Open Questions\n<what still needs investigation>\n## Next Steps\n<concrete recommended actions>\nIf the user explicitly says not to save, skip writing the file."
+    },
+    "plan": {
+      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
+      "mode": "primary",
+      "model": "litellm/qwen3-4b-q4",
+      "temperature": 0.25,
+      "permission": {
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "bash": "deny"
+      },
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
+    }
+  }
+}
