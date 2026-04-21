@@ -18,7 +18,7 @@ orchestration, and vector-search endpoints."
 -->
 
 ## Tech Stack
- 
+
 | Layer               | Choice                                                         |
 | ------------------- | -------------------------------------------------------------- |
 | Language            | Python 3.12+                                                   |
@@ -112,23 +112,6 @@ lifespan startup hook.
 - **Coverage:** ≥ 80 % on `app/`; enforced with `--cov=app --cov-fail-under=80`.
 - Mirror source paths: `app/services/llm.py` → `tests/services/test_llm.py`.
 
-## Git Commits
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
-`feat(api): add /v1/chat streaming endpoint` — scope is the affected layer
-(`api`, `models`, `services`, `core`). Subject ≤ 72 chars. No `Co-Authored-By`.
-
-## Agent Skills
-
-```bash
-ls .agents/skills/       # repo-scoped skills
-ls ~/.agents/skills/     # user-global skills
-npx skills list          # discover all skills
-npx skills run <skill>   # execute a skill
-```
-
-Prefer project-local skills for domain tasks (new router, migration).
-Use global skills for cross-cutting concerns (commit linting, PR descriptions).
 
 ## Boundaries
 
