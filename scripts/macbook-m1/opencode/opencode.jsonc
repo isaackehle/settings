@@ -1,35 +1,48 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "ollama": {
+    "litellm": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (Local)",
+      "name": "LiteLLM (local)",
       "options": {
-        "baseURL": "http://127.0.0.1:11434/v1"
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "sk-local"
       },
       "models": {
-        // --- Primary coding model (~5 GB) ---
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7B (code, 5 GB)"
+        // 16GB machines - smaller models
+        "qwen2.5-coder-7b": {
+          "name": "Qwen2.5 Coder 7B (code, 5 GB)",
+          "limit": {
+            "context": 8192,
+            "output": 2048
+          }
         },
         // --- Autocomplete / fast (~1 GB) ---
-        "qwen2.5-coder:1.5b": {
+        "qwen2.5-coder-1.5b": {
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
         },
         // --- Reasoning + tool calls (~5 GB) ---
-        "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
+        "deepseek-r1-tools-8b": {
+          "name": "DeepSeek R1 8B (reason+tools, 5 GB)",
+          "limit": {
+            "context": 8192,
+            "output": 2048
+          }
         },
         // --- Planning / fast (~3 GB) ---
-        "qwen3-4b:q4": {
-          "name": "Qwen3 4B Q8 (plan, fast, 3 GB)"
+        "qwen3-4b-q4": {
+          "name": "Qwen3 4B Q4 (plan, fast)",
+          "limit": {
+            "context": 4096,
+            "output": 1024
+          }
         }
       }
     }
   },
   "default_agent": "code",
-  "model": "ollama/qwen2.5-coder:7b",
-  "small_model": "ollama/qwen2.5-coder:1.5b",
+  "model": "litellm/qwen2.5-coder-7b",
+  "small_model": "litellm/qwen2.5-coder-1.5b",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -43,7 +56,7 @@
     "code": {
       "description": "Primary coding agent.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "litellm/qwen2.5-coder-7b",
       "temperature": 0.2,
       "permission": {
         "read": "allow",
@@ -59,7 +72,7 @@
     "think": {
       "description": "Reasoning agent for analysis and debugging strategy.",
       "mode": "primary",
-      "model": "ollama/deepseek-r1-tools:8b",
+      "model": "litellm/deepseek-r1-tools-8b",
       "temperature": 0.3,
       "permission": {
         "read": "allow",
@@ -75,7 +88,7 @@
     "write": {
       "description": "Writing agent for docs, resumes, and prose.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "litellm/qwen2.5-coder-7b",
       "temperature": 0.65,
       "permission": {
         "read": "allow",
@@ -91,7 +104,7 @@
     "research": {
       "description": "Research agent for discovery and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "litellm/qwen2.5-coder-7b",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
@@ -107,7 +120,7 @@
     "plan": {
       "description": "Fast planning agent for next steps and breakdowns.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b:q4",
+      "model": "litellm/qwen3-4b-q4",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
