@@ -65,14 +65,6 @@ tags: [ai, index]
 | [[LlamaIndex]]   | Data framework for RAG and custom data sources       |
 | [[PyTorch]]      | Standard ML framework; MPS support for Apple Silicon |
 
-## Category Overviews
-
-- [[03 - Coding Assistants]] — all coding agents and assistants
-- [[05 - VS Code AI Extensions]] — VS Code-specific tools
-- [[04 - Local LLMs]] — local runtime options
-- [[06 - Image Generation]] — image generation tools
-- [[07 - Frameworks]] — AI frameworks and libraries
-
 ## Reference
 
 - [[AI Setup Architecture]] — stack overview, tool conflict map, and setup checklist

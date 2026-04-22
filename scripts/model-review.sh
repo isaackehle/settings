@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/opt/homebrew/bin/bash
+
 # model-review.sh — monthly model review guide
 # Shows current models by role with targeted benchmark sources for each.
 # Run via: model-review

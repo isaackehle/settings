@@ -24,10 +24,10 @@
 #
 # Ollama name (colon form)              LiteLLM model_name (dash form)       Machines
 # ──────────────────────────────────────────────────────────────────────────────────────
-# qwen3.6-35b-32k:q6                   qwen3.6-35b-32k-q6                    64GB
-# qwen3.6-35b-220k:q6                  qwen3.6-35b-220k-q6                   64GB
-# qwen3.6-35b-32k:q5                   qwen3.6-35b-32k-q5                    48GB
-# qwen3.6-35b-220k:q5                  qwen3.6-35b-220k-q5                   48GB
+# qwen3.6:35b-8k                       qwen3.6-35b-8k                        64GB
+# qwen3.6:35b-128k                     qwen3.6-35b-128k                      64GB
+# qwen3.6:35b-8k                       qwen3.6-35b-8k                        48GB
+# qwen3.6:35b-128k                     qwen3.6-35b-128k                      48GB
 # qwen3-coder-30b-32k:q6               qwen3-coder-30b-32k-q6                64GB
 # qwen3-coder-30b-220k:q6              qwen3-coder-30b-220k-q6               64GB
 # qwen3-coder-30b-32k:q5               qwen3-coder-30b-32k-q5                48GB
@@ -56,52 +56,52 @@
 # M5 Max 48GB - Standard configuration
 MODELS_M5_48GB=(
     # Custom aliases built via CUSTOM_MODELS_48GB below:
-    #   qwen3.6-35b-32k:q5
-    #   qwen3.6-35b-220k:q5
+    #   qwen3.6:35b-8k
+    #   qwen3.6:35b-128k
     #   qwen3-coder-30b-32k:q5
     #   qwen3-coder-30b-220k:q5
     #   qwen3-4b:q4
     #   qwen3-14b:q5
     #   deepseek-r1-tools:8b
-
+    
     "qwen3.5:27b"                                        # ~20 GB | Writing, docs, cover letters
-
+    
     "deepseek-r1:8b"                                     # ~5 GB  | Reasoning, chat-only (no tools)
-
+    
     "codestral:22b"                                      # ~14 GB | Code apply/insert, light coding
-
+    
     "qwen2.5-coder:7b"                                   # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                                 # ~1 GB  | Autocomplete
-
+    
     "nomic-embed-text"                                   # ~0.3 GB| Embeddings (Continue/RAG)
 )
 
 # M5 Max 64GB - Extended configuration
 MODELS_M5_64GB=(
     # Custom aliases built via CUSTOM_MODELS_64GB below:
-    #   qwen3.6-35b-a3b:q8   (HF base — pulled once, ~35 GB)
-    #   qwen3.6-35b-32k:q6   (32K ctx alias)
-    #   qwen3.6-35b-220k:q6  (220K ctx alias)
-    #   qwen3-coder-30b-a3b:q6   (HF base — pulled once, ~26 GB)
-    #   qwen3-coder-30b-32k:q6   (32K ctx alias)
-    #   qwen3-coder-30b-220k:q6  (220K ctx alias)
+    #   qwen3.6:35b                 (Ollama stock — ~35 GB)
+    #   qwen3.6:35b-8k              (8K ctx alias)
+    #   qwen3.6:35b-128k            (128K ctx alias)
+    #   qwen3-coder-30b-a3b:q6      (HF base — pulled once, ~26 GB)
+    #   qwen3-coder-30b-32k:q6      (32K ctx alias)
+    #   qwen3-coder-30b-220k:q6     (220K ctx alias)
     #   qwen3-4b:q8
     #   qwen3-14b:q8
     #   qwen3-32b:q5
     #   deepseek-r1-tools:14b
     #   deepseek-r1-tools:32b
-
+    
     "qwen3.5:27b"                                       # ~20 GB | Writing, docs, cover letters
-
+    
     "deepseek-r1:14b"                                   # ~10 GB | Reasoning, chat-only (no tools)
-
+    
     "codestral:22b-v0.1-q8_0"                           # ~23 GB | Code apply/insert, light coding
-
+    
     "qwen2.5-coder:7b"                                  # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                                # ~1 GB  | Autocomplete
-
+    
     "nomic-embed-text"                                  # ~0.3 GB| Embeddings (Continue/RAG)
-
+    
     "llama3.3:70b"                                      # ~43 GB | General purpose (large, solo use only)
 )
 
@@ -116,14 +116,14 @@ MODELS_32GB=(
     #   qwen3-14b:q5
     #   deepseek-r1-tools:8b
     #   deepseek-r1-tools:14b
-
+    
     "qwen3.5:27b"                                       # ~20 GB | Writing, docs, cover letters
-
+    
     "deepseek-r1:32b"                                   # ~21 GB | Deep reasoning — solo only
-
+    
     "qwen2.5-coder:7b"                                  # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                                # ~1 GB  | Autocomplete
-
+    
     "nomic-embed-text"                                  # ~0.3 GB| Embeddings (Continue/RAG)
 )
 
@@ -131,14 +131,14 @@ MODELS_32GB=(
 MODELS_16GB=(
     # Custom aliases built via CUSTOM_MODELS_16GB below:
     #   deepseek-r1-tools:8b
-
+    
     "qwen3:14b"                                         # ~10 GB | General purpose coding + chat (Q4_K_M)
-
+    
     "deepseek-r1:8b"                                    # ~5 GB  | Reasoning, chat-only (no tools)
-
+    
     "qwen2.5-coder:7b"                                  # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                                # ~1 GB  | Autocomplete
-
+    
     "nomic-embed-text"                                  # ~0.3 GB| Embeddings (Continue/RAG)
 )
 
@@ -160,9 +160,9 @@ MODELS_16GB=(
 # 48GB agent map
 # Note: opencode [code] agent uses qwen3.5:27b — #1 on OpenCode IndexNow benchmark.
 # The qwen3-coder-30b-32k:q5 model is available in the model picker for manual selection.
-# The qwen3.6-35b-32k:q5 model is available in the model picker for manual selection.
+# The qwen3.6:35b-8k model is available in the model picker for manual selection.
 declare -A OPENCODE_AGENTS_48GB=(
-    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b-32k:q5 or qwen3.6-35b-32k:q5 via picker
+    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b-32k:q5 or qwen3.6:35b-8k via picker
     [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
@@ -171,10 +171,10 @@ declare -A OPENCODE_AGENTS_48GB=(
 
 # 64GB agent map
 # Note: opencode [code] agent uses qwen3.5:27b — #1 on OpenCode IndexNow benchmark.
-# The qwen3.6-35b-32k:q6 model is available in the model picker for manual selection.
+# The qwen3.6:35b-128k model is available in the model picker for manual selection.
 # The qwen3-coder-30b-32k:q6 model is available in the model picker for manual selection.
 declare -A OPENCODE_AGENTS_64GB=(
-    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3.6-35b-32k:q6 or qwen3-coder-30b-32k:q6 via picker
+    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3.6:35b-128k or qwen3-coder-30b-32k:q6 via picker
     [think]="deepseek-r1-tools:32b"                               # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-32b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
@@ -215,6 +215,7 @@ declare -A CONTINUE_ROLES_48GB=(
 # 64GB Continue roles
 declare -A CONTINUE_ROLES_64GB=(
     [chat]="qwen3-coder-30b-32k:q6"                  # chat panel + inline edit (Ctrl+I)
+    [kimi]="kimi-k2.6:cloud"                            # Cloud-based reasoning
     [chat_alt]="qwen3.5:27b"                         # manual model switch in chat
     [apply]="codestral:22b-v0.1-q8_0"                # applying suggested code to file (Q8_0, highest quality)
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
@@ -238,6 +239,8 @@ CLINE_MODEL_48GB="qwen3-coder-30b-32k:q5"
 
 # 64GB
 CLINE_MODEL_64GB="qwen3-coder-30b-32k:q6"
+# Cloud alternative
+CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
 
 # 16GB
 CLINE_MODEL_16GB="qwen3:14b"
@@ -261,7 +264,12 @@ CLAUDE_CODE_OPUS_48GB="qwen3-coder-30b-220k:q5"             # ANTHROPIC_DEFAULT_
 # 64GB — Claude Code model mapping
 CLAUDE_CODE_SONNET_64GB="qwen3-coder-30b-32k:q6"            # ANTHROPIC_DEFAULT_SONNET_MODEL
 CLAUDE_CODE_HAIKU_64GB="qwen3-4b:q8"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
-CLAUDE_CODE_OPUS_64GB="qwen3-coder-30b-220k:q6"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+CLAUDE_CODE_OPUS_64GB="qwen3.6:35b-128k"                    # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+
+# 32GB — Claude Code model mapping
+CLAUDE_CODE_SONNET_64GB="qwen3-coder-30b-32k:q6"            # ANTHROPIC_DEFAULT_SONNET_MODEL
+CLAUDE_CODE_HAIKU_64GB="qwen3-4b:q8"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_OPUS_64GB="qwen3.6:35b-128k"                    # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 # 16GB
 CLAUDE_CODE_SONNET_16GB="qwen3:14b"                         # ANTHROPIC_DEFAULT_SONNET_MODEL
@@ -307,21 +315,20 @@ CLAUDE_CODE_OPUS_16GB="qwen3:14b"                           # ANTHROPIC_DEFAULT_
 CUSTOM_MODELS_48GB=(
     # Format: "source|alias|num_ctx"  (num_ctx empty = model default)
     # HF base aliases must come before derived aliases that reference them.
-
+    
     # ── HF base aliases ───────────────────────────────────────────────────────
-    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M|qwen3.6-35b-a3b:q5||"                  # ~25 GB (standard Q5_K_M — Unsloth UD format unsupported pre-Ollama 0.7)
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"    # ~21 GB
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
-
+    
     # ── Derived context aliases ───────────────────────────────────────────────
-    "qwen3.6-35b-a3b:q5|qwen3.6-35b-32k:q5|32768|"           # ~25 GB loaded
-    "qwen3.6-35b-a3b:q5|qwen3.6-35b-220k:q5|220000|"         # ~38 GB — solo only
+    "qwen3.6:35b|qwen3.6:35b-8k|8192|"                          # 8K ctx
+    "qwen3.6:35b|qwen3.6:35b-128k|131072|"                      # 128K ctx — solo only
     "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k:q5|32768|"   # ~25 GB loaded
     "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-220k:q5|220000|" # ~38 GB — solo only
-
+    
     # ── Backward-compat aliases ───────────────────────────────────────────────
     "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
+    
     # ── Community model aliases ───────────────────────────────────────────────
     "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                  # ~12 GB
     "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                          # auto-registered short name → lowercase alias
@@ -332,24 +339,23 @@ CUSTOM_MODELS_64GB=(
     # Format: "source|alias|num_ctx"
     # HF base aliases must come before derived aliases that reference them.
     # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ── HF base alias (30B coder) ─────────────────────────────────────────────
-    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q6_K|qwen3.6-35b-a3b:q6||"                   # ~35 GB
+    
+    # ── Ollama base alias (30B coder) ─────────────────────────────────────────────
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6||"   # ~26 GB
-
+    
     # ── Context-window aliases (derived from base above) ──────────────────────
-    "qwen3.6-35b-a3b:q6|qwen3.6-35b-32k:q6|32768|"              # 32K ctx  — primary coding model
-    "qwen3.6-35b-a3b:q6|qwen3.6-35b-220k:q6|220000|"            # 220K ctx — large context, solo only
+    "qwen3.6:35b|qwen3.6:35b-8k|8192|"                          # 8K ctx — primary coding model
+    "qwen3.6:35b|qwen3.6:35b-128k|131072|"                      # 128K ctx — large context, solo only
     "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-32k:q6|32768|"      # 32K ctx  — primary coding model
     "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k:q6|220000|"    # 220K ctx — large context, solo only
     "qwen3-coder-30b-a3b:q6|qwen3-coder-30b-220k:q6|8196|false" # 8K ctx — small context, no thinking
-
+    
     # ── HF base alias (4B) ────────────────────────────────────────────────────
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8||"  # ~5 GB
-
+    
     # ── Backward-compat aliases ───────────────────────────────────────────────
     "qwen3-4b-2507:q8|qwen3-4b:q8||"
-
+    
     # ── Community model aliases ───────────────────────────────────────────────
     # Ollama auto-registers a capitalized short name alongside each community pull
     # (e.g. dengcao/Qwen3-14B:Q8_0 also appears as Qwen3-14B:q8 in ollama list).
@@ -366,19 +372,19 @@ CUSTOM_MODELS_64GB=(
 CUSTOM_MODELS_32GB=(
     # Format: "source|alias|num_ctx"
     # HF base aliases must come before derived aliases that reference them.
-
+    
     # ── HF base aliases ───────────────────────────────────────────────────────
     "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q4_K_M|qwen3.6-35b-a3b:q4||"                 # ~22 GB (Q4 — headroom for concurrent models)
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"   # ~21 GB
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                # ~3 GB
-
+    
     # ── Derived context aliases ───────────────────────────────────────────────
     "qwen3.6-35b-a3b:q4|qwen3.6-35b-32k:q4|32768|"            # ~22 GB — alt coder, 32K ctx
     "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k:q5|32768|"    # ~25 GB — primary coder, 32K ctx
-
+    
     # ── Backward-compat aliases ───────────────────────────────────────────────
     "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
+    
     # ── Community model aliases ───────────────────────────────────────────────
     "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                          # ~12 GB — research
     "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                                  # auto-registered short name → lowercase alias
@@ -389,13 +395,13 @@ CUSTOM_MODELS_32GB=(
 CUSTOM_MODELS_16GB=(
     # Format: "source|alias|num_ctx"
     # HF base aliases must come before derived aliases that reference them.
-
+    
     # ── HF base aliases ───────────────────────────────────────────────────────
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"  # ~3 GB
-
+    
     # ── Backward-compat aliases ───────────────────────────────────────────────
     "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
+    
     # ── Community model aliases ───────────────────────────────────────────────
     "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
 )

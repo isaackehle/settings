@@ -1,136 +1,78 @@
-# MacBook Pro M5 Max 48 GB — Model Matrix
-
-**Hardware:** M5 Max · 48 GB unified memory · Q5 stack
-**Models last updated:** 2026-04-22
-
+---
+tags: [ai, llm, models]
 ---
 
-## Model Roster
+# AI Models
 
-One row per property, one column per model. The alias chain shows how each model is built.
+Central reference for model IDs across local (Ollama) and cloud (OpenRouter/direct API) providers.
 
-| Model                   | Source                                                     | Modelfile                | RAM loaded | Context | Capabilities           | Continue: role        | Cline: role | Claude Code: tier | OpenCode: agent | LiteLLM model_name      | Ollama alias type |
-| ----------------------- | ---------------------------------------------------------- | ------------------------ | ---------- | ------- | ---------------------- | --------------------- | ----------- | ----------------- | --------------- | ----------------------- | ----------------- |
-| qwen3.6-35b-a3b:q5      | hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M           | qwen3.6-35b-a3b.txt      | ~25 GB     | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3.6-35b-32k:q5      | ← qwen3.6-35b-a3b:q5                                       | qwen3.6-35b-32k.txt      | ~25 GB     | 32K     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3.6-35b-32k:q5      | derived (ctx)     |
-| qwen3.6-35b-220k:q5     | ← qwen3.6-35b-a3b:q5                                       | qwen3.6-35b-220k.txt     | ~38 GB     | 220K    | code, tools, large ctx | —                     | —           | opus              | —               | qwen3.6-35b-220k:q5     | derived (ctx)     |
-| qwen3-coder-30b-a3b:q5  | hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL | qwen3-coder-30b-a3b.txt  | ~21 GB     | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3-coder-30b-32k:q5  | ← qwen3-coder-30b-a3b:q5                                   | qwen3-coder-30b-32k.txt  | ~25 GB     | 32K     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3-coder-30b-32k:q5  | derived (ctx)     |
-| qwen3-coder-30b-220k:q5 | ← qwen3-coder-30b-a3b:q5                                   | qwen3-coder-30b-220k.txt | ~38 GB     | 220K    | code, tools, large ctx | —                     | —           | opus              | —               | qwen3-coder-30b-220k:q5 | derived (ctx)     |
-| qwen3-4b-2507:q4        | hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M        | qwen3-4b-2507.txt        | ~3 GB      | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3-4b:q4             | ← qwen3-4b-2507:q4                                         | qwen3-4b.txt             | ~3 GB      | 262K    | planning, fast         | chat                  | —           | haiku             | plan            | qwen3-4b:q4             | compat            |
-| deepseek-r1-tools:8b    | mfdoom/deepseek-r1-tool-calling:8b                         | deepseek-r1-tools-8b.txt | ~5 GB      | 131K    | reasoning + tools      | chat                  | —           | —                 | think           | deepseek-r1-tools:8b    | community         |
-| deepseek-r1:8b          | (direct pull)                                              | —                        | ~5 GB      | 131K    | reasoning, chat-only   | —                     | —           | —                 | —               | deepseek-r1:8b          | direct            |
-| qwen3-14b:q5            | dengcao/Qwen3-14B:Q5_K_M                                   | qwen3-14b.txt            | ~12 GB     | 40K     | analysis               | —                     | —           | —                 | —               | qwen3-14b:q5            | community         |
-| gemma4:31b              | (direct pull)                                              | —                        | ~22 GB     | 128K    | research, writing      | chat (alt)            | —           | —                 | research        | gemma4:31b              | direct            |
-| qwen3.5:27b             | (direct pull)                                              | —                        | ~20 GB     | 262K    | writing, general       | chat                  | —           | —                 | write, code     | qwen3.5:27b             | direct            |
-| codestral:22b           | (direct pull)                                              | —                        | ~14 GB     | 32K     | code apply/insert      | apply                 | —           | —                 | —               | codestral:22b           | direct            |
-| qwen2.5-coder:7b        | (direct pull)                                              | —                        | ~5 GB      | 32K     | fast code              | autocomplete          | —           | —                 | —               | qwen2.5-coder:7b        | direct            |
-| qwen2.5-coder:1.5b      | (direct pull)                                              | —                        | ~1 GB      | 32K     | autocomplete           | autocomplete          | —           | —                 | —               | qwen2.5-coder:1.5b      | direct            |
-| nomic-embed-text        | (direct pull)                                              | —                        | ~0.3 GB    | 2K      | embeddings             | embed                 | —           | —                 | —               | nomic-embed-text        | direct            |
+## Cloud Models
 
+Frontier models available via API only.
 
-> **Memory note:** code + think (~30 GB) fits comfortably. code + gemma4 research (~47 GB) is tight — Ollama swap evicts idle model. 220k alias is solo-only (38 GB alone). Ollama evicts after 5 min idle by default.
+| Model                | Provider API ID             | OpenRouter ID                 | Best for                    |
+| -------------------- | --------------------------- | ----------------------------- | --------------------------- |
+| Claude Opus 4.6      | `claude-opus-4-6`           | `anthropic/claude-opus-4-6`   | Complex tasks, best quality |
+| Claude Sonnet 4.6    | `claude-sonnet-4-6`         | `anthropic/claude-sonnet-4-6` | Balanced speed and quality  |
+| Claude Haiku 4.5     | `claude-haiku-4-5-20251001` | `anthropic/claude-haiku-4-5`  | Fast, lightweight tasks     |
+| GPT-4o               | `gpt-4o`                    | `openai/gpt-4o`               | General purpose             |
+| o3                   | `o3`                        | `openai/o3`                   | Deep reasoning              |
+| Gemini 2.5 Pro       | `gemini-2.5-pro`            | `google/gemini-2.5-pro`       | Long context, multimodal    |
+| Mistral Large        | `mistral-large-latest`      | `mistralai/mistral-large`     | European, multilingual      |
+| Perplexity Sonar Pro | —                           | `perplexity/sonar-pro`        | Web search, current events  |
+| Kimi k2.6            | `kimi-k2.6:cloud`           | `moonshot/kimi-k2.6`          | Long context, reasoning     |
 
----
+## Open Models
 
-## Alias Chain
+Available locally via Ollama and via OpenRouter.
 
-```
-hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M
-  └── qwen3.6-35b-a3b:q5   (HF base — use for ad-hoc or future derived aliases)
-        ├── qwen3.6-35b-32k:q5   (num_ctx 32768 — daily driver)
-        └── qwen3.6-35b-220k:q5  (num_ctx 220000 — solo, large context)
+| Model               | Ollama ID             | OpenRouter ID                           | Size (est) | Best for                   |
+| ------------------- | --------------------- | --------------------------------------- | ---------- | -------------------------- |
+| Codestral 22B       | `codestral:22b`       | `mistralai/codestral-2405`              | ~13GB      | Code, fill-in-middle       |
+| DeepSeek Coder 6.7B | `deepseek-coder:6.7b` | `deepseek/deepseek-coder-6.7b-instruct` | ~4GB       | Code generation            |
+| DeepSeek R1         | —                     | `deepseek/deepseek-r1`                  | —          | Reasoning, math            |
+| DeepSeek R1 14B     | `deepseek-r1:14b`     | `deepseek/deepseek-r1-distill-qwen-14b` | ~9GB       | Local reasoning            |
+| Gemma 3 12B         | `gemma3:12b`          | `google/gemma-3-12b-it`                 | ~7GB       | General purpose            |
+| GLM-4 Flash         | `glm-4-flash`         | `thudm/glm-4-flash`                     | ~5GB       | Fast, Chinese-optimized    |
+| Llama 3.1 70B       | —                     | `meta-llama/llama-3.1-70b-instruct`     | ~40GB      | Larger reasoning           |
+| Llama 3.2           | `llama3.2`            | `meta-llama/llama-3.2-3b-instruct`      | ~2GB       | General purpose            |
+| Gemma 4 31B         | `gemma4:31b`          | `google/gemma-4-31b-it`                 | ~18GB      | Reasoning, code            |
+| Phi-4               | `phi4`                | `microsoft/phi-4`                       | ~9GB       | Efficient, small footprint |
+| Qwen 2.5 Coder 7B   | `qwen2.5-coder:7b`    | `qwen/qwen-2.5-coder-7b-instruct`       | ~4.5GB     | Code generation            |
+| Qwen 3.6 35B        | `qwen3.6:35b`         | `qwen/qwen3.6-35b`                      | ~18GB      | Large reasoning            |
+| Qwen 3 Coder 7B     | `qwen3.2-coder:7b`    | `qwen/qwen3-coder-7b-instruct`          | ~4.5GB     | Code generation            |
 
-hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL
-  └── qwen3-coder-30b-a3b:q5   (HF base — use for ad-hoc or future derived aliases)
-        ├── qwen3-coder-30b-32k:q5   (num_ctx 32768 — daily driver)
-        └── qwen3-coder-30b-220k:q5  (num_ctx 220000 — solo, large context)
+## Local Model Specs
 
-hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M
-  └── qwen3-4b-2507:q4   (HF base)
-        └── qwen3-4b:q4  (compat alias used by configs)
+| Ollama ID         | Modelfile Path (Reference) | VRAM Req. | Status |
+| ----------------- | -------------------------- | --------- | ------ |
+| `gemma4:31b`      | `MODELS/gemma4-31b.mf`     | ~20GB     | ✅ Fits |
+| `qwen3.6:35b`     | `MODELS/qwen3.6-35b.mf`    | ~18GB     | ✅ Fits |
+| `codestral:22b`   | `MODELS/codestral-22b.mf`  | ~14GB     | ✅ Fits |
+| `deepseek-r1:14b` | `MODELS/ds-r1-14b.mf`      | ~10GB     | ✅ Fits |
+| `phi4`            | `MODELS/phi4.mf`           | ~10GB     | ✅ Fits |
 
-mfdoom/deepseek-r1-tool-calling:8b  →  deepseek-r1-tools:8b
-dengcao/Qwen3-14B:Q5_K_M           →  qwen3-14b:q5
-gemma4:31b                          →  direct pull
-```
+## Embedding Models
 
-Build order matters — `install_custom_models` in `install_models.sh` processes CUSTOM_MODELS_48GB top-to-bottom, so HF base aliases are created before derived aliases.
+| Model       | Ollama ID          | Use                    |
+| ----------- | ------------------ | ---------------------- |
+| Nomic Embed | `nomic-embed-text` | Codebase indexing, RAG |
 
----
+## OpenRouter Variants
 
-## Tool Quick Reference
+Append to any OpenRouter model ID:
 
-### Claude Code `~/.claude/config.json`
+| Suffix      | Effect                                 |
+| ----------- | -------------------------------------- |
+| `:free`     | Free tier (may be slower/rate-limited) |
+| `:nitro`    | Fastest available provider             |
+| `:thinking` | Extended chain-of-thought reasoning    |
+| `:online`   | Web search grounding                   |
+| `:extended` | Longer context window                  |
 
-| Tier             | Model                     | Notes                   |
-| ---------------- | ------------------------- | ----------------------- |
-| Sonnet (default) | `qwen3-coder-30b-32k:q5`  | 32k ctx, ~25 GB         |
-| Haiku (fast)     | `qwen3-4b:q4`             | ~3 GB, planning/routing |
-| Opus (large ctx) | `qwen3-coder-30b-220k:q5` | 220k ctx — solo only    |
+## References
 
-Routes through LiteLLM `:4000`.
-
-### Continue `~/.continue/config.yaml`
-
-| Role                    | Model                              |
-| ----------------------- | ---------------------------------- |
-| chat / edit / summarize | `qwen3-coder-30b-32k:q5`           |
-| chat (alt)              | `qwen3.5:27b`                      |
-| chat (reasoning)        | `deepseek-r1-tools:8b`             |
-| apply / insert          | `codestral:22b`                    |
-| autocomplete (fast)     | `qwen2.5-coder:1.5b`               |
-| autocomplete (quality)  | `qwen2.5-coder:7b`                 |
-| embed                   | `nomic-embed-text`                 |
-| rerank                  | `dengcao/Qwen3-Reranker-0.6B:Q8_0` |
-| chat (planning)         | `qwen3-4b:q4`                      |
-
-### Cline
-
-Primary model: `qwen3-coder-30b-32k:q5`
-Set in sidebar → gear → API Provider: Ollama, Base URL: `http://localhost:11434`
-
-### GitHub Copilot
-
-Chat model: `qwen3-coder-30b-32k:q5` (`coding` alias)
-Copilot Chat → Add Models → Ollama → select `qwen3-coder-30b-32k:q5`
-
-### OpenCode `~/.config/opencode/opencode.jsonc`
-
-| Agent      | Model                  | Purpose                            |
-| ---------- | ---------------------- | ---------------------------------- |
-| `code`     | `qwen3.5:27b`          | Implementation, editing, debugging |
-| `think`    | `deepseek-r1-tools:8b` | Reasoning, read-only               |
-| `write`    | `qwen3.5:27b`          | Docs, resumes, prose               |
-| `research` | `gemma4:31b`           | Discovery, saves to Obsidian       |
-| `plan`     | `qwen3-4b:q4`          | Next steps, breakdowns             |
-
-Default model: `qwen3.5:27b` · Small model: `qwen3-4b:q4`
-
-### LiteLLM `~/.config/litellm/config.yaml`
-
-Gemini model aliases (router_settings):
-- `gemini-2.5-pro / flash / flash-preview` → `qwen3.5:27b`
-- `gemini-2.5-flash-lite` → `qwen3-4b:q4`
-- `gemini-3.1-pro-preview` → `qwen3-coder-30b-32k:q5`
-
-### Ollama convenience aliases `~/.ollama/config.json`
-
-| Tag         | Model                    |
-| ----------- | ------------------------ |
-| `coding`    | `qwen3-coder-30b-32k:q5` |
-| `primary`   | `qwen3.5:27b`            |
-| `fast`      | `qwen3-4b:q4`            |
-| `reasoning` | `deepseek-r1-tools:8b`   |
-| `research`  | `gemma4:31b`             |
-
----
-
-## Install
-
-```shell
-bash scripts/install_models.sh   # select option 1 (M5 48GB)
-```
-
-Pulls direct models, then builds alias chain from CUSTOM_MODELS_48GB in `models.sh`.
+- [[Ollama]] — local model manager
+- [[OpenRouter]] — unified cloud API gateway
+- [[Cline]] — VS Code agent (uses these model IDs)
+- [[Continue]] — VS Code autocomplete (uses these model IDs)

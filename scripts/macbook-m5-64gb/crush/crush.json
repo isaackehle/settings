@@ -8,15 +8,15 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3.6-35b-32k:q6",
-          "name": "Qwen3.6 35B (32k)",
-          "context_window": 32768,
+          "id": "qwen3.6-35b-128k",
+          "name": "Qwen3.6 35B (128k, solo only)",
+          "context_window": 128000,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3.6-35b-220k:q6",
-          "name": "Qwen3.6 35B (220k, solo)",
-          "context_window": 220000,
+          "id": "qwen3.6-35b-24k",
+          "name": "Qwen3.6 35B (24k)",
+          "context_window": 24000,
           "default_max_tokens": 8192
         },
         {
@@ -54,6 +54,12 @@
           "name": "Qwen3 4B (fast)",
           "context_window": 32768,
           "default_max_tokens": 4096
+        },
+        {
+          "id": "kimi-k2.6-cloud",
+          "name": "Kimi k2.6 Cloud",
+          "context_window": 128000,
+          "default_max_tokens": 8192
         }
       ]
     }
