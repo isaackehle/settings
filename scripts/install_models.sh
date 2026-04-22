@@ -1,34 +1,48 @@
 #!/opt/homebrew/bin/bash
 
-. "$(dirname "${BASH_SOURCE[0]}")/models.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/exo/setup_exo.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "${SCRIPT_DIR}/helpers.sh"
+. "${SCRIPT_DIR}/exo/setup_exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose
+# Model configurations are loaded dynamically from profile folders
 
 # ==============================================
-# HARDWARE DETECTION
+# PROFILE CONFIGURATION
 # ==============================================
 
-# Returns 1 (48GB), 2 (64GB), 3 (32GB), or 4 (16GB) based on unified memory.
-_detect_profile() {
-    local hw_mem_gb
-    hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
-    if   [[ "$hw_mem_gb" -ge 56 ]]; then echo "2"   # M5 Max 64GB
-    elif [[ "$hw_mem_gb" -ge 40 ]]; then echo "1"   # M5 Max 48GB
-    elif [[ "$hw_mem_gb" -ge 24 ]]; then echo "3"   # M2/M3/M4 32GB
-    else                                 echo "4"   # 16GB
+# Load model configuration for a specific profile folder
+# $1 = profile folder name (e.g., macbook-m5-64gb)
+load_profile_models() {
+    local profile="$1"
+    local profile_file="${SCRIPT_DIR}/profiles/${profile}/models.sh"
+    if [[ -f "$profile_file" ]]; then
+        . "$profile_file"
+        return 0
     fi
+    return 1
 }
 
-_profile_label() {
-    case "$1" in
-        1) echo "M5 Max 48GB" ;;
-        2) echo "M5 Max 64GB" ;;
-        3) echo "M2/M3/M4 32GB" ;;
-        4) echo "16GB MacBook/Mini" ;;
-        *) echo "Unknown" ;;
-    esac
+# Map menu choice to profile folder
+# $1 = menu choice (1, 2, 3, etc.) OR profile folder name (e.g., macbook-m5-64gb)
+get_profile_for_choice() {
+    local choice="$1"
+    local i=1
+    while IFS= read -r folder; do
+        # Check if choice matches the folder name directly
+        if [[ "$choice" == "$folder" ]]; then
+            echo "$folder"
+            return 0
+        fi
+        # Check if choice matches the menu number
+        if [[ "$choice" == "$i" ]]; then
+            echo "$folder"
+            return 0
+        fi
+        i=$((i + 1))
+    done < <(_get_profile_folders)
+    return 1
 }
 
 # ==============================================
@@ -112,7 +126,6 @@ install_custom_models() {
         tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
         printf 'FROM %s\n' "$source" > "$tmp_mf"
         [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
-        # [[ -n "$thinking_mode" ]] && printf 'PARAMETER thinking %s\n' "$thinking_mode" >> "$tmp_mf"
 
         echo "▶ Creating alias: $alias_name"
         ollama create "$alias_name" -f "$tmp_mf"
@@ -214,35 +227,47 @@ prune_models() {
 install_coding_assistants() {
     local detected
     detected=$(_detect_profile)
-    local detected_label
-    detected_label=$(_profile_label "$detected")
 
     echo ""
     echo "Ollama Model Installer"
     echo "======================"
     echo ""
-    echo "  Detected hardware: $detected_label (auto-selected as [$detected])"
+    print_profile_menu "$detected"
     echo ""
-    echo "  1) M5 Max 48GB   — Q5 stack + 30B coder + 8B reasoning"
-    echo "  2) M5 Max 64GB   — Q6 stack + 30B coder + 32B reasoning + 70B solo"
-    echo "  3) M2/M3/M4 32GB — Q5 stack + 30B coder + 32B reasoning"
-    echo "  4) M1/M2/M3 16GB — Q4 lightweight stack"
-    echo "  5) exo            — distributed inference across Apple Silicon Macs"
-    echo "  6) Cancel"
-    echo ""
+
     read -p "Enter selection [1-6] (Enter = $detected): " choice
     choice="${choice:-$detected}"
 
-    local profile_name direct_arr custom_arr
-    case $choice in
-        1) profile_name="M5 Max 48GB";    direct_arr=MODELS_M5_48GB; custom_arr=CUSTOM_MODELS_48GB ;;
-        2) profile_name="M5 Max 64GB";    direct_arr=MODELS_M5_64GB; custom_arr=CUSTOM_MODELS_64GB ;;
-        3) profile_name="M2/M3/M4 32GB";  direct_arr=MODELS_32GB;    custom_arr=CUSTOM_MODELS_32GB ;;
-        4) profile_name="M1/M2/M3 16GB";  direct_arr=MODELS_16GB;    custom_arr=CUSTOM_MODELS_16GB ;;
-        5) setup_exo; return ;;
-        6) echo "Installation cancelled."; return ;;
-        *) echo "Invalid selection."; return 1 ;;
-    esac
+    # Handle exo option
+    local num_profiles
+    num_profiles=$(ls -d "${SCRIPT_DIR}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    local exo_choice=$((num_profiles + 1))
+    local cancel_choice=$((num_profiles + 2))
+
+    if [[ "$choice" == "$exo_choice" ]]; then
+        setup_exo
+        return
+    fi
+
+    if [[ "$choice" == "$cancel_choice" || "$choice" == "cancel" ]]; then
+        echo "Installation cancelled."
+        return
+    fi
+
+    # Get profile folder from choice
+    local profile
+    profile=$(get_profile_for_choice "$choice") || {
+        echo "Invalid selection."
+        return 1
+    }
+
+    # Load the profile's models
+    load_profile_models "$profile" || {
+        echo "Error: Could not load models for profile $profile"
+        return 1
+    }
+
+    local profile_name="$(_profile_label "$profile")"
 
     echo ""
     echo "What would you like to do?"
@@ -255,17 +280,17 @@ install_coding_assistants() {
 
     case $action in
         1)
-            install_models "$profile_name" "$direct_arr"
-            install_custom_models "$profile_name" "$custom_arr"
+            install_models "$profile_name" MODELS
+            install_custom_models "$profile_name" CUSTOM_MODELS
             ;;
         2)
-            prune_models "$profile_name" "$direct_arr" "$custom_arr"
+            prune_models "$profile_name" MODELS CUSTOM_MODELS
             ;;
         3)
-            install_models "$profile_name" "$direct_arr"
-            install_custom_models "$profile_name" "$custom_arr"
+            install_models "$profile_name" MODELS
+            install_custom_models "$profile_name" CUSTOM_MODELS
             echo ""
-            prune_models "$profile_name" "$direct_arr" "$custom_arr"
+            prune_models "$profile_name" MODELS CUSTOM_MODELS
             ;;
         *)
             echo "Invalid action."
@@ -281,10 +306,14 @@ install_coding_assistants() {
 list_model_profiles() {
     echo "Available hardware profiles:"
     echo ""
-    echo "📋 M5 Max 48GB (${#MODELS_M5_48GB[@]} pull + ${#CUSTOM_MODELS_48GB[@]} custom aliases)"
-    echo "📋 M5 Max 64GB (${#MODELS_M5_64GB[@]} pull + ${#CUSTOM_MODELS_64GB[@]} custom aliases)"
-    echo "📋 M2/M3/M4 32GB (${#MODELS_32GB[@]} pull + ${#CUSTOM_MODELS_32GB[@]} custom aliases)"
-    echo "📋 M1/M2/M3 16GB (${#MODELS_16GB[@]} pull + ${#CUSTOM_MODELS_16GB[@]} custom aliases)"
+
+    local i=1
+    local folder
+    while IFS= read -r folder; do
+        echo "📋 $(_profile_label "$folder") — $(_profile_description "$folder")"
+        i=$((i + 1))
+    done < <(_get_profile_folders)
+
     echo "📋 exo — distributed inference across multiple Apple Silicon Macs"
     echo ""
     echo "Run install_coding_assistants to select and install"

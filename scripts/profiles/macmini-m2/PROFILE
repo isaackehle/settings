@@ -1,0 +1,8 @@
+# Machine profile descriptor
+FOLDER=macmini-m2
+NAME=Mac mini M2 16GB
+MEMORY=16
+MEMORY_RANGE_MIN=0
+MEMORY_RANGE_MAX=20
+COMPUTER_TYPES=Macmini*
+DESCRIPTION=Q4 lightweight stack

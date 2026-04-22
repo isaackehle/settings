@@ -1,0 +1,8 @@
+# Machine profile descriptor
+FOLDER=macbook-m5-48gb
+NAME=MacBook Pro M5 Max 48GB
+MEMORY=48
+MEMORY_RANGE_MIN=40
+MEMORY_RANGE_MAX=56
+COMPUTER_TYPES=MacBook*,Mac1*,Mac14*
+DESCRIPTION=Q5 stack + 30B coder + 8B reasoning

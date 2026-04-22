@@ -1,0 +1,8 @@
+# Machine profile descriptor
+FOLDER=macbook-m1-16gb
+NAME=MacBook M1/M2 16GB
+MEMORY=16
+MEMORY_RANGE_MIN=0
+MEMORY_RANGE_MAX=20
+COMPUTER_TYPES=MacBook*,Mac1*,Mac14*
+DESCRIPTION=Q4 lightweight stack
