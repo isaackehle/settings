@@ -10,13 +10,14 @@
 # HARDWARE DETECTION
 # ==============================================
 
-# Returns 1 (48GB), 2 (64GB), or 3 (16GB) based on unified memory.
+# Returns 1 (48GB), 2 (64GB), 3 (32GB), or 4 (16GB) based on unified memory.
 _detect_profile() {
     local hw_mem_gb
     hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
     if   [[ "$hw_mem_gb" -ge 56 ]]; then echo "2"   # M5 Max 64GB
     elif [[ "$hw_mem_gb" -ge 40 ]]; then echo "1"   # M5 Max 48GB
-    else                                  echo "3"   # 16GB
+    elif [[ "$hw_mem_gb" -ge 24 ]]; then echo "3"   # M2/M3/M4 32GB
+    else                                 echo "4"   # 16GB
     fi
 }
 
@@ -24,7 +25,8 @@ _profile_label() {
     case "$1" in
         1) echo "M5 Max 48GB" ;;
         2) echo "M5 Max 64GB" ;;
-        3) echo "16GB MacBook/Mini" ;;
+        3) echo "M2/M3/M4 32GB" ;;
+        4) echo "16GB MacBook/Mini" ;;
         *) echo "Unknown" ;;
     esac
 }
@@ -221,22 +223,24 @@ install_coding_assistants() {
     echo ""
     echo "  Detected hardware: $detected_label (auto-selected as [$detected])"
     echo ""
-    echo "  1) M5 Max 48GB   — standard Q5 stack"
-    echo "  2) M5 Max 64GB   — extended Q6 stack + 32B reasoning + 70B solo"
-    echo "  3) M1/M2/M3 16GB — lightweight Q4 stack"
-    echo "  4) exo           — distributed inference across multiple Apple Silicon Macs"
-    echo "  5) Cancel"
+    echo "  1) M5 Max 48GB   — Q5 stack + 30B coder + 8B reasoning"
+    echo "  2) M5 Max 64GB   — Q6 stack + 30B coder + 32B reasoning + 70B solo"
+    echo "  3) M2/M3/M4 32GB — Q5 stack + 30B coder + 32B reasoning"
+    echo "  4) M1/M2/M3 16GB — Q4 lightweight stack"
+    echo "  5) exo            — distributed inference across Apple Silicon Macs"
+    echo "  6) Cancel"
     echo ""
-    read -p "Enter selection [1-5] (Enter = $detected): " choice
+    read -p "Enter selection [1-6] (Enter = $detected): " choice
     choice="${choice:-$detected}"
 
     local profile_name direct_arr custom_arr
     case $choice in
-        1) profile_name="M5 Max 48GB"; direct_arr=MODELS_M5_48GB;  custom_arr=CUSTOM_MODELS_48GB ;;
-        2) profile_name="M5 Max 64GB"; direct_arr=MODELS_M5_64GB;  custom_arr=CUSTOM_MODELS_64GB ;;
-        3) profile_name="16GB";        direct_arr=MODELS_16GB;       custom_arr=CUSTOM_MODELS_16GB ;;
-        4) setup_exo; return ;;
-        5) echo "Installation cancelled."; return ;;
+        1) profile_name="M5 Max 48GB";    direct_arr=MODELS_M5_48GB; custom_arr=CUSTOM_MODELS_48GB ;;
+        2) profile_name="M5 Max 64GB";    direct_arr=MODELS_M5_64GB; custom_arr=CUSTOM_MODELS_64GB ;;
+        3) profile_name="M2/M3/M4 32GB";  direct_arr=MODELS_32GB;    custom_arr=CUSTOM_MODELS_32GB ;;
+        4) profile_name="M1/M2/M3 16GB";  direct_arr=MODELS_16GB;    custom_arr=CUSTOM_MODELS_16GB ;;
+        5) setup_exo; return ;;
+        6) echo "Installation cancelled."; return ;;
         *) echo "Invalid selection."; return 1 ;;
     esac
 
@@ -279,7 +283,8 @@ list_model_profiles() {
     echo ""
     echo "📋 M5 Max 48GB (${#MODELS_M5_48GB[@]} pull + ${#CUSTOM_MODELS_48GB[@]} custom aliases)"
     echo "📋 M5 Max 64GB (${#MODELS_M5_64GB[@]} pull + ${#CUSTOM_MODELS_64GB[@]} custom aliases)"
-    echo "📋 16GB MacBook (${#MODELS_16GB[@]} pull + ${#CUSTOM_MODELS_16GB[@]} custom aliases)"
+    echo "📋 M2/M3/M4 32GB (${#MODELS_32GB[@]} pull + ${#CUSTOM_MODELS_32GB[@]} custom aliases)"
+    echo "📋 M1/M2/M3 16GB (${#MODELS_16GB[@]} pull + ${#CUSTOM_MODELS_16GB[@]} custom aliases)"
     echo "📋 exo — distributed inference across multiple Apple Silicon Macs"
     echo ""
     echo "Run install_coding_assistants to select and install"

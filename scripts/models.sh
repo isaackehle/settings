@@ -105,6 +105,28 @@ MODELS_M5_64GB=(
     "llama3.3:70b"                                      # ~43 GB | General purpose (large, solo use only)
 )
 
+# M2/M3/M4 32GB - Extended Q5 stack with 32B reasoning
+MODELS_32GB=(
+    # Custom aliases built via CUSTOM_MODELS_32GB below:
+    #   qwen3.6-35b-a3b:q4   (HF base — ~22 GB)
+    #   qwen3.6-35b-32k:q4   (32K ctx alias)
+    #   qwen3-coder-30b-a3b:q5   (HF base — ~21 GB)
+    #   qwen3-coder-30b-32k:q5   (32K ctx alias)
+    #   qwen3-4b:q4
+    #   qwen3-14b:q5
+    #   deepseek-r1-tools:8b
+    #   deepseek-r1-tools:14b
+
+    "qwen3.5:27b"                                       # ~20 GB | Writing, docs, cover letters
+
+    "deepseek-r1:32b"                                   # ~21 GB | Deep reasoning — solo only
+
+    "qwen2.5-coder:7b"                                  # ~5 GB  | Fast code tasks
+    "qwen2.5-coder:1.5b"                                # ~1 GB  | Autocomplete
+
+    "nomic-embed-text"                                  # ~0.3 GB| Embeddings (Continue/RAG)
+)
+
 # M1/M2/M3 16GB - Optimized for smaller memory
 MODELS_16GB=(
     # Custom aliases built via CUSTOM_MODELS_16GB below:
@@ -339,6 +361,29 @@ CUSTOM_MODELS_64GB=(
     "Qwen3-32B:q5|qwen3-32b:q5||"                                    # auto-registered short name → lowercase alias
     "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"    # ~10 GB
     "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b||"    # ~20 GB
+)
+
+CUSTOM_MODELS_32GB=(
+    # Format: "source|alias|num_ctx"
+    # HF base aliases must come before derived aliases that reference them.
+
+    # ── HF base aliases ───────────────────────────────────────────────────────
+    "hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q4_K_M|qwen3.6-35b-a3b:q4||"                 # ~22 GB (Q4 — headroom for concurrent models)
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"   # ~21 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                # ~3 GB
+
+    # ── Derived context aliases ───────────────────────────────────────────────
+    "qwen3.6-35b-a3b:q4|qwen3.6-35b-32k:q4|32768|"            # ~22 GB — alt coder, 32K ctx
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b-32k:q5|32768|"    # ~25 GB — primary coder, 32K ctx
+
+    # ── Backward-compat aliases ───────────────────────────────────────────────
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"
+
+    # ── Community model aliases ───────────────────────────────────────────────
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                          # ~12 GB — research
+    "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                                  # auto-registered short name → lowercase alias
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||"         # ~5 GB
+    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"       # ~10 GB
 )
 
 CUSTOM_MODELS_16GB=(

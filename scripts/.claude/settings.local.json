@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "apple-reminders",
+    "home-assistant"
+  ]
+}
