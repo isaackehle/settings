@@ -9,6 +9,10 @@
         "apiKey": "sk-local"
       },
       "models": {
+        // Gemma 4
+        "gemma4-31b": {
+          "name": "Gemma 4 31B"
+        },
         // Qwen3-Coder-Next 80B
         "qwen3-coder-next-80b-q4": {
           "name": "Qwen 3 Coder Next 80B"
