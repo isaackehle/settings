@@ -9,24 +9,24 @@
 
 One row per property, one column per model. The alias chain shows how each model is built.
 
-| Model                   | Source                                                     | Modelfile params | RAM loaded | Capabilities           | Continue: role        | Cline: role | Claude Code: tier | OpenCode: agent | LiteLLM model_name      | Ollama alias type |
-| ----------------------- | ---------------------------------------------------------- | ---------------- | ---------- | ---------------------- | --------------------- | ----------- | ----------------- | --------------- | ----------------------- | ----------------- |
-| qwen3.6-35b-a3b:q5      | hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M           | —                | ~25 GB     | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3.6-35b-32k:q5      | ← qwen3.6-35b-a3b:q5                                       | num_ctx 32768    | ~25 GB     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3.6-35b-32k:q5      | derived (ctx)     |
-| qwen3.6-35b-220k:q5     | ← qwen3.6-35b-a3b:q5                                       | num_ctx 220000   | ~38 GB     | code, tools, large ctx | —                     | —           | opus              | —               | qwen3.6-35b-220k:q5     | derived (ctx)     |
-| qwen3-coder-30b-a3b:q5  | hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL | —                | ~21 GB     | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3-coder-30b-32k:q5  | ← qwen3-coder-30b-a3b:q5                                   | num_ctx 32768    | ~25 GB     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3-coder-30b-32k:q5  | derived (ctx)     |
-| qwen3-coder-30b-220k:q5 | ← qwen3-coder-30b-a3b:q5                                   | num_ctx 220000   | ~38 GB     | code, tools, large ctx | —                     | —           | opus              | —               | qwen3-coder-30b-220k:q5 | derived (ctx)     |
-| qwen3-4b-2507:q4        | hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M        | —                | ~3 GB      | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
-| qwen3-4b:q4             | ← qwen3-4b-2507:q4                                         | —                | ~3 GB      | planning, fast         | chat                  | —           | haiku             | plan            | qwen3-4b:q4             | compat            |
-| deepseek-r1-tools:8b    | mfdoom/deepseek-r1-tool-calling:8b                         | —                | ~5 GB      | reasoning + tools      | chat                  | —           | —                 | think           | deepseek-r1-tools:8b    | community         |
-| deepseek-r1:8b          | (direct pull)                                              | —                | ~5 GB      | reasoning, chat-only   | —                     | —           | —                 | —               | deepseek-r1:8b          | direct            |
-| qwen3-14b:q5            | dengcao/Qwen3-14B:Q5_K_M                                   | —                | ~12 GB     | research, analysis     | —                     | —           | —                 | research        | qwen3-14b:q5            | community         |
-| qwen3.5:27b             | (direct pull)                                              | —                | ~20 GB     | writing, general       | chat                  | —           | —                 | write, code     | qwen3.5:27b             | direct            |
-| codestral:22b           | (direct pull)                                              | —                | ~14 GB     | code apply/insert      | apply                 | —           | —                 | —               | codestral:22b           | direct            |
-| qwen2.5-coder:7b        | (direct pull)                                              | —                | ~5 GB      | fast code              | autocomplete          | —           | —                 | —               | qwen2.5-coder:7b        | direct            |
-| qwen2.5-coder:1.5b      | (direct pull)                                              | —                | ~1 GB      | autocomplete           | autocomplete          | —           | —                 | —               | qwen2.5-coder:1.5b      | direct            |
-| nomic-embed-text        | (direct pull)                                              | —                | ~0.3 GB    | embeddings             | embed                 | —           | —                 | —               | nomic-embed-text        | direct            |
+| Model                   | Source                                                     | Modelfile                | RAM loaded | Context | Capabilities           | Continue: role        | Cline: role | Claude Code: tier | OpenCode: agent | LiteLLM model_name      | Ollama alias type |
+| ----------------------- | ---------------------------------------------------------- | ------------------------ | ---------- | ------- | ---------------------- | --------------------- | ----------- | ----------------- | --------------- | ----------------------- | ----------------- |
+| qwen3.6-35b-a3b:q5      | hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q5_K_M           | qwen3.6-35b-a3b.txt      | ~25 GB     | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
+| qwen3.6-35b-32k:q5      | ← qwen3.6-35b-a3b:q5                                       | qwen3.6-35b-32k.txt      | ~25 GB     | 32K     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3.6-35b-32k:q5      | derived (ctx)     |
+| qwen3.6-35b-220k:q5     | ← qwen3.6-35b-a3b:q5                                       | qwen3.6-35b-220k.txt     | ~38 GB     | 220K    | code, tools, large ctx | —                     | —           | opus              | —               | qwen3.6-35b-220k:q5     | derived (ctx)     |
+| qwen3-coder-30b-a3b:q5  | hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL | qwen3-coder-30b-a3b.txt  | ~21 GB     | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
+| qwen3-coder-30b-32k:q5  | ← qwen3-coder-30b-a3b:q5                                   | qwen3-coder-30b-32k.txt  | ~25 GB     | 32K     | code, tools            | chat, edit, summarize | primary     | sonnet            | —               | qwen3-coder-30b-32k:q5  | derived (ctx)     |
+| qwen3-coder-30b-220k:q5 | ← qwen3-coder-30b-a3b:q5                                   | qwen3-coder-30b-220k.txt | ~38 GB     | 220K    | code, tools, large ctx | —                     | —           | opus              | —               | qwen3-coder-30b-220k:q5 | derived (ctx)     |
+| qwen3-4b-2507:q4        | hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M        | qwen3-4b-2507.txt        | ~3 GB      | 262K    | base weight            | —                     | —           | —                 | —               | —                       | HF base           |
+| qwen3-4b:q4             | ← qwen3-4b-2507:q4                                         | qwen3-4b.txt             | ~3 GB      | 262K    | planning, fast         | chat                  | —           | haiku             | plan            | qwen3-4b:q4             | compat            |
+| deepseek-r1-tools:8b    | mfdoom/deepseek-r1-tool-calling:8b                         | deepseek-r1-tools-8b.txt | ~5 GB      | 131K    | reasoning + tools      | chat                  | —           | —                 | think           | deepseek-r1-tools:8b    | community         |
+| deepseek-r1:8b          | (direct pull)                                              | —                        | ~5 GB      | 131K    | reasoning, chat-only   | —                     | —           | —                 | —               | deepseek-r1:8b          | direct            |
+| qwen3-14b:q5            | dengcao/Qwen3-14B:Q5_K_M                                   | qwen3-14b.txt            | ~12 GB     | 40K     | research, analysis     | —                     | —           | —                 | research        | qwen3-14b:q5            | community         |
+| qwen3.5:27b             | (direct pull)                                              | —                        | ~20 GB     | 262K    | writing, general       | chat                  | —           | —                 | write, code     | qwen3.5:27b             | direct            |
+| codestral:22b           | (direct pull)                                              | —                        | ~14 GB     | 32K     | code apply/insert      | apply                 | —           | —                 | —               | codestral:22b           | direct            |
+| qwen2.5-coder:7b        | (direct pull)                                              | —                        | ~5 GB      | 32K     | fast code              | autocomplete          | —           | —                 | —               | qwen2.5-coder:7b        | direct            |
+| qwen2.5-coder:1.5b      | (direct pull)                                              | —                        | ~1 GB      | 32K     | autocomplete           | autocomplete          | —           | —                 | —               | qwen2.5-coder:1.5b      | direct            |
+| nomic-embed-text        | (direct pull)                                              | —                        | ~0.3 GB    | 2K      | embeddings             | embed                 | —           | —                 | —               | nomic-embed-text        | direct            |
 
 
 > **Memory note:** code + think (~30 GB) fits comfortably. code + write pushes ~45 GB — fine, nothing else loads. 220k alias is solo-only (38 GB alone). Ollama evicts after 5 min idle by default.
@@ -88,6 +88,11 @@ Routes through LiteLLM `:4000`.
 
 Primary model: `qwen3-coder-30b-32k:q5`
 Set in sidebar → gear → API Provider: Ollama, Base URL: `http://localhost:11434`
+
+### GitHub Copilot
+
+Chat model: `qwen3-coder-30b-32k:q5` (`coding` alias)
+Copilot Chat → Add Models → Ollama → select `qwen3-coder-30b-32k:q5`
 
 ### OpenCode `~/.config/opencode/opencode.jsonc`
 

@@ -21,12 +21,6 @@ Install the VS Code extension from the Marketplace: search **GitHub Copilot**.
 
 VS Code has native Ollama integration — no separate extension needed.
 
-```shell
-# Recommended: launch VS Code integration automatically
-ollama launch vscode
-```
-
-Or manually:
 1. Open **Copilot Chat** sidebar
 2. Click the settings gear icon
 3. Click **Add Models** → select **Ollama**
@@ -34,11 +28,19 @@ Or manually:
 
 **Requirements:** Ollama v0.18.3+, VS Code 1.113+, GitHub Copilot Chat extension 0.41.0+
 
-```shell
-ollama pull qwen3.2-coder:7b
-ollama pull deepseek-coder:6.7b
-ollama pull codestral:22b
-```
+Models are installed per machine profile via `install_models.sh`. Use the Copilot Chat model picker to select the Ollama model after enabling the integration.
+
+Recommended chat model per profile (matches Cline primary):
+
+| Profile         | Chat model               | Ollama alias |
+| --------------- | ------------------------ | ------------ |
+| macbook-m1      | `qwen3:14b`              | `primary`    |
+| macmini-m2      | `qwen3:14b`              | `primary`    |
+| macbook-m2-32gb | `qwen3-coder-30b-32k:q5` | `coding`     |
+| macbook-m5-48gb | `qwen3-coder-30b-32k:q5` | `coding`     |
+| macbook-m5-64gb | `qwen3-coder-30b-32k:q6` | `coding`     |
+
+See each profile's `MODELS.md` → GitHub Copilot section for the canonical model name.
 
 ## BYOK (Bring Your Own Key)
 
@@ -48,7 +50,7 @@ Replace the default chat with any OpenAI-compatible model:
 2. Add **OpenAI Compatible** provider
 3. Set base URL: `http://localhost:11434/v1` (for Ollama)
 
-Or via `settings.json`:
+Or via `settings.json` (substitute the model for your profile — see table above):
 
 ```json
 {
@@ -56,7 +58,7 @@ Or via `settings.json`:
   "github.copilot.chat.customOAIModels": {
     "ollama": {
       "endpoint": "http://localhost:11434/v1",
-      "model": "qwen3.2-coder:7b"
+      "model": "qwen3-coder-30b-32k:q5"
     }
   }
 }

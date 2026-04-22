@@ -1,0 +1,1 @@
+FROM hf.co/bartowski/Qwen_Qwen3.6-35B-A3B-GGUF:Q6_K

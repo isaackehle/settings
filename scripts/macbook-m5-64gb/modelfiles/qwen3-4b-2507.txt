@@ -1,0 +1,1 @@
+FROM hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL

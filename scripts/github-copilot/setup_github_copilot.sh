@@ -3,6 +3,13 @@
 
 # Set up GitHub Copilot — VS Code extension + gh CLI extension.
 
+_install_copilot_cli() {
+    print_info "Installing copilot-cli via brew..."
+    brew install copilot-cli && return 0
+    print_warning "brew install failed — install manually: https://github.com/features/copilot/cli/"
+    return 1
+}
+
 verify_github_copilot() {
     if command_exists "gh" && gh extension list 2>/dev/null | grep -q "github/gh-copilot"; then
         print_status "gh-copilot extension installed"
@@ -32,6 +39,8 @@ setup_github_copilot() {
     else
         print_warning "VS Code CLI (code) not found — install extensions from Marketplace"
     fi
+
+    _install_copilot_cli
 
     print_info ""
     print_info "=== GitHub Copilot ==="
