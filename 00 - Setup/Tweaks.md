@@ -33,7 +33,12 @@ For scroll issues while middle-clicking: Wheel Mode → Ratchet, uncheck Smooth 
 ## CLI Tools
 
 ```shell
-brew install tree pstree rename vim
+brew install tree pstree
+
+brew install rename vim
+
+brew install watch
+
 ```
 
 ## Network Drives

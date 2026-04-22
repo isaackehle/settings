@@ -1,4 +1,24 @@
 model_list:
+  # --- Cloud Models ---
+  - model_name: kimi-k2.6-cloud
+    litellm_params:
+      model: openrouter/moonshot/kimi-k2.6
+      max_tokens: 4096
+      num_ctx: 32768
+
+  - model_name: glm-5.1-cloud
+    litellm_params:
+      model: openrouter/thudm/glm-5.1
+      max_tokens: 4096
+      num_ctx: 32768
+
+  - model_name: gemma4-31b-cloud
+    litellm_params:
+      model: ollama_chat/gemma4:31b-cloud
+      api_base: http://localhost:11434
+      max_tokens: 4096
+      num_ctx: 32768
+
   # --- General / coding ---
   - model_name: qwen3-14b
     litellm_params:
