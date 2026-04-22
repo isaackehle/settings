@@ -1,7 +1,7 @@
 # MacBook Pro M5 Max 64 GB — Model Matrix
 
 **Hardware:** M5 Max · 64 GB unified memory · Q6 stack
-**Models last updated:** 2026-04-19
+**Models last updated:** 2026-04-22
 
 ---
 
@@ -23,8 +23,9 @@ One row per property, one column per model. The alias chain shows how each model
 | qwen3-coder-next-80b:q4     | qwen3-coder-next:q4_K_M                                    | qwen3-coder-next-80b.txt     | ~51 GB     | 262K    |          |                        |                       |             |                   |                 |                         |                   |
 | qwen3-coder-next-80b:q4-16k | qwen3-coder-next-80b:q4                                    | qwen3-coder-next-80b-16k.txt | ~51 GB     | 16K     |          |                        |                       |             |                   |                 |                         |                   |
 | deepseek-r1-tools:14b       | mfdoom/deepseek-r1-tool-calling:14b                        | deepseek-r1-tools-14b.txt    | ~10 GB     | 131K    | -        | reasoning + tools      | reasoning             | —           | —                 | think           | deepseek-r1-tools:14b   | community         |
+| gemma4:31b                  | (direct pull)                                              | —                            | ~22 GB     | 128K    | -        | research, writing      | chat (alt)            | —           | —                 | research        | gemma4:31b              | direct            |
 
-> **Memory note:** code + think (~50 GB) is the outer limit — nothing else loads. code + write (~50 GB) same. 220k alias is solo-only (~44 GB alone). 70b is solo-only (43 GB alone). Pair code (28 GB) + research (22 GB) = 50 GB — swap Ollama evicts the idle one automatically after 5 min.
+> **Memory note:** code + think (~50 GB) is the outer limit — nothing else loads. code + gemma4 research (~50 GB) same. 220k alias is solo-only (~44 GB alone). 80b is solo-only (~51 GB alone). Pair code (28 GB) + gemma4 (22 GB) = 50 GB — swap Ollama evicts the idle one automatically after 5 min.
 
 ```shell
 ollama create qwen3-coder-next-80b:q4 -f modelfiles/qwen3-coder-next-80b.txt
@@ -51,9 +52,7 @@ hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL
         └── qwen3-4b:q8  (compat alias used by configs)
 
 mfdoom/deepseek-r1-tool-calling:14b  →  deepseek-r1-tools:14b
-mfdoom/deepseek-r1-tool-calling:32b  →  deepseek-r1-tools:32b
-dengcao/Qwen3-14B:Q8_0               →  qwen3-14b:q8
-dengcao/Qwen3-32B:Q5_K_M             →  qwen3-32b:q5
+gemma4:31b                            →  direct pull
 ```
 
 Build order matters — `install_custom_models` in `install_models.sh` processes CUSTOM_MODELS_64GB top-to-bottom, so HF base aliases are created before derived aliases.
@@ -105,7 +104,7 @@ Copilot Chat → Add Models → Ollama → select `qwen3-coder-30b-32k:q6`
 | `code`     | `qwen3-coder-30b-32k:q6` | Implementation, editing, debugging |
 | `think`    | `deepseek-r1-tools:14b`  | Reasoning, read-only               |
 | `write`    | `qwen3.5:27b`            | Docs, resumes, prose               |
-| `research` | `qwen3-32b:q5`           | Discovery, saves to Obsidian       |
+| `research` | `gemma4:31b`             | Discovery, saves to Obsidian       |
 | `plan`     | `qwen3-4b:q8`            | Next steps, breakdowns             |
 
 Default model: `qwen3.5:27b` · Small model: `qwen3-4b:q8`
@@ -118,10 +117,6 @@ Gemini model aliases (router_settings):
 - `gemini-3.0-pro` → `qwen3-coder-30b-32k:q6`
 - `gemini-3.1-pro-preview` → `qwen3.6-35b-32k:q6`
 
-Gemini model aliases (router_settings):
-- `gemini-2.5-pro / flash / flash-preview` → `qwen3.5:27b`
-- `gemini-2.5-flash-lite` → `qwen3-4b:q8`
-
 ### Ollama convenience aliases `~/.ollama/config.json`
 
 | Tag         | Model                    |
@@ -130,7 +125,7 @@ Gemini model aliases (router_settings):
 | `primary`   | `qwen3.5:27b`            |
 | `fast`      | `qwen3-4b:q8`            |
 | `reasoning` | `deepseek-r1-tools:14b`  |
-| `research`  | `qwen3-32b:q5`           |
+| `research`  | `gemma4:31b`             |
 
 ---
 
