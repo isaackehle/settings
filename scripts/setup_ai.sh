@@ -20,6 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/../scripts/anythingllm/setup_anythingllm.sh"
 . "$SCRIPT_DIR/../scripts/vscode/setup_vscode.sh"
 . "$SCRIPT_DIR/../scripts/windsurf/setup_windsurf.sh"
+. "$SCRIPT_DIR/../scripts/github-copilot/setup_github_copilot.sh"
 . "$SCRIPT_DIR/install_models.sh"
 
 # Configuration directory
@@ -267,7 +268,7 @@ verify_installations() {
     print_info "Verifying tool installations..."
     local verification_results=""
     local all_passed=true
-    for check in verify_claude_code verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_litellm; do
+    for check in verify_claude_code verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_litellm verify_github_copilot; do
         local label="${check#verify_}"
         if $check; then
             verification_results="$verification_results ✓ $label - OK\n"
@@ -296,6 +297,7 @@ install_tools() {
     verify_groq         || setup_groq      || print_error "Failed to install Groq"
     verify_litellm      || setup_litellm      || print_error "Failed to install LiteLLM"
     verify_anythingllm  || setup_anythingllm  || print_error "Failed to install AnythingLLM"
+    verify_github_copilot || setup_github_copilot || print_error "Failed to install GitHub Copilot"
     verify_installations
 }
 
@@ -318,6 +320,7 @@ _run_one() {
         setup:anythingllm) setup_anythingllm ;;
         setup:litellm)    setup_litellm ;;
         setup:opencode)   setup_opencode ;;
+        setup:copilot)    setup_github_copilot ;;
         setup:vscode)     setup_vscode ;;
         setup:windsurf)   setup_windsurf ;;
         restore:claude)   restore_claude ;;
@@ -366,6 +369,7 @@ interactive_menu() {
         continue
         litellm
         anythingllm
+        copilot
         exo
         olol
         )
@@ -384,11 +388,12 @@ interactive_menu() {
         "continue    - deploy Continue.dev config"
         "litellm     - install proxy + deploy config"
         "anythingllm - install + configure Ollama provider"
+        "copilot     - install gh-copilot extension + VS Code extensions"
         "exo         - install exo distributed inference"
         "olol        - install Ollama load balancer"
     )
     # Default selections
-    local sel=(0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    local sel=(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 
     while true; do
         echo ""
@@ -465,11 +470,12 @@ main() {
             setup_claude
             ;;
         setup)
-            setup_continue
-            setup_opencode
-            setup_crush
-            setup_claude
-            print_status "All tool configurations applied"
+    setup_continue
+    setup_opencode
+    setup_crush
+    setup_claude
+    setup_github_copilot
+    print_status "All tool configurations applied"
             ;;
         vscode)
             setup_vscode
@@ -507,6 +513,9 @@ main() {
         anythingllm)
             setup_anythingllm
             ;;
+        copilot)
+            setup_github_copilot
+            ;;
         check)
             check_system_requirements
             ;;
@@ -526,7 +535,7 @@ main() {
             interactive_menu
             ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|copilot|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo "  backup      - Backup all existing configurations"
@@ -547,6 +556,7 @@ main() {
             echo "  gemini      - Install Gemini CLI"
             echo "  litellm     - Setup LiteLLM proxy (install + deploy config)"
             echo "  anythingllm - Install AnythingLLM + print Ollama provider config"
+            echo "  copilot     - Install gh-copilot extension + VS Code Copilot extensions"
             echo "  check       - Check system requirements"
             echo "  verify      - Verify all tool installations"
             echo "  install     - Install all tools (check + install-if-missing + verify)"
