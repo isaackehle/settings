@@ -105,15 +105,9 @@ Personal macOS development environment setup guide and reference.
 - [[Dashboards]] — Monitoring and dashboards
 - [[Collaborations]] — Team collaboration tools
 - [[Task Managers]] — Project management (ClickUp, etc.)
-
-## 04 - Security
-
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
-
-## 05 - System
-
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 
