@@ -35,6 +35,7 @@ Available locally via Ollama and via OpenRouter.
 | GLM-4 Flash         | `glm-4-flash`         | `thudm/glm-4-flash`                     | Fast, Chinese-optimized    |
 | Llama 3.1 70B       | —                     | `meta-llama/llama-3.1-70b-instruct`     | Larger reasoning           |
 | Llama 3.2           | `llama3.2`            | `meta-llama/llama-3.2-3b-instruct`      | General purpose            |
+| Gemma 4 31B         | `gemma4:31b`          | `google/gemma-4-31b-it`                 | Reasoning, code            |
 | Phi-4               | `phi4`                | `microsoft/phi-4`                       | Efficient, small footprint |
 | Qwen 2.5 Coder 7B   | `qwen2.5-coder:7b`    | `qwen/qwen-2.5-coder-7b-instruct`       | Code generation            |
 | Qwen 3 30B          | `qwen3:30b-a3b`       | `qwen/qwen3-30b-a3b`                    | Large reasoning            |
