@@ -111,7 +111,7 @@ Personal macOS development environment setup guide and reference.
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 
-## 06 - AI
+## 04 - AI
 
 - [[AI Setup Architecture]] — Layered stack design, tool conflict map, machine-type model selection, and VS Code troubleshooting.
 - [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
