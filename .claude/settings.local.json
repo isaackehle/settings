@@ -23,7 +23,13 @@
       "Bash(mkdir -p /Users/isaac/code/isaackehle/settings/scripts/macbook-m5-48gb/modelfiles)",
       "Bash(mkdir -p /Users/isaac/code/isaackehle/settings/scripts/macbook-m2-32gb/modelfiles)",
       "Bash(mkdir -p /Users/isaac/code/isaackehle/settings/scripts/macbook-m1/modelfiles)",
-      "Bash(mkdir -p /Users/isaac/code/isaackehle/settings/scripts/macmini-m2/modelfiles)"
+      "Bash(mkdir -p /Users/isaac/code/isaackehle/settings/scripts/macmini-m2/modelfiles)",
+      "Bash(mkdir -p docs)",
+      "Bash(mv \"00 - Setup\" \"01 - Terminal\" \"02 - Development\" \"03 - Apps\" \"04 - AI\" docs/)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "apple-reminders",
+    "Home Assistant"
+  ]
 }
