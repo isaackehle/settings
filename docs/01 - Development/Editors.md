@@ -9,7 +9,7 @@ Code editors and IDEs available via Homebrew.
 ## Installation
 
 | Tool                                                | Command                                  |
-| --------------------------------------------------- | ---------------------------------------- |
+| --- | --- |
 | [Araxis Merge](https://www.araxis.com/merge/)       | `brew install --cask araxis-merge`       |
 | [Cursor](https://cursor.com/)                       | `brew install --cask cursor`             |
 | [Helix](https://helix-editor.com/)                  | `brew install helix`                     |

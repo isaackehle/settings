@@ -12,9 +12,27 @@
     "error": ""
   },
   {
+    "url": "https://2023.stateofjs.com/en-US/libraries/front-end-frameworks/",
+    "status": 200,
+    "final": "https://2023.stateofjs.com/en-US/libraries/front-end-frameworks/",
+    "error": ""
+  },
+  {
     "url": "https://2fas.com/",
     "status": 200,
     "final": "https://2fas.com/",
+    "error": ""
+  },
+  {
+    "url": "https://angular.io/cli",
+    "status": 200,
+    "final": "https://v17.angular.io/cli",
+    "error": ""
+  },
+  {
+    "url": "https://anythingllm.com/",
+    "status": 200,
+    "final": "https://anythingllm.com/",
     "error": ""
   },
   {
@@ -24,9 +42,27 @@
     "error": ""
   },
   {
+    "url": "https://aquasecurity.github.io/tfsec/",
+    "status": 200,
+    "final": "https://aquasecurity.github.io/tfsec/",
+    "error": ""
+  },
+  {
     "url": "https://arc.net/",
     "status": 200,
     "final": "https://arc.net/",
+    "error": ""
+  },
+  {
+    "url": "https://artifacthub.io/",
+    "status": 200,
+    "final": "https://artifacthub.io/",
+    "error": ""
+  },
+  {
+    "url": "https://aws.amazon.com/serverless/",
+    "status": 200,
+    "final": "https://aws.amazon.com/serverless/",
     "error": ""
   },
   {
@@ -45,6 +81,30 @@
     "url": "https://brew.sh/",
     "status": 200,
     "final": "https://brew.sh/",
+    "error": ""
+  },
+  {
+    "url": "https://build.nvidia.com/openshell",
+    "status": 200,
+    "final": "https://build.nvidia.com/openshell",
+    "error": ""
+  },
+  {
+    "url": "https://bun.sh/",
+    "status": 200,
+    "final": "https://bun.sh/",
+    "error": ""
+  },
+  {
+    "url": "https://bun.sh/docs",
+    "status": 200,
+    "final": "https://bun.sh/docs",
+    "error": ""
+  },
+  {
+    "url": "https://charm.sh/",
+    "status": 200,
+    "final": "https://charm.land/",
     "error": ""
   },
   {
@@ -76,6 +136,48 @@
     "status": 200,
     "final": "https://codefresh.io/",
     "error": ""
+  },
+  {
+    "url": "https://codeium.com/windsurf",
+    "status": 200,
+    "final": "https://windsurf.com/editor",
+    "error": ""
+  },
+  {
+    "url": "https://console.aws.amazon.com/iam/",
+    "status": 200,
+    "final": "https://us-east-1.console.aws.amazon.com/iam",
+    "error": ""
+  },
+  {
+    "url": "https://console.aws.amazon.com/iamidentity/",
+    "status": null,
+    "final": "https://console.aws.amazon.com/iamidentity/",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://console.groq.com",
+    "status": 200,
+    "final": "https://console.groq.com/home",
+    "error": ""
+  },
+  {
+    "url": "https://console.groq.com/docs",
+    "status": 200,
+    "final": "https://console.groq.com/docs/overview",
+    "error": ""
+  },
+  {
+    "url": "https://console.groq.com/docs/models",
+    "status": 200,
+    "final": "https://console.groq.com/docs/models",
+    "error": ""
+  },
+  {
+    "url": "https://console.perplexity.ai",
+    "status": null,
+    "final": "https://console.perplexity.ai",
+    "error": "HTTP Error 403: Forbidden"
   },
   {
     "url": "https://cursor.com/",
@@ -126,9 +228,39 @@
     "error": ""
   },
   {
+    "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Glossary",
+    "error": ""
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model",
+    "error": ""
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
+    "error": ""
+  },
+  {
     "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
     "status": 200,
     "final": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+    "error": ""
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    "status": 200,
+    "final": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    "error": ""
+  },
+  {
+    "url": "https://discord.gg/exo-explore",
+    "status": 200,
+    "final": "https://discord.com/invite/exo-explore",
     "error": ""
   },
   {
@@ -144,6 +276,42 @@
     "error": ""
   },
   {
+    "url": "https://docs.anthropic.com/en/docs/claude-code",
+    "status": 200,
+    "final": "https://code.claude.com/docs",
+    "error": ""
+  },
+  {
+    "url": "https://docs.anythingllm.com/",
+    "status": 200,
+    "final": "https://docs.anythingllm.com/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.anythingllm.com/llm-configuration/local/ollama",
+    "status": null,
+    "final": "https://docs.anythingllm.com/llm-configuration/local/ollama",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://docs.astral.sh/ruff/",
+    "status": 200,
+    "final": "https://docs.astral.sh/ruff/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.astral.sh/uv/",
+    "status": 200,
+    "final": "https://docs.astral.sh/uv/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.astro.build/",
+    "status": 200,
+    "final": "https://docs.astro.build/",
+    "error": ""
+  },
+  {
     "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html",
     "status": 200,
     "final": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html",
@@ -156,9 +324,57 @@
     "error": ""
   },
   {
+    "url": "https://docs.aws.amazon.com/ecs/",
+    "status": 200,
+    "final": "https://docs.aws.amazon.com/ecs/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.aws.amazon.com/eks/",
+    "status": 200,
+    "final": "https://docs.aws.amazon.com/eks/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html",
+    "status": 200,
+    "final": "https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html",
+    "error": ""
+  },
+  {
     "url": "https://docs.celeryq.dev/en/stable/",
     "status": 200,
     "final": "https://docs.celeryq.dev/en/stable/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.cline.bot/",
+    "status": 200,
+    "final": "https://docs.cline.bot/home",
+    "error": ""
+  },
+  {
+    "url": "https://docs.cline.bot/mcp/what-is-mcp",
+    "status": null,
+    "final": "https://docs.cline.bot/mcp/what-is-mcp",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://docs.codeium.com/windsurf/cascade",
+    "status": 200,
+    "final": "https://docs.windsurf.com/windsurf/cascade/cascade",
+    "error": ""
+  },
+  {
+    "url": "https://docs.codeium.com/windsurf/getting-started",
+    "status": 200,
+    "final": "https://docs.windsurf.com/windsurf/getting-started",
+    "error": ""
+  },
+  {
+    "url": "https://docs.continue.dev/",
+    "status": 200,
+    "final": "https://docs.continue.dev/",
     "error": ""
   },
   {
@@ -186,6 +402,12 @@
     "error": ""
   },
   {
+    "url": "https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-in-the-command-line",
+    "status": 200,
+    "final": "https://docs.github.com/en/copilot/how-tos/use-copilot-for-common-tasks/use-copilot-in-the-cli",
+    "error": ""
+  },
+  {
     "url": "https://docs.gradle.org/current/userguide/multi_project_builds.html",
     "status": 200,
     "final": "https://docs.gradle.org/current/userguide/multi_project_builds.html",
@@ -198,9 +420,111 @@
     "error": ""
   },
   {
+    "url": "https://docs.helix-editor.com/",
+    "status": 200,
+    "final": "https://docs.helix-editor.com/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.julialang.org/en/v1/",
+    "status": 200,
+    "final": "https://docs.julialang.org/en/v1/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.langchain.com/",
+    "status": 200,
+    "final": "https://docs.langchain.com/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.litellm.ai/",
+    "status": 200,
+    "final": "https://docs.litellm.ai/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.litellm.ai/docs/proxy/deploy",
+    "status": 200,
+    "final": "https://docs.litellm.ai/docs/proxy/deploy",
+    "error": ""
+  },
+  {
+    "url": "https://docs.litellm.ai/docs/proxy/quick_start",
+    "status": 200,
+    "final": "https://docs.litellm.ai/docs/proxy/quick_start",
+    "error": ""
+  },
+  {
+    "url": "https://docs.llamaindex.ai/",
+    "status": 200,
+    "final": "https://developers.llamaindex.ai/python/framework/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.lmstudio.ai/",
+    "status": null,
+    "final": "https://docs.lmstudio.ai/",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design",
+    "status": 200,
+    "final": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design",
+    "error": ""
+  },
+  {
+    "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs",
+    "status": 200,
+    "final": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs",
+    "error": ""
+  },
+  {
+    "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing",
+    "status": 200,
+    "final": "https://learn.microsoft.com/en-us/azure/architecture/patterns/event-sourcing",
+    "error": ""
+  },
+  {
     "url": "https://docs.nativescript.org/",
     "status": 200,
     "final": "https://docs.nativescript.org/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.ollama.com/integrations/opencode",
+    "status": 200,
+    "final": "https://docs.ollama.com/integrations/opencode",
+    "error": ""
+  },
+  {
+    "url": "https://docs.perplexity.ai",
+    "status": 200,
+    "final": "https://docs.perplexity.ai/docs/getting-started/overview",
+    "error": ""
+  },
+  {
+    "url": "https://docs.perplexity.ai/models/model-cards",
+    "status": 200,
+    "final": "https://docs.perplexity.ai/docs/sonar/models",
+    "error": ""
+  },
+  {
+    "url": "https://docs.pytest.org/",
+    "status": 200,
+    "final": "https://docs.pytest.org/en/stable/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.rancherdesktop.io/",
+    "status": 200,
+    "final": "https://docs.rancherdesktop.io/",
+    "error": ""
+  },
+  {
+    "url": "https://docs.vibekit.sh/agents/grok",
+    "status": 200,
+    "final": "https://docs.vibekit.sh/agents/grok",
     "error": ""
   },
   {
@@ -216,9 +540,33 @@
     "error": ""
   },
   {
+    "url": "https://eksctl.io/",
+    "status": 200,
+    "final": "https://docs.aws.amazon.com/eks/latest/eksctl/what-is-eksctl.html",
+    "error": ""
+  },
+  {
+    "url": "https://elixir-lang.org/",
+    "status": 200,
+    "final": "https://elixir-lang.org/",
+    "error": ""
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/Architectural_pattern",
+    "status": 200,
+    "final": "https://en.wikipedia.org/wiki/Architectural_pattern",
+    "error": ""
+  },
+  {
     "url": "https://en.wikipedia.org/wiki/Functional_programming",
     "status": 200,
     "final": "https://en.wikipedia.org/wiki/Functional_programming",
+    "error": ""
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/Glossary_of_computer_science",
+    "status": 200,
+    "final": "https://en.wikipedia.org/wiki/Glossary_of_computer_science",
     "error": ""
   },
   {
@@ -252,6 +600,24 @@
     "error": ""
   },
   {
+    "url": "https://en.wikipedia.org/wiki/Solution_stack",
+    "status": 200,
+    "final": "https://en.wikipedia.org/wiki/Solution_stack",
+    "error": ""
+  },
+  {
+    "url": "https://esbuild.github.io/",
+    "status": 200,
+    "final": "https://esbuild.github.io/",
+    "error": ""
+  },
+  {
+    "url": "https://eslint.org/",
+    "status": 200,
+    "final": "https://eslint.org/",
+    "error": ""
+  },
+  {
     "url": "https://example.com",
     "status": 200,
     "final": "https://example.com",
@@ -264,12 +630,6 @@
     "error": ""
   },
   {
-    "url": "https://fastapi.tiangolo.com/",
-    "status": 200,
-    "final": "https://fastapi.tiangolo.com/",
-    "error": ""
-  },
-  {
     "url": "https://ffmpeg.org/",
     "status": 200,
     "final": "https://ffmpeg.org/",
@@ -279,7 +639,7 @@
     "url": "https://filezilla-project.org/",
     "status": null,
     "final": "https://filezilla-project.org/",
-    "error": "<urlopen error timed out>"
+    "error": "HTTP Error 403: Forbidden"
   },
   {
     "url": "https://flexibits.com/fantastical",
@@ -294,9 +654,33 @@
     "error": ""
   },
   {
+    "url": "https://geminicli.com/docs/",
+    "status": 200,
+    "final": "https://geminicli.com/docs/",
+    "error": ""
+  },
+  {
     "url": "https://get.adobe.com/reader/",
     "status": 200,
     "final": "https://get.adobe.com/reader/",
+    "error": ""
+  },
+  {
+    "url": "https://ghostty.org",
+    "status": 200,
+    "final": "https://ghostty.org",
+    "error": ""
+  },
+  {
+    "url": "https://ghostty.org/docs",
+    "status": 200,
+    "final": "https://ghostty.org/docs",
+    "error": ""
+  },
+  {
+    "url": "https://ghostty.org/docs/config/reference",
+    "status": 200,
+    "final": "https://ghostty.org/docs/config/reference",
     "error": ""
   },
   {
@@ -318,9 +702,33 @@
     "error": ""
   },
   {
+    "url": "https://github.com/AlexsJones/llmfit",
+    "status": 200,
+    "final": "https://github.com/AlexsJones/llmfit",
+    "error": ""
+  },
+  {
     "url": "https://github.com/Comfy-Org/ComfyUI",
     "status": 200,
     "final": "https://github.com/Comfy-Org/ComfyUI",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/Exafunction/codeium",
+    "status": 200,
+    "final": "https://github.com/Exafunction/codeium",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/K2/olol",
+    "status": 200,
+    "final": "https://github.com/K2/olol",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/NVIDIA/OpenShell",
+    "status": 200,
+    "final": "https://github.com/NVIDIA/OpenShell",
     "error": ""
   },
   {
@@ -360,6 +768,12 @@
     "error": ""
   },
   {
+    "url": "https://github.com/catppuccin/ghostty",
+    "status": 200,
+    "final": "https://github.com/catppuccin/ghostty",
+    "error": ""
+  },
+  {
     "url": "https://github.com/charmbracelet/crush",
     "status": 200,
     "final": "https://github.com/charmbracelet/crush",
@@ -369,6 +783,36 @@
     "url": "https://github.com/cline/cline",
     "status": 200,
     "final": "https://github.com/cline/cline",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/continuedev/continue",
+    "status": 200,
+    "final": "https://github.com/continuedev/continue",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/derailed/k9s",
+    "status": 200,
+    "final": "https://github.com/derailed/k9s",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/evanw/esbuild",
+    "status": 200,
+    "final": "https://github.com/evanw/esbuild",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/exo-explore/exo",
+    "status": 200,
+    "final": "https://github.com/exo-explore/exo",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/features/copilot",
+    "status": 200,
+    "final": "https://github.com/features/copilot",
     "error": ""
   },
   {
@@ -384,6 +828,24 @@
     "error": ""
   },
   {
+    "url": "https://github.com/ggml-org/llama.cpp#readme",
+    "status": 200,
+    "final": "https://github.com/ggml-org/llama.cpp#readme",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/google-gemini/gemini-cli",
+    "status": 200,
+    "final": "https://github.com/google-gemini/gemini-cli",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/google-gemini/gemini-cli/issues/2168",
+    "status": 200,
+    "final": "https://github.com/google-gemini/gemini-cli/issues/2168",
+    "error": ""
+  },
+  {
     "url": "https://github.com/grafana/k6",
     "status": 200,
     "final": "https://github.com/grafana/k6",
@@ -396,6 +858,12 @@
     "error": ""
   },
   {
+    "url": "https://github.com/langchain-ai/langchain",
+    "status": 200,
+    "final": "https://github.com/langchain-ai/langchain",
+    "error": ""
+  },
+  {
     "url": "https://github.com/mbadolato/iTerm2-Color-Schemes",
     "status": 200,
     "final": "https://github.com/mbadolato/iTerm2-Color-Schemes",
@@ -405,6 +873,24 @@
     "url": "https://github.com/nodejs/corepack",
     "status": 200,
     "final": "https://github.com/nodejs/corepack",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/nomic-ai/gpt4all",
+    "status": 200,
+    "final": "https://github.com/nomic-ai/gpt4all",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/nrwl/nx",
+    "status": 200,
+    "final": "https://github.com/nrwl/nx",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/nuxt/nuxt",
+    "status": 200,
+    "final": "https://github.com/nuxt/nuxt",
     "error": ""
   },
   {
@@ -426,9 +912,33 @@
     "error": ""
   },
   {
+    "url": "https://github.com/ollama/ollama/blob/main/docs/api.md",
+    "status": 200,
+    "final": "https://github.com/ollama/ollama/blob/main/docs/api.md",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/openai/codex",
+    "status": 200,
+    "final": "https://github.com/openai/codex",
+    "error": ""
+  },
+  {
     "url": "https://github.com/pyenv/pyenv",
     "status": 200,
     "final": "https://github.com/pyenv/pyenv",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/python/xv",
+    "status": null,
+    "final": "https://github.com/python/xv",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://github.com/rancher-sandbox/rancher-desktop",
+    "status": 200,
+    "final": "https://github.com/rancher-sandbox/rancher-desktop",
     "error": ""
   },
   {
@@ -438,9 +948,45 @@
     "error": ""
   },
   {
+    "url": "https://github.com/run-llama/llama_index",
+    "status": 200,
+    "final": "https://github.com/run-llama/llama_index",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/socketio/socket.io",
+    "status": 200,
+    "final": "https://github.com/socketio/socket.io",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/superagent-ai/grok-cli",
+    "status": 200,
+    "final": "https://github.com/superagent-ai/grok-cli",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/sveltejs/kit",
+    "status": 200,
+    "final": "https://github.com/sveltejs/kit",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/vercel/turborepo",
+    "status": 200,
+    "final": "https://github.com/vercel/turborepo",
+    "error": ""
+  },
+  {
     "url": "https://github.com/vllm-project/vllm",
     "status": 200,
     "final": "https://github.com/vllm-project/vllm",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/vllm-project/vllm#readme",
+    "status": 200,
+    "final": "https://github.com/vllm-project/vllm#readme",
     "error": ""
   },
   {
@@ -450,9 +996,33 @@
     "error": ""
   },
   {
+    "url": "https://github.com/withastro/astro",
+    "status": 200,
+    "final": "https://github.com/withastro/astro",
+    "error": ""
+  },
+  {
     "url": "https://gnupg.org/",
     "status": 200,
     "final": "https://gnupg.org/",
+    "error": ""
+  },
+  {
+    "url": "https://go.dev/",
+    "status": 200,
+    "final": "https://go.dev/",
+    "error": ""
+  },
+  {
+    "url": "https://go.dev/doc/",
+    "status": 200,
+    "final": "https://go.dev/doc/",
+    "error": ""
+  },
+  {
+    "url": "https://go.dev/tour/",
+    "status": 200,
+    "final": "https://go.dev/tour/",
     "error": ""
   },
   {
@@ -480,6 +1050,18 @@
     "error": ""
   },
   {
+    "url": "https://gruntjs.com/",
+    "status": 200,
+    "final": "https://gruntjs.com/",
+    "error": ""
+  },
+  {
+    "url": "https://gulpjs.com/",
+    "status": 200,
+    "final": "https://gulpjs.com/",
+    "error": ""
+  },
+  {
     "url": "https://haacked.com/archive/2014/07/28/github-flow-aliases/",
     "status": 200,
     "final": "https://haacked.com/archive/2014/07/28/github-flow-aliases/",
@@ -492,9 +1074,21 @@
     "error": ""
   },
   {
+    "url": "https://helix-editor.com/",
+    "status": 200,
+    "final": "https://helix-editor.com/",
+    "error": ""
+  },
+  {
     "url": "https://helm.sh/",
     "status": 200,
     "final": "https://helm.sh/",
+    "error": ""
+  },
+  {
+    "url": "https://helm.sh/docs/",
+    "status": 200,
+    "final": "https://helm.sh/docs/",
     "error": ""
   },
   {
@@ -504,15 +1098,33 @@
     "error": "HTTP Error 403: Forbidden"
   },
   {
+    "url": "https://hex.pm/",
+    "status": 200,
+    "final": "https://hex.pm/",
+    "error": ""
+  },
+  {
+    "url": "https://hexdocs.pm/elixir/introduction.html",
+    "status": 200,
+    "final": "https://hexdocs.pm/elixir/introduction.html",
+    "error": ""
+  },
+  {
     "url": "https://httpd.apache.org/docs/",
     "status": 200,
     "final": "https://httpd.apache.org/docs/",
     "error": ""
   },
   {
-    "url": "https://httpie.io/",
+    "url": "https://hub.helm.sh/",
     "status": 200,
-    "final": "https://httpie.io/",
+    "final": "https://artifacthub.io:443/",
+    "error": ""
+  },
+  {
+    "url": "https://huggingface.co/",
+    "status": 200,
+    "final": "https://huggingface.co/",
     "error": ""
   },
   {
@@ -546,6 +1158,18 @@
     "error": ""
   },
   {
+    "url": "https://julialang.org/",
+    "status": 200,
+    "final": "https://julialang.org/",
+    "error": ""
+  },
+  {
+    "url": "https://julialang.org/packages/",
+    "status": 200,
+    "final": "https://julialang.org/packages/",
+    "error": ""
+  },
+  {
     "url": "https://jupyter.org/",
     "status": 200,
     "final": "https://jupyter.org/",
@@ -576,6 +1200,12 @@
     "error": ""
   },
   {
+    "url": "https://kit.svelte.dev/",
+    "status": 200,
+    "final": "https://svelte.dev/",
+    "error": ""
+  },
+  {
     "url": "https://kotlinlang.org/",
     "status": 200,
     "final": "https://kotlinlang.org/",
@@ -594,9 +1224,21 @@
     "error": ""
   },
   {
+    "url": "https://kubernetes.io/docs/getting-started-guides/",
+    "status": 200,
+    "final": "https://kubernetes.io/docs/setup/",
+    "error": ""
+  },
+  {
     "url": "https://kubernetes.io/docs/home/",
     "status": 200,
     "final": "https://kubernetes.io/docs/home/",
+    "error": ""
+  },
+  {
+    "url": "https://kubernetes.io/docs/reference/kubectl/quick-reference/",
+    "status": 200,
+    "final": "https://kubernetes.io/docs/reference/kubectl/quick-reference/",
     "error": ""
   },
   {
@@ -624,6 +1266,36 @@
     "error": ""
   },
   {
+    "url": "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot",
+    "status": 200,
+    "final": "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot",
+    "error": ""
+  },
+  {
+    "url": "https://marketplace.visualstudio.com/items?itemName=cline.cline",
+    "status": null,
+    "final": "https://marketplace.visualstudio.com/items?itemName=cline.cline",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev",
+    "status": 200,
+    "final": "https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev",
+    "error": ""
+  },
+  {
+    "url": "https://martinfowler.com/articles/microservices.html",
+    "status": 200,
+    "final": "https://martinfowler.com/articles/microservices.html",
+    "error": ""
+  },
+  {
+    "url": "https://medium.com/@rohitkhatana/installing-vllm-on-macos-a-step-by-step-guide-bbbf673461af",
+    "status": null,
+    "final": "https://medium.com/@rohitkhatana/installing-vllm-on-macos-a-step-by-step-guide-bbbf673461af",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
     "url": "https://mypy.readthedocs.io/en/stable/",
     "status": 200,
     "final": "https://mypy.readthedocs.io/en/stable/",
@@ -648,9 +1320,39 @@
     "error": ""
   },
   {
+    "url": "https://nuxt.com/docs",
+    "status": 200,
+    "final": "https://nuxt.com/docs/getting-started/introduction",
+    "error": ""
+  },
+  {
+    "url": "https://nx.app/",
+    "status": 200,
+    "final": "https://cloud.nx.app/get-started/",
+    "error": ""
+  },
+  {
+    "url": "https://nx.dev/",
+    "status": 200,
+    "final": "https://nx.dev/",
+    "error": ""
+  },
+  {
     "url": "https://obsidian.md",
     "status": 200,
     "final": "https://obsidian.md",
+    "error": ""
+  },
+  {
+    "url": "https://obsidian.md/",
+    "status": 200,
+    "final": "https://obsidian.md/",
+    "error": ""
+  },
+  {
+    "url": "https://ollama.com",
+    "status": 200,
+    "final": "https://ollama.com",
     "error": ""
   },
   {
@@ -660,9 +1362,63 @@
     "error": ""
   },
   {
-    "url": "https://opensource.com/article/19/5/python-3-default-mac",
+    "url": "https://ollama.com/docs",
     "status": 200,
-    "final": "https://opensource.com/article/19/5/python-3-default-mac",
+    "final": "https://docs.ollama.com/",
+    "error": ""
+  },
+  {
+    "url": "https://openai.com/index/introducing-codex",
+    "status": null,
+    "final": "https://openai.com/index/introducing-codex",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://opencode.ai/",
+    "status": 200,
+    "final": "https://opencode.ai/",
+    "error": ""
+  },
+  {
+    "url": "https://openjdk.org/",
+    "status": 200,
+    "final": "https://openjdk.org/",
+    "error": ""
+  },
+  {
+    "url": "https://openrouter.ai/docs",
+    "status": 200,
+    "final": "https://openrouter.ai/docs/quickstart",
+    "error": ""
+  },
+  {
+    "url": "https://openrouter.ai/keys",
+    "status": 200,
+    "final": "https://openrouter.ai/sign-in?redirect_url=https%3A%2F%2Fopenrouter.ai%2Fworkspaces%2Fdefault%2Fkeys",
+    "error": ""
+  },
+  {
+    "url": "https://openrouter.ai/models",
+    "status": 200,
+    "final": "https://openrouter.ai/models",
+    "error": ""
+  },
+  {
+    "url": "https://openrouter.ai/models?order=pricing",
+    "status": 200,
+    "final": "https://openrouter.ai/models?order=pricing",
+    "error": ""
+  },
+  {
+    "url": "https://openrouter.ai/models?q=perplexity",
+    "status": 200,
+    "final": "https://openrouter.ai/models?q=perplexity",
+    "error": ""
+  },
+  {
+    "url": "https://parceljs.org/",
+    "status": 200,
+    "final": "https://parceljs.org/",
     "error": ""
   },
   {
@@ -672,9 +1428,21 @@
     "error": ""
   },
   {
+    "url": "https://pipenv.pypa.io/en/latest/",
+    "status": 200,
+    "final": "https://pipenv.pypa.io/en/latest/",
+    "error": ""
+  },
+  {
     "url": "https://pnpm.io/",
     "status": 200,
     "final": "https://pnpm.io/",
+    "error": ""
+  },
+  {
+    "url": "https://postcss.org/",
+    "status": 200,
+    "final": "https://postcss.org/",
     "error": ""
   },
   {
@@ -696,9 +1464,27 @@
     "error": ""
   },
   {
+    "url": "https://pytest-cov.readthedocs.io/",
+    "status": 200,
+    "final": "https://pytest-cov.readthedocs.io/en/latest/",
+    "error": ""
+  },
+  {
     "url": "https://pytorch.org/",
     "status": 200,
     "final": "https://pytorch.org/",
+    "error": ""
+  },
+  {
+    "url": "https://pytorch.org/docs/",
+    "status": 200,
+    "final": "https://docs.pytorch.org/docs/",
+    "error": ""
+  },
+  {
+    "url": "https://pytorch.org/docs/stable/notes/mps.html",
+    "status": 200,
+    "final": "https://docs.pytorch.org/docs/stable/notes/mps.html",
     "error": ""
   },
   {
@@ -708,9 +1494,33 @@
     "error": ""
   },
   {
+    "url": "https://react.dev/",
+    "status": 200,
+    "final": "https://react.dev/",
+    "error": ""
+  },
+  {
     "url": "https://registry.terraform.io/",
     "status": 200,
     "final": "https://registry.terraform.io/",
+    "error": ""
+  },
+  {
+    "url": "https://registry.terraform.io/providers/hashicorp/aws/latest",
+    "status": 200,
+    "final": "https://registry.terraform.io/providers/hashicorp/aws/latest",
+    "error": ""
+  },
+  {
+    "url": "https://restfulapi.net/",
+    "status": 200,
+    "final": "https://restfulapi.net/",
+    "error": ""
+  },
+  {
+    "url": "https://rollupjs.org/guide/en/",
+    "status": 200,
+    "final": "https://rollupjs.org/guide/en/",
     "error": ""
   },
   {
@@ -726,15 +1536,21 @@
     "error": ""
   },
   {
+    "url": "https://sass-lang.com/",
+    "status": 200,
+    "final": "https://sass-lang.com/",
+    "error": ""
+  },
+  {
     "url": "https://sdkman.io/",
     "status": 200,
     "final": "https://sdkman.io/",
     "error": ""
   },
   {
-    "url": "https://slack.com/",
+    "url": "https://socket.io/docs/",
     "status": 200,
-    "final": "https://slack.com/",
+    "final": "https://socket.io/docs/v4/",
     "error": ""
   },
   {
@@ -756,21 +1572,45 @@
     "error": ""
   },
   {
-    "url": "https://swagger.io/",
+    "url": "https://svelte.dev/",
     "status": 200,
-    "final": "https://swagger.io/",
+    "final": "https://svelte.dev/",
     "error": ""
   },
   {
-    "url": "https://textexpander.com/",
+    "url": "https://tailwindcss.com/",
     "status": 200,
-    "final": "https://textexpander.com/",
+    "final": "https://tailwindcss.com/",
+    "error": ""
+  },
+  {
+    "url": "https://techterms.com/",
+    "status": 200,
+    "final": "https://techterms.com/",
+    "error": ""
+  },
+  {
+    "url": "https://tools.ietf.org/html/rfc6455",
+    "status": 200,
+    "final": "https://datatracker.ietf.org/doc/html/rfc6455",
     "error": ""
   },
   {
     "url": "https://tunnelblick.net/",
     "status": 200,
     "final": "https://tunnelblick.net/",
+    "error": ""
+  },
+  {
+    "url": "https://turbo.build/repo/docs",
+    "status": 200,
+    "final": "https://turborepo.dev/docs",
+    "error": ""
+  },
+  {
+    "url": "https://ui.shadcn.com/",
+    "status": 200,
+    "final": "https://ui.shadcn.com/",
     "error": ""
   },
   {
@@ -792,15 +1632,57 @@
     "error": ""
   },
   {
+    "url": "https://vite.dev/config/",
+    "status": 200,
+    "final": "https://vite.dev/config/",
+    "error": ""
+  },
+  {
     "url": "https://vite.dev/guide/",
     "status": 200,
     "final": "https://vite.dev/guide/",
     "error": ""
   },
   {
+    "url": "https://vitest.dev/",
+    "status": 200,
+    "final": "https://vitest.dev/",
+    "error": ""
+  },
+  {
+    "url": "https://vllm.ai/",
+    "status": 200,
+    "final": "https://vllm.ai/",
+    "error": ""
+  },
+  {
     "url": "https://volta.sh/",
     "status": 200,
     "final": "https://volta.sh/",
+    "error": ""
+  },
+  {
+    "url": "https://vuejs.org/",
+    "status": 200,
+    "final": "https://vuejs.org/",
+    "error": ""
+  },
+  {
+    "url": "https://webpack.js.org/",
+    "status": 200,
+    "final": "https://webpack.js.org/",
+    "error": ""
+  },
+  {
+    "url": "https://webpack.js.org/comparison/",
+    "status": 200,
+    "final": "https://webpack.js.org/comparison/",
+    "error": ""
+  },
+  {
+    "url": "https://windsurf.com/",
+    "status": 200,
+    "final": "https://windsurf.com/",
     "error": ""
   },
   {
@@ -840,9 +1722,9 @@
     "error": ""
   },
   {
-    "url": "https://www.docker.com/products/docker-desktop/",
+    "url": "https://www.conventionalcommits.org/",
     "status": 200,
-    "final": "https://www.docker.com/products/docker-desktop/",
+    "final": "https://www.conventionalcommits.org/",
     "error": ""
   },
   {
@@ -894,12 +1776,6 @@
     "error": ""
   },
   {
-    "url": "https://www.jetbrains.com/phpstorm/",
-    "status": 200,
-    "final": "https://www.jetbrains.com/phpstorm/",
-    "error": ""
-  },
-  {
     "url": "https://www.jetbrains.com/pycharm/",
     "status": 200,
     "final": "https://www.jetbrains.com/pycharm/",
@@ -912,15 +1788,15 @@
     "error": ""
   },
   {
-    "url": "https://www.langchain.com/",
+    "url": "https://www.kiwiforgmail.com/",
     "status": 200,
-    "final": "https://www.langchain.com/",
+    "final": "https://www.kiwiforgmail.com/",
     "error": ""
   },
   {
-    "url": "https://www.libreoffice.org/",
+    "url": "https://www.langchain.com/",
     "status": 200,
-    "final": "https://www.libreoffice.org/",
+    "final": "https://www.langchain.com/",
     "error": ""
   },
   {
@@ -954,12 +1830,6 @@
     "error": "HTTP Error 403: Forbidden"
   },
   {
-    "url": "https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac",
-    "status": null,
-    "final": "https://www.microsoft.com/en-us/microsoft-365/mac/microsoft-365-for-mac",
-    "error": "HTTP Error 403: Forbidden"
-  },
-  {
     "url": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software",
     "status": null,
     "final": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software",
@@ -984,10 +1854,22 @@
     "error": ""
   },
   {
-    "url": "https://www.openapis.org/",
-    "status": 200,
-    "final": "https://www.openapis.org/",
-    "error": ""
+    "url": "https://www.npmjs.com/package/@google/gemini-cli",
+    "status": null,
+    "final": "https://www.npmjs.com/package/@google/gemini-cli",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://www.npmjs.com/package/@vibe-kit/grok-cli",
+    "status": null,
+    "final": "https://www.npmjs.com/package/@vibe-kit/grok-cli",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://www.npmjs.com/package/npm-check-updates",
+    "status": null,
+    "final": "https://www.npmjs.com/package/npm-check-updates",
+    "error": "HTTP Error 403: Forbidden"
   },
   {
     "url": "https://www.openssh.org/",
@@ -1014,6 +1896,18 @@
     "error": ""
   },
   {
+    "url": "https://www.perplexity.ai/comet",
+    "status": null,
+    "final": "https://www.perplexity.ai/comet",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://www.php.net/",
+    "status": 200,
+    "final": "https://www.php.net/",
+    "error": ""
+  },
+  {
     "url": "https://www.postgresql.org/docs/",
     "status": 200,
     "final": "https://www.postgresql.org/docs/",
@@ -1026,15 +1920,27 @@
     "error": ""
   },
   {
+    "url": "https://www.python.org/",
+    "status": 200,
+    "final": "https://www.python.org/",
+    "error": ""
+  },
+  {
     "url": "https://www.realvnc.com/en/connect/download/viewer/",
-    "status": null,
+    "status": 200,
     "final": "https://www.realvnc.com/en/connect/download/viewer/",
-    "error": "HTTP Error 403: Forbidden"
+    "error": ""
   },
   {
     "url": "https://www.ruby-lang.org/en/downloads/",
     "status": 200,
     "final": "https://www.ruby-lang.org/en/downloads/",
+    "error": ""
+  },
+  {
+    "url": "https://www.rust-lang.org/",
+    "status": 200,
+    "final": "https://rust-lang.org/",
     "error": ""
   },
   {
@@ -1050,6 +1956,24 @@
     "error": ""
   },
   {
+    "url": "https://www.typescriptlang.org/",
+    "status": 200,
+    "final": "https://www.typescriptlang.org/",
+    "error": ""
+  },
+  {
+    "url": "https://www.typescriptlang.org/docs/",
+    "status": 200,
+    "final": "https://www.typescriptlang.org/docs/",
+    "error": ""
+  },
+  {
+    "url": "https://www.typescriptlang.org/tsconfig/",
+    "status": 200,
+    "final": "https://www.typescriptlang.org/tsconfig/",
+    "error": ""
+  },
+  {
     "url": "https://www.virtualbox.org/",
     "status": 200,
     "final": "https://www.virtualbox.org/",
@@ -1059,6 +1983,18 @@
     "url": "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion",
     "status": 200,
     "final": "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion",
+    "error": ""
+  },
+  {
+    "url": "https://www.w3.org/TR/soap/",
+    "status": 200,
+    "final": "https://www.w3.org/TR/soap/",
+    "error": ""
+  },
+  {
+    "url": "https://www.w3.org/TR/wsdl/",
+    "status": 200,
+    "final": "https://www.w3.org/TR/wsdl/",
     "error": ""
   },
   {

@@ -2,13 +2,13 @@
 tags: [ai, llm, coding, productivity, claude, ollama, local]
 ---
 
-# Claude Code
+# <img src="https://github.com/anthropics.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Claude Code
 
 Anthropic's agentic coding CLI. Reads, writes, and runs code in your terminal.
 
 ## Installation
 
-curl is the only supported install method. If previously installed via npm or Homebrew, uninstall first:
+`curl` is the only supported install method. If previously installed via npm or Homebrew, uninstall first:
 
 ```shell
 npm uninstall -g @anthropic-ai/claude-code
@@ -29,14 +29,14 @@ Deployed to `~/.claude/config.json` by `setup_claude.sh`.
 
 ### Environment Variables
 
-| Variable                         | Value                     | Purpose                           |
-| -------------------------------- | ------------------------- | --------------------------------- |
-| `ANTHROPIC_BASE_URL`             | `http://localhost:11434`  | Route requests to local Ollama    |
-| `ANTHROPIC_AUTH_TOKEN`           | `ollama`                  | Dummy token (Ollama doesn't auth) |
-| `ANTHROPIC_API_KEY`              | `ollama`                  | Duplicate for SDK compatibility   |
-| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `qwen3-coder-30b-32k:q5`  | Maps Sonnet tier → local model    |
-| `ANTHROPIC_DEFAULT_HAIKU_MODEL`  | `qwen3-4b:q8`             | Maps Haiku tier → local model     |
-| `ANTHROPIC_DEFAULT_OPUS_MODEL`   | `qwen3-coder-30b-220k:q5` | Maps Opus tier → local model      |
+| Variable | Value | Purpose |
+| --- | --- | --- |
+| `ANTHROPIC_BASE_URL` | `http://localhost:11434` | Route requests to local Ollama |
+| `ANTHROPIC_AUTH_TOKEN` | `ollama` | Dummy token (Ollama doesn't auth) |
+| `ANTHROPIC_API_KEY` | `ollama` | Duplicate for SDK compatibility |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `qwen3.2-coder:7b` | Maps Sonnet tier to local model |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | `qwen3.2-coder:7b` | Maps Haiku tier to local model |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | `qwen3.2-coder:7b` | Maps Opus tier to local model |
 
 ### Model Aliases
 
@@ -58,8 +58,16 @@ ollama create qwen3-coder-30b-32k:q5 -f /tmp/Modelfile
 Pre-approves read-only git commands to avoid prompts on every `git log`:
 
 ```json
-"permissions": {
-  "allow": ["Bash(git log:*)", "Bash(git diff:*)", "Bash(git status:*)", "Bash(git show:*)", "Bash(git blame:*)"]
+{
+  "permissions": {
+    "allow": [
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git show:*)",
+      "Bash(git blame:*)"
+    ]
+  }
 }
 ```
 

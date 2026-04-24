@@ -9,7 +9,7 @@ Tools for bundling assets, running tasks, and optimizing applications for produc
 ## Comparison
 
 | Tool          | Best For                  | Config | Performance |
-| ------------- | ------------------------- | ------ | ----------- |
+| ------------- | ------ | ------ | ----------- |
 | [[esbuild]]   | Speed-critical builds     | None   | Fastest     |
 | [[Grunt]]     | Simple automation         | High   | Good        |
 | [[Gulp]]      | Custom workflows          | Medium | Excellent   |
