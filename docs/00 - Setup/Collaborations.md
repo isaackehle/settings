@@ -1,5 +1,5 @@
 ---
-tags: [apps]
+tags: [setup]
 ---
 
 # <img src="https://github.com/jupyter.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Collaborations
@@ -26,8 +26,7 @@ No basic configuration required.
 jupyter lab
 ```
 
-- [Project Jupyter](https://jupyter.org/)
-
 ## References
 
+- [Project Jupyter](https://jupyter.org/)
 - [JupyterLab Documentation](https://jupyterlab.readthedocs.io/en/latest/)
