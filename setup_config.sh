@@ -42,8 +42,8 @@ fi
 # Prints the resolved path, or empty string if not found.
 find_source() {
     local rel="$1"
-    local model_path="$SETTINGS_REPO/../scripts/$MAC_MODEL/$rel"
-    local default_path="$SETTINGS_REPO/$rel"
+    local model_path="$SETTINGS_REPO/scripts/$MAC_MODEL/$rel"
+    local default_path="$SETTINGS_REPO/scripts/$rel"
     if [ -f "$model_path" ]; then
         echo "$model_path"
     elif [ -f "$default_path" ]; then
@@ -63,15 +63,19 @@ copy_file() {
         return
     fi
 
+    # Skip if destination is already a file and identical to source
+    if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
+        echo "  (skip) $dest is already up to date"
+        return
+    fi
+
     # Remove stale symlink
     if [ -L "$dest" ]; then
         rm "$dest"
     # Back up a real file that is different from what we'd copy
     elif [ -f "$dest" ]; then
-        if ! cmp -s "$src" "$dest"; then
-            mv "$dest" "${dest}.backup-$(date +%s)"
-            echo "  backed up existing $(basename "$dest")"
-        fi
+        mv "$dest" "${dest}.backup-$(date +%s)"
+        echo "  backed up existing $(basename "$dest")"
     fi
 
     mkdir -p "$(dirname "$dest")"
@@ -108,8 +112,8 @@ done
 install_file "shellrc" "$HOME/.shellrc"
 
 # profile.d — mirror to ~/.profile.d/ (sourced by shellrc)
-PROFILED_SRC="$SETTINGS_REPO/../scripts/$MAC_MODEL/profile.d"
-[ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_REPO/profile.d"
+PROFILED_SRC="$SETTINGS_REPO/scripts/$MAC_MODEL/profile.d"
+[ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_REPO/config/profile.d"
 if [ -d "$PROFILED_SRC" ]; then
     [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
     mkdir -p "$HOME/.profile.d"
@@ -141,8 +145,8 @@ if [ -d "$PROFILED_SRC" ]; then
 fi
 
 # zshrc.d — mirror to ~/.zshrc.d/ (sourced by zshrc)
-ZSHRCD_SRC="$SETTINGS_REPO/../scripts/$MAC_MODEL/zshrc.d"
-[ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_REPO/zshrc.d"
+ZSHRCD_SRC="$SETTINGS_REPO/scripts/$MAC_MODEL/zshrc.d"
+[ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_REPO/config/zshrc.d"
 if [ -d "$ZSHRCD_SRC" ]; then
     [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
     mkdir -p "$HOME/.zshrc.d"
@@ -167,7 +171,7 @@ echo "Copying .env.local..."
 
 ENV_DEST="$HOME/.env.local"
 ENV_SRC=$(find_source "env.local")
-[ -z "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/../scripts/$MAC_MODEL/env.local"
+[ -z "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/scripts/$MAC_MODEL/env.local"
 [ ! -f "$ENV_SRC" ] && ENV_SRC="$SYNC_DIR/env.local"
 
 if [ ! -f "$ENV_SRC" ]; then
@@ -246,7 +250,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# ProtonDrive detection (informational)
+# ProtonDrive detection and configuration
 # ---------------------------------------------------------------------------
 if [ -z "$PROTON_DRIVE" ]; then
     CLOUD_STORAGE="$HOME/Library/CloudStorage"
@@ -254,6 +258,21 @@ if [ -z "$PROTON_DRIVE" ]; then
     if [ -n "$DETECTED" ]; then
         echo ""
         echo "Detected ProtonDrive at: $DETECTED"
+
+        # Set environment variable in ~/.profile.d/
+        PROTON_PROFILED="$HOME/.profile.d/_protondrive"
+        mkdir -p "$(dirname "$PROTON_PROFILED")"
+        cat > "$PROTON_PROFILED" <<EOF
+# ProtonDrive path — written by setup_config.sh \$(date +%Y-%m-%d)
+export PROTON_DRIVE="$DETECTED"
+EOF
+        echo "  Set PROTON_DRIVE environment variable in $PROTON_PROFILED"
+
+        # Create softlink in user root
+        PROTON_LINK="$HOME/ProtonDrive"
+        [ -L "$PROTON_LINK" ] && rm "$PROTON_LINK"
+        ln -s "$DETECTED" "$PROTON_LINK"
+        echo "  Created softlink: $PROTON_LINK -> $DETECTED"
     fi
 fi
 
@@ -266,5 +285,5 @@ echo "  1. Edit ~/.env.local and verify your API keys"
 echo "  2. Reload your shell: source ~/.zshrc"
 echo "  3. Run ./setup_ai.sh deploy to copy AI tool configs (Claude, Gemini, Continue, etc.)"
 echo ""
-echo "Model-specific overrides live in: $SETTINGS_REPO/../scripts/$MAC_MODEL/"
+echo "Model-specific overrides live in: $SETTINGS_REPO/scripts/$MAC_MODEL/"
 echo ""
