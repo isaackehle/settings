@@ -166,7 +166,7 @@ Models are defined in `scripts/models.sh`. The install script reads your machine
 
 ```shell
 # Install models for your hardware profile
-bash config/install_models.sh m5-48gb   # or m5-64gb, m1, m2
+bash config/install-models.sh m5-48gb   # or m5-64gb, m1, m2
 ```
 
 See [[Models]] for the full table and `scripts/models.sh` for exact model names per profile.

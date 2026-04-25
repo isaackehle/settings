@@ -435,8 +435,8 @@ main() {
     echo ""
     read -r -p "Pull new model via install_coding_assistants? (y/n): " install_choice
     if [[ "$install_choice" == "y" || "$install_choice" == "Y" ]]; then
-        # install_coding_assistants is a bash function defined in install_models.sh
-        source "$SCRIPT_DIR/install_models.sh"
+        # install_coding_assistants is a bash function defined in install-models.sh
+        source "$SCRIPT_DIR/install-models.sh"
         install_coding_assistants
     fi
 

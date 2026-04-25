@@ -28,7 +28,7 @@ VS Code has native Ollama integration — no separate extension needed.
 
 **Requirements:** Ollama v0.18.3+, VS Code 1.113+, GitHub Copilot Chat extension 0.41.0+
 
-Models are installed per machine profile via `install_models.sh`. Use the Copilot Chat model picker to select the Ollama model after enabling the integration.
+Models are installed per machine profile via `install-models.sh`. Use the Copilot Chat model picker to select the Ollama model after enabling the integration.
 
 Recommended chat model per profile (matches Cline primary):
 
