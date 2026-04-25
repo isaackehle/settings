@@ -135,11 +135,7 @@ setup_litellm() {
         src_cfg=$(find_source "litellm/litellm.yaml")
     fi
     if [ -z "$src_cfg" ]; then
-        if declare -f detect_mac_model &>/dev/null; then
-            mac_model="$(detect_mac_model)"
-        else
-            mac_model="macbook-m1"
-        fi
+        mac_model="$(_detect_profile)"
         src_cfg="$script_dir/$mac_model/litellm/litellm.yaml"
     fi
 

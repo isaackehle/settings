@@ -137,11 +137,16 @@ _does_profile_match_computer() {
     [[ "$matched" -eq 1 ]]
 }
 
+# Populate HW_MODEL and HW_MEM_GB globals from sysctl (idempotent).
+_detect_hw() {
+    HW_MODEL=$(sysctl -n hw.model 2>/dev/null || echo "Unknown")
+    HW_MEM_GB=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
+}
+
 # Detect current machine profile using each profile's own _does_profile_match_computer() logic
 _detect_profile() {
-    local hw_mem_gb hw_model
-    hw_mem_gb=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
-    hw_model=$(sysctl -n hw.model 2>/dev/null || echo "Unknown")
+    _detect_hw
+    local hw_mem_gb=$HW_MEM_GB hw_model=$HW_MODEL
     local best_match=""
     local best_mem=0
 
@@ -197,25 +202,6 @@ print_profile_menu() {
     echo "  $i) exo — distributed inference across Apple Silicon Macs"
     i=$((i + 1))
     echo "  $i) Cancel"
-}
-
-# ==============================================
-# LEGACY ALIAS (for compatibility with detect_mac_model)
-# ==============================================
-
-detect_mac_model() {
-    local hw_mem_gb hw_model
-    hw_mem_gb=$(( $(sysctl -n hw.memsize) / 1024 / 1024 / 1024 ))
-    hw_model=$(sysctl -n hw.model)
-    if [[ "$hw_mem_gb" -ge 56 ]]; then
-        echo "macbook-m5-64gb"
-    elif [[ "$hw_mem_gb" -ge 40 ]]; then
-        echo "macbook-m5-48gb"
-    elif [[ "$hw_model" == Macmini* || "$hw_model" == Mac14* ]]; then
-        echo "macmini-m2"
-    else
-        echo "macbook-m1"   # 16GB fallback for all other machines
-    fi
 }
 
 
