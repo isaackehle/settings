@@ -159,7 +159,7 @@ Use ` ```shell ` for all terminal commands. Add `# comments` above non-obvious c
 
 ### Markdown linting
 
-After creating or editing markdown files, run markdown linting and fix any issues in the touched files.
+After creating or editing markdown files, run markdown linting to clean up tables, formatting, and fix any issues in the touched files.
 
 - Preferred command: `npx markdownlint-cli2 "**/*.md"`
 - If unavailable, use another markdown linter available in the environment.
