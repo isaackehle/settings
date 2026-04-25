@@ -5,23 +5,23 @@ echo "=== AI TOOL CONFIGURATION BACKUP AND RESTORE SCRIPT ==="
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/helpers.sh"
-. "$SCRIPT_DIR/../scripts/ollama/setup_ollama.sh"
-. "$SCRIPT_DIR/../scripts/grok/setup_grok.sh"
-. "$SCRIPT_DIR/../scripts/groq/setup_groq.sh"
-. "$SCRIPT_DIR/../scripts/olol/setup_olol.sh"
-. "$SCRIPT_DIR/../scripts/exo/setup_exo.sh"
-. "$SCRIPT_DIR/../scripts/continue/setup_continue.sh"
-. "$SCRIPT_DIR/../scripts/opencode/setup_opencode.sh"
-. "$SCRIPT_DIR/../scripts/crush/crush.sh"
-. "$SCRIPT_DIR/../scripts/claude/setup_claude.sh"
-. "$SCRIPT_DIR/../scripts/codex/setup_codex.sh"
-. "$SCRIPT_DIR/../scripts/gemini/setup_gemini.sh"
-. "$SCRIPT_DIR/../scripts/litellm/setup_litellm.sh"
-. "$SCRIPT_DIR/../scripts/anythingllm/setup_anythingllm.sh"
-. "$SCRIPT_DIR/../scripts/vscode/setup_vscode.sh"
-. "$SCRIPT_DIR/../scripts/windsurf/setup_windsurf.sh"
-. "$SCRIPT_DIR/../scripts/github-copilot/setup_github_copilot.sh"
-. "$SCRIPT_DIR/install-models.sh"
+. "$SCRIPT_DIR/scripts/ollama/setup_ollama.sh"
+. "$SCRIPT_DIR/scripts/grok/setup_grok.sh"
+. "$SCRIPT_DIR/scripts/groq/setup_groq.sh"
+. "$SCRIPT_DIR/scripts/olol/setup_olol.sh"
+. "$SCRIPT_DIR/scripts/exo/setup_exo.sh"
+. "$SCRIPT_DIR/scripts/continue/setup_continue.sh"
+. "$SCRIPT_DIR/scripts/opencode/setup_opencode.sh"
+. "$SCRIPT_DIR/scripts/crush/crush.sh"
+. "$SCRIPT_DIR/scripts/claude/setup_claude.sh"
+. "$SCRIPT_DIR/scripts/codex/setup_codex.sh"
+. "$SCRIPT_DIR/scripts/gemini/setup_gemini.sh"
+. "$SCRIPT_DIR/scripts/litellm/setup_litellm.sh"
+. "$SCRIPT_DIR/scripts/anythingllm/setup_anythingllm.sh"
+. "$SCRIPT_DIR/docs/01 - Development/vscode/setup_vscode.sh"
+. "$SCRIPT_DIR/scripts/windsurf/setup_windsurf.sh"
+. "$SCRIPT_DIR/scripts/github-copilot/setup_github_copilot.sh"
+. "$SCRIPT_DIR/docs/02 - AI/install-models.sh"
 
 # Configuration directory
 DATE="$(date +%Y-%m-%d)"
@@ -38,8 +38,8 @@ mkdir -p "$BACKUP_DIR"
 # Find best source file: model-specific takes precedence over default.
 find_source() {
     local rel="$1"
-    local model_path="$SCRIPT_DIR/../scripts/$MAC_MODEL/$rel"
-    local default_path="$SCRIPT_DIR/$rel"
+    local model_path="$SCRIPT_DIR/scripts/$MAC_MODEL/$rel"
+    local default_path="$SCRIPT_DIR/scripts/$rel"
     if [ -f "$model_path" ]; then
         echo "$model_path"
     elif [ -f "$default_path" ]; then
@@ -98,8 +98,8 @@ deploy_configs() {
 
     # Skills: copy external skill symlinks (find-skills, conventional-commit, create-agentsmd)
     # then create live symlinks for personal skills from ~/code/isaackehle/skills
-    local skills_src="$SCRIPT_DIR/../scripts/$MAC_MODEL/claude/skills"
-    [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/../scripts/claude/skills"
+    local skills_src="$SCRIPT_DIR/scripts/$MAC_MODEL/claude/skills"
+    [ ! -d "$skills_src" ] && skills_src="$SCRIPT_DIR/scripts/claude/skills"
     if [ -d "$skills_src" ]; then
         mkdir -p "$HOME/.claude/skills"
         cp -R "$skills_src/." "$HOME/.claude/skills/"
@@ -128,7 +128,7 @@ deploy_configs() {
         local mcp_dest="$HOME/.mcp.json"
         local mcp_src
         mcp_src=$(find_source "mcp.json")
-        [ -z "$mcp_src" ] && mcp_src="$SCRIPT_DIR/mcp.json"
+        [ -z "$mcp_src" ] && mcp_src="$SCRIPT_DIR/scripts/mcp.json"
 
         local do_install=true
         if [ -f "$mcp_dest" ]; then
@@ -176,7 +176,7 @@ deploy_configs() {
     mkdir -p "$HOME/.continue"
     local cont_src
     cont_src=$(find_source "continue/config.yaml")
-    [ -z "$cont_src" ] && cont_src="$SCRIPT_DIR/continue/config.yaml"
+    [ -z "$cont_src" ] && cont_src="$SCRIPT_DIR/scripts/continue/config.yaml"
     _copy_file "$cont_src" "$HOME/.continue/config.yaml"
 
     # --- IDE selection ---
@@ -227,8 +227,8 @@ deploy_configs() {
     # --- Shell profile.d ---
     echo ""
     echo "Copying profile.d files..."
-    local profiled_src="$SCRIPT_DIR/../scripts/$MAC_MODEL/profile.d"
-    [ ! -d "$profiled_src" ] && profiled_src="$SCRIPT_DIR/../config/profile.d"
+    local profiled_src="$SCRIPT_DIR/scripts/$MAC_MODEL/profile.d"
+    [ ! -d "$profiled_src" ] && profiled_src="$SCRIPT_DIR/config/profile.d"
     if [ -d "$profiled_src" ]; then
         mkdir -p "$HOME/.profile.d"
         cp -R "$profiled_src/." "$HOME/.profile.d/"

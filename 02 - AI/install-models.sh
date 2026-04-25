@@ -51,7 +51,7 @@ get_profile_for_choice() {
 
 # Pull direct Ollama models for a profile.
 # $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
-install_models() {
+install-models() {
     local profile_name="$1"
     local arr_name="$2"
     local -a _models
@@ -280,14 +280,14 @@ install_coding_assistants() {
 
     case $action in
         1)
-            install_models "$profile_name" MODELS
+            install-models "$profile_name" MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             ;;
         2)
             prune_models "$profile_name" MODELS CUSTOM_MODELS
             ;;
         3)
-            install_models "$profile_name" MODELS
+            install-models "$profile_name" MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             echo ""
             prune_models "$profile_name" MODELS CUSTOM_MODELS

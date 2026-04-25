@@ -51,3 +51,4 @@ Thumbs.db
 
 **/ai_setup.log
 **/tea_debug.log
+.claude/settings.local.json
