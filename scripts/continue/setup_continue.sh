@@ -12,11 +12,7 @@ setup_continue() {
     local src_cfg script_dir mac_model
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-    if declare -f detect_mac_model &>/dev/null; then
-        mac_model="$(detect_mac_model)"
-    else
-        mac_model=""
-    fi
+    mac_model="$(_detect_profile)"
     if [ -f "$script_dir/$mac_model/continue/config.yaml" ]; then
         src_cfg="$script_dir/$mac_model/continue/config.yaml"
     else

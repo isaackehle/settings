@@ -79,7 +79,7 @@ _install_file() {
 # deploy_configs — copy AI tool config files to their home-directory locations
 # ---------------------------------------------------------------------------
 deploy_configs() {
-    MAC_MODEL=$(detect_mac_model)
+    MAC_MODEL=$(_detect_profile)
     print_info "Deploying AI tool configs ($MAC_MODEL)..."
 
     if [ -f "$HOME/.env.local" ]; then
