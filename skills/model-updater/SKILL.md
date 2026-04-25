@@ -18,7 +18,7 @@ in `scripts/models.sh`. When a custom GGUF alias changes, this skill keeps two t
 1. `scripts/models.sh` — the `CUSTOM_MODELS_*` source array entries
 2. Per-machine `MODELS.md` files — the Model Matrix documentation tables
 
-Custom GGUF aliases are created at install time by `install_custom_models` in `scripts/install_models.sh`,
+Custom GGUF aliases are created at install time by `install_custom_models` in `scripts/install-models.sh`,
 which writes a temp Modelfile, calls `ollama create`, then deletes the temp file. There are no persistent
 Modelfile templates — `CUSTOM_MODELS_*` entries in `models.sh` are the single source of truth for the
 `source|alias|num_ctx|thinking_mode` tuple.
@@ -191,7 +191,7 @@ Find the relevant `CUSTOM_MODELS_*` array entry and update the source field:
 "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_M|qwen3-coder-30b-a3b:q5|"
 ```
 
-The install script (`install_custom_models` in `scripts/install_models.sh`) builds a temp Modelfile
+The install script (`install_custom_models` in `scripts/install-models.sh`) builds a temp Modelfile
 at runtime and calls `ollama create` — no persistent Modelfile files are stored. After updating
 `models.sh`, re-running the installer picks up the change automatically.
 
@@ -245,5 +245,5 @@ After presenting the report, offer to:
 
 1. Apply the upgrade (both files — models.sh + MODELS.md, including the `Models last updated:` date) — show a diff first.
 2. Run `llmfit` on each candidate if available.
-3. Re-run the install: `bash config/install_models.sh` → select profile.
+3. Re-run the install: `bash config/install-models.sh` → select profile.
 4. Verify with `ollama list` and `ollama ps` after pulling.

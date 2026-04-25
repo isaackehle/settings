@@ -21,7 +21,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$SCRIPT_DIR/../scripts/vscode/setup_vscode.sh"
 . "$SCRIPT_DIR/../scripts/windsurf/setup_windsurf.sh"
 . "$SCRIPT_DIR/../scripts/github-copilot/setup_github_copilot.sh"
-. "$SCRIPT_DIR/install_models.sh"
+. "$SCRIPT_DIR/install-models.sh"
 
 # Configuration directory
 DATE="$(date +%Y-%m-%d)"

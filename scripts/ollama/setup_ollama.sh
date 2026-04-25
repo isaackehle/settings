@@ -15,7 +15,7 @@ verify_ollama() {
 }
 
 # Install Ollama and start the server. Model installation is handled
-# separately by install_coding_assistants in install_models.sh.
+# separately by install_coding_assistants in install-models.sh.
 setup_ollama() {
     print_info "Setting up Ollama..."
 
@@ -27,7 +27,7 @@ setup_ollama() {
     print_info "Verifying Ollama installation..."
     ollama --version
 
-    print_status "Ollama setup complete. Run 'bash scripts/install_models.sh' to install models."
+    print_status "Ollama setup complete. Run 'bash scripts/install-models.sh' to install models."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
