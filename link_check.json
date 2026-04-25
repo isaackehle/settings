@@ -714,6 +714,24 @@
     "error": ""
   },
   {
+    "url": "https://github.com/DavidAnson/markdownlint",
+    "status": 200,
+    "final": "https://github.com/DavidAnson/markdownlint",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/DavidAnson/markdownlint#api",
+    "status": 200,
+    "final": "https://github.com/DavidAnson/markdownlint#api",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/DavidAnson/markdownlint-cli2",
+    "status": 200,
+    "final": "https://github.com/DavidAnson/markdownlint-cli2",
+    "error": ""
+  },
+  {
     "url": "https://github.com/Exafunction/codeium",
     "status": 200,
     "final": "https://github.com/Exafunction/codeium",
@@ -858,9 +876,21 @@
     "error": ""
   },
   {
+    "url": "https://github.com/igorshubovych/markdownlint-cli",
+    "status": 200,
+    "final": "https://github.com/igorshubovych/markdownlint-cli",
+    "error": ""
+  },
+  {
     "url": "https://github.com/langchain-ai/langchain",
     "status": 200,
     "final": "https://github.com/langchain-ai/langchain",
+    "error": ""
+  },
+  {
+    "url": "https://github.com/marketplace/actions/markdownlint-cli2-action",
+    "status": 200,
+    "final": "https://github.com/marketplace/actions/markdownlint-cli2-action",
     "error": ""
   },
   {
@@ -1135,9 +1165,9 @@
   },
   {
     "url": "https://imagemagick.org/",
-    "status": 200,
+    "status": null,
     "final": "https://imagemagick.org/",
-    "error": ""
+    "error": "HTTP Error 403: Forbidden"
   },
   {
     "url": "https://iterm2.com/documentation-shell-integration.html",
@@ -1263,6 +1293,12 @@
     "url": "https://macvim.org/macvim/",
     "status": 200,
     "final": "https://macvim.org/macvim/",
+    "error": ""
+  },
+  {
+    "url": "https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint",
+    "status": 200,
+    "final": "https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint",
     "error": ""
   },
   {
