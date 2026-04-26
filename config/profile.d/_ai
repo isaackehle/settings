@@ -1,6 +1,6 @@
 # AI workspace paths
-export JOB_SEARCH_WORKSPACE="$OBSIDIAN_VAULT/job_search"
-export PRIVATE_CONFIG_ROOT="$OBSIDIAN_VAULT/private"
+export JOB_SEARCH_WORKSPACE="$PRIMARY_VAULT/job_search"
+export PRIVATE_CONFIG_ROOT="$PRIMARY_VAULT/private"
 
 # Monthly model review reminder
 _ai_stamp="${XDG_CONFIG_HOME:-$HOME/.config}/ai/models-last-checked"

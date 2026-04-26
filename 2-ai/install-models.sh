@@ -1,8 +1,8 @@
 #!/opt/homebrew/bin/bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-. "${SCRIPT_DIR}/helpers.sh"
-. "${SCRIPT_DIR}/exo/setup_exo.sh"
+SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "${SETTINGS_BASE}/helpers.sh"
+. "${SETTINGS_BASE}/exo/setup_exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose
@@ -16,7 +16,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # $1 = profile folder name (e.g., macbook-m5-64gb)
 load_profile_models() {
     local profile="$1"
-    local profile_file="${SCRIPT_DIR}/profiles/${profile}/models.sh"
+    local profile_file="${SETTINGS_BASE}/profiles/${profile}/models.sh"
     if [[ -f "$profile_file" ]]; then
         . "$profile_file"
         return 0
@@ -240,7 +240,7 @@ install_coding_assistants() {
 
     # Handle exo option
     local num_profiles
-    num_profiles=$(ls -d "${SCRIPT_DIR}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    num_profiles=$(ls -d "${SETTINGS_BASE}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
     local exo_choice=$((num_profiles + 1))
     local cancel_choice=$((num_profiles + 2))
 
