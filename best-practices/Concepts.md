@@ -37,7 +37,6 @@ Reference definitions, patterns, and technology landscape notes.
 
 ## Build & Tooling
 
-- [[Build Tools/Build Tools]] — Build tools comparison
 - [[Build Tools/Webpack]] — Module bundler
 - [[Build Tools/Turborepo]] — Monorepo build system
 - [[Build Tools/NX]] — Monorepo build system (full-featured)

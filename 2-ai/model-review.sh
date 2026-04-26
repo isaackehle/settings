@@ -444,3 +444,50 @@ main() {
 }
 
 main "$@"
+
+# ---------------------------------------------------------------------------
+echo ""
+echo "── AUTOCOMPLETE ────────────────────────────────────────────────────"
+echo ""
+echo "  Current:"
+echo "    All   qwen2.5-coder:1.5b       (default, ~1 GB)"
+echo "    All   qwen2.5-coder:7b         (quality fallback, ~5 GB)"
+echo ""
+echo "  What to look for:"
+echo "    → Lower latency at 1-2B size (time-to-first-token < 200ms)"
+echo "    → FIM (fill-in-middle) support confirmed"
+echo "    → qwen2.5-coder still the benchmark leader at 1.5B/7B?"
+echo ""
+echo "  Check:"
+echo "    HumanEval / EvalPlus    https://evalplus.github.io/leaderboard.html"
+echo "    r/LocalLLaMA            https://www.reddit.com/r/LocalLLaMA"
+
+# ---------------------------------------------------------------------------
+# New releases to watch
+# ---------------------------------------------------------------------------
+echo ""
+echo "── NEW RELEASES TO WATCH ───────────────────────────────────────────"
+echo ""
+echo "  Ollama newest            https://ollama.com/library?sort=newest"
+echo "  HuggingFace trending     https://huggingface.co/models?sort=trending&pipeline_tag=text-generation"
+echo "  Unsloth blog (quants)    https://unsloth.ai/blog"
+echo "  Simon Willison           https://simonwillison.net"
+
+# ---------------------------------------------------------------------------
+# Stamp
+# ---------------------------------------------------------------------------
+echo ""
+mkdir -p "$(dirname "$STAMP_FILE")"
+date +%s > "$STAMP_FILE"
+echo "────────────────────────────────────────────────────────────────────"
+echo "  ✓ Marked as reviewed: $(date '+%Y-%m-%d')"
+echo "    Shell will remind you again in 30 days."
+echo ""
+
+# Offer to replace any models
+echo ""
+read -p "Replace any models? (y/n): " replace_models
+if [[ "$replace_models" == "y" || "$replace_models" == "Y" ]]; then
+    "$SETTINGS_BASE/swap-model.sh"
+fi
+echo ""

@@ -2,7 +2,7 @@
 
 ## Obsidian Vault
 
-Primary vault: `$OBSIDIAN_VAULT` = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary`
+Primary vault: `$PRIMARY_VAULT` = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary`
 
 This is Isaac's single source of truth for personal and professional notes.
 

@@ -15,6 +15,6 @@ else
   _vault_model="deepseek-r1-tools:8b"    # macbook-m1 (default)
 fi
 
-alias vault="cd \"\$OBSIDIAN_VAULT\" && opencode --model $_vault_model"
+alias vault="cd \"\$PRIMARY_VAULT\" && opencode --model $_vault_model"
 
 unset _hw_model _hw_mem_gb _vault_model

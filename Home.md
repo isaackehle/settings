@@ -27,71 +27,72 @@ Personal macOS development environment setup guide and reference.
 - [[iTerm]] — iTerm2 setup and keyboard shortcuts
 - [[SSH]] — SSH configuration
 
-## 02 - Development
+## 1-dev
 
-- [[Editors]] — VS Code, Vim, and other editors
-- [[Git]] — Git setup, gh CLI, aliases
-- [[Xcode]] — Xcode Command Line Tools
-- [[Web Dev]] — Web development overview
-- [[Front-End/Vite]] — Modern frontend build tool
-- [[Front-End/Vitest]] — Fast unit test framework
-- [[Styling/Tailwind CSS]] — Utility-first CSS framework
-- [[Styling/ShadCN]] — Component library for React
-- [[Front-End/Angular]] — Angular CLI
-- [[NPM Globals]] — Global npm packages
-- [[APIs]] — API development tools
-- [[CSS]] — CSS overview and styling tools
-- [[Front-End/Next.js]] — Next.js framework
-- [[SDK]] — SDK management
-- [[Concepts]] — Development concepts and best practices
-- [[Load Testing]] — Load testing tools
-- [[Build Tools/Build Tools]] — Build tools overview and comparison
-- [[Build Tools/esbuild]] — Extremely fast JS/TS bundler
-- [[Build Tools/Gradle]] — Gradle build tool
-- [[Build Tools/Grunt]] — Configuration-based task runner
-- [[Build Tools/Gulp]] — Streaming build system
-- [[Build Tools/Just]] — Command runner
-- [[Build Tools/NX]] — Full-featured monorepo build system
-- [[Build Tools/Parcel]] — Zero-config bundler
-- [[Build Tools/Pipelines]] — CI/CD pipelines
-- [[Build Tools/Rollup]] — ES module bundler for libraries
-- [[Build Tools/Turborepo]] — Lightweight monorepo build system
-- [[Build Tools/Webpack]] — Configurable module bundler
-- [[Docker]] — Docker and Docker Compose
-- [[Kubernetes]] — kubectl, helm, minikube
-- [[Rancher Desktop]] — Container and Kubernetes desktop management
-- [[Volta]] — Volta version manager (recommended)
-- [[NVM]] — Node Version Manager
-- [[FNM]] — Fast Node Manager
-- [[PNPM]] — PNPM package manager
-- [[Bun]] — Bun runtime and package manager
-- [[Corepack]] — Node.js built-in package manager manager
-- [[Agent Config]] — AGENTS.md templates for AI coding agents
-- [[AGENTS.md Monorepo Root]] — Root-level template for multi-stack repos
-- [[AGENTS.md Next.js TypeScript]] — Frontend template for Next.js 15 / React 19 / TypeScript
-- [[AGENTS.md Python FastAPI]] — Backend template for Python / FastAPI / Pydantic
-- [[AGENTS.md Embedded Edge ML]] — Embedded systems and edge ML template
+### Install
+- [[install/Editors]] — VS Code, Vim, and other editors
+- [[install/Git]] — Git setup, gh CLI, aliases
+- [[install/Xcode]] — Xcode Command Line Tools
+- [[install/Front-End/Vite]] — Modern frontend build tool
+- [[install/Front-End/Vitest]] — Fast unit test framework
+- [[install/Styling/Tailwind CSS]] — Utility-first CSS framework
+- [[install/Styling/ShadCN]] — Component library for React
+- [[install/Front-End/Angular]] — Angular CLI
+- [[install/NPM Globals]] — Global npm packages
+- [[install/Front-End/Next.js]] — Next.js framework
+- [[install/SDK]] — SDK management
+- [[install/Build Tools/esbuild]] — Extremely fast JS/TS bundler
+- [[install/Build Tools/Gradle]] — Gradle build tool
+- [[install/Build Tools/Grunt]] — Configuration-based task runner
+- [[install/Build Tools/Gulp]] — Streaming build system
+- [[install/Build Tools/Just]] — Command runner
+- [[install/Build Tools/NX]] — Full-featured monorepo build system
+- [[install/Build Tools/Parcel]] — Zero-config bundler
+- [[install/Build Tools/Pipelines]] — CI/CD pipelines
+- [[install/Build Tools/Rollup]] — ES module bundler for libraries
+- [[install/Build Tools/Turborepo]] — Lightweight monorepo build system
+- [[install/Build Tools/Webpack]] — Configurable module bundler
+- [[install/Infrastructure/Docker]] — Docker and Docker Compose
+- [[install/Infrastructure/Kubernetes]] — kubectl, helm, minikube
+- [[install/Infrastructure/Rancher Desktop]] — Container and Kubernetes desktop management
+- [[install/Node/Volta]] — Volta version manager (recommended)
+- [[install/Node/NVM]] — Node Version Manager
+- [[install/Node/FNM]] — Fast Node Manager
+- [[install/Node/PNPM]] — PNPM package manager
+- [[install/Node/Bun]] — Bun runtime and package manager
+- [[install/Node/Corepack]] — Node.js built-in package manager manager
+- [[install/Agent Config/Agent Config]] — AGENTS.md templates for AI coding agents
+- [[install/Agent Config/AGENTS.md Monorepo Root]] — Root-level template for multi-stack repos
+- [[install/Agent Config/AGENTS.md Next.js TypeScript]] — Frontend template for Next.js 15 / React 19 / TypeScript
+- [[install/Agent Config/AGENTS.md Python FastAPI]] — Backend template for Python / FastAPI / Pydantic
+- [[install/Agent Config/AGENTS.md Embedded Edge ML]] — Embedded systems and edge ML template
+- [[install/Languages/Programming Languages]] — Broad language overview and quick starts
+- [[install/Languages/Java]] — Java/JDK via SDKMAN
+- [[install/Languages/Python/Python]] — Python 3 via pyenv
+- [[install/Languages/Python/Pipenv]] — Virtual environment and dependency manager
+- [[install/Languages/Python/Pytest]] — Python testing framework
+- [[install/Languages/Ruby]] — Ruby via RVM
+- [[install/Languages/Rust]] — Rust language setup
+- [[install/Languages/Go]] — Go language setup
+- [[install/Languages/TypeScript]] — TypeScript setup
+- [[install/Languages/Julia]] — Julia language setup
+- [[install/Languages/Elixir]] — Elixir language setup
+- [[install/Languages/Kotlin]] — Kotlin
+- [[install/Languages/Flutter]] — Flutter mobile framework
+- [[install/Infrastructure/AWS]] — AWS CLI and tools
+- [[install/Infrastructure/Cloud]] — Cloud services overview
+- [[install/Infrastructure/SOPS]] — Secrets management
+- [[install/Infrastructure/Terraform]] — Terraform IaC
+- [[install/Databases/Databases]] — Database setup and configuration
+- [[install/Databases/Services]] — Microservices and supporting services
+- [[install/Databases/Apache]] — Apache server configuration
 
-- [[Languages/Programming Languages]] — Broad language overview and quick starts
-- [[Languages/Java]] — Java/JDK via SDKMAN
-- [[Languages/Python/Python]] — Python 3 via pyenv
-- [[Languages/Python/Pipenv]] — Virtual environment and dependency manager
-- [[Languages/Python/Pytest]] — Python testing framework
-- [[Languages/Ruby]] — Ruby via RVM
-- [[Languages/Rust]] — Rust language setup
-- [[Languages/Go]] — Go language setup
-- [[Languages/TypeScript]] — TypeScript setup
-- [[Languages/Julia]] — Julia language setup
-- [[Languages/Elixir]] — Elixir language setup
-- [[Languages/Kotlin]] — Kotlin
-- [[Languages/Flutter]] — Flutter mobile framework
-- [[Infrastructure/AWS]] — AWS CLI and tools
-- [[Infrastructure/Cloud]] — Cloud services overview
-- [[Infrastructure/SOPS]] — Secrets management
-- [[Infrastructure/Terraform]] — Terraform IaC
-- [[Databases/Databases]] — Database setup and configuration
-- [[Databases/Services]] — Microservices and supporting services
-- [[Databases/Apache]] — Apache server configuration
+### Best Practices
+- [[best-practices/Web Dev]] — Web development overview
+- [[best-practices/APIs]] — API development tools
+- [[best-practices/CSS]] — CSS overview and styling tools
+- [[best-practices/Concepts]] — Development concepts and best practices
+- [[best-practices/Load Testing]] — Load testing tools
 
 ## 03 - Apps
 
