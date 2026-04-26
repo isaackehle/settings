@@ -4,15 +4,8 @@
 # Allows users to select/deselect tools via spacebar and execute them.
 
 # Load utilities if available
-[ -f "./utils.sh" ] && . "./utils.sh"
-[ -f "./helpers.sh" ] && . "./helpers.sh"
-
-# Default print functions if utils.sh is missing
-if ! command -v print_info &> /dev/null; then
-    print_info() { echo -e "\033[1;34m[INFO]\033[0m $1"; }
-    print_status() { echo -e "\033[1;32m[OK]\033[0m $1"; }
-    print_warning() { echo -e "\033[1;33m[WARN]\033[0m $1"; }
-fi
+. "${SETTINGS_BASE}/utils.sh"
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Define Categories and their associated scripts
 declare -A CATEGORIES
@@ -47,7 +40,7 @@ render_menu() {
         for script in "${scripts[@]}"; do
             local marker=" [ ] "
             [[ " ${SELECTED_SCRIPTS[*]} " == *" $script "* ]] && marker=" [x] "
-            
+
             if [ "$script" == "${CURRENT_SCRIPT}" ]; then
                 echo -e "\033[1;33m>$marker $script\033[0m"
             else

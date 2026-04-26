@@ -1,8 +1,7 @@
 # Shared preamble — installed to ~/.shellrc by setup.sh, sourced by bashrc and zshrc
 
-export OBSIDIAN_BASE="$HOME/Obsidian"
-export OBSIDIAN_ROOT="$OBSIDIAN_BASE/Documents"
-export PRIMARY_VAULT="$OBSIDIAN_ROOT/primary"
+export PROTON_DRIVE_ROOT="$HOME/ProtonDrive"
+export PRIMARY_VAULT="$PROTON_DRIVE_ROOT/root"
 export SETTINGS_BASE="$HOME/code/isaackehle/settings"
 export PATH="$HOME/.local/bin:$PATH"
 

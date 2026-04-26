@@ -1,6 +1,6 @@
 # Global Instructions
 
-## Obsidian Vault
+## Primary Vault
 
 Primary vault: `$PRIMARY_VAULT` = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary`
 

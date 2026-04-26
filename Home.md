@@ -111,6 +111,7 @@ Personal macOS development environment setup guide and reference.
 - [[VPN]] — VPN setup
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
+- [[Synology]] — Synology NAS management tools
 
 ## 04 - AI
 
