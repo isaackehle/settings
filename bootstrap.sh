@@ -10,9 +10,6 @@ REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
 
 . "${SETTINGS_BASE}/helpers.sh"
 
-# Source models.sh to load current mappings (provides OPENCODE_AGENTS_*, CLAUDE_CODE_*, etc.)
-# shellcheck source=models.sh
-source "$SETTINGS_BASE/models.sh"
 
 
 # Utility functions, menu prompts, and file updates are sourced from helpers.sh
@@ -24,26 +21,27 @@ source "$SETTINGS_BASE/models.sh"
 main() {
     echo ""
     echo "╔══════════════════════════════════════════════════════════════════╗"
-    echo "║           SWAP AI MODEL — Interactive Configuration             ║"
+    echo "║           BOOTSTRAP — Interactive Configuration                  ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
-
+    
     # Select machine
     local mem_class
     mem_class=$(prompt_machine_class)
     echo ""
     log_info "Machine: $mem_class (${MACHINE_DIRS[$mem_class]})"
-
+    
+    # Source profile-specific models.sh to load OPENCODE_AGENTS and other mappings
+    source "$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]}/models.sh"
+    
     # Select role — reads current models from sourced arrays
     local role
     role=$(prompt_role_menu "$mem_class")
     echo ""
     log_info "Role: $role"
-
+    
     # Look up current model from sourced array
-    local arr_name
-    arr_name=$(agents_array_for "$mem_class")
-    local -n _cur_agents="$arr_name"
-
+    local -n _cur_agents="OPENCODE_AGENTS"
+    
     local agent_key
     case "$role" in
         coding)   agent_key="code" ;;
@@ -52,26 +50,26 @@ main() {
         writing)  agent_key="write" ;;
         planning) agent_key="plan" ;;
     esac
-
+    
     local current_model="${_cur_agents[$agent_key]:-}"
     if [[ -z "$current_model" ]]; then
         die "Could not determine current model for $role on $mem_class"
     fi
-
+    
     # Prompt for replacement
     echo ""
     echo "  Current: $current_model"
     echo ""
     read -r -p "New model alias (Ollama colon form, e.g. qwen3-32b:q6): " new_alias
     new_alias="${new_alias// /}"  # trim whitespace
-
+    
     if [[ -z "$new_alias" ]]; then
         die "Model alias cannot be empty."
     fi
-
+    
     local new_dash
     new_dash=$(colon_to_dash "$new_alias")
-
+    
     # Confirm
     echo ""
     echo "╔══════════════════════════════════════════════════════════════════╗"
@@ -92,19 +90,19 @@ main() {
     echo "    scripts/${MACHINE_DIRS[$mem_class]}/grok/grok.json"
     [[ "$role" == "research" ]] && echo "    config/profile.d/_obsidian"
     echo ""
-
+    
     read -r -p "Continue? (y/n): " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
         echo "Cancelled."
         exit 0
     fi
-
+    
     echo ""
     local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]}"
     if [[ ! -d "$machine_dir" ]]; then
         die "Machine directory not found: $machine_dir"
     fi
-
+    
     # Apply all updates
     update_models_sh    "$role" "$mem_class" "$current_model" "$new_alias"
     update_litellm_yaml "$machine_dir" "$current_model" "$new_alias"
@@ -112,15 +110,15 @@ main() {
     update_claude_settings "$machine_dir" "$current_model" "$new_alias"
     update_opencode_config "$machine_dir" "$current_model" "$new_alias"
     update_grok_config  "$machine_dir" "$current_model" "$new_alias"
-
+    
     if [[ "$role" == "research" ]]; then
         update_obsidian_profile "$mem_class" "$current_model" "$new_alias"
     fi
-
+    
     echo ""
     log_success "Done. Changes applied to repo — commit when ready."
     echo ""
-
+    
     # Offer to pull and install the new model
     echo ""
     read -r -p "Pull new model via install_coding_assistants? (y/n): " install_choice
@@ -129,7 +127,7 @@ main() {
         source "$SETTINGS_BASE/install-models.sh"
         install_coding_assistants
     fi
-
+    
     echo ""
 }
 

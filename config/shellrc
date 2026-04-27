@@ -1,7 +1,9 @@
 # Shared preamble — installed to ~/.shellrc by setup.sh, sourced by bashrc and zshrc
 
-export PROTON_DRIVE_ROOT="$HOME/ProtonDrive"
-export PRIMARY_VAULT="$PROTON_DRIVE_ROOT/root"
+# These are after the soft-links are set
+export PROTON_LINK="$HOME/ProtonDrive"
+export ONEDRIVE_LINK="$HOME/OneDrive"
+export PRIMARY_VAULT="$ONEDRIVE_LINK/vault"
 export SETTINGS_BASE="$HOME/code/isaackehle/settings"
 export PATH="$HOME/.local/bin:$PATH"
 

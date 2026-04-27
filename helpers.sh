@@ -17,13 +17,13 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 
-# Machine key → repo subdirectory name
+# Machine folder → folder name (Used for resolution in update functions)
 declare -A MACHINE_DIRS=(
-    ["64gb"]="macbook-m5-64gb"
-    ["48gb"]="macbook-m5-48gb"
-    ["32gb"]="macbook-m2"
-    ["m1"]="macbook-m1"
-    ["m2"]="macmini-m2"
+    ["macbook-m1-16gb"]="macbook-m1-16gb"
+    ["macbook-m2-32gb"]="macbook-m2-32gb"
+    ["macbook-m5-48gb"]="macbook-m5-48gb"
+    ["macbook-m5-64gb"]="macbook-m5-64gb"
+    ["macmini-m2"]="macmini-m2"
 )
 
 
@@ -40,13 +40,121 @@ die()         { log_error "$*"; exit 1; }
 # Ollama colon form → LiteLLM dash form  (qwen3-32b:q5 → qwen3-32b-q5)
 colon_to_dash() { echo "${1//:/-}"; }
 
-# Return the agent-map array name for a given machine key
-agents_array_for() {
-    case "$1" in
-        64gb) echo "OPENCODE_AGENTS_64GB" ;;
-        48gb) echo "OPENCODE_AGENTS_48GB" ;;
-        m1|m2) echo "OPENCODE_AGENTS_16GB" ;;
-    esac
+
+# ============================================================================
+# PROFILE DETECTION & MANAGEMENT
+# ============================================================================
+
+PROFILES_DIR="$SETTINGS_BASE/2-ai/profiles"
+declare -A _PROFILE_CACHE
+
+_get_profile_numbers() {
+    # List directories in profiles dir, sorted
+    ls -d "$PROFILES_DIR"/*/ 2>/dev/null | while read -r d; do
+        basename "$d"
+    done | sort
+}
+
+_load_profile() {
+    local folder="$1"
+    local profile_file="$PROFILES_DIR/$folder/PROFILE"
+    if [[ ! -f "$profile_file" ]]; then return 1; fi
+    
+    # Load key=value pairs into cache
+    while IFS='=' read -r key value; do
+        [[ -z "$key" || "$key" == \#* ]] && continue
+        _PROFILE_CACHE["p${folder}_${key}"]="$value"
+    done < "$profile_file"
+}
+
+_profile_name() {
+    local folder="$1"
+    _load_profile "$folder"
+    echo "${_PROFILE_CACHE[p${folder}_NAME]:-Unknown}"
+}
+
+_profile_memory() {
+    local folder="$1"
+    _load_profile "$folder"
+    echo "${_PROFILE_CACHE[p${folder}_MEMORY]:-0}"
+}
+
+_profile_computer_types() {
+    local folder="$1"
+    _load_profile "$folder"
+    echo "${_PROFILE_CACHE[p${folder}_COMPUTER_TYPES]:-}"
+}
+
+_profile_description() {
+    local folder="$1"
+    _load_profile "$folder"
+    echo "${_PROFILE_CACHE[p${folder}_DESCRIPTION]:-No description}"
+}
+
+_does_profile_match_computer() {
+    local folder="$1"
+    local hw_mem=$2
+    local hw_model=$3
+    
+    _load_profile "$folder" || return 1
+    
+    local min=${_PROFILE_CACHE[p${folder}_MEMORY_RANGE_MIN]:-0}
+    local max=${_PROFILE_CACHE[p${folder}_MEMORY_RANGE_MAX]:-9999}
+    
+    if [[ "$hw_mem" -lt "$min" || "$hw_mem" -gt "$max" ]]; then
+        return 1
+    fi
+    
+    local types=${_PROFILE_CACHE[p${folder}_COMPUTER_TYPES]:-""}
+    IFS=',' read -ra patterns <<< "$types"
+    for pattern in "${patterns[@]}"; do
+        if [[ "$hw_model" == $pattern ]]; then
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+_detect_hw() {
+    HW_MODEL=$(sysctl -n hw.model 2>/dev/null || echo "Unknown")
+    HW_MEM_GB=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
+}
+
+_detect_profile() {
+    _detect_hw
+    local best_match=""
+    local best_mem=0
+    
+    while IFS= read -r folder; do
+        if _does_profile_match_computer "$folder" "$HW_MEM_GB" "$HW_MODEL"; then
+            local mem
+            mem=$(_profile_memory "$folder")
+            if [[ "$mem" -gt "$best_mem" ]]; then
+                best_match="$folder"
+                best_mem="$mem"
+            fi
+        fi
+    done < <(_get_profile_numbers)
+    
+    echo "${best_match:-}"
+}
+
+get_profile_for_choice() {
+    local choice="$1"
+    
+    # If it's a number, resolve index
+    if [[ "$choice" =~ ^[0-9]+$ ]]; then
+        local idx=$choice
+        local profile
+        profile=$( _get_profile_numbers | sed -n "${idx}p")
+        echo "$profile"
+    # If it's already a valid folder name
+    elif [[ -d "$PROFILES_DIR/$choice" ]]; then
+        echo "$choice"
+    else
+        return 1
+    fi
 }
 
 # ============================================================================
@@ -55,11 +163,9 @@ agents_array_for() {
 
 show_role_menu() {
     local mem_class="$1"
-    local arr_name
-    arr_name=$(agents_array_for "$mem_class")
 
     # Read current models from the sourced associative array
-    local -n _agents="$arr_name"
+    local -n _agents="OPENCODE_AGENTS"
 
     echo ""
     echo "── CURRENT MODELS ($mem_class) ──────────────────────────────────"
@@ -91,27 +197,44 @@ prompt_role_menu() {
     esac
 }
 
+print_profile_menu() {
+    local detected="$1"
+    local i=1
+    local profile_num
+
+    echo "  Detected hardware: $(_profile_name "$detected") (auto-selected as [$detected])"
+    echo ""
+
+    while IFS= read -r profile_num; do
+        echo "  $i) $(_profile_name "$profile_num") — $(_profile_description "$profile_num")"
+        i=$((i + 1))
+    done < <(_get_profile_numbers)
+
+    echo "  $i) exo — distributed inference across Apple Silicon Macs"
+    i=$((i + 1))
+    echo "  $i) Cancel"
+}
+
 prompt_machine_class() {
+    local detected
+    detected=$(_detect_profile)
+    
     echo ""
     echo "── SELECT MACHINE ──────────────────────────────────────────────────"
-    echo "  1) 64GB   (M5 Max MacBook 64GB)"
-    echo "  2) 48GB   (M5 Max MacBook 48GB)"
-    echo "  3) M1     (MacBook M1)"
-    echo "  4) M2     (Mac mini M2)"
+    print_profile_menu "$detected"
     echo ""
-
-    while true; do
-        read -r -p "Select machine [1-4]: " mc_idx
-        if [[ "$mc_idx" =~ ^[1-4]$ ]]; then break; fi
-        log_error "Invalid selection. Please enter 1-4."
-    done
-
-    case "$mc_idx" in
-        1) echo "64gb" ;;
-        2) echo "48gb" ;;
-        3) echo "m1" ;;
-        4) echo "m2" ;;
-    esac
+    
+    local choice
+    read -p "Select machine (Enter = $detected): " choice
+    choice="${choice:-$detected}"
+    
+    # Get profile folder from choice
+    local profile
+    profile=$(get_profile_for_choice "$choice") || {
+        log_error "Invalid selection."
+        return 1
+    }
+    echo "$profile"
 }
 
 # ============================================================================
@@ -130,8 +253,6 @@ update_models_sh() {
     local old_dash
     old_dash=$(colon_to_dash "$old_colon")
 
-    local arr_name
-    arr_name=$(agents_array_for "$mem_class")
     local suffix="${mem_class^^}"  # 64GB→64GB, 48GB→48GB, m1→M1, m2→M2
 
     # Map role name → array key
@@ -146,10 +267,11 @@ update_models_sh() {
 
     log_info "Updating models.sh..."
 
-    # 1. Update OPENCODE_AGENTS_* entry (colon form in array)
-    sed -i '' "/declare -A ${arr_name}=/,/^)/s|\[${agent_key}\]=\"${old_colon}\"|[${agent_key}]=\"${new_colon}\"|" \
-    "$SETTINGS_BASE/models.sh"
-    log_success "  models.sh: OPENCODE_AGENTS_${suffix}[$agent_key]"
+    local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]}"
+    # 1. Update OPENCODE_AGENTS entry (colon form in array)
+    sed -i '' "/declare -A OPENCODE_AGENTS=/,/^)/s|\[${agent_key}\]=\"${old_colon}\"|[${agent_key}]=\"${new_colon}\"|" \
+    "$machine_dir/models.sh"
+    log_success "  models.sh: OPENCODE_AGENTS[$agent_key]"
 
     # 2. Update CONTINUE_ROLES_* entry for coding→chat, reasoning→think (colon form)
     local continue_key=""
@@ -158,23 +280,25 @@ update_models_sh() {
     esac
     if [[ -n "$continue_key" && ( "$mem_class" == "64gb" || "$mem_class" == "48gb" ) ]]; then
         local continue_arr="CONTINUE_ROLES_${suffix}"
+        local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]}"
         sed -i '' "/declare -A ${continue_arr}=/,/^)/s|\[${continue_key}\]=\"${old_colon}\"|[${continue_key}]=\"${new_colon}\"|" \
-        "$SETTINGS_BASE/models.sh"
+        "$machine_dir/models.sh"
         log_success "  models.sh: ${continue_arr}[$continue_key]"
     fi
 
     # 3. Update CLAUDE_CODE_* variable (colon form stored in models.sh)
+    local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]}"
     case "$role" in
         coding)
             local sonnet_var="CLAUDE_CODE_SONNET_${suffix}"
             sed -i '' "s|${sonnet_var}=\"${old_colon}\"|${sonnet_var}=\"${new_colon}\"|" \
-            "$SETTINGS_BASE/models.sh"
+            "$machine_dir/models.sh"
             log_success "  models.sh: ${sonnet_var}"
         ;;
         planning)
             local haiku_var="CLAUDE_CODE_HAIKU_${suffix}"
             sed -i '' "s|${haiku_var}=\"${old_colon}\"|${haiku_var}=\"${new_colon}\"|" \
-            "$SETTINGS_BASE/models.sh"
+            "$machine_dir/models.sh"
             log_success "  models.sh: ${haiku_var}"
         ;;
     esac
@@ -203,13 +327,13 @@ update_litellm_yaml() {
 
     log_info "Updating $(basename "$machine_dir")/litellm/litellm.yaml..."
 
-    # model_name: qwen3-coder-30b-32k-q5   (unquoted dash form)
+    # model_name: qwen3-coder-30b-q5-32k   (unquoted dash form)
     sed -i '' "s|model_name: ${old_dash}|model_name: ${new_dash}|g" "$litellm_file"
 
-    # model: ollama_chat/qwen3-coder-30b-32k:q5   (colon form)
+    # model: ollama_chat/qwen3-coder-30b:q5-32k   (colon form)
     sed -i '' "s|ollama_chat/${old_colon}|ollama_chat/${new_colon}|g" "$litellm_file"
 
-    # router alias values: "qwen3-coder-30b-32k-q5"  (quoted dash form)
+    # router alias values: "qwen3-coder-30b-q5-32k"  (quoted dash form)
     sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$litellm_file"
 
     log_success "  $(basename "$machine_dir")/litellm/litellm.yaml"
@@ -232,7 +356,7 @@ update_continue_config() {
 
     log_info "Updating $(basename "$machine_dir")/continue/config.yaml..."
 
-    # model: "qwen3-coder-30b-32k-q5"  (quoted dash form)
+    # model: "qwen3-coder-30b-q5-32k"  (quoted dash form)
     sed -i '' "s|model: \"${old_dash}\"|model: \"${new_dash}\"|g" "$continue_file"
 
     log_success "  $(basename "$machine_dir")/continue/config.yaml"
@@ -255,7 +379,7 @@ update_claude_settings() {
 
     log_info "Updating $(basename "$machine_dir")/claude/settings.json..."
 
-    # "qwen3-coder-30b-32k-q5"  (quoted dash form — both env values and "model" key)
+    # "qwen3-coder-30b-q5-32k"  (quoted dash form — both env values and "model" key)
     sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$claude_file"
 
     log_success "  $(basename "$machine_dir")/claude/settings.json"
@@ -276,9 +400,9 @@ update_opencode_config() {
     log_info "Updating $(basename "$machine_dir")/opencode/opencode.jsonc..."
 
     # Model list keys + agent values use colon form (direct Ollama, port 11434)
-    # "qwen3-coder-30b-32k:q5": { ... }
+    # "qwen3-coder-30b:q5-32k": { ... }
     sed -i '' "s|\"${old_colon}\"|\"${new_colon}\"|g" "$opencode_file"
-    # ollama/qwen3-coder-30b-32k:q5
+    # ollama/qwen3-coder-30b:q5-32k
     sed -i '' "s|ollama/${old_colon}|ollama/${new_colon}|g" "$opencode_file"
 
     log_success "  $(basename "$machine_dir")/opencode/opencode.jsonc"
@@ -334,7 +458,7 @@ update_obsidian_profile() {
 main() {
     echo ""
     echo "╔══════════════════════════════════════════════════════════════════╗"
-    echo "║           SWAP AI MODEL — Interactive Configuration             ║"
+    echo "║           helpers.sh — Interactive Configuration                 ║"
     echo "╚══════════════════════════════════════════════════════════════════╝"
 
     # Select machine
@@ -444,219 +568,3 @@ main() {
 }
 
 main "$@"
- [[ "$hw_mem_gb" -gt "$mem_max" ]]; then
-        return 1
-    fi
-
-    # Get profile's computer types and check for match
-    local computer_types
-    computer_types=$(_profile_computer_types "$profile")
-
-    # Handle wildcard matching for computer types (comma-separated patterns)
-    # Portable version that works in both bash and zsh
-    local matched=0
-    local old_ifs="$IFS"
-    IFS=','
-    for pattern in $computer_types; do
-        # Trim whitespace
-        pattern="${pattern#"${pattern%%[![:space:]]*}"}"
-        pattern="${pattern%"${pattern##*[![:space:]]}"}"
-        if [[ "$hw_model" == $pattern ]]; then
-            matched=1
-            break
-        fi
-    done
-    IFS="$old_ifs"
-
-    [[ "$matched" -eq 1 ]]
-}
-
-# Populate HW_MODEL and HW_MEM_GB globals from sysctl (idempotent).
-_detect_hw() {
-    HW_MODEL=$(sysctl -n hw.model 2>/dev/null || echo "Unknown")
-    HW_MEM_GB=$(( $(sysctl -n hw.memsize 2>/dev/null || echo 0) / 1024 / 1024 / 1024 ))
-}
-
-# Detect current machine profile using each profile's own _does_profile_match_computer() logic
-_detect_profile() {
-    _detect_hw
-    local hw_mem_gb=$HW_MEM_GB hw_model=$HW_MODEL
-    local best_match=""
-    local best_mem=0
-
-    while IFS= read -r folder; do
-        # Use each profile's own matching function
-        if _does_profile_match_computer "$folder" "$hw_mem_gb" "$hw_model"; then
-            local mem
-            mem=$(_profile_memory "$folder")
-            # Pick the profile with the highest memory threshold that matches
-            if [[ "$mem" -gt "$best_mem" ]]; then
-                best_match="$folder"
-                best_mem="$mem"
-            fi
-        fi
-    done < <(_get_profile_numbers)
-
-    # If no match found (e.g., more memory than any profile), use highest memory profile
-    if [[ -z "$best_match" ]]; then
-        best_match=$(ls -d "${PROFILES_DIR}"/*/ 2>/dev/null | while read -r d; do
-            [[ -f "${d}PROFILE" ]] && basename "$d"
-        done | sort | tail -1)
-    fi
-
-    echo "${best_match:-}"
-}
-
-# Get profile label (alias for _profile_name)
-_profile_label() {
-    _profile_name "$1"
-}
-
-# Profile descriptions from PROFILE files
-_profile_description() {
-    local folder="$1"
-    _load_profile "$folder" || return 1
-    echo "${_PROFILE_CACHE[p${folder}_DESCRIPTION]:-}"
-}
-
-# Generate profile menu options dynamically
-print_profile_menu() {
-    local detected="$1"
-    local i=1
-    local profile_num
-
-    echo "  Detected hardware: $(_profile_label "$detected") (auto-selected as [$detected])"
-    echo ""
-
-    while IFS= read -r profile_num; do
-        echo "  $i) $(_profile_label "$profile_num") — $(_profile_description "$profile_num")"
-        i=$((i + 1))
-    done < <(_get_profile_numbers)
-
-    echo "  $i) exo — distributed inference across Apple Silicon Macs"
-    i=$((i + 1))
-    echo "  $i) Cancel"
-}
-
-
-# Enhanced tool check with version information
-check_tool_with_version() {
-    local tool_name="$1"
-    local command_name="$2"
-
-    # Check CLI command first
-    if command_exists "$command_name"; then
-        local version_output
-        version_output=$("$command_name" --version 2>/dev/null || "$command_name" version 2>/dev/null || echo "Version check not available")
-        print_status "$tool_name is installed (version: $version_output)"
-        return 0
-    fi
-
-    # Check for node modules (for tools that might be installed via npm)
-    if command_exists "node" && npm list -g "$command_name" &> /dev/null; then
-        print_status "$tool_name Node module found"
-        return 0
-    fi
-
-    # Check for uv tools (for tools that might be installed via uv)
-
-    if command_exists "uv" && uv tool list | grep -q "$command_name"; then
-        print_status "$tool_name uv tool found"
-        return 0
-    fi
-
-    # Check for executable in common locations
-    local common_paths=(
-        "/usr/local/bin/$command_name"
-        "$HOME/.local/bin/$command_name"
-        "$HOME/.npm-global/bin/$command_name"
-        "/opt/$command_name/bin/$command_name"
-        "$HOME/.config/yarn/global/node_modules/.bin/$command_name"
-    )
-
-    for path in "${common_paths[@]}"; do
-        if [ -f "$path" ]; then
-            print_status "$tool_name executable found at $path"
-            return 0
-        fi
-    done
-
-    print_warning "$tool_name not found"
-    return 1
-}
-
-# Install via npm with error handling and verbose output
-install_via_npm() {
-    local tool_name="$1"
-    local package_name="$2"
-
-    print_info "Installing $tool_name via npm..."
-
-    if command_exists "npm"; then
-        print_info "Attempting npm install for $package_name..."
-        if npm install -g "$package_name" --silent; then
-            print_success "$tool_name installed successfully via npm"
-            return 0
-        else
-            print_error "npm installation failed for $tool_name (package: $package_name)"
-            return 1
-        fi
-    else
-        print_warning "npm not available - cannot install $tool_name via npm"
-        return 1
-    fi
-}
-
-
-# Install Homebrew if not present
-setup_homebrew() {
-    print_info "Installing Homebrew..."
-
-    if ! command_exists "brew"; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        print_status "Homebrew installed successfully"
-    else
-        print_status "Homebrew already installed"
-    fi
-}
-
-# Check common system requirements: curl, git, node, npm, python3, docker
-check_system_requirements() {
-    print_info "Checking system requirements..."
-
-    if command_exists "curl"; then
-        print_status "✓ curl found"
-    else
-        print_warning "⚠ curl not found - may affect downloads"
-    fi
-
-    if command_exists "git"; then
-        print_status "✓ git found"
-    else
-        print_warning "⚠ git not found - some tools may require git"
-    fi
-
-    if command_exists "node"; then
-        print_status "✓ Node.js found: $(node --version)"
-    else
-        print_warning "⚠ Node.js not found - npm-based installations will be limited"
-    fi
-
-    if command_exists "npm"; then
-        print_status "✓ npm found: $(npm --version)"
-    else
-        print_warning "⚠ npm not found - npm-based installations will be limited"
-    fi
-
-    if command_exists "python3"; then
-        print_status "✓ Python 3 found: $(python3 --version)"
-    else
-        print_warning "⚠ Python 3 not found - some tools may require Python"
-    fi
-
-    if command_exists "docker"; then
-        print_status "✓ Docker found: $(docker --version 2>/dev/null || echo 'Docker found')"
-    else
-        print_info "ℹ Docker not found - some AI tools may benefit from Docker"
-    fi
-}

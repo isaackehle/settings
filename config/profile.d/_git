@@ -1,2 +1,2 @@
-export SETTINGS_REPO="$HOME/code/isaackehle/settings"
+export SETTINGS_BASE="$HOME/code/isaackehle/settings" # the github repo's name
 

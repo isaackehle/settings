@@ -1,7 +1,7 @@
 #!/opt/homebrew/bin/bash
 set -e
 
-# Setup script for Isaac's dotfiles and Claude Code config
+# Setup script for this repo's dotfiles and Claude Code config
 # Usage: ./setup.sh
 
 SETTINGS_BASE="$(cd "$(dirname "$0")" && pwd)"
