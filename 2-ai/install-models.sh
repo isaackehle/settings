@@ -235,7 +235,12 @@ install_coding_assistants() {
     print_profile_menu "$detected"
     echo ""
 
-    read -p "Enter selection [1-6] (Enter = $detected): " choice
+    # Calculate total options for the prompt: profiles + exo + cancel
+    local num_profiles
+    num_profiles=$(ls -d "${SETTINGS_BASE}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    local total_options=$((num_profiles + 2))
+
+    read -p "Enter selection [1-$total_options] (Enter = $detected): " choice
     choice="${choice:-$detected}"
 
     # Handle exo option
