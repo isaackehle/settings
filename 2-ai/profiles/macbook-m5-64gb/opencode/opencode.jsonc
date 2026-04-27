@@ -1,82 +1,188 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "litellm": {
+    "openrouter": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM",
+      "name": "OpenRouter",
       "options": {
-        "baseURL": "http://127.0.0.1:4000/v1",
-        "apiKey": "sk-local"
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "env.OPENROUTER_API_KEY",
       },
-      "models": {
-        // Gemma 4
-        "gemma4-31b": {
+"models": {
+        // --- Qwen3 Coder Next (80B) — NEW Jan 2026 ---
+        "qwen3-coder-next-80b:q4": {
+          "name": "Qwen 3 Coder Next 80B",
+          "limit": { "context": 8192 }
+        },
+        "qwen3-coder-next-80b:q4-16k": {
+          "name": "Qwen 3 Coder Next 80B, 16k context",
+          "limit": { "context": 16384, "output": 4096 }
+        },
+        "qwen3-coder-next-80b:q4-64k": {
+          "name": "Qwen 3 Coder Next 80B, 64k context",
+          "limit": { "context": 65536 }
+        },
+        // --- Qwen3.5 (27B) ---
+        "qwen3.5:27b": {
+          "name": "Qwen 3.5 27B (code #1 + write+vision)"
+        },
+        // --- Qwen3.6 (35B) ---
+        "qwen3.6:35b:q5-8k": {
+          "name": "Qwen3.6 35B, 8k context"
+        },
+        "qwen3.6:35b:q5-128k": {
+          "name": "Qwen3.6 35B 128k (code, solo only)",
+          "limit": { "context": 131072 }
+        },
+        // --- Qwen3 Coder 30B (A3B) ---
+        "qwen3-coder-30b:q6-32k": {
+          "name": "Qwen3-Coder 30B A3B 32k (code)",
+          "limit": { "context": 32768 }
+        },
+        "qwen3-coder-30b:q6-220k": {
+          "name": "Qwen3-Coder 30B A3B 220k (large ctx)",
+          "limit": { "context": 220000 }
+        },
+        // --- DeepSeek R1 ---
+        "deepseek-r1:14b": {
+          "name": "DeepSeek R1 14B"
+        },
+        "deepseek-r1-tools:14b": {
+          "name": "DeepSeek R1 Tool-Calling 14B"
+        },
+        "deepseek-r1-tools:32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B"
+        },
+        // --- Qwen3 32B / 14B ---
+        "qwen3-32b:q5": {
+          "name": "Qwen3 32B Q5 (research)"
+        },
+        "qwen3-14b:q8": {
+          "name": "Qwen3 14B Q8 (research)"
+        },
+        "qwen3-14b:q5": {
+          "name": "Qwen3 14B Q5 (research)"
+        },
+        // --- Qwen3 4B ---
+        "qwen3-4b:q8": {
+          "name": "Qwen3 4B Q8 (plan)"
+        },
+        "qwen3-4b:q4": {
+          "name": "Qwen3 4B Q4 (plan, fast)"
+        },
+        // --- Gemma 4 ---
+        "gemma4:31b": {
           "name": "Gemma 4 31B"
         },
-        "qwen3-coder-next-80b-q4": {
-          "name": "Qwen 3 Coder Next 80B"
+        // --- Gemma 3 ---
+        "gemma3:12b": {
+          "name": "Gemma 3 12B"
         },
-        "qwen3-coder-next-80b-q4-16k": {
-          "name": "Qwen 3 Coder Next 80B, 16k context"
+        // --- GLM ---
+        "glm-4.7-flash": {
+          "name": "GLM-4.7 Flash"
         },
-        "qwen3.6-35b-128k": {
-          "name": "Qwen3.6 35B 128k (code,  solo only)"
+        // --- Phi-4 ---
+        "phi4": {
+          "name": "Phi-4"
         },
-        "qwen3.6-35b-24k": {
-          "name": "Qwen3.6 35B 24k (code, agentic)"
+        // --- Codestral ---
+        "codestral:22b": {
+          "name": "Codestral 22B"
         },
-        "qwen3-coder-30b-32k-q6": {
-          "name": "Qwen3-Coder 30B A3B 32k (code, default)"
+        "codestral-22b-v0.1:q8_0": {
+          "name": "Codestral 22B Q8 (code apply/insert)"
         },
-        "qwen3-coder-30b-220k-q6": {
-          "name": "Qwen3-Coder 30B A3B 220k (code, large ctx)"
+        // --- Llama ---
+        "llama3.3:70b": {
+          "name": "Llama 3.3 70B (solo only)"
         },
-        "qwen3-4b-q8": {
-          "name": "Qwen3 4B Q8 (plan, fast)"
+        "llama3.2": {
+          "name": "Llama 3.2"
         },
-        "codestral-22b-v0.1-q8_0": {
-          "name": "Codestral 22B Q8 (code apply/insert, 23 GB)"
+        // --- Qwen 2.5 Coder ---
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7B"
         },
-        "qwen2.5-coder-7b": {
-          "name": "Qwen2.5 Coder 7B (fast code, 5 GB)"
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5B (autocomplete)"
         },
-        "qwen2.5-coder-1.5b": {
-          "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
+        // --- Cloud ---
+        "kimi-k2.6:cloud": {
+          "name": "Kimi k2.6 Cloud"
         },
-        "deepseek-r1-tools-32b": {
-          "name": "DeepSeek R1 Tool-Calling 32B (reason+tools, 20 GB)"
+        // --- Embeddings ---
+        "nomic-embed-text": {
+          "name": "Nomic Embed (embeddings)"
         },
-        "deepseek-r1-tools-14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
+      },
+        "qwen3-coder-next-80b:q4": {
+          "name": "Qwen 3 Coder Next 80B",
         },
-        "qwen3-32b-q5": {
-          "name": "Qwen3 32B Q5 (research, 22 GB)"
+        "qwen3-coder-next-80b:q4-16k": {
+          "name": "Qwen 3 Coder Next 80B, 16k context",
         },
-        "qwen3-14b-q8": {
-          "name": "Qwen3 14B Q8 (research, 15 GB)"
+        "qwen3-coder-next-80b:q4-64k": {
+          "name": "Qwen 3 Coder Next 80B, 64k context",
         },
-        "qwen3.5-27b": {
-          "name": "Qwen 3.5 27B Q3 (code #1 + write+vision, 5.0% err, 20 GB)"
+        "qwen3.6:35b:q5-128k": {
+          "name": "Qwen3.6 35B 128k (code,  solo only)",
         },
-        "qwen3.5-27b-8k": {
-          "name": "Qwen 3.5 27B Q3, 8k context"
+        "qwen3.6:35b:q5-24k": {
+          "name": "Qwen3.6 35B 24k (code, agentic)",
         },
-        "qwen3.5-27b-32k": {
-          "name": "Qwen 3.5 27B Q3, 32k context"
+        "qwen3-coder-30b:q6-32k": {
+          "name": "Qwen3-Coder 30B A3B 32k (code, default)",
         },
-        "llama3.3-70b": {
-          "name": "Llama 3.3 70B (general, solo only, 43 GB)"
+        "qwen3-coder-30b:q6-220k": {
+          "name": "Qwen3-Coder 30B A3B 220k (code, large ctx)",
         },
-        "kimi-k2.6-cloud": {
-          "name": "Kimi k2.6 Cloud (reasoning, cloud)"
-        }
-      }
-    }
+        "qwen3-4b:q8": {
+          "name": "Qwen3 4B Q8 (plan, fast)",
+        },
+        "codestral-22b-v0.1:q8_0": {
+          "name": "Codestral 22B Q8 (code apply/insert, 23 GB)",
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7B (fast code, 5 GB)",
+        },
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)",
+        },
+        "deepseek-r1-tools:32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B (reason+tools, 20 GB)",
+        },
+        "deepseek-r1-tools:14b": {
+          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)",
+        },
+        "qwen3-32b:q5": {
+          "name": "Qwen3 32B Q5 (research, 22 GB)",
+        },
+        "qwen3-14b:q8": {
+          "name": "Qwen3 14B Q8 (research, 15 GB)",
+        },
+        "qwen3.5:27b": {
+          "name": "Qwen 3.5 27B Q3 (code #1 + write+vision, 5.0% err, 20 GB)",
+        },
+        "qwen3.5:27b:q5-8k": {
+          "name": "Qwen 3.5 27B Q3, 8k context",
+        },
+        "qwen3.5:27b:q5-32k": {
+          "name": "Qwen 3.5 27B Q3, 32k context",
+        },
+        "llama3.3:70b": {
+          "name": "Llama 3.3 70B (general, solo only, 43 GB)",
+        },
+        "kimi-k2.6:cloud": {
+          "name": "Kimi k2.6 Cloud (reasoning, cloud)",
+        },
+      },
+    },
   },
   "default_agent": "code",
   // qwen3.5-27b: #1 on OpenCode IndexNow benchmark (5.0% errors)
-  "model": "litellm/qwen3-coder-next-80b-q4-16k",
-  "small_model": "litellm/qwen3-4b-q8",
+  "model": "openrouter/qwen/qwen3-coder-next-80b",
+  "small_model": "openrouter/qwen/qwen3-4b",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -84,13 +190,13 @@
     "list": "allow",
     "webfetch": "allow",
     "edit": "ask",
-    "bash": "ask"
+    "bash": "ask",
   },
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
-      "model": "litellm/qwen3-coder-next-80b-q4-16k",
+      "model": "openrouter/qwen/qwen3-coder-next-80b",
       "temperature": 0.2,
       "maxTokens": 4000,
       "permission": {
@@ -100,14 +206,14 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "ask"
+        "bash": "ask",
       },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly."
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "litellm/deepseek-r1-tools-32b",
+      "model": "openrouter/deepseek/deepseek-r1-tool-calling-32b",
       "temperature": 0.3,
       "permission": {
         "read": "allow",
@@ -116,14 +222,14 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "bash": "deny"
+        "bash": "deny",
       },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations."
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations.",
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "litellm/qwen3-coder-next-80b-q4-16k",
+      "model": "openrouter/qwen/qwen3-coder-next-80b",
       "temperature": 0.65,
       "permission": {
         "read": "allow",
@@ -132,14 +238,14 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "deny"
+        "bash": "deny",
       },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific."
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific.",
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "litellm/qwen3-coder-next-80b-q4-16k",
+      "model": "openrouter/qwen/qwen3-coder-next-80b",
       "temperature": 0.25,
       "permission": {
         "read": "allow",
@@ -148,14 +254,14 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "deny"
+        "bash": "deny",
       },
-      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n\n## Findings\n<bullet points, organized by sub-topic>\n\n## Open Questions\n<what still needs investigation>\n\n## Next Steps\n<concrete recommended actions>\n\nIf the user explicitly says not to save, skip writing the file."
+      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n\n## Findings\n<bullet points, organized by sub-topic>\n\n## Open Questions\n<what still needs investigation>\n\n## Next Steps\n<concrete recommended actions>\n\nIf the user explicitly says not to save, skip writing the file.",
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "mode": "primary",
-      "model": "litellm/qwen3-4b-q8",
+      "model": "openrouter/qwen/qwen3-4b",
       "temperature": 0.25,
       "maxTokens": 1500,
       "permission": {
@@ -165,9 +271,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "bash": "deny"
+        "bash": "deny",
       },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
-    }
-  }
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
+    },
+  },
 }

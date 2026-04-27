@@ -1,16 +1,40 @@
 {
   "provider": {
-    "ollama": {
-      "name": "Ollama (Local via LiteLLM)",
+    "openrouter": {
+      "name": "OpenRouter (Cloud)",
       "options": {
-        "baseURL": "http://localhost:4000/v1"
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "deepseek-r1-tools-14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
+        "deepseek/deepseek-r1-tool-calling-32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B"
         },
-        "deepseek-r1-tools-8b": {
-          "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
+        "qwen/qwen3-4b": {
+          "name": "Qwen3 4B (fast, planning)"
+        },
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        }
+      }
+    },
+    "ollama": {
+      "name": "Ollama (Local)",
+      "options": {
+        "baseURL": "http://localhost:11434"
+      },
+      "models": {
+        "qwen3.5:27b": {
+          "name": "Qwen3.5 27B (general)"
+        },
+        "qwen3.6:35b:q5-32k": {
+          "name": "Qwen3.6 35B (general)"
+        },
+        "qwen3-coder-30b:q5-32k": {
+          "name": "Qwen3-Coder 30B A3B (code)"
+        },
+        "deepseek-r1-tools:8b": {
+          "name": "DeepSeek R1 Tool-Calling 8B (local)"
         }
       }
     }

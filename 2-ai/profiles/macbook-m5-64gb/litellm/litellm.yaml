@@ -1,126 +1,152 @@
 model_list:
-  # --- Cloud Models ---
+  # --- Cloud Models (via OpenRouter) ---
   - model_name: kimi-k2.6-cloud
     litellm_params:
       model: openrouter/moonshot/kimi-k2.6
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
   - model_name: glm-5.1-cloud
     litellm_params:
       model: openrouter/thudm/glm-5.1
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
   - model_name: gemma4-31b-cloud
     litellm_params:
-      model: ollama_chat/gemma4:31b-cloud
-      api_base: http://localhost:11434
+      model: openrouter/google/gemma-4-31b-it
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 32768
+
+  - model_name: codestral-cloud
+    litellm_params:
+      model: openrouter/mistralai/codestral
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 32768
+
+  - model_name: qwen3-4b-cloud
+    litellm_params:
+      model: openrouter/qwen/qwen3-4b
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
   # --- Coding ---
-  - model_name: qwen3.6:35b-8k
+  - model_name: qwen3.6:35b:q5-8k
     litellm_params:
-      model: ollama_chat/qwen3.6:35b-8k
+      model: ollama_chat/qwen3.6:35b:q5-8k
       api_base: http://localhost:11434
 
-  - model_name: qwen3.6:35b-128k
+  - model_name: qwen3.6:35b:q5-128k
     litellm_params:
-      model: ollama_chat/qwen3.6:35b-128k
+      model: ollama_chat/qwen3.6:35b:q5-128k
       api_base: http://localhost:11434
 
-  - model_name: qwen3-coder-30b-32k-q6
+  - model_name: qwen3-coder-30b:q6-32k
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b-32k:q6
+      model: ollama_chat/qwen3-coder-30b:q6-32k
       api_base: http://localhost:11434
 
-  - model_name: qwen3-coder-30b-220k-q6
+  - model_name: qwen3-coder-30b:q6-220k
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b-220k:q6
+      model: ollama_chat/qwen3-coder-30b:q6-220k
       api_base: http://localhost:11434
 
-  - model_name: qwen3-coder-next-80b-q4
+  - model_name: qwen3-coder-next-80b:q4
     litellm_params:
       model: ollama_chat/qwen3-coder-next-80b:q4
       api_base: http://localhost:11434
 
-  - model_name: qwen3-coder-next-80b-q4-16k
+  - model_name: qwen3-coder-next-80b:q4-16k
     litellm_params:
       model: ollama_chat/qwen3-coder-next-80b:q4-16k
       api_base: http://localhost:11434
 
-  - model_name: codestral-22b-v0.1-q8_0
+  - model_name: qwen3-coder-next-80b:q4-64k
     litellm_params:
-      model: ollama_chat/codestral:22b-v0.1-q8_0
+      model: ollama_chat/qwen3-coder-next-80b:q4-64k
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-7b
+  - model_name: codestral-22b-v0.1:q8_0
+    litellm_params:
+      model: ollama_chat/codestral:22b-v0.1:q8_0
+      api_base: http://localhost:11434
+
+  - model_name: qwen2.5-coder:7b
     litellm_params:
       model: ollama_chat/qwen2.5-coder:7b
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-1.5b
+  - model_name: qwen2.5-coder:1.5b
     litellm_params:
       model: ollama_chat/qwen2.5-coder:1.5b
       api_base: http://localhost:11434
 
   # --- Writing / general ---
-  - model_name: qwen3.5-27b
+  - model_name: qwen3.5:27b
     litellm_params:
       model: ollama_chat/qwen3.5:27b
       api_base: http://localhost:11434
 
-  - model_name: qwen3.5-27b-8k
+  - model_name: qwen3.5:27b:q5-8k
     litellm_params:
-      model: ollama_chat/qwen3.5:27b-8k
+      model: ollama_chat/qwen3.5:27b:q5-8k
       api_base: http://localhost:11434
 
-  - model_name: qwen3.5-27b-32k
+  - model_name: qwen3.5:27b:q5-32k
     litellm_params:
-      model: ollama_chat/qwen3.5:27b-32k
+      model: ollama_chat/qwen3.5:27b:q5-32k
       api_base: http://localhost:11434
 
   # --- Research ---
-  - model_name: qwen3-14b-q8
+  - model_name: qwen3-14b:q8
     litellm_params:
       model: ollama_chat/qwen3-14b:q8
       api_base: http://localhost:11434
 
-  - model_name: qwen3-32b-q5
+  - model_name: qwen3-32b:q5
     litellm_params:
       model: ollama_chat/qwen3-32b:q5
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
-  - model_name: deepseek-r1-tools-14b
+  - model_name: deepseek-r1-tools:14b
     litellm_params:
       model: ollama_chat/deepseek-r1-tools:14b
       api_base: http://localhost:11434
 
-  - model_name: deepseek-r1-tools-32b
+  - model_name: deepseek-r1-tools:32b
     litellm_params:
       model: ollama_chat/deepseek-r1-tools:32b
       api_base: http://localhost:11434
 
-  - model_name: deepseek-r1-14b
+  - model_name: deepseek-r1:14b
     litellm_params:
       model: ollama_chat/deepseek-r1:14b
       api_base: http://localhost:11434
 
   # --- Planning / fast ---
-  - model_name: qwen3-4b-q8
+  - model_name: qwen3-4b:q8
     litellm_params:
       model: ollama_chat/qwen3-4b:q8
       api_base: http://localhost:11434
 
   # --- General / large (solo use) ---
-  - model_name: llama3.3-70b
+  - model_name: llama3.3:70b
     litellm_params:
       model: ollama_chat/llama3.3:70b
       api_base: http://localhost:11434
 
-  - model_name: gemma4-31b
+  - model_name: gemma4:31b
     litellm_params:
       model: ollama_chat/gemma4:31b
       api_base: http://localhost:11434
@@ -141,12 +167,12 @@ general_settings:
 
 router_settings:
   model_group_alias:
-    "gemini-2.5-pro":                     "qwen3.5-27b"
-    "gemini-2.5-flash":                   "qwen3.5-27b"
-    "gemini-2.5-flash-lite":              "qwen3-4b-q8"
-    "gemini-3-flash-preview":             "qwen3.5-27b"
-    "gemini-3-flash-preview-customtools": "qwen3.5-27b"
-    "gemini-3-pro":                       "qwen3-coder-30b-32k-q5"
-    "gemini-3-pro-customtools":           "qwen3-coder-30b-32k-q5"
-    "gemini-3.1-pro-preview":             "qwen3.6:35b-128k"
-    "gemini-3.1-pro-preview-customtools": "qwen3.6:35b-128k"
+    "gemini-2.5-pro": "qwen3.5:27b"
+    "gemini-2.5-flash": "qwen3.5:27b"
+    "gemini-2.5-flash-lite": "qwen3-4b:q8"
+    "gemini-3-flash-preview": "qwen3.5:27b"
+    "gemini-3-flash-preview-customtools": "qwen3.5:27b"
+    "gemini-3-pro": "qwen3-coder-30b:q5-32k"
+    "gemini-3-pro-customtools": "qwen3-coder-30b:q5-32k"
+    "gemini-3.1-pro-preview": "qwen3.6:35b:q5-128k"
+    "gemini-3.1-pro-preview-customtools": "qwen3.6:35b:q5-128k"

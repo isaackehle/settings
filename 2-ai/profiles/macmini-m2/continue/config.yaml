@@ -1,13 +1,38 @@
-name: "Continue Config - Local Models (16GB)"
+name: "Continue Config - Local + Cloud Models (Mini M2)"
 version: "1.0.0"
 schema: "v1"
 
 models:
+  # ── Cloud Models (via OpenRouter) ──────────────────────────────────────
+  - name: "Kimi k2.6 Cloud"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "moonshot/kimi-k2.6"
+    roles:
+      - chat
+
+  - name: "GLM-5.1 Cloud"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "thudm/glm-5.1"
+    roles:
+      - chat
+
+  - name: "Claude Sonnet 4.6"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "anthropic/claude-sonnet-4-6"
+    roles:
+      - chat
+
+  # ── Local Models (via Ollama) ───────────────────────────────────────────
   # Primary chat / edit / apply model
   - name: "Qwen3 14B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
+    provider: ollama
+    apiBase: http://localhost:11434
     model: "qwen3-14b"
     roles:
       - chat
@@ -17,45 +42,33 @@ models:
 
   # Reasoning with tool calls
   - name: "DeepSeek R1 Tool-Calling 8B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "deepseek-r1-tools-8b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "deepseek-r1-tools:8b"
     roles:
       - chat
 
-  # Fast planning
-  - name: "Qwen3 4B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen3-4b-q4"
-    roles:
-      - chat
-
-  # Autocomplete — default (fast, safe on 16GB with 14B loaded)
+  # Autocomplete — default
   - name: "Qwen2.5 Coder 1.5B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen2.5-coder-1.5b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:1.5b"
     requestOptions:
       timeout: 8000
     roles:
       - autocomplete
 
-  # Autocomplete — quality (use when 14B is not loaded)
+  # Autocomplete — quality
   - name: "Qwen2.5 Coder 7B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen2.5-coder-7b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:7b"
     requestOptions:
       timeout: 8000
     roles:
       - autocomplete
 
-  # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
+  # Embedding model
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434

@@ -1,16 +1,40 @@
 {
   "provider": {
-    "ollama": {
-      "name": "Ollama (Local via LiteLLM)",
+    "openrouter": {
+      "name": "OpenRouter (Cloud)",
       "options": {
-        "baseURL": "http://localhost:4000/v1"
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "deepseek-r1-tools-32b": {
-          "name": "DeepSeek R1 Tool-Calling 32B (reason+tools, 20 GB)"
+        "deepseek/deepseek-r1-tool-calling-32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B"
         },
-        "deepseek-r1-tools-14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)"
+        "qwen/qwen3-4b": {
+          "name": "Qwen3 4B (fast, planning)"
+        },
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        }
+      }
+    },
+    "ollama": {
+      "name": "Ollama (Local)",
+      "options": {
+        "baseURL": "http://localhost:11434"
+      },
+      "models": {
+        "qwen3-coder-next-80b:q4": {
+          "name": "Qwen3 Coder Next 80B (primary coding)"
+        },
+        "qwen3.6:35b:q5-8k": {
+          "name": "Qwen3.6 35B (general)"
+        },
+        "deepseek-r1-tools:32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B (local)"
+        },
+        "deepseek-r1-tools:14b": {
+          "name": "DeepSeek R1 Tool-Calling 14B (local)"
         }
       }
     }

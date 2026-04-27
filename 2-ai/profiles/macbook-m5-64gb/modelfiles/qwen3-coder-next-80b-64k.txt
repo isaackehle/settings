@@ -1,0 +1,6 @@
+FROM qwen3-coder-next-80b:q4
+PARAMETER num_ctx 65536
+PARAMETER temperature 1.0
+PARAMETER top_p 0.95
+PARAMETER top_k 40
+PARAMETER min_p 0.01
