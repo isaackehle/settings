@@ -112,8 +112,8 @@ router_settings:
     "gemini-2.5-flash-lite":              "qwen3-4b"
     "gemini-3-flash-preview":             "qwen3.5:27b"
     "gemini-3-flash-preview-customtools": "qwen3.5:27b"
-    "gemini-3.1-pro-preview":             "qwen3-coder-30b-32k:q5"
-    "gemini-3.1-pro-preview-customtools": "qwen3-coder-30b-32k:q5"
+    "gemini-3.1-pro-preview":             "qwen3-coder-30b:q5-32k"
+    "gemini-3.1-pro-preview-customtools": "qwen3-coder-30b:q5-32k"
 ```
 
 If you see `BadRequestError: There are no healthy deployments for this model`, add the missing model name to the alias map — Gemini CLI may use additional model names across versions.

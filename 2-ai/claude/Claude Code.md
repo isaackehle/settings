@@ -50,7 +50,7 @@ cat > /tmp/Modelfile << 'EOF'
 FROM qwen2.5-coder:32b-instruct-q4_K_M
 PARAMETER num_ctx 32768
 EOF
-ollama create qwen3-coder-30b-32k:q5 -f /tmp/Modelfile
+ollama create qwen3-coder-30b:q5-32k -f /tmp/Modelfile
 ```
 
 ### Permissions
