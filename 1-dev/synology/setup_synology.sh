@@ -3,12 +3,12 @@
 
 _install_synology_tools() {
     print_info "Installing Synology tools..."
-    brew install --cask synology-drive \
-                    synology-chat \
-                    synology-note-station-client \
-                    synology-surveillance-station-client \
-                    synology-image-assistant \
-                    synology-assistant
+    brew install --cask synology-drive
+    brew install --cask synology-chat
+    brew install --cask synology-note-station-client
+    brew install --cask synology-surveillance-station-client
+    brew install --cask synology-image-assistant
+    brew install --cask synologyassistant
 }
 
 setup_synology() {
