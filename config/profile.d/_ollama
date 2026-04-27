@@ -1,5 +1,5 @@
 # Ollama
 command -v ollama >/dev/null 2>&1 || return 0
-export OLLAMA_KEEP_ALIVE="60m"  # keep models warm in RAM (default is 5m)
+export OLLAMA_KEEP_ALIVE="5m"   # keep models warm in RAM (0 = immediate unload)
 
-alias model-review="${SETTINGS_REPO:-$HOME/code/isaackehle/settings}/scripts/model-review.sh"
+alias model-review="${SETTINGS_BASE:-$HOME/code/isaackehle/settings}/scripts/model-review.sh"
