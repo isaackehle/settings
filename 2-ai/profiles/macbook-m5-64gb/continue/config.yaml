@@ -1,84 +1,118 @@
-name: "Continue Config - Local Models (M5 64GB)"
+name: "Continue Config - Local + Cloud Models (M5 64GB)"
 version: "1.0.0"
 schema: "v1"
 
 models:
-  # Primary coding model — 30B, tool-capable
-  - name: "Qwen3 Coder 30B A3B"
+  # ── Cloud Models (via OpenRouter) ──────────────────────────────────────
+  - name: "Kimi k2.6 Cloud"
     provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen3-coder-30b-32k-q6"
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "moonshot/kimi-k2.6"
+    roles:
+      - chat
+
+  - name: "GLM-5.1 Cloud"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "thudm/glm-5.1"
+    roles:
+      - chat
+
+  - name: "Codestral Cloud"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "mistralai/codestral"
+    roles:
+      - chat
+
+  - name: "Claude Sonnet 4.6"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "anthropic/claude-sonnet-4-6"
+    roles:
+      - chat
+
+  - name: "Claude Opus 4.6"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "anthropic/claude-opus-4-6"
+    roles:
+      - chat
+
+  # ── Local Models (via Ollama) ───────────────────────────────────────────
+  # Primary coding model — 80B, tool-capable
+  - name: "Qwen3 Coder Next 80B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3-coder-next-80b:q4"
     roles:
       - chat
       - edit
       - apply
       - summarize
 
-  - name: "Qwen3.6 30B A3B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen3.6-35b-32k-q6"
+  # Qwen3.6 35B
+  - name: "Qwen3.6 35B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3.6:35b:q5-8k"
     roles:
       - chat
       - edit
       - apply
       - summarize
 
-  # General chat / writing
+  # Qwen3.5 27B — general chat / writing
   - name: "Qwen3.5 27B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen3.5-27b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3.5:27b"
     roles:
       - chat
 
   # Apply/insert — best code insertion
-  - name: "Codestral 22B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "codestral-22b-v0.1-q8_0"
+  - name: "Codestral 22B (Q8)"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "codestral:22b-v0.1:q8_0"
     roles:
       - apply
 
-  # Reasoning with tool calls — 32B (fits comfortably at 64GB)
+  # Reasoning with tool calls — 32B (fits at 64GB)
   - name: "DeepSeek R1 Tool-Calling 32B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "deepseek-r1-tools-32b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "deepseek-r1-tools:32b"
     roles:
       - chat
 
   # Reasoning with tool calls — 14B fallback
   - name: "DeepSeek R1 Tool-Calling 14B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "deepseek-r1-tools-14b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "deepseek-r1-tools:14b"
     roles:
       - chat
 
   # Large general model (solo use)
   - name: "Llama 3.3 70B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "llama3.3-70b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "llama3.3:70b"
     roles:
       - chat
       - edit
 
   # Autocomplete — default (fast, low RAM)
-  # Short timeout: fail fast when Ollama is busy (model load / pull) to prevent VS Code freeze
   - name: "Qwen2.5 Coder 1.5B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen2.5-coder-1.5b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:1.5b"
     roles:
       - autocomplete
     requestOptions:
@@ -86,16 +120,15 @@ models:
 
   # Autocomplete — quality
   - name: "Qwen2.5 Coder 7B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen2.5-coder-7b"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen2.5-coder:7b"
     roles:
       - autocomplete
     requestOptions:
       timeout: 8000
 
-  # Embedding model — stay on Ollama directly (more reliable than LiteLLM embed path)
+  # Embedding model — stay on Ollama directly
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434
@@ -103,7 +136,7 @@ models:
     roles:
       - embed
 
-  # Reranking — stay on Ollama directly
+  # Reranking
   - name: "Qwen3 Reranker 0.6B"
     provider: ollama
     apiBase: http://localhost:11434
@@ -113,18 +146,15 @@ models:
 
   # Fast planning
   - name: "Qwen3 4B"
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: "sk-local"
-    model: "qwen3-4b-q8"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3-4b:q4"
     roles:
       - chat
 
 tabAutocompleteOptions:
-  debounceDelay: 500 # ms to wait after keystroke before firing (reduces request rate)
-  maxPromptTokens: 1024 # keep context small → faster completions
+  debounceDelay: 500
+  maxPromptTokens: 1024
   disable: false
 
-# Set to true to stop Continue indexing files for @codebase search.
-# Indexing runs nomic-embed-text on every file change — disable if you don't use @codebase.
 disableIndexing: false
