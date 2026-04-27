@@ -126,7 +126,7 @@ Add OpenRouter as a fallback in `~/.config/litellm/config.yaml`:
 model_list:
   - model_name: claude-sonnet
     litellm_params:
-      model: ollama/qwen3-coder-30b-32k-q5
+      model: ollama/qwen3-coder-30b-q5-32k
       api_base: http://localhost:11434
 
   - model_name: claude-sonnet-fallback
@@ -177,8 +177,8 @@ Quick reference:
 | ----- | -------------------- | ---------------------- |
 | 16 GB | 8B (Q4)              | qwen2.5-coder:7b       |
 | 32 GB | 14B (Q8) or 27B (Q4) | qwen3:14b              |
-| 48 GB | 30B (Q5)             | qwen3-coder-30b-32k-q5 |
-| 64 GB | 30B (Q6) + 70B solo  | qwen3-coder-30b-32k-q6 |
+| 48 GB | 30B (Q5)             | qwen3-coder-30b-q5-32k |
+| 64 GB | 30B (Q6) + 70B solo  | qwen3-coder-30b-q6-32k |
 
 ---
 
@@ -250,7 +250,7 @@ If that fails, start LiteLLM first (or start it and restart the VS Code extensio
 
 ```shell
 curl http://localhost:11434/api/generate \
-  -d '{"model":"qwen3-coder-30b-32k-q5","prompt":"hi","stream":false}'
+  -d '{"model":"qwen3-coder-30b-q5-32k","prompt":"hi","stream":false}'
 ```
 
 **Continue aggressive autocomplete:** Continue polls for completions on every keystroke. If the autocomplete model is large and slow, the extension queues up requests and appears frozen. Fix: use the 1.5B autocomplete model and reserve the large model for chat only (already set in `config/continue/`).

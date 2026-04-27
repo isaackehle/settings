@@ -36,9 +36,9 @@ Recommended chat model per profile (matches Cline primary):
 | --------------- | ------------------------ | ------------ |
 | macbook-m1      | `qwen3:14b`              | `primary`    |
 | macmini-m2      | `qwen3:14b`              | `primary`    |
-| macbook-m2-32gb | `qwen3-coder-30b-32k:q5` | `coding`     |
-| macbook-m5-48gb | `qwen3-coder-30b-32k:q5` | `coding`     |
-| macbook-m5-64gb | `qwen3-coder-30b-32k:q6` | `coding`     |
+| macbook-m2-32gb | `qwen3-coder-30b:q5-32k` | `coding`     |
+| macbook-m5-48gb | `qwen3-coder-30b:q5-32k` | `coding`     |
+| macbook-m5-64gb | `qwen3-coder-30b:q6-32k` | `coding`     |
 
 See each profile's `MODELS.md` → GitHub Copilot section for the canonical model name.
 
@@ -58,7 +58,7 @@ Or via `settings.json` (substitute the model for your profile — see table abov
   "github.copilot.chat.customOAIModels": {
     "ollama": {
       "endpoint": "http://localhost:11434/v1",
-      "model": "qwen3-coder-30b-32k:q5"
+      "model": "qwen3-coder-30b:q5-32k"
     }
   }
 }
