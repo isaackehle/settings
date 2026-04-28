@@ -60,7 +60,7 @@ models:
   - name: "Qwen3.6 35B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3.6:35b:q5-8k"
+    model: "qwen3.6:35b-8k"
     roles:
       - chat
       - edit

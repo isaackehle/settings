@@ -67,9 +67,12 @@ OLLAMA_MODELS=(
     "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters
 
     # --- Qwen3.6 (35B) ---
+    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact"
+    # "hf.co/Qwen/Qwen3.6-35B-A3B"
     "qwen3.6:35b"                                   # ~35 GB | Stock (from Ollama)
-    "qwen3.6:35b:q5-8k"                            # ~35 GB | 8K context
-    "qwen3.6:35b:q5-128k"                          # ~35 GB | 128K context (solo only)
+    "qwen3.6:35b-8k"                            # ~35 GB | 8K context
+    "qwen3.6:35b-32k"                           # ~35 GB | 32K context
+    "qwen3.6:35b-128k"                          # ~35 GB | 128K context (solo only)
 
     # --- Qwen3 Coder 30B ---
     "qwen3-coder-30b-a3b:q6"                       # ~26 GB | HF base (from unsloth)
@@ -82,6 +85,7 @@ OLLAMA_MODELS=(
     "deepseek-r1-tools:32b"                         # ~20 GB | Tool calling 32B
 
     # --- Qwen3 32B ---
+    "dengcao/Qwen3-32B:Q5_K_M"                        # ~22 GB
     "qwen3-32b:q5"                                 # ~22 GB | Research
 
     # --- Gemma 4 (31B) ---
@@ -111,8 +115,10 @@ OLLAMA_MODELS=(
     "qwen2.5-coder:1.5b"                            # ~1 GB  | Autocomplete
 
     # --- Qwen3 14B ---
-    "qwen3-14b:q8"                                  # ~15 GB | Research
-    "qwen3-14b:q5"                                  # ~12 GB | Research Q5
+    "dengcao/Qwen3-14B:Q8_0"                        # ~15 GB | Research Q8
+    "dengcao/Qwen3-14B:Q5_K_M"                      # ~12 GB | Research Q5
+    "qwen3-14b:q8"
+    "qwen3-14b:q5"
 
     # --- Qwen3 4B ---
     "qwen3-4b:q8"                                   # ~5 GB | Planning
@@ -130,9 +136,43 @@ OLLAMA_MODELS=(
     "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
 )
 
+# ==============================================
+# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
+# ==============================================
+CUSTOM_MODELS=(
+    # Format: "source|alias|num_ctx"
+    # HF base aliases must come before derived aliases that reference them.
+    # ollama pull is idempotent — re-running won't re-download if already cached.
+
+    # ═══════════════════════════════════════════
+    # BASE MODELS -> ALIASES
+    # ═══════════════════════════════════════════
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6||"
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8||"
+    "Qwen3-14B:q8|qwen3-14b:q8||"
+    "Qwen3-32B:q5|qwen3-32b:q5||"
+    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6:35b||"
+    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8||"
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5||"
+    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"
+    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b||"
+
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-32k|32768|"
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-220k|220000|"
+    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-8192|8192|false"# 8K ctx
+
+    "qwen3-4b-2507:q8|qwen3-4b:q8||"
+
+    "qwen3.6:35b|qwen3.6:35b-8k|8192|"
+    "qwen3.6:35b|qwen3.6:35b-32k|32768|"
+    "qwen3.6:35b|qwen3.6:35b-128k|131072|"
+
+)
+
 # 64GB agent map
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-coder-next-80b:q4-16k"                          # OpenCode #1 — switch to qwen3.6:35b:q5-128k or qwen3-coder-30b:q6-32k via picker
+    [code]="qwen3-coder-next-80b:q4-16k"                          # OpenCode #1 — switch to qwen3.6:35b-128k or qwen3-coder-30b:q6-32k via picker
     [think]="deepseek-r1-tools:32b"                             # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                        # resumes, cover letters, docs, polished prose
     [research]="qwen3-32b:q5"                                     # codebase/web investigation
@@ -163,46 +203,7 @@ CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
 # ----------------------------------------------
 CLAUDE_CODE_SONNET="qwen3-coder-next-80b:q4-16k"        # ANTHROPIC_DEFAULT_SONNET_MODEL
 CLAUDE_CODE_HAIKU="qwen3-4b:q8"                          # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning
-CLAUDE_CODE_OPUS="qwen3.6:35b:q5-128k"                  # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
-
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # HF base aliases must come before derived aliases that reference them.
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # DERIVED CONTEXT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3.6:35b|qwen3.6:35b:q5-8k|8192|"                          # 8K ctx
-    "qwen3.6:35b|qwen3.6:35b:q5-128k|131072|"                     # 128K ctx — solo only
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-32k|32768|"      # 32K ctx
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-220k|220000|"    # 220K ctx — solo only
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-8192|8192|false"# 8K ctx
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6||"   # ~26 GB
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8||"  # ~5 GB
-
-    # ═══════════════════════════════════════════
-    # BACKWARD-COMPAT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3-4b-2507:q8|qwen3-4b:q8||"
-
-    # ═══════════════════════════════════════════
-    # COMMUNITY MODEL ALIASES
-    # ═══════════════════════════════════════════
-    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8||"                          # ~15 GB
-    "Qwen3-14B:q8|qwen3-14b:q8||"                                    # auto-registered
-    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5||"                        # ~22 GB
-    "Qwen3-32B:q5|qwen3-32b:q5||"                                    # auto-registered
-    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"    # ~10 GB
-    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b||"    # ~20 GB
-)
+CLAUDE_CODE_OPUS="qwen3.6:35b-128k"                  # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 # ----------------------------------------------
 # Ollama direct
@@ -210,7 +211,7 @@ CUSTOM_MODELS=(
 #   ollama list                                 all installed models
 #   ollama ps                                   currently loaded + memory usage
 #   ollama run qwen3-coder-next-80b:q4-16k       interactive shell with model
-#   ollama run qwen3.6:35b:q5-128k             interactive shell with model
+#   ollama run qwen3.6:35b-128k             interactive shell with model
 #   ollama stop <model>                       force-unload to free memory
 #   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins
 # ----------------------------------------------

@@ -80,6 +80,20 @@ OLLAMA_MODELS=(
     "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
 )
 
+# ==============================================
+# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
+# ==============================================
+CUSTOM_MODELS=(
+    # Format: "source|alias|num_ctx"
+    # ollama pull is idempotent — re-running won't re-download if already cached.
+
+    # ═══════════════════════════════════════════
+    # HF BASE MODELS/ALIASES
+    # ═══════════════════════════════════════════
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
+)
+
+
 # ----------------------------------------------
 # opencode
 # ----------------------------------------------
@@ -111,19 +125,6 @@ CLINE_MODEL="qwen2.5-coder:7b"
 # Claude Code
 # ----------------------------------------------
 CLAUDE_CODE_HAIKU="qwen2.5-coder:1.5b"                     # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning
-
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
-)
 
 # ----------------------------------------------
 # Ollama direct
