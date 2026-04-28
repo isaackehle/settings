@@ -1,1 +1,0 @@
-FROM mfdoom/deepseek-r1-tool-calling:8b
