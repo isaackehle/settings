@@ -91,6 +91,30 @@ OLLAMA_MODELS=(
     "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
 )
 
+# ==============================================
+# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
+# ==============================================
+CUSTOM_MODELS=(
+    # Format: "source|alias|num_ctx"
+    # HF base aliases must come before derived aliases that reference them.
+    # ollama pull is idempotent — re-running won't re-download if already cached.
+
+    # ═══════════════════════════════════════════
+    # HF BASE MODELS/ALIASES
+    # ═══════════════════════════════════════════
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
+
+    # ═══════════════════════════════════════════
+    # BACKWARD-COMPAT ALIASES
+    # ═══════════════════════════════════════════
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"
+
+    # ═══════════════════════════════════════════
+    # COMMUNITY MODEL ALIASES
+    # ═══════════════════════════════════════════
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
+)
+
 # ----------------------------------------------
 # opencode
 # ----------------------------------------------
@@ -126,29 +150,6 @@ CLAUDE_CODE_SONNET="qwen3-14b"            # ANTHROPIC_DEFAULT_SONNET_MODEL
 CLAUDE_CODE_HAIKU="qwen3-4b:q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="codestral:22b"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # HF base aliases must come before derived aliases that reference them.
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
-
-    # ═══════════════════════════════════════════
-    # BACKWARD-COMPAT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
-    # ═══════════════════════════════════════════
-    # COMMUNITY MODEL ALIASES
-    # ═══════════════════════════════════════════
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
-)
 
 # ----------------------------------------------
 # Ollama direct

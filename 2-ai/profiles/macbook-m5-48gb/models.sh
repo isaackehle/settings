@@ -62,10 +62,10 @@ OLLAMA_MODELS=(
     "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters
 
     # --- Qwen3.6 (35B) ---
-    "qwen3.6:35b"                                   # ~35 GB | Stock (from Ollama)
-    "qwen3.6:35b:q5-8k"                            # ~35 GB | 8K context
-    "qwen3.6:35b:q5-32k"                           # ~35 GB | 32K context
-    "qwen3.6:35b:q5-128k"                          # ~35 GB | 128K context (solo only)
+    "qwen3.6:35b"                                  # ~35 GB | Stock (from Ollama)
+    "qwen3.6:35b-8k"                            # ~35 GB | 8K context
+    "qwen3.6:35b-32k"                           # ~35 GB | 32K context
+    "qwen3.6:35b-128k"                          # ~35 GB | 128K context (solo only)
 
     # --- Qwen3 Coder 30B (A3B) ---
     "qwen3-coder-30b-a3b:q5"                       # ~21 GB | HF base (from unsloth)
@@ -101,11 +101,48 @@ OLLAMA_MODELS=(
     "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
 )
 
+# ==============================================
+# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
+# ==============================================
+CUSTOM_MODELS=(
+    # Format: "source|alias|num_ctx"
+    # HF base aliases must come before derived aliases that reference them.
+    # ollama pull is idempotent — re-running won't re-download if already cached.
+
+    # ═══════════════════════════════════════════
+    # HF BASE MODELS/ALIASES
+    # ═══════════════════════════════════════════
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"    # ~21 GB
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                   # ~3 GB
+
+    # ═══════════════════════════════════════════
+    # DERIVED CONTEXT ALIASES
+    # ═══════════════════════════════════════════
+    "qwen3.6:35b|qwen3.6:35b-8k|8192|"                          # 8K ctx
+    "qwen3.6:35b|qwen3.6:35b-32k|32768|"                         # 32K ctx
+    "qwen3.6:35b|qwen3.6:35b-128k|131072|"                       # 128K ctx — solo only
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-32k|32768|"   # 32K ctx
+    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-220k|220000|"   # 220K ctx — solo only
+
+    # ═══════════════════════════════════════════
+    # BACKWARD-COMPAT ALIASES
+    # ═══════════════════════════════════════════
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"
+
+    # ═══════════════════════════════════════════
+    # COMMUNITY MODEL ALIASES
+    # ═══════════════════════════════════════════
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                  # ~12 GB
+    "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                          # auto-registered short name → lowercase alias
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
+)
+
+
 # ----------------------------------------------
 # opencode agents
 # ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b:q5-32k or qwen3.6:35b:q5-8k via picker
+    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b:q5-32k or qwen3.6:35b-8k via picker
     [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
@@ -136,49 +173,13 @@ CLAUDE_CODE_SONNET="qwen3-coder-30b:q5-32k"            # ANTHROPIC_DEFAULT_SONNE
 CLAUDE_CODE_HAIKU="qwen3-4b:q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="qwen3-coder-30b:q5-220k"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # HF base aliases must come before derived aliases that reference them.
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"    # ~21 GB
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                   # ~3 GB
-
-    # ═══════════════════════════════════════════
-    # DERIVED CONTEXT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3.6:35b|qwen3.6:35b:q5-8k|8192|"                          # 8K ctx
-    "qwen3.6:35b|qwen3.6:35b:q5-32k|32768|"                         # 32K ctx
-    "qwen3.6:35b|qwen3.6:35b:q5-128k|131072|"                       # 128K ctx — solo only
-    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-32k|32768|"   # 32K ctx
-    "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-220k|220000|"   # 220K ctx — solo only
-
-    # ═══════════════════════════════════════════
-    # BACKWARD-COMPAT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
-    # ═══════════════════════════════════════════
-    # COMMUNITY MODEL ALIASES
-    # ═══════════════════════════════════════════
-    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"                  # ~12 GB
-    "Qwen3-14B-Q5_K_M|qwen3-14b:q5||"                          # auto-registered short name → lowercase alias
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
-)
-
 # ----------------------------------------------
 # Ollama direct
 # ----------------------------------------------
 #   ollama list                                 all installed models
 #   ollama ps                                   currently loaded + memory usage
-#   ollama run qwen3.6:35b:q5-8k               interactive shell with model
-#   ollama run qwen3.6:35b:q5-128k             interactive shell with model
+#   ollama run qwen3.6:35b-8k               interactive shell with model
+#   ollama run qwen3.6:35b-128k             interactive shell with model
 #   ollama run qwen3-coder-30b:q5-32k          interactive shell with model
 #   ollama run qwen3-coder-30b:q5-220k         interactive shell with model
 #   ollama stop <model>                         force-unload to free memory

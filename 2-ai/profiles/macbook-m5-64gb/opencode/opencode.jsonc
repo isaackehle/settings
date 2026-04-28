@@ -27,10 +27,10 @@
           "name": "Qwen 3.5 27B (code #1 + write+vision)"
         },
         // --- Qwen3.6 (35B) ---
-        "qwen3.6:35b:q5-8k": {
+        "qwen3.6:35b-8k": {
           "name": "Qwen3.6 35B, 8k context"
         },
-        "qwen3.6:35b:q5-128k": {
+        "qwen3.6:35b-128k": {
           "name": "Qwen3.6 35B 128k (code, solo only)",
           "limit": { "context": 131072 }
         },
@@ -125,10 +125,10 @@
         "qwen3-coder-next-80b:q4-64k": {
           "name": "Qwen 3 Coder Next 80B, 64k context",
         },
-        "qwen3.6:35b:q5-128k": {
+        "qwen3.6:35b-128k": {
           "name": "Qwen3.6 35B 128k (code,  solo only)",
         },
-        "qwen3.6:35b:q5-24k": {
+        "qwen3.6:35b-24k": {
           "name": "Qwen3.6 35B 24k (code, agentic)",
         },
         "qwen3-coder-30b:q6-32k": {

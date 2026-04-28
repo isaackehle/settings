@@ -9,7 +9,7 @@
         "research": "qwen3-14b:q5"
       },
       "models": [
-        "qwen3.6-35b:q5-32k",
+        "qwen3.6-35b-32k",
         "qwen3.5:27b",
         "qwen3-coder-30b:q5-32k",
         "qwen3-14b:q5",
@@ -19,7 +19,7 @@
     },
     "opencode": {
       "models": [
-        "qwen3.6-35b:q5-32k",
+        "qwen3.6-35b-32k",
         "qwen3.5:27b",
         "qwen3-coder-30b:q5-32k",
         "qwen3-4b:q4",
