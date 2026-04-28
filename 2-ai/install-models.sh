@@ -4,7 +4,7 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
 . "${SETTINGS_BASE}/helpers.sh"
-. "${SETTINGS_BASE}/exo/setup_exo.sh"
+. "${SETTINGS_BASE}/2-ai/exo/setup_exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose
@@ -18,7 +18,7 @@ fi
 # $1 = profile folder name (e.g., macbook-m5-64gb)
 load_profile_models() {
     local profile="$1"
-    local profile_file="${SETTINGS_BASE}/profiles/${profile}/models.sh"
+    local profile_file="${SETTINGS_BASE}/2-ai/profiles/${profile}/models.sh"
     if [[ -f "$profile_file" ]]; then
         . "$profile_file"
         return 0
@@ -26,26 +26,6 @@ load_profile_models() {
     return 1
 }
 
-# Map menu choice to profile folder
-# $1 = menu choice (1, 2, 3, etc.) OR profile folder name (e.g., macbook-m5-64gb)
-get_profile_for_choice() {
-    local choice="$1"
-    local i=1
-    while IFS= read -r folder; do
-        # Check if choice matches the folder name directly
-        if [[ "$choice" == "$folder" ]]; then
-            echo "$folder"
-            return 0
-        fi
-        # Check if choice matches the menu number
-        if [[ "$choice" == "$i" ]]; then
-            echo "$folder"
-            return 0
-        fi
-        i=$((i + 1))
-    done < <(_get_profile_folders)
-    return 1
-}
 
 # ==============================================
 # INSTALL FUNCTIONS
@@ -63,14 +43,26 @@ install-models() {
     echo "===================================================="
     echo ""
 
+    local -a passed=()
+    local -a failed=()
     local model
+
     for model in "${_models[@]}"; do
         echo "▶ Installing: $model"
-        ollama pull "$model"
+        if ollama pull "$model"; then
+            passed+=("$model")
+        else
+            failed+=("$model")
+        fi
         echo ""
     done
 
-    echo "✅ Installation complete for $profile_name"
+    echo "===================================================="
+    echo "Installation Summary for $profile_name:"
+    echo "✅ Passed: ${passed[*]:-none}"
+    echo "❌ Failed: ${failed[*]:-none}"
+    echo "===================================================="
+    echo "✅ Installation process complete for $profile_name"
 }
 
 # Install custom models that require pull + ollama create via Modelfile.
@@ -92,6 +84,8 @@ install_custom_models() {
     eval "_custom=(\"\${${arr_name}[@]}\")"
     local -a pulled_sources=()
     local -a created_aliases=()
+    local -a passed=()
+    local -a failed=()
 
     echo "Creating custom model aliases for $profile_name..."
     echo "===================================================="
@@ -109,6 +103,7 @@ install_custom_models() {
         done
 
         # Pull remote source once (skip if local alias or already pulled)
+        local pull_success=1
         if (( !is_local )); then
             local already_pulled=0
             local s
@@ -117,25 +112,51 @@ install_custom_models() {
             done
             if (( !already_pulled )); then
                 echo "▶ Pulling: $source"
-                ollama pull "$source"
-                pulled_sources+=("$source")
+                if ollama pull "$source"; then
+                    pulled_sources+=("$source")
+                    pull_success=0
+                else
+                    pull_success=1
+                fi
                 echo ""
+            else
+                pull_success=0
             fi
+        else
+            pull_success=0
         fi
 
         # Write temp Modelfile, create alias, clean up
-        local tmp_mf
-        tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
-        printf 'FROM %s\n' "$source" > "$tmp_mf"
-        [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
+        local create_success=1
+        if (( pull_success == 0 )); then
+            local tmp_mf
+            tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
+            printf 'FROM %s\n' "$source" > "$tmp_mf"
+            [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
 
-        echo "▶ Creating alias: $alias_name"
-        ollama create "$alias_name" -f "$tmp_mf"
-        rm -f "$tmp_mf"
-        created_aliases+=("$alias_name")
+            echo "▶ Creating alias: $alias_name"
+            if ollama create "$alias_name" -f "$tmp_mf"; then
+                create_success=0
+            fi
+            rm -f "$tmp_mf"
+        else
+            echo "⚠ Skipping alias creation for $alias_name due to pull failure of $source"
+        fi
+
+        if (( create_success == 0 )); then
+            passed+=("$alias_name")
+            created_aliases+=("$alias_name")
+        else
+            failed+=("$alias_name")
+        fi
         echo ""
     done
 
+    echo "===================================================="
+    echo "Custom Alias Summary for $profile_name:"
+    echo "✅ Passed: ${passed[*]:-none}"
+    echo "❌ Failed: ${failed[*]:-none}"
+    echo "===================================================="
     echo "✅ Custom aliases complete for $profile_name"
     echo ""
 }
@@ -227,6 +248,7 @@ prune_models() {
 # ==============================================
 
 install_coding_assistants() {
+    print_step "Detecting hardware profile"
     local detected
     detected=$(_detect_profile)
 
@@ -239,19 +261,20 @@ install_coding_assistants() {
 
     # Calculate total options for the prompt: profiles + exo + cancel
     local num_profiles
-    num_profiles=$(ls -d "${SETTINGS_BASE}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    num_profiles=$(ls -d "${SETTINGS_BASE}/2-ai/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
     local total_options=$((num_profiles + 2))
 
     read -p "Enter selection [1-$total_options] (Enter = $detected): " choice
     choice="${choice:-$detected}"
 
+    print_step "Resolving profile for choice: $choice"
+
     # Handle exo option
-    local num_profiles
-    num_profiles=$(ls -d "${SETTINGS_BASE}/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
     local exo_choice=$((num_profiles + 1))
     local cancel_choice=$((num_profiles + 2))
 
     if [[ "$choice" == "$exo_choice" ]]; then
+        print_step "Launching exo setup"
         setup_exo
         return
     fi
@@ -264,17 +287,19 @@ install_coding_assistants() {
     # Get profile folder from choice
     local profile
     profile=$(get_profile_for_choice "$choice") || {
-        echo "Invalid selection."
+        echo "Invalid selection: '$choice'"
         return 1
     }
+    print_step "Profile resolved: $profile"
 
     # Load the profile's models
+    print_step "Loading model list for profile: $profile"
     load_profile_models "$profile" || {
         echo "Error: Could not load models for profile $profile"
         return 1
     }
 
-    local profile_name="$(_profile_label "$profile")"
+    local profile_name="$(_profile_name "$profile")"
 
     echo ""
     echo "What would you like to do?"
@@ -287,16 +312,20 @@ install_coding_assistants() {
 
     case $action in
         1)
+            print_step "Installing models for $profile_name"
             install-models "$profile_name" MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             ;;
         2)
+            print_step "Pruning orphan models for $profile_name"
             prune_models "$profile_name" MODELS CUSTOM_MODELS
             ;;
         3)
+            print_step "Installing models for $profile_name"
             install-models "$profile_name" MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             echo ""
+            print_step "Pruning orphan models for $profile_name"
             prune_models "$profile_name" MODELS CUSTOM_MODELS
             ;;
         *)

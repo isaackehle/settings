@@ -16,10 +16,12 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/helpers.sh"
 . "${SETTINGS_BASE}/utils.sh"
 # Source AI tool setup scripts
+. "${SETTINGS_BASE}/2-ai/install-models.sh"
 . "${SETTINGS_BASE}/2-ai/ollama/setup_ollama.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter/setup_openrouter.sh"
 . "${SETTINGS_BASE}/2-ai/litellm/setup_litellm.sh"
 . "${SETTINGS_BASE}/2-ai/claude/setup_claude.sh"
+. "${SETTINGS_BASE}/2-ai/cline/setup_cline.sh"
 . "${SETTINGS_BASE}/2-ai/codex/setup_codex.sh"
 . "${SETTINGS_BASE}/2-ai/crush/crush.sh"
 . "${SETTINGS_BASE}/2-ai/exo/setup_exo.sh"
@@ -42,9 +44,7 @@ deploy_configs() {
     log_info "Deploying AI tool configurations..."
 
     # --- MCP config (~/.mcp.json) ---
-    echo ""
-    echo "MCP Servers"
-    echo "-----------"
+    print_step "MCP Servers"
     read -p "Install Claude MCP servers? (y/n) " -n 1 -r; echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         local mcp_dest="$HOME/.mcp.json"
@@ -81,8 +81,7 @@ deploy_configs() {
     fi
 
     # --- AI tool configs ---
-    echo ""
-    echo "Copying AI tool configs..."
+    print_step "Copying AI tool configs"
 
     [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
     mkdir -p "$HOME/.groq"
@@ -102,9 +101,7 @@ deploy_configs() {
     _copy_file "$cont_src" "$HOME/.continue/config.yaml"
 
     # --- IDE selection ---
-    echo ""
-    echo "IDE Selection"
-    echo "-------------"
+    print_step "IDE Selection"
     echo "  1) VS Code   (recommended — broader extension ecosystem)"
     echo "  2) Windsurf  (VS Code fork with built-in Codeium AI)"
     echo "  3) Both      (deploy configs for both, install neither)"
@@ -147,8 +144,7 @@ deploy_configs() {
     _install_file "litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
 
     # --- Shell profile.d ---
-    echo ""
-    echo "Copying profile.d files..."
+    print_step "Copying profile.d files"
     local profiled_src="$SETTINGS_BASE/2-ai/$MAC_MODEL/profile.d"
     [ ! -d "$profiled_src" ] && profiled_src="$SETTINGS_BASE/config/profile.d"
         if [ -d "$profiled_src" ]; then
@@ -201,7 +197,7 @@ verify_installations() {
     log_info "Verifying tool installations..."
     local verification_results=""
     local all_passed=true
-    for check in verify_ollama verify_litellm verify_claude_code verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot; do
+    for check in verify_ollama verify_litellm verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot; do
         local label="${check#verify_}"
         if $check; then
             verification_results="$verification_results ✓ $label - OK\n"
@@ -220,19 +216,51 @@ verify_installations() {
 }
 
 install_tools() {
+    print_step "Checking system requirements"
     check_system_requirements
-    verify_ollama       || setup_ollama       || log_error "Failed to install Ollama"
-    verify_openrouter   || setup_openrouter   || log_error "Failed to setup OpenRouter"
-    verify_litellm      || setup_litellm      || log_error "Failed to install LiteLLM"
-    verify_claude_code  || setup_claude       || log_error "Failed to install Claude Code"
-    verify_opencode     || setup_opencode     || log_error "Failed to install OpenCode"
-    verify_crush        || setup_crush        || log_error "Failed to install Crush"
-    verify_codex        || setup_codex        || log_error "Failed to install Codex"
+    print_step "Ollama"
+    if ! verify_ollama; then
+        setup_ollama || log_error "Failed to install Ollama"
+    fi
+    print_step "OpenRouter"
+    if ! verify_openrouter; then
+        setup_openrouter || log_error "Failed to setup OpenRouter"
+    fi
+    print_step "LiteLLM"
+    if ! verify_litellm; then
+        setup_litellm || log_error "Failed to install LiteLLM"
+    fi
+    print_step "Claude Code"
+    if ! verify_claude_code; then
+        setup_claude || log_error "Failed to install Claude Code"
+    fi
+    print_step "Cline"
+    if ! verify_cline_cli; then
+        setup_cline || log_error "Failed to install Cline"
+    fi
+    print_step "OpenCode"
+    if ! verify_opencode; then
+        setup_opencode || log_error "Failed to install OpenCode"
+    fi
+    print_step "Crush"
+    if ! verify_crush; then
+        setup_crush || log_error "Failed to install Crush"
+    fi
+    print_step "Codex"
+    if ! verify_codex; then
+        setup_codex || log_error "Failed to install Codex"
+    fi
+    print_step "Gemini"
     verify_gemini       || setup_gemini       || log_error "Failed to install Gemini"
+    print_step "Grok"
     verify_grok         || setup_grok         || log_error "Failed to install Grok"
+    print_step "Groq"
     verify_groq         || setup_groq         || log_error "Failed to install Groq"
+    print_step "AnythingLLM"
     verify_anythingllm  || setup_anythingllm  || log_error "Failed to install AnythingLLM"
+    print_step "GitHub Copilot"
     verify_github_copilot || setup_github_copilot || log_error "Failed to install GitHub Copilot"
+    print_step "Verifying all installations"
     verify_installations
 }
 
@@ -241,6 +269,7 @@ _run_one() {
     local action="$1" tool="$2"
     case "$action:$tool" in
         setup:claude)     setup_claude ;;
+        setup:cline)      setup_cline ;;
         setup:codex)      setup_codex ;;
         setup:continue)   setup_continue ;;
         setup:crush)      setup_crush ;;
@@ -293,23 +322,24 @@ interactive_menu() {
     # Tool definitions: name|group|description
     local tools_info=(
         "ollama|servers|Install server + start via brew services"
+        "exo|servers|Install exo distributed inference"
+        "olol|servers|Install Ollama load balancer"
+        "lmstudio|servers|Install LM Studio (GUI app)"
         "openrouter|proxies|Install OpenRouter proxy + deploy config"
         "litellm|proxies|Install LiteLLM proxy + deploy config"
         "models|models|Install / prune Ollama models (auto-detects hardware)"
+        "groq|providers|Deploy Groq config + API key instructions"
         "claude|tools|Install CLI + deploy config"
+        "cline|tools|Install VS Code extension + CLI"
         "codex|tools|Install Codex CLI"
         "crush|tools|Install + deploy crush config"
-        "exo|servers|Install exo distributed inference"
-        "olol|servers|Install Ollama load balancer"
         "grok|tools|Install + deploy grok config"
         "gemini|tools|Install Gemini CLI"
-        "groq|providers|Deploy Groq config + API key instructions"
         "opencode|tools|Install + deploy opencode config"
-        "continue|extensions|Deploy Continue.dev config"
+        "anythingllm|tools|Install + configure Ollama provider"
         "vscode|editors|Install VS Code + Continue + Cline extensions"
         "windsurf|editors|Install Windsurf IDE + deploy argv.json"
-        "anythingllm|tools|Install + configure Ollama provider"
-        "lmstudio|servers|Install LM Studio (GUI app)"
+        "continue|extensions|Deploy Continue.dev config"
         "copilot|extensions|Install gh-copilot extension + VS Code extensions"
     )
 
@@ -342,7 +372,7 @@ interactive_menu() {
             local g="${groups[$i]}"
             local mark
             if [ "${sel[$i]}" = "1" ]; then mark="[x]"; else mark="[ ]"; fi
-            
+
             if [ "$g" != "$prev_group" ]; then
                 echo ""
                 echo "  ── $g ──"
@@ -358,34 +388,34 @@ interactive_menu() {
 
         echo ""
         echo "────────────────────────────────────────────────────────────────"
-        
+
         # Use stty raw to capture keys precisely and avoid Bash 'read' quirks on macOS.
         # Save terminal state, set to raw, read 1 byte, then restore.
         local term_state
         term_state=$(stty -g)
         stty raw -echo
-        
+
         # Read one character
         key=$(dd bs=1 count=1 2>/dev/null)
-        
+
         stty "$term_state"
-        
+
         case "$key" in
-            " "|$'\x20') 
+            " "|$'\x20')
                 if [ "${sel[$cursor]}" = "0" ]; then
                     sel[$cursor]="1"
                 else
                     sel[$cursor]="0"
                 fi
                 ;;
-            $'\e') 
+            $'\e')
                 # Handle escape sequences (arrows)
                 # We need to read the next 2 bytes for the arrow sequence
                 stty raw -echo
                 local sequence
                 sequence=$(dd bs=1 count=2 2>/dev/null)
                 stty "$term_state"
-                
+
                 case "$sequence" in
                     "[A") # Up
                         cursor=$((cursor - 1))
@@ -464,6 +494,9 @@ main() {
         claude)
             setup_claude
         ;;
+        cline)
+            setup_cline
+        ;;
         setup)
             setup_continue
             setup_opencode
@@ -536,7 +569,7 @@ main() {
             interactive_menu
         ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo ""
@@ -554,6 +587,7 @@ main() {
             echo ""
             echo "=== TOOLS ==="
             echo "  claude      - Install Claude Code CLI + deploy config"
+            echo "  cline       - Install Cline VS Code extension + CLI"
             echo "  codex       - Install Codex CLI"
             echo "  crush       - Install Crush + deploy config"
             echo "  gemini      - Install Gemini CLI"

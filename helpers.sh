@@ -125,7 +125,7 @@ _load_profile() {
     local folder="$1"
     local profile_file="$PROFILES_DIR/$folder/PROFILE"
     if [[ ! -f "$profile_file" ]]; then return 1; fi
-    
+
     # Load key=value pairs into cache
     while IFS='=' read -r key value; do
         [[ -z "$key" || "$key" == \#* ]] && continue
@@ -161,16 +161,16 @@ _does_profile_match_computer() {
     local folder="$1"
     local hw_mem=$2
     local hw_model=$3
-    
+
     _load_profile "$folder" || return 1
-    
+
     local min=${_PROFILE_CACHE[p${folder}_MEMORY_RANGE_MIN]:-0}
     local max=${_PROFILE_CACHE[p${folder}_MEMORY_RANGE_MAX]:-9999}
-    
+
     if [[ "$hw_mem" -lt "$min" || "$hw_mem" -gt "$max" ]]; then
         return 1
     fi
-    
+
     local types=${_PROFILE_CACHE[p${folder}_COMPUTER_TYPES]:-""}
     IFS=',' read -ra patterns <<< "$types"
     for pattern in "${patterns[@]}"; do
@@ -178,7 +178,7 @@ _does_profile_match_computer() {
             return 0
         fi
     done
-    
+
     return 1
 }
 
@@ -191,7 +191,7 @@ _detect_profile() {
     _detect_hw
     local best_match=""
     local best_mem=0
-    
+
     while IFS= read -r folder; do
         if _does_profile_match_computer "$folder" "$HW_MEM_GB" "$HW_MODEL"; then
             local mem
@@ -202,13 +202,13 @@ _detect_profile() {
             fi
         fi
     done < <(_get_profile_numbers)
-    
+
     echo "${best_match:-}"
 }
 
 get_profile_for_choice() {
     local choice="$1"
-    
+
     # If it's a number, resolve index
     if [[ "$choice" =~ ^[0-9]+$ ]]; then
         local idx=$choice
@@ -307,16 +307,16 @@ print_profile_menu() {
 prompt_machine_class() {
     local detected
     detected=$(_detect_profile)
-    
+
     echo "" >&2
     echo "── SELECT MACHINE ──────────────────────────────────────────────────" >&2
     print_profile_menu "$detected"
     echo "" >&2
-    
+
     local choice
     read -p "Select machine (Enter = $detected): " choice
     choice="${choice:-$detected}"
-    
+
     # Get profile folder from choice
     local profile
     profile=$(get_profile_for_choice "$choice") || {
@@ -342,9 +342,9 @@ prompt_deployment_mode() {
         1) echo "ollama" ;;
         2) echo "litellm" ;;
         3) echo "openrouter" ;;
-        *) 
+        *)
             log_error "Invalid selection. Defaulting to LiteLLM."
-            echo "litellm" 
+            echo "litellm"
             ;;
     esac
 }
@@ -377,7 +377,7 @@ update_models_sh() {
     log_info "Updating models.sh..."
 
     local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]:-}"
-    
+
     # For models.sh, we generally store the identifier used by the app
     # (Colon for Ollama, ID for OpenRouter)
     sed -i '' "/declare -A OPENCODE_AGENTS=/,/^)/s|\[${agent_key}\]=\"${old_val}\"|[${agent_key}]=\"${new_val}\"|" \
@@ -498,7 +498,7 @@ update_opencode_config() {
 
     # Model list keys + agent values
     sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$opencode_file"
-    
+
     if [[ "$mode" == "ollama" || "$mode" == "litellm" ]]; then
         sed -i '' "s|ollama/${old_val}|ollama/${new_val}|g" "$opencode_file"
     fi
@@ -590,7 +590,7 @@ main() {
 
     local -n _cur_agents="OPENCODE_AGENTS"
     local current_model=""
-    
+
     if [[ "$role" != "all" ]]; then
         local agent_key
         case "$role" in
@@ -616,12 +616,12 @@ main() {
         echo "  Current: Mixed (Setting all roles to same model)"
     fi
     echo ""
-    
+
     show_model_suggestions "$deploy_mode"
-    
+
     local prompt_text="New model alias (Ollama colon form, e.g. qwen3-32b:q6): "
     [[ "$deploy_mode" == "openrouter" ]] && prompt_text="New OpenRouter Model ID (e.g. anthropic/claude-3.5-sonnet): "
-    
+
     read -r -p "$prompt_text" new_alias
     new_alias="${new_alias// /}"
 
@@ -672,12 +672,12 @@ main() {
     if [[ "$role" == "all" ]]; then
         local roles=("coding" "reasoning" "research" "writing" "planning")
         local keys=("code"    "think"     "research" "write"   "plan")
-        
+
         for i in "${!roles[@]}"; do
             local r="${roles[$i]}"
             local k="${keys[$i]}"
             local old="${_cur_agents[$k]:-}"
-            
+
             log_info "Applying update to role: $r (Old: $old)"
             update_models_sh    "$r" "$mem_class" "$old" "$new_alias" "$deploy_mode"
             update_litellm_yaml "$machine_dir" "$old" "$new_alias" "$deploy_mode"
