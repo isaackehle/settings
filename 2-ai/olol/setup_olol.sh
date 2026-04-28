@@ -1,5 +1,8 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+. "${SETTINGS_BASE}/utils.sh"
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Set up olol — Ollama load balancer across multiple machines
 # olol routes different requests to different Ollama backends (one full model per machine).
@@ -7,10 +10,10 @@
 
 _install_olol() {
     if ! command_exists "node"; then
-        print_error "Node.js is required for olol. Install from: https://nodejs.org"
+        log_error "Node.js is required for olol. Install from: https://nodejs.org"
         return 1
     fi
-    print_info "Installing olol from GitHub..."
+    log_info "Installing olol from GitHub..."
     npm install -g https://github.com/K2/olol.git
 }
 
@@ -19,8 +22,8 @@ verify_olol() {
 }
 
 setup_olol() {
-    print_info "Setting up olol (Ollama load balancer)..."
-    verify_olol || _install_olol || print_warning "olol not installed — skipping"
+    log_info "Setting up olol (Ollama load balancer)..."
+    verify_olol || _install_olol || log_warning "olol not installed — skipping"
 
     local olol_cfg="$HOME/.config/olol/config.json"
     mkdir -p "$(dirname "$olol_cfg")"
@@ -34,20 +37,20 @@ setup_olol() {
   ]
 }
 EOF
-        print_status "Created starter olol config at $olol_cfg"
-        print_warning "Add additional machines to the 'backends' array in $olol_cfg"
+        log_status "Created starter olol config at $olol_cfg"
+        log_warning "Add additional machines to the 'backends' array in $olol_cfg"
     else
-        print_status "Existing olol config found at $olol_cfg — not overwritten"
+        log_status "Existing olol config found at $olol_cfg — not overwritten"
     fi
 
-    print_info ""
-    print_info "=== olol usage ==="
-    print_info "Start:        olol --config $olol_cfg"
-    print_info "API endpoint: http://127.0.0.1:11435/v1  (use instead of :11434 in tool configs)"
-    print_info "Add backends: edit 'backends' array in $olol_cfg"
-    print_info ""
-    print_info "Use case: run the same model on multiple machines and distribute requests."
-    print_info "Does NOT reduce per-machine memory — each backend loads the full model."
+    log_info ""
+    log_info "=== olol usage ==="
+    log_info "Start:        olol --config $olol_cfg"
+    log_info "API endpoint: http://127.0.0.1:11435/v1  (use instead of :11434 in tool configs)"
+    log_info "Add backends: edit 'backends' array in $olol_cfg"
+    log_info ""
+    log_info "Use case: run the same model on multiple machines and distribute requests."
+    log_info "Does NOT reduce per-machine memory — each backend loads the full model."
 }
 
 restore_olol() {
@@ -56,9 +59,9 @@ restore_olol() {
     if [ -n "$latest_file" ]; then
         mkdir -p "$HOME/.config/olol"
         cp "$latest_file" "$HOME/.config/olol/config.json"
-        print_status "Restored olol config from $(basename "$latest_file")"
+        log_status "Restored olol config from $(basename "$latest_file")"
     else
-        print_warning "No olol config backup found in $BACKUP_DIR"
+        log_warning "No olol config backup found in $BACKUP_DIR"
     fi
 }
 
@@ -66,7 +69,7 @@ backup_olol() {
     local olol_cfg="$HOME/.config/olol/config.json"
     if [ -f "$olol_cfg" ]; then
         cp "$olol_cfg" "$BACKUP_DIR/olol_config_backup_$DATE.json"
-        print_status "Backed up olol config"
+        log_status "Backed up olol config"
     fi
 }
 

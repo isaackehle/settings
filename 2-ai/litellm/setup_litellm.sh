@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
 . "${SETTINGS_BASE}/helpers.sh"
 
 setup_litellm() {
@@ -26,15 +28,13 @@ setup_litellm() {
 
     mkdir -p "$_local_dir"
 
-    local src_cfg mac_model script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
+    local src_cfg mac_model
     if declare -f find_source > /dev/null 2>&1; then
         src_cfg=$(find_source "litellm/litellm.yaml")
     fi
     if [ -z "$src_cfg" ]; then
         mac_model="$(_detect_profile)"
-        src_cfg="$script_dir/$mac_model/litellm/litellm.yaml"
+        src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/litellm/litellm.yaml"
     fi
 
     if [ -f "$src_cfg" ]; then
@@ -118,7 +118,9 @@ backup_litellm() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    SETTINGS_BASE="$(dirname "${BASH_SOURCE[0]}")/.."
+    if [ -z "${SETTINGS_BASE:-}" ]; then
+        SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+    fi
     setup_litellm
 fi
 

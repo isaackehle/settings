@@ -1,5 +1,8 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+. "${SETTINGS_BASE}/utils.sh"
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Set up Groq — cloud LLM inference via API key.
 # local-settings.json is used by the Groq Code CLI (~/.groq/).
@@ -20,16 +23,14 @@ setup_groq() {
     print_info "Setting up Groq..."
     mkdir -p "$_groq_cfg_dir"
 
-    local src_cfg mac_model script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
+    local src_cfg mac_model
     if declare -f find_source > /dev/null 2>&1; then
         src_cfg=$(find_source "groq/local-settings.json")
     fi
 
     if [ -z "$src_cfg" ]; then
         mac_model="$(_detect_profile)"
-        src_cfg="$script_dir/$mac_model/groq/local-settings.json"
+        src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/groq/local-settings.json"
     fi
 
     if [ -f "$src_cfg" ]; then

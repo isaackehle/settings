@@ -9,6 +9,11 @@ SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
 
 
+# Shared backup globals (used by all setup scripts)
+DATE="$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/settings-backups"
+mkdir -p "$BACKUP_DIR"
+
 # Color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'

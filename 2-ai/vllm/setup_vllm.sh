@@ -1,5 +1,5 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+. "${REPO_ROOT}/utils.sh"
+. "${REPO_ROOT}/helpers.sh"
 
 # Install vLLM — high-throughput LLM inference server with OpenAI-compatible API.
 # Note: vLLM has limited macOS support. Full GPU acceleration requires Linux + NVIDIA GPU.

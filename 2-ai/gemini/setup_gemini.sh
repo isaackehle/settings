@@ -1,5 +1,8 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+. "${SETTINGS_BASE}/utils.sh"
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Install Gemini CLI and write local-model env vars for LiteLLM routing.
 
@@ -21,15 +24,14 @@ setup_gemini() {
     verify_gemini || _install_gemini || print_warning "Gemini CLI not installed — skipping"
 
     # Deploy machine-specific settings.json
-    local src_cfg mac_model script_dir gemini_cfg_dir="$HOME/.gemini"
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    local src_cfg mac_model gemini_cfg_dir="$HOME/.gemini"
 
     if declare -f find_source > /dev/null 2>&1; then
         src_cfg=$(find_source "gemini/settings.json")
     fi
     if [ -z "$src_cfg" ]; then
         mac_model="$(_detect_profile)"
-        src_cfg="$script_dir/$mac_model/gemini/settings.json"
+        src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/gemini/settings.json"
     fi
 
     if [ -f "$src_cfg" ]; then
