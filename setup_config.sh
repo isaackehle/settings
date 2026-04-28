@@ -32,66 +32,6 @@ if [ -f "$HOME/.env.local" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-# Find the best source file: model-specific takes precedence over default.
-# Usage: find_source <relative-path-within-settings-repo>
-# Prints the resolved path, or empty string if not found.
-find_source() {
-    local rel="$1"
-    local model_path="$SETTINGS_BASE/profiles/$MAC_MODEL/$rel"
-    local default_path="$SETTINGS_BASE/scripts/$rel"
-    if [ -f "$model_path" ]; then
-        echo "$model_path"
-        elif [ -f "$default_path" ]; then
-        echo "$default_path"
-    else
-        echo ""
-    fi
-}
-
-# Copy src to dest, backing up any existing non-symlink file first.
-copy_file() {
-    local src="$1"
-    local dest="$2"
-    
-    if [ -z "$src" ] || [ ! -f "$src" ]; then
-        echo "  (skip) source not found for $dest"
-        return
-    fi
-    
-    # Skip if destination is already a file and identical to source
-    if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
-        echo "  (skip) $dest is already up to date"
-        return
-    fi
-    
-    # Remove stale symlink
-    if [ -L "$dest" ]; then
-        rm "$dest"
-        # Back up a real file that is different from what we'd copy
-        elif [ -f "$dest" ]; then
-        mv "$dest" "${dest}.backup-$(date +%s)"
-        echo "  backed up existing $(basename "$dest")"
-    fi
-    
-    mkdir -p "$(dirname "$dest")"
-    cp "$src" "$dest"
-    echo "  copied $src -> $dest"
-}
-
-# Same as copy_file but looks up the source via find_source.
-# Usage: install_file <rel-path-in-settings> <dest>
-install_file() {
-    local rel="$1"
-    local dest="$2"
-    local src
-    src=$(find_source "$rel")
-    copy_file "$src" "$dest"
-}
-
-# ---------------------------------------------------------------------------
 # Create settings repo folder if it doesn't already exist
 # ---------------------------------------------------------------------------
 mkdir -p "$SETTINGS_BASE"
