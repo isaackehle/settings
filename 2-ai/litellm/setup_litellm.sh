@@ -8,13 +8,71 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
 fi
 . "${SETTINGS_BASE}/helpers.sh"
 
-setup_litellm() {
-    print_info "Setting up LiteLLM proxy..."
+# Config paths
+_local_dir="$HOME/.config/litellm"
+_local_cfg="$_local_dir/litellm.yaml"
+_svc_dir="/usr/local/bin"
+_svc_cfg="$_svc_dir/litellm.yaml"
+_db_url="postgresql://litellm:litellm@localhost:5432/litellm_db"
 
+verify_litellm() {
+    command -v litellm &> /dev/null || [ -x "$HOME/.local/share/uv/tools/litellm/bin/litellm" ]
+}
 
-    pyenv install 3.13
-    pyenv local 3.13
+_install_litellm() {
+    print_info "Installing LiteLLM via uv..."
+    if ! command -v uv &> /dev/null; then
+        print_error "uv not found. Please install uv first."
+        return 1
+    fi
+    uv tool install litellm
+}
 
+setup_litellm_postgres() {
+    print_info "Setting up LiteLLM Postgres database..."
+    if ! command -v docker &> /dev/null; then
+        print_error "docker not found. Please install Docker first."
+        return 1
+    fi
+
+    if docker ps -a --format '{{.Names}}' | grep -q "^litellm-postgres$"; then
+        print_status "LiteLLM Postgres container already exists. Ensuring it is running..."
+        docker start litellm-postgres
+    else
+        print_info "Creating LiteLLM Postgres container..."
+        docker run -d \
+        --name litellm-postgres \
+        -e POSTGRES_USER=litellm \
+        -e POSTGRES_PASSWORD=litellm \
+        -e POSTGRES_DB=litellm_db \
+        -p 5432:5432 \
+        -v litellm-db-data:/var/lib/postgresql/data \
+        postgres:16-alpine
+        print_status "LiteLLM Postgres container started."
+    fi
+}
+
+_generate_prisma_client() {
+    print_info "Initializing LiteLLM database schema..."
+    local tools_bin="$HOME/.local/share/uv/tools/litellm/bin"
+    local prisma_bin="$tools_bin/prisma"
+    local litellm_py="$tools_bin/python3"
+
+    if [ ! -x "$prisma_bin" ] || [ ! -x "$litellm_py" ]; then
+        print_warning "prisma not found in litellm tools — schema will initialize on first start."
+        return 0
+    fi
+
+    local schema
+    schema=$("$litellm_py" -c \
+        "import litellm,os;print(os.path.join(os.path.dirname(litellm.__file__),'proxy','schema.prisma'))" \
+    2>/dev/null) || { print_warning "Could not locate LiteLLM schema — will initialize on first start."; return 0; }
+
+    [ -f "$schema" ] || { print_warning "Schema file not found — will initialize on first start."; return 0; }
+
+    DATABASE_URL="$_db_url" \
+    "$prisma_bin" db push --schema="$schema" --skip-generate \
+    || print_warning "LiteLLM DB schema push failed or already initialized."
 }
 
 setup_litellm() {
@@ -28,7 +86,7 @@ setup_litellm() {
 
     mkdir -p "$_local_dir"
 
-    local src_cfg mac_model
+    local src_cfg="" mac_model=""
     if declare -f find_source > /dev/null 2>&1; then
         src_cfg=$(find_source "litellm/litellm.yaml")
     fi
@@ -51,6 +109,7 @@ setup_litellm() {
     local env_file="$_local_dir/.env"
     local env_src
     env_src="$(find_source "litellm/.env" 2>/dev/null)"
+
     [ -z "$env_src" ] && env_src="$SETTINGS_BASE/litellm/.env"
     if [ -f "$env_src" ]; then
         cp "$env_src" "$env_file"
@@ -59,26 +118,28 @@ setup_litellm() {
         print_warning "No .env source found at $env_src — skipping .env deploy"
     fi
 
+    print_status "Configure litellm to run as a service"
+
     # Configure litellm to run as a user-level service on port 4000 (optional)
     if command_exists "launchctl"; then
-        local src_plist="$SETTINGS_BASE/litellm/ai.litellm.proxy.plist"
+        local src_plist="$SETTINGS_BASE/2-ai/litellm/ai.litellm.proxy.plist"
 
-        cp $src_plist $HOME/Library/LaunchAgents
-
-        print_info "Creating a directory for litellm service at location $_svc_dir..."
-        sudo mkdir -p $_svc_dir 2>/dev/null || true
-
-        print_info "Copying config to service location $_svc_cfg..."
-        sudo cp "$src_cfg" "$_svc_cfg"
-
-        print_info "Creating symbolic link for litellm executable..."
-        sudo ln -sf $HOME/.local/share/uv/tools/litellm/bin/litellm $_svc_dir/litellm
-
-        # Bootstrap the service (unload first in case it's already registered)
-        local plist="$HOME/Library/LaunchAgents/ai.litellm.proxy.plist"
-        local gui="gui/$(id -u)"
-        launchctl bootout "$gui" "$plist" 2>/dev/null || true
-        launchctl bootstrap "$gui" "$plist"
+        if [ ! -f "$src_plist" ]; then
+            print_warning "Plist not found at $src_plist — skipping service setup"
+        else
+            local plist="$HOME/Library/LaunchAgents/ai.litellm.proxy.plist"
+            local gui="gui/$(id -u)"
+            {
+                mkdir -p "$HOME/Library/LaunchAgents"
+                cp "$src_plist" "$plist"
+                sudo mkdir -p "$_svc_dir" 2>/dev/null
+                [ -f "$src_cfg" ] && sudo cp "$src_cfg" "$_svc_cfg"
+                sudo ln -sf "$HOME/.local/share/uv/tools/litellm/bin/litellm" "$_svc_dir/litellm"
+                launchctl bootout "$gui" "$plist" 2>/dev/null || true
+                launchctl bootstrap "$gui" "$plist"
+                print_status "LiteLLM service registered."
+            } || print_warning "Service registration failed — run manually: launchctl bootstrap $gui $plist"
+        fi
 
         print_info ""
         print_info "=== LiteLLM usage ==="

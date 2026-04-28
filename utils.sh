@@ -35,6 +35,12 @@ print_success() {
     log_message "SUCCESS: $1"
 }
 
+print_step() {
+    echo ""
+    echo -e "${BLUE}━━━ $1 ━━━${NC}"
+    log_message "STEP: $1"
+}
+
 # Check if command exists
 command_exists() {
     command -v "$1" &> /dev/null
