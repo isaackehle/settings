@@ -1,5 +1,5 @@
 # Machine profile descriptor
-FOLDER=macmini-m2
+FOLDER=macmini-m2-16gb
 NAME=Mac mini M2 16GB
 MEMORY=16
 MEMORY_RANGE_MIN=0

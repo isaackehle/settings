@@ -48,6 +48,20 @@ install-models() {
     local model
 
     for model in "${_models[@]}"; do
+        # Skip cloud models
+        if [[ "$model" == *":cloud" ]]; then
+            echo "☁ Skipping cloud model: $model"
+            continue
+        fi
+
+        # Check if model already exists locally to avoid pulling aliases
+        if ollama list "$model" 2>/dev/null | grep -q "$model"; then
+            echo "✅ Already installed: $model"
+            passed+=("$model")
+            echo ""
+            continue
+        fi
+
         echo "▶ Installing: $model"
         if ollama pull "$model"; then
             passed+=("$model")
@@ -313,20 +327,20 @@ install_coding_assistants() {
     case $action in
         1)
             print_step "Installing models for $profile_name"
-            install-models "$profile_name" MODELS
+            install-models "$profile_name" OLLAMA_MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             ;;
         2)
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" MODELS CUSTOM_MODELS
+            prune_models "$profile_name" OLLAMA_MODELS CUSTOM_MODELS
             ;;
         3)
             print_step "Installing models for $profile_name"
-            install-models "$profile_name" MODELS
+            install-models "$profile_name" OLLAMA_MODELS
             install_custom_models "$profile_name" CUSTOM_MODELS
             echo ""
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" MODELS CUSTOM_MODELS
+            prune_models "$profile_name" OLLAMA_MODELS CUSTOM_MODELS
             ;;
         *)
             echo "Invalid action."

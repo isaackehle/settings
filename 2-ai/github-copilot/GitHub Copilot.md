@@ -34,13 +34,11 @@ Recommended chat model per profile (matches Cline primary):
 
 | Profile         | Chat model               | Ollama alias |
 | --------------- | ------------------------ | ------------ |
-| macbook-m1      | `qwen3:14b`              | `primary`    |
-| macmini-m2      | `qwen3:14b`              | `primary`    |
+| macbook-m1-16gb | `qwen3:14b`              | `primary`    |
+| macmini-m2-16gb | `qwen3:14b`              | `primary`    |
 | macbook-m2-32gb | `qwen3-coder-30b:q5-32k` | `coding`     |
 | macbook-m5-48gb | `qwen3-coder-30b:q5-32k` | `coding`     |
 | macbook-m5-64gb | `qwen3-coder-30b:q6-32k` | `coding`     |
-
-See each profile's `MODELS.md` → GitHub Copilot section for the canonical model name.
 
 ## BYOK (Bring Your Own Key)
 

@@ -42,59 +42,63 @@
 #   :online   → Web search grounding
 #   :extended → Longer context
 
-# M5 Max 48GB - Standard configuration
-MODELS=(
-    # ═══════════════════════════════════════════════════════════════════════════════
-    # CLOUD MODELS (via OpenRouter — requires API key)
-    # ═══════════════════════════════════════════════════════════════════════════════
+# Cloud models (via OpenRouter — requires API key)
+OPENROUTER_MODELS=(
     "claude-opus-4-6:cloud"                         # Claude Opus 4.6
     "claude-sonnet-4-6:cloud"                      # Claude Sonnet 4.6
     "claude-haiku-4-5:cloud"                       # Claude Haiku 4.5
     "gpt-4o:cloud"                                  # GPT-4o
     "o3:cloud"                                      # o3
-    "gemini-2.5-pro:cloud"                          # Gemini 2.5 Pro
-    "mistral-large:cloud"                           # Mistral Large
     "sonar-pro:cloud"                               # Perplexity Sonar
-    "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
-    "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
-    
+)
+
+# M5 Max 48GB - Standard configuration (local — pull with ollama)
+OLLAMA_MODELS=(
     # ═══════════════════════════════════════════════════════════════════════════════
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════
-    
+
     # --- Qwen3.5 (27B) ---
     "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters
-    
+
     # --- Qwen3.6 (35B) ---
     "qwen3.6:35b"                                   # ~35 GB | Stock (from Ollama)
     "qwen3.6:35b:q5-8k"                            # ~35 GB | 8K context
     "qwen3.6:35b:q5-32k"                           # ~35 GB | 32K context
     "qwen3.6:35b:q5-128k"                          # ~35 GB | 128K context (solo only)
-    
+
     # --- Qwen3 Coder 30B (A3B) ---
     "qwen3-coder-30b-a3b:q5"                       # ~21 GB | HF base (from unsloth)
     "qwen3-coder-30b:q5-32k"                       # ~21 GB | 32K context
     "qwen3-coder-30b:q5-220k"                      # ~21 GB | 220K context (solo only)
-    
+
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                               # ~5 GB  | Reasoning
     "deepseek-r1-tools:8b"                         # ~5 GB  | Tool calling
-    
+
     # --- Qwen3 14B ---
     "qwen3-14b:q5"                                 # ~12 GB | Research
-    
+
     # --- Qwen3 4B ---
     "qwen3-4b:q4"                                   # ~3 GB | Planning fast
-    
+
     # --- Codestral ---
     "codestral:22b"                                 # ~14 GB | Code
-    
+
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                              # ~5 GB | Fast code
     "qwen2.5-coder:1.5b"                            # ~1 GB | Autocomplete
-    
+
     # --- Embeddings ---
     "nomic-embed-text"                             # ~0.3 GB | Codebase/RAG
+
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # CLOUD MODELS
+    # ═══════════════════════════════════════════════════════════════════════════════
+    "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
+    "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
+    "mistral-large-3:675b-cloud"                           # Mistral Large
+    "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
 )
 
 # ----------------------------------------------
@@ -139,13 +143,13 @@ CUSTOM_MODELS=(
     # Format: "source|alias|num_ctx"
     # HF base aliases must come before derived aliases that reference them.
     # ollama pull is idempotent — re-running won't re-download if already cached.
-    
+
     # ═══════════════════════════════════════════
     # HF BASE MODELS/ALIASES
     # ═══════════════════════════════════════════
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5||"    # ~21 GB
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                   # ~3 GB
-    
+
     # ═══════════════════════════════════════════
     # DERIVED CONTEXT ALIASES
     # ═══════════════════════════════════════════
@@ -154,12 +158,12 @@ CUSTOM_MODELS=(
     "qwen3.6:35b|qwen3.6:35b:q5-128k|131072|"                       # 128K ctx — solo only
     "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-32k|32768|"   # 32K ctx
     "qwen3-coder-30b-a3b:q5|qwen3-coder-30b:q5-220k|220000|"   # 220K ctx — solo only
-    
+
     # ═══════════════════════════════════════════
     # BACKWARD-COMPAT ALIASES
     # ═══════════════════════════════════════════
     "qwen3-4b-2507:q4|qwen3-4b:q4||"
-    
+
     # ═══════════════════════════════════════════
     # COMMUNITY MODEL ALIASES
     # ═══════════════════════════════════════════
