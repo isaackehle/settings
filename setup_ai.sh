@@ -3,6 +3,13 @@
 
 set -euo pipefail
 
+# Ensure we are running in bash, not sh or zsh
+if [ -z "$BASH_VERSION" ]; then
+    echo "Error: This script must be run with bash."
+    echo "Please run it as: bash $(basename "$0")"
+    exit 1
+fi
+
 SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
 
@@ -266,7 +273,6 @@ _run_for_tools() {
 # Interactive tool picker and action selector
 interactive_menu() {
     # Tool definitions: name|group|description
-    # Groups: servers, proxies, models, tools, editors, extensions, providers
     local tools_info=(
         "ollama|servers|Install server + start via brew services"
         "openrouter|proxies|Install OpenRouter proxy + deploy config"
@@ -288,7 +294,6 @@ interactive_menu() {
         "copilot|extensions|Install gh-copilot extension + VS Code extensions"
     )
 
-    # Parse tools into separate arrays
     local tools=() descs=() groups=()
     for entry in "${tools_info[@]}"; do
         IFS='|' read -r name group desc <<< "$entry"
@@ -297,64 +302,102 @@ interactive_menu() {
         descs+=("$name - $desc")
     done
 
-    # Default selections (all off)
-    local sel=()
+    declare -a sel=()
     for i in "${!tools[@]}"; do sel+=("0"); done
+    local cursor=0
+    local debug_info=""
 
-    # Build key→index mapping (a-z for first 18 tools)
-    local key_map=()
-    for i in "${!tools[@]}"; do
-        key_map+=("$(printf "%d" $i)")
-    done
-
+    # Disable 'exit on error' for the interactive loop to prevent unexpected crashes
+    set +e
     while true; do
+        # Use a simple clear; if it fails, we just continue
+        clear || true
         echo ""
         echo "╔════════════════════════════════════════════════════════════════╗"
-        echo "║  Select tools (press key to toggle, q=confirm)                  ║"
+        echo "║  Select tools (↑/↓: move, Space: toggle, Enter: confirm, q: quit) ║"
         echo "╚════════════════════════════════════════════════════════════════╝"
         echo ""
 
-        # Group tools by category and display with key bindings
         local prev_group=""
         for i in "${!tools[@]}"; do
             local g="${groups[$i]}"
-            local mark; [ "${sel[$i]}" = "1" ] && mark="[x]" || mark="[ ]"
-            local desc="${descs[$i]}"
-            # Compute key letter (a=0, b=1, c=2, etc.)
-            local key=$(printf "\\x%x" $((16#61 + i)))
-
-            # Show group header if new group
+            local mark
+            if [ "${sel[$i]}" = "1" ]; then mark="[x]"; else mark="[ ]"; fi
+            
             if [ "$g" != "$prev_group" ]; then
                 echo ""
                 echo "  ── $g ──"
                 prev_group="$g"
             fi
-            printf "    %s %s) %s\n" "$mark" "$key" "${descs[$i]}"
+
+            if [ $i -eq $cursor ]; then
+                printf "  > %s %s\n" "$mark" "${descs[$i]}"
+            else
+                printf "    %s %s\n" "$mark" "${descs[$i]}"
+            fi
         done
 
         echo ""
         echo "────────────────────────────────────────────────────────────────"
-        printf "Key (a-${key_char}, all/none, q=confirm): "
-        read -r input
-        case "$input" in
-            q|"") break ;;
-            all|a) for i in "${!sel[@]}"; do sel[$i]=1; done ;;
-            none|n) for i in "${!sel[@]}"; do sel[$i]=0; done ;;
-            *)
-                # Find matching tool by letter
-                local idx=$(printf "%d" "'$input") && idx=$((idx - 96))
-                if [[ "$input" =~ ^[a-z]$ ]] && (( idx >= 1 && idx <= ${#tools[@]} )); then
-                    local tool_idx=$((idx - 1))
-                    sel[$tool_idx]=$(( 1 - sel[$tool_idx] ))
+        
+        # Use stty raw to capture keys precisely and avoid Bash 'read' quirks on macOS.
+        # Save terminal state, set to raw, read 1 byte, then restore.
+        local term_state
+        term_state=$(stty -g)
+        stty raw -echo
+        
+        # Read one character
+        key=$(dd bs=1 count=1 2>/dev/null)
+        
+        stty "$term_state"
+        
+        case "$key" in
+            " "|$'\x20') 
+                if [ "${sel[$cursor]}" = "0" ]; then
+                    sel[$cursor]="1"
+                else
+                    sel[$cursor]="0"
                 fi
-            ;;
+                ;;
+            $'\e') 
+                # Handle escape sequences (arrows)
+                # We need to read the next 2 bytes for the arrow sequence
+                stty raw -echo
+                local sequence
+                sequence=$(dd bs=1 count=2 2>/dev/null)
+                stty "$term_state"
+                
+                case "$sequence" in
+                    "[A") # Up
+                        cursor=$((cursor - 1))
+                        [ $cursor -lt 0 ] && cursor=$((${#tools[@]} - 1))
+                        ;;
+                    "[B") # Down
+                        cursor=$((cursor + 1))
+                        [ $cursor -ge ${#tools[@]} ] && cursor=0
+                        ;;
+                esac
+                ;;
+            "q") # Quit
+                return
+                ;;
+            $'\x0a'|$'\x0d') # Newline or Carriage Return
+                break
+                ;;
+            *)
+                # Ignore all other keys
+                ;;
         esac
     done
 
     local chosen=()
     for i in "${!tools[@]}"; do
-        [ "${sel[$i]}" = "1" ] && chosen+=("${tools[$i]}")
+        if [ "${sel[$i]}" = "1" ]; then
+            chosen+=("${tools[$i]}")
+        fi
     done
+
+    set -e
 
     if [ ${#chosen[@]} -eq 0 ]; then
         print_warning "No tools selected."
@@ -519,8 +562,8 @@ main() {
 
     echo ""
     echo "=== AI TOOL CONFIGURATION PROCESS COMPLETED ==="
-    echo "Backup directory: $BACKUP_DIR"
+    echo "Backup directory: ${BACKUP_DIR:-Not defined}"
 }
 
 # Run the script with provided argument
-main "$1"
+main "${1:-}"
