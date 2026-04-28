@@ -28,7 +28,7 @@ declare -A MACHINE_DIRS=(
     ["macbook-m2-32gb"]="2-ai/profiles/macbook-m2-32gb"
     ["macbook-m5-48gb"]="2-ai/profiles/macbook-m5-48gb"
     ["macbook-m5-64gb"]="2-ai/profiles/macbook-m5-64gb"
-    ["macmini-m2"]="2-ai/profiles/macmini-m2"
+    ["macmini-m2-16gb"]="2-ai/profiles/macmini-m2-16gb"
 )
 
 

@@ -15,8 +15,7 @@ description: >
 A skill for finding new model releases and suggesting upgrades to the local model stack defined
 in `scripts/models.sh`. When a custom GGUF alias changes, this skill keeps two things in sync:
 
-1. `scripts/models.sh` — the `CUSTOM_MODELS_*` source array entries
-2. Per-machine `MODELS.md` files — the Model Matrix documentation tables
+`scripts/models.sh` — the `CUSTOM_MODELS_*` source array entries
 
 Custom GGUF aliases are created at install time by `install_custom_models` in `docs/02 - AI/install-models.sh`,
 which writes a temp Modelfile, calls `ollama create`, then deletes the temp file. There are no persistent
@@ -35,7 +34,7 @@ benchmark, or a smaller model that fits better in available RAM with similar qua
 
 Read `scripts/models.sh` from the settings repo. Extract:
 
-- Which hardware profiles exist (m5-48gb, m5-64gb, m1, macmini-m2, etc.)
+- Which hardware profiles exist (m5-48gb, m5-64gb, m1-16gb, macmini-m2-16gb, etc.)
 - Which models are assigned to each profile and role (chat, autocomplete, apply, embed, reasoning)
 - Custom model aliases in `CUSTOM_MODELS_*` arrays — note the `source|alias|num_ctx` format:
   - `source` — HuggingFace URL (`hf.co/owner/repo:tag`) or Ollama model ref

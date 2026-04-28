@@ -42,32 +42,53 @@
 #   :online   → Web search grounding
 #   :extended → Longer context
 
-# Mac Mini M2 - Standard configuration
-MODELS=(
-    # ═══════════════════════════════════════════════════════════════════════════════
-    # CLOUD MODELS (via OpenRouter — requires API key)
-    # ═══════════════════════════════════════════════════════════════════════════════
+# Cloud models (via OpenRouter — requires API key)
+OPENROUTER_MODELS=(
     "claude-opus-4-6:cloud"                         # Claude Opus 4.6
     "claude-sonnet-4-6:cloud"                      # Claude Sonnet 4.6
     "claude-haiku-4-5:cloud"                       # Claude Haiku 4.5
     "gpt-4o:cloud"                                  # GPT-4o
     "o3:cloud"                                      # o3
-    "gemini-2.5-pro:cloud"                          # Gemini 2.5 Pro
-    "mistral-large:cloud"                           # Mistral Large
     "sonar-pro:cloud"                               # Perplexity Sonar
     "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
     "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
-    
+)
+
+# Mac Mini M2 - Standard configuration
+OLLAMA_MODELS=(
     # ═══════════════════════════════════════════════════════════════════════════════
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════
-    
+
+    # --- Qwen 3 (14B) ---
     "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters
+
+    # --- DeepSeek R1 ---
     "deepseek-r1:8b"                             # ~5 GB  | Reasoning, chat-only (no tools)
+
+    # --- Codestral ---
     "codestral:22b"                              # ~14 GB | Code apply/insert, light coding
+
+    # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB  | Fast code tasks
     "qwen2.5-coder:1.5b"                         # ~1 GB  | Autocomplete
+
+    # --- Embeddings ---
     "nomic-embed-text"                            # ~0.3 GB| Embeddings (Continue/RAG)
+
+    # --- GPT-OSS ---
+    "gpt-oss:latest"                              # ~14 GB  | General purpose
+    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding
+
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # CLOUD MODELS
+    # ═══════════════════════════════════════════════════════════════════════════════
+    "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
+    "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
+    "mistral-large-3:675b-cloud"                           # Mistral Large
+    "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
+    "gpt-oss:20b-cloud"                            # GPT-OSS 20B Cloud
+    "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
 )
 
 # ----------------------------------------------
@@ -112,17 +133,17 @@ CUSTOM_MODELS=(
     # Format: "source|alias|num_ctx"
     # HF base aliases must come before derived aliases that reference them.
     # ollama pull is idempotent — re-running won't re-download if already cached.
-    
+
     # ═══════════════════════════════════════════
     # HF BASE MODELS/ALIASES
     # ═══════════════════════════════════════════
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
-    
+
     # ═══════════════════════════════════════════
     # BACKWARD-COMPAT ALIASES
     # ═══════════════════════════════════════════
     "qwen3-4b-2507:q4|qwen3-4b:q4||"
-    
+
     # ═══════════════════════════════════════════
     # COMMUNITY MODEL ALIASES
     # ═══════════════════════════════════════════
