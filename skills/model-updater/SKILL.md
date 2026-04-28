@@ -196,7 +196,7 @@ at runtime and calls `ollama create` — no persistent Modelfile files are store
 
 The alias name (e.g., `qwen3.6-35b-a3b:q5`) encodes the quant tier — change it when the quant
 changes, keep it when only the source URL changes (e.g., same quant, new upstream revision). All
-derived aliases (`qwen3.6-35b:q5-32k`, `qwen3.6-35b-220k:q5`) are unaffected unless the base alias
+derived aliases (`qwen3.6-35b-32k`, `qwen3.6-35b-220k:q5`) are unaffected unless the base alias
 name changes.
 
 If the model architecture or quantization tier changes significantly (e.g., Q5 → Q6 across
