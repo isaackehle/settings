@@ -11,11 +11,28 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
+REPO_ROOT="$SETTINGS_BASE"
 
 . "${SETTINGS_BASE}/helpers.sh"
 . "${SETTINGS_BASE}/utils.sh"
+# Source AI tool setup scripts
+. "${SETTINGS_BASE}/2-ai/ollama/setup_ollama.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter/setup_openrouter.sh"
+. "${SETTINGS_BASE}/2-ai/litellm/setup_litellm.sh"
+. "${SETTINGS_BASE}/2-ai/claude/setup_claude.sh"
+. "${SETTINGS_BASE}/2-ai/codex/setup_codex.sh"
+. "${SETTINGS_BASE}/2-ai/crush/crush.sh"
+. "${SETTINGS_BASE}/2-ai/exo/setup_exo.sh"
+. "${SETTINGS_BASE}/2-ai/olol/setup_olol.sh"
+. "${SETTINGS_BASE}/2-ai/grok/setup_grok.sh"
+. "${SETTINGS_BASE}/2-ai/gemini/setup_gemini.sh"
+. "${SETTINGS_BASE}/2-ai/groq/setup_groq.sh"
+. "${SETTINGS_BASE}/2-ai/opencode/setup_opencode.sh"
+. "${SETTINGS_BASE}/2-ai/continue/setup_continue.sh"
+. "${SETTINGS_BASE}/2-ai/windsurf/setup_windsurf.sh"
+. "${SETTINGS_BASE}/2-ai/anythingllm/setup_anythingllm.sh"
+. "${SETTINGS_BASE}/2-ai/github-copilot/setup_github_copilot.sh"
+. "${SETTINGS_BASE}/2-ai/lmstudio/setup_lmstudio.sh"
 
 # ============================================================================
 # CONFIGURATION DEPLOYMENT
@@ -103,12 +120,12 @@ deploy_configs() {
         [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
         mkdir -p "$HOME/.windsurf"
         _install_file "windsurf/argv.json" "$HOME/.windsurf/argv.json"
-        print_status "Windsurf config deployed."
+        log_status "Windsurf config deployed."
     fi
 
     if [[ "$IDE_CHOICE" == "1" || "$IDE_CHOICE" == "3" ]]; then
-        print_info "VS Code config: extensions are installed via 'setup vscode' in the menu."
-        print_info "Continue config is shared with both IDEs at ~/.continue/config.yaml."
+        log_info "VS Code config: extensions are installed via 'setup vscode' in the menu."
+        log_info "Continue config is shared with both IDEs at ~/.continue/config.yaml."
     fi
 
     [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
@@ -151,12 +168,12 @@ deploy_configs() {
             fi
         fi
 
-    print_status "AI tool configs deployed."
+    log_status "AI tool configs deployed."
 }
 
 # Function to backup existing configurations
 backup_existing_configs() {
-    print_status "Backing up existing AI tool configurations..."
+    log_status "Backing up existing AI tool configurations..."
     backup_continue
     backup_opencode
     backup_crush
@@ -164,12 +181,12 @@ backup_existing_configs() {
     backup_grok
     backup_olol
     backup_litellm
-    print_status "All existing configurations backed up successfully"
+    log_status "All existing configurations backed up successfully"
 }
 
 # Function to restore configurations from backup
 restore_configs() {
-    print_status "Restoring AI tool configurations from backup..."
+    log_status "Restoring AI tool configurations from backup..."
     restore_continue
     restore_opencode
     restore_crush
@@ -177,11 +194,11 @@ restore_configs() {
     restore_grok
     restore_olol
     restore_litellm
-    print_status "All configurations restored successfully"
+    log_status "All configurations restored successfully"
 }
 
 verify_installations() {
-    print_info "Verifying tool installations..."
+    log_info "Verifying tool installations..."
     local verification_results=""
     local all_passed=true
     for check in verify_ollama verify_litellm verify_claude_code verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot; do
@@ -195,27 +212,27 @@ verify_installations() {
     done
     echo -e "$verification_results"
     if [ "$all_passed" = true ]; then
-        print_status "All AI development tools are properly installed and functional"
+        log_status "All AI development tools are properly installed and functional"
     else
-        print_warning "Some tools may require manual configuration or additional setup"
+        log_warning "Some tools may require manual configuration or additional setup"
         return 1
     fi
 }
 
 install_tools() {
     check_system_requirements
-    verify_ollama       || setup_ollama       || print_error "Failed to install Ollama"
-    verify_openrouter   || setup_openrouter   || print_error "Failed to setup OpenRouter"
-    verify_litellm      || setup_litellm      || print_error "Failed to install LiteLLM"
-    verify_claude_code  || setup_claude       || print_error "Failed to install Claude Code"
-    verify_opencode     || setup_opencode     || print_error "Failed to install OpenCode"
-    verify_crush        || setup_crush        || print_error "Failed to install Crush"
-    verify_codex        || setup_codex        || print_error "Failed to install Codex"
-    verify_gemini       || setup_gemini       || print_error "Failed to install Gemini"
-    verify_grok         || setup_grok         || print_error "Failed to install Grok"
-    verify_groq         || setup_groq         || print_error "Failed to install Groq"
-    verify_anythingllm  || setup_anythingllm  || print_error "Failed to install AnythingLLM"
-    verify_github_copilot || setup_github_copilot || print_error "Failed to install GitHub Copilot"
+    verify_ollama       || setup_ollama       || log_error "Failed to install Ollama"
+    verify_openrouter   || setup_openrouter   || log_error "Failed to setup OpenRouter"
+    verify_litellm      || setup_litellm      || log_error "Failed to install LiteLLM"
+    verify_claude_code  || setup_claude       || log_error "Failed to install Claude Code"
+    verify_opencode     || setup_opencode     || log_error "Failed to install OpenCode"
+    verify_crush        || setup_crush        || log_error "Failed to install Crush"
+    verify_codex        || setup_codex        || log_error "Failed to install Codex"
+    verify_gemini       || setup_gemini       || log_error "Failed to install Gemini"
+    verify_grok         || setup_grok         || log_error "Failed to install Grok"
+    verify_groq         || setup_groq         || log_error "Failed to install Groq"
+    verify_anythingllm  || setup_anythingllm  || log_error "Failed to install AnythingLLM"
+    verify_github_copilot || setup_github_copilot || log_error "Failed to install GitHub Copilot"
     verify_installations
 }
 
@@ -236,6 +253,7 @@ _run_one() {
         setup:ollama)     setup_ollama ;;
         setup:olol)       setup_olol ;;
         setup:anythingllm) setup_anythingllm ;;
+        setup:lmstudio)    setup_lmstudio ;;
         setup:litellm)    setup_litellm ;;
         setup:openrouter) setup_openrouter ;;
         setup:opencode)   setup_opencode ;;
@@ -250,7 +268,7 @@ _run_one() {
         restore:litellm)  restore_litellm ;;
         restore:olol)     restore_olol ;;
         restore:opencode) restore_opencode ;;
-        restore:*)        print_info "No restore available for $tool — skipping" ;;
+        restore:*)        log_info "No restore available for $tool — skipping" ;;
         backup:claude)    backup_claude ;;
         backup:continue)  backup_continue ;;
         backup:crush)     backup_crush ;;
@@ -259,7 +277,7 @@ _run_one() {
         backup:litellm)   backup_litellm ;;
         backup:olol)      backup_olol ;;
         backup:opencode)  backup_opencode ;;
-        backup:*)         print_info "No backup available for $tool — skipping" ;;
+        backup:*)         log_info "No backup available for $tool — skipping" ;;
     esac
 }
 
@@ -291,6 +309,7 @@ interactive_menu() {
         "vscode|editors|Install VS Code + Continue + Cline extensions"
         "windsurf|editors|Install Windsurf IDE + deploy argv.json"
         "anythingllm|tools|Install + configure Ollama provider"
+        "lmstudio|servers|Install LM Studio (GUI app)"
         "copilot|extensions|Install gh-copilot extension + VS Code extensions"
     )
 
@@ -400,7 +419,7 @@ interactive_menu() {
     set -e
 
     if [ ${#chosen[@]} -eq 0 ]; then
-        print_warning "No tools selected."
+        log_warning "No tools selected."
         return
     fi
 
@@ -420,7 +439,7 @@ interactive_menu() {
         1|setup)   _run_for_tools setup   "${chosen[@]}" ;;
         2|restore) _run_for_tools restore "${chosen[@]}" ;;
         3|backup)  _run_for_tools backup  "${chosen[@]}" ;;
-        *) print_error "Invalid action"; return 1 ;;
+        *) log_error "Invalid action"; return 1 ;;
     esac
 }
 
@@ -451,7 +470,7 @@ main() {
             setup_crush
             setup_claude
             setup_github_copilot
-            print_status "All tool configurations applied"
+            log_status "All tool configurations applied"
         ;;
         vscode)
             setup_vscode
@@ -492,6 +511,9 @@ main() {
         anythingllm)
             setup_anythingllm
         ;;
+        lmstudio)
+            setup_lmstudio
+        ;;
         copilot)
             setup_github_copilot
         ;;
@@ -514,7 +536,7 @@ main() {
             interactive_menu
         ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|copilot|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo ""
@@ -539,6 +561,7 @@ main() {
             echo "  groq        - Deploy Groq config + API key instructions"
             echo "  opencode    - Setup OpenCode + deploy config"
             echo "  anythingllm - Install AnythingLLM + configure Ollama provider"
+            echo "  lmstudio    - Install LM Studio"
             echo ""
             echo "=== EDITORS ==="
             echo "  vscode      - Install VS Code + Continue + Cline extensions"
@@ -565,5 +588,7 @@ main() {
     echo "Backup directory: ${BACKUP_DIR:-Not defined}"
 }
 
-# Run the script with provided argument
-main "${1:-}"
+# Run the script with provided argument only if it's being executed, not sourced
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "${1:-}"
+fi

@@ -1,5 +1,8 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+. "${SETTINGS_BASE}/utils.sh"
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Install and configure Grok CLI (@vibe-kit/grok-cli)
 # A conversational AI terminal tool backed by xAI's Grok models.
@@ -25,15 +28,13 @@ setup_grok() {
     mkdir -p "$HOME/.config/grok"
 
     # Deploy machine-specific grok.json
-    local src_cfg mac_model script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
+    local src_cfg mac_model
     if declare -f find_source > /dev/null 2>&1; then
         src_cfg=$(find_source "grok/grok.json")
     fi
     if [ -z "$src_cfg" ]; then
         mac_model="$(_detect_profile)"
-        src_cfg="$script_dir/$mac_model/grok/grok.json"
+        src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/grok/grok.json"
     fi
 
     if [ -f "$src_cfg" ]; then

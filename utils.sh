@@ -40,4 +40,13 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
-
+# Basic system requirements check
+check_system_requirements() {
+    echo "Checking system requirements..."
+    if ! command_exists brew; then
+        echo "Error: Homebrew is not installed. Please install it from https://brew.sh/"
+        return 1
+    fi
+    echo "System requirements met."
+    return 0
+}

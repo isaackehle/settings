@@ -1,5 +1,5 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+. "${REPO_ROOT}/utils.sh"
+. "${REPO_ROOT}/helpers.sh"
 
 # Install OpenShell — NVIDIA's sandboxed runtime for AI coding agents.
 # Requires Docker running locally (Rancher Desktop or Colima).

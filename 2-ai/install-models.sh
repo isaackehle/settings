@@ -1,6 +1,8 @@
 #!/opt/homebrew/bin/bash
 
-SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
 . "${SETTINGS_BASE}/helpers.sh"
 . "${SETTINGS_BASE}/exo/setup_exo.sh"
 
