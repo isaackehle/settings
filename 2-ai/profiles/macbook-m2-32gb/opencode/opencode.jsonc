@@ -133,8 +133,8 @@
         "moonshot/kimi-k2.6": {
           "name": "Kimi k2.6 (reasoning)"
         },
-        "qwen/qwen3-4b": {
-          "name": "Qwen3 4B (fast, planning)"
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
         }
       },
       "name": "OpenRouter (Cloud)",

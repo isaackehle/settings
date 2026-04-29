@@ -139,7 +139,7 @@
   "default_agent": "code",
   // qwen3.5-27b: #1 on OpenCode IndexNow benchmark (5.0% errors)
   "model": "openrouter/qwen/qwen3-coder-next-80b",
-  "small_model": "openrouter/qwen/qwen3-4b",
+  "small_model": "openrouter/qwen/qwen3-8b",
   "permission": {
     "read": "allow",
     "glob": "allow",
@@ -218,7 +218,7 @@
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "mode": "primary",
-      "model": "openrouter/qwen/qwen3-4b",
+      "model": "openrouter/qwen/qwen3-8b",
       "temperature": 0.25,
       "maxTokens": 1500,
       "permission": {

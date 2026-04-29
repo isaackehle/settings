@@ -44,17 +44,11 @@ models:
   - name: "Qwen3.5 27B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3.5:27b"
+    model: "qwen3.5-27b:q8-256k"
     roles:
       - chat
 
   # Qwen3.6 35B variants
-  - name: "Qwen3.6 35B (8K)"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3.6-35b:q4-8k"
-    roles:
-      - chat
 
   - name: "Qwen3.6 35B (32K)"
     provider: ollama
@@ -63,18 +57,12 @@ models:
     roles:
       - chat
 
-  - name: "Qwen3.6 35B (128K)"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3.6-35b:q4-128k"
-    roles:
-      - chat
 
   # Apply/insert — best code insertion
   - name: "Codestral 22B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "codestral:22b"
+    model: "codestral-22b:q6-32k"
     roles:
       - apply
 
@@ -110,17 +98,10 @@ models:
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "nomic-embed-text:latest"
+    model: "nomic-embed-text"
     roles:
       - embed
 
-  # Reranking
-  - name: "Qwen3 Reranker 0.6B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "dengcao/Qwen3-Reranker-0.6B:Q8_0"
-    roles:
-      - rerank
 
   # Fast planning
   - name: "Qwen3 4B"

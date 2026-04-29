@@ -61,9 +61,13 @@ OLLAMA_MODELS=(
 
     # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
     "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k" # ~19 GB | Writing, docs, cover letters / Image
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-8k|8192"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-32k|32768"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-128k|131072"
 
     # --- Qwen 3 (14B) ---
-    "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters (32k)
+    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # base Q8 (16 GB) Research (40k)
+    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
 
     # --- Qwen 3 (4B) ---
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (32k)
@@ -103,10 +107,10 @@ OLLAMA_MODELS=(
 # opencode
 # ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-14b"                                          # OpenCode #1 (IndexNow benchmark)
+    [code]="qwen3-14b:q5-40k"                                          # OpenCode #1 (IndexNow benchmark)
     [think]="deepseek-r1-tools:8b-128k"                                # tradeoff analysis, debugging strategy, scoring
-    [write]="qwen3-14b"                                         # resumes, cover letters, docs, polished prose
-    [research]="qwen3-14b"                                      # codebase/web investigation — saves to Obsidian Research/
+    [write]="qwen3-14b:q5-40k"                                         # resumes, cover letters, docs, polished prose
+    [research]="qwen3-14b:q5-40k"                                      # codebase/web investigation — saves to Obsidian Research/
     [plan]="qwen3-4b:q4-256k"                                          # next steps, task breakdown, routing
 )
 
@@ -114,7 +118,7 @@ declare -A OPENCODE_AGENTS=(
 # Continue (VS Code)
 # ----------------------------------------------
 declare -A CONTINUE_ROLES=(
-    [chat]="qwen3-14b"                                 # chat panel + inline edit (Ctrl+I)
+    [chat]="qwen3-14b:q5-40k"                                 # chat panel + inline edit (Ctrl+I)
     [chat_alt]="codestral:22b"                         # manual model switch in chat
     [apply]="codestral:22b"                          # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
@@ -125,12 +129,12 @@ declare -A CONTINUE_ROLES=(
 # ----------------------------------------------
 # Cline (VS Code)
 # ----------------------------------------------
-CLINE_MODEL="qwen3-14b"
+CLINE_MODEL="qwen3-14b:q5-40k"
 
 # ----------------------------------------------
 # Claude Code
 # ----------------------------------------------
-CLAUDE_CODE_SONNET="qwen3-14b"            # ANTHROPIC_DEFAULT_SONNET_MODEL
+CLAUDE_CODE_SONNET="qwen3-14b:q5-40k"            # ANTHROPIC_DEFAULT_SONNET_MODEL
 CLAUDE_CODE_HAIKU="qwen3-4b:q4-256k"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="codestral:22b"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 

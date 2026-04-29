@@ -150,8 +150,8 @@
         "qwen/qwen3-14b": {
           "name": "Qwen3 14B (research)"
         },
-        "qwen/qwen3-4b": {
-          "name": "Qwen3 4B (fast, planning)"
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
         }
       },
       "name": "OpenRouter (Cloud)",

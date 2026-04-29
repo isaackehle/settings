@@ -64,7 +64,8 @@ OLLAMA_MODELS=(
     "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-128k|131072"
 
     # --- Qwen 3 (14b) ---
-    "richardyoung/qwen3-14b-abliterated:Q4_K_M|qwen3-14b:q4-40k" # ~9 GB | HF base / Research (40k)
+    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # base Q8 (16 GB) Research (40k)
+    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
 
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks (32k)

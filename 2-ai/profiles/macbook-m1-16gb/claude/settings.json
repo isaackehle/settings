@@ -2,11 +2,11 @@
   "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
     "ANTHROPIC_API_KEY": "sk-local",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-14b",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": qwen3-14b:q4-40k,
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-4b-q4-32k",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-14b"
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": qwen3-14b:q4-40k
   },
-  "model": "qwen3-14b",
+  "model": qwen3-14b:q4-40k,
   "permissions": {
     "allow": [
       "Bash(git log:*)",
