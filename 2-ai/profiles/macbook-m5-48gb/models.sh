@@ -58,10 +58,21 @@ OLLAMA_MODELS=(
     # ═══════════════════════════════════════════════════════════════════════════════════════
 
     # --- Qwen 3.6 (35B) ---
-    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6:35b-256k" # ~35 GB | HF base (128k)
-    "qwen3.6:35b|qwen3.6:35b-8k|8192"
-    "qwen3.6:35b|qwen3.6:35b-32k|32768"
-    "qwen3.6:35b|qwen3.6:35b-128k|131072"
+    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6-35b:q4-256k" # ~35 GB | HF base (128k)
+    "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-8k|8192"
+    "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-32k|32768"
+    "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-128k|131072"
+    "mmproj.gguf" # (~1 GB) Vision projector - Required for image understanding
+
+    # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
+    "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k"    # ~19 GB | Writing, docs, cover letters / Image
+    "sinhang/qwen3.5-claude-4.6-opus:27b-q8_0|qwen3.5-27b:q8-256k"      # ~29 GB | Writing, docs, cover letters / Image
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-8k|8192"
+    "qwen3.5-27b:q8-256k|qwen3.5-27b:q8-8k|8192"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-32k|32768"
+    "qwen3.5-27b:q8-256k|qwen3.5-27b:q8-32k|32768"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-128k|131072"
+    "qwen3.5-27b:q8-256k|qwen3.5-27b:q8-128k|131072"
 
     # --- Qwen 3 Coder 30B (A3B) ---
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-q5_K_XL|qwen3-coder-30b-a3b:q5-256k" # ~21 GB | HF base (256k)
@@ -69,27 +80,46 @@ OLLAMA_MODELS=(
     "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-32k|32768"
     "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-128k|131072"
 
+    # --- Qwen 3 (32B) ---
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5"       # ~22 GB | HF base Stock/Research (32k)
 
-    # --- Qwen 3.5 (27B) ---
-    "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters (32k)
+    # --- Qwen 3 (14B) ---
+    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # Ollama Q8 (~16 GB) (32k)
+    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # Ollama Q5 (~11 GB) (32k)
+
+    # --- Qwen 3 (4B) ---
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (256k)
+
+    # --- Qwen 2.5 Coder ---
+    "qwen2.5-coder:7b"                              # ~4.5 GB | Fast code (32k)
+    "qwen2.5-coder:1.5b"                            # ~1 GB  | Autocomplete (32k)
 
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                               # ~5 GB  | Reasoning (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b" # ~5 GB | HF base (128k)
+    "MFDoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b-128k" # 9 GB | HF base 14B (128k)
+    "MFDoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b-128k" # 20 GB | HF base 32B (128k)
 
-    # --- Qwen 3 (14B) ---
-    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5"        # ~12 GB | HF base / Research (32k)
+    # --- Gemma 4 (31B) ---
+    "gemma4:31b"                                    # ~18 GB | Reasoning (128k)
 
-    # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4" # ~3 GB | HF base (32k)
-    "qwen3-4b-2507:q4|qwen3-4b:q4"                 # ~3 GB | Backward-compat / Planning fast (32k)
+    # --- Gemma 3 (12B) ---
+    "gemma3:12b"                                     # ~7 GB | General purpose (128k)
+
+    # --- GLM-4.7 Flash ---
+    "glm-4.7-flash"                                 # ~5 GB | Fast, Chinese-optimized (32k)
+
+    # --- Phi-4 ---
+    "phi4"                                          # ~9 GB | Efficient, small footprint (16k)
 
     # --- Codestral ---
-    "codestral:22b"                                 # ~14 GB | Code (32k)
+    "codestral:22b-v0.1-q6_K|codestral-22b:q6-32k"  # ~23 GB | Code apply/insert (q6_K) (32k)
 
-    # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                              # ~5 GB | Fast code (32k)
-    "qwen2.5-coder:1.5b"                            # ~1 GB | Autocomplete (32k)
+    # --- Llama 3.3 (70B) ---
+    "llama3.3:70b"                                  # ~43 GB | General purpose (solo only) (128k)
+
+    # --- Llama 3.2 ---
+    "llama3.2"                                       # ~2 GB | General purpose (128k)
+
 
     # --- Embeddings ---
     "nomic-embed-text"                             # ~0.3 GB | Codebase/RAG (8k)
@@ -104,23 +134,17 @@ OLLAMA_MODELS=(
     "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
 )
 
-# ----------------------------------------------
-# opencode agents
-# ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3.5:27b"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b:q5-32k or qwen3.6:35b-8k via picker
-    [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
-    [write]="qwen3.5:27b"                                         # resumes, cover letters, docs, polished prose
-    [research]="qwen3-14b:q5"                                     # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b:q4"                                          # next steps, task breakdown, routing
+    [code]="qwen3.5-27b:q8-256k"                                          # OpenCode #1 (IndexNow benchmark); switch to qwen3-coder-30b:q5-32k or qwen3.6-35b:q4-8k via picker
+    [think]="deepseek-r1-tools:14b-128k"                                # tradeoff analysis, debugging strategy, scoring
+    [write]="qwen3.5-27b:q8-256k"                                         # resumes, cover letters, docs, polished prose
+    [research]="qwen3-14b:q5-40k"                                     # codebase/web investigation — saves to Obsidian Research/
+    [plan]="qwen3-4b:q8-256k"                                          # next steps, task breakdown, routing
 )
 
-# ----------------------------------------------
-# Continue (VS Code)
-# ----------------------------------------------
 declare -A CONTINUE_ROLES=(
     [chat]="qwen3-coder-30b:q5-32k"                  # chat panel + inline edit (Ctrl+I)
-    [chat_alt]="qwen3.5:27b"                         # manual model switch in chat
+    [chat_alt]="qwen3.5-27b:q8-256k"                         # manual model switch in chat
     [apply]="codestral:22b"                          # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"          # switch manually for complex files
@@ -131,12 +155,13 @@ declare -A CONTINUE_ROLES=(
 # Cline (VS Code)
 # ----------------------------------------------
 CLINE_MODEL="qwen3-coder-30b:q5-32k"
+CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
 
 # ----------------------------------------------
 # Claude Code
 # ----------------------------------------------
 CLAUDE_CODE_SONNET="qwen3-coder-30b:q5-32k"            # ANTHROPIC_DEFAULT_SONNET_MODEL
-CLAUDE_CODE_HAIKU="qwen3-4b:q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_HAIKU="qwen3-4b:q8-256k"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="qwen3-coder-30b:q5-128k"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 # ----------------------------------------------
@@ -144,8 +169,8 @@ CLAUDE_CODE_OPUS="qwen3-coder-30b:q5-128k"             # ANTHROPIC_DEFAULT_OPUS_
 # ----------------------------------------------
 #   ollama list                                 all installed models
 #   ollama ps                                   currently loaded + memory usage
-#   ollama run qwen3.6:35b-8k               interactive shell with model
-#   ollama run qwen3.6:35b-128k             interactive shell with model
+#   ollama run qwen3.6-35b:q4-8k               interactive shell with model
+#   ollama run qwen3.6-35b:q4-128k             interactive shell with model
 #   ollama run qwen3-coder-30b:q5-32k          interactive shell with model
 #   ollama run qwen3-coder-30b:q5-128k         interactive shell with model
 #   ollama stop <model>                         force-unload to free memory

@@ -27,7 +27,7 @@
         "qwen3-coder-next-80b:q4": {
           "name": "Qwen3 Coder Next 80B (primary coding)"
         },
-        "qwen3.6:35b-8k": {
+        "qwen3.6-35b:q4-8k": {
           "name": "Qwen3.6 35B (general)"
         },
         "deepseek-r1-tools:32b-128k": {

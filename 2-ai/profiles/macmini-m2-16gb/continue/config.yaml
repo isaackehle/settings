@@ -44,7 +44,7 @@ models:
   - name: "DeepSeek R1 Tool-Calling 8B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "deepseek-r1-tools:8b"
+    model: "deepseek-r1-tools:8b-128k"
     roles:
       - chat
 

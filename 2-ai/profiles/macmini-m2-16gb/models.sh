@@ -59,23 +59,26 @@ OLLAMA_MODELS=(
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════════════
 
-    # --- DeepSeek R1 ---
-    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
+    "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k" # ~19 GB | Writing, docs, cover letters / Image
 
     # --- Qwen 3 (14B) ---
     "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters (32k)
 
     # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||" # ~3 GB | HF base (32k)
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"                 # ~3 GB | Backward-compat alias (32k)
-
-    # --- Codestral ---
-    "codestral:22b"                              # ~14 GB | Code apply/insert, light coding (32k)
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (32k)
 
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB  | Fast code tasks (32k)
     "qwen2.5-coder:1.5b"                         # ~1 GB  | Autocomplete (32k)
+
+    # --- Codestral ---
+    "codestral:22b"                              # ~14 GB | Code apply/insert, light coding (32k)
+
+    # --- DeepSeek R1 ---
+    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b-128k" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+
 
     # --- GPT-OSS ---
     "gpt-oss:latest"                              # ~14 GB  | General purpose (32k)
@@ -101,10 +104,10 @@ OLLAMA_MODELS=(
 # ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
     [code]="qwen3-14b"                                          # OpenCode #1 (IndexNow benchmark)
-    [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
+    [think]="deepseek-r1-tools:8b-128k"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3-14b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b"                                      # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b:q4"                                          # next steps, task breakdown, routing
+    [plan]="qwen3-4b:q4-256k"                                          # next steps, task breakdown, routing
 )
 
 # ----------------------------------------------
@@ -128,7 +131,7 @@ CLINE_MODEL="qwen3-14b"
 # Claude Code
 # ----------------------------------------------
 CLAUDE_CODE_SONNET="qwen3-14b"            # ANTHROPIC_DEFAULT_SONNET_MODEL
-CLAUDE_CODE_HAIKU="qwen3-4b:q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_HAIKU="qwen3-4b:q4-256k"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="codestral:22b"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 

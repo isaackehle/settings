@@ -14,7 +14,7 @@ if [[ -f "$SETTINGS_BASE/helpers.sh" ]]; then
 fi
 
 # Fallback if detection fails
-_vault_model="${_vault_model:-deepseek-r1-tools:8b}"
+_vault_model="${_vault_model:-deepseek-r1-tools:8b-128k}"
 
 alias vault="cd \"\$PRIMARY_VAULT\" && opencode --model $_vault_model"
 

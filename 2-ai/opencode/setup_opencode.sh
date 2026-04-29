@@ -10,9 +10,15 @@ fi
 
 . "${SETTINGS_BASE}/helpers.sh"
 
-log_info "Setting up OpenCode..."
+setup_opencode() {
+    log_info "Setting up OpenCode..."
 
-# TODO: Add OpenCode-specific installation/configuration steps here
+    # TODO: Add OpenCode-specific installation/configuration steps here
 
-log_success "OpenCode setup complete."
-log_info "Note: update_models_sh() is available from helpers.sh for model updates."
+    log_success "OpenCode setup complete."
+    log_info "Note: update_models_sh() is available from helpers.sh for model updates."
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    setup_opencode
+fi

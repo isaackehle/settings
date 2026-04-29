@@ -4,7 +4,6 @@
 # Allows users to select/deselect tools via spacebar and execute them.
 
 # Load utilities if available
-. "${SETTINGS_BASE}/utils.sh"
 . "${SETTINGS_BASE}/helpers.sh"
 
 # Define Categories and their associated scripts

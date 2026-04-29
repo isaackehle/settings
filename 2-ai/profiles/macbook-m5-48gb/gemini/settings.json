@@ -6,7 +6,7 @@
                 "baseURL": "http://localhost:11434/v1"
             },
             "models": {
-                "qwen3-14b:q5": {
+                "qwen3-14b:q5-40k": {
                     "name": "Qwen3 14B Q5 (research, 12 GB)"
                 },
                 "qwen3.5:27b": {

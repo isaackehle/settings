@@ -8,18 +8,12 @@ set -euo pipefail
 SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
 
+. "${SETTINGS_BASE}/utils.sh"
 
 # Shared backup globals (used by all setup scripts)
 DATE="$(date +%Y%m%d_%H%M%S)"
 BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/settings-backups"
 mkdir -p "$BACKUP_DIR"
-
-# Color codes
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
 
 
 # Machine folder → folder name (Used for resolution in update functions)
@@ -93,18 +87,49 @@ install_file() {
 
 
 
-# ============================================================================
-# UTILITY FUNCTIONS
-# ============================================================================
+# Compare two version strings. Returns 0 if $1 >= $2
+version_ge() {
+    [[ "$1" == "$2" ]] && return 0
+    local IFS=.
+    local i
+    local v1=($1)
+    local v2=($2)
+    for ((i=${#v1[@]}; i<${#v2[@]}; i++)); do v1[i]=0; done
+    for ((i=0; i<${#v1[@]}; i++)); do
+        if [[ ${v1[i]} -gt ${v2[i]} ]]; then return 0; fi
+        if [[ ${v1[i]} -lt ${v2[i]} ]]; then return 1; fi
+    done
+    return 0
+}
 
-log_info()    { echo -e "${BLUE}ℹ${NC} $*"; }
-log_success() { echo -e "${GREEN}✓${NC} $*"; }
-log_warn()    { echo -e "${YELLOW}⚠${NC} $*"; }
-log_error()   { echo -e "${RED}✗${NC} $*" >&2; }
-die()         { log_error "$*"; exit 1; }
+# Check if a tool exists and meets a minimum version requirement
+# Usage: check_tool_with_version "tool-name" "1.2.3"
+check_tool_with_version() {
+    local tool="$1"
+    local min_version="$2"
+    local version=""
 
-# Ollama colon form → LiteLLM dash form  (qwen3-32b:q5 → qwen3-32b-q5)
-colon_to_dash() { echo "${1//:/-}"; }
+    if [[ "$tool" == "zsh" ]]; then
+        version=$(zsh -c 'echo $ZSH_VERSION' 2>/dev/null || echo "")
+    elif command -v "$tool" >/dev/null 2>&1; then
+        version=$("$tool" --version 2>&1 | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1)
+    else
+        log_error "Tool '$tool' is not installed."
+        return 1
+    fi
+
+    if [[ -z "$version" ]]; then
+        log_error "Could not determine version for '$tool'."
+        return 1
+    fi
+
+    if ! version_ge "$version" "$min_version"; then
+        log_error "Tool '$tool' version $version is less than required $min_version."
+        return 1
+    fi
+
+    return 0
+}
 
 
 # ============================================================================

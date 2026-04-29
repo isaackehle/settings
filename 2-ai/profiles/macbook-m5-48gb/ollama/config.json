@@ -3,18 +3,18 @@
     "claude": {
       "aliases": {
         "coding": "qwen3-coder-30b:q5-32k",
-        "fast": "qwen3-4b:q4",
+        "fast": "qwen3-4b:q8-256k",
         "primary": "qwen3.5:27b",
-        "reasoning": "deepseek-r1-tools:8b",
-        "research": "qwen3-14b:q5"
+        "reasoning": "deepseek-r1-tools:14b-128k",
+        "research": "qwen3-14b:q5-40k"
       },
       "models": [
         "qwen3.6-35b-32k",
         "qwen3.5:27b",
         "qwen3-coder-30b:q5-32k",
-        "qwen3-14b:q5",
+        "qwen3-14b:q5-40k",
         "deepseek-r1-tools:14b-128k",
-        "deepseek-r1-tools:8b"
+        "deepseek-r1-tools:32b-128k"
       ]
     },
     "opencode": {
@@ -22,8 +22,9 @@
         "qwen3.6-35b-32k",
         "qwen3.5:27b",
         "qwen3-coder-30b:q5-32k",
-        "qwen3-4b:q4",
-        "deepseek-r1-tools:8b"
+        "qwen3-4b:q8-256k",
+        "deepseek-r1-tools:14b-128k",
+        "deepseek-r1-tools:32b-128k"
       ]
     }
   },

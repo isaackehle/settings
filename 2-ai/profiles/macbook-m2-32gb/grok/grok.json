@@ -27,7 +27,7 @@
         "qwen3-14b": {
           "name": "Qwen3 14B (primary)"
         },
-        "deepseek-r1-tools:8b": {
+        "deepseek-r1-tools:8b-128k": {
           "name": "DeepSeek R1 8B (reason+tools)"
         }
       }
