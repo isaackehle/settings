@@ -13,7 +13,7 @@ _install_ollama() {
 }
 
 verify_ollama() {
-    check_tool_with_version "Ollama" "ollama"
+    check_tool_with_version "Ollama" "0.0.0"
 }
 
 # Install Ollama and start the server. Model installation is handled
@@ -36,8 +36,6 @@ setup_ollama() {
 
     log_info "Verifying Ollama installation..."
     ollama --version
-
-    log_success "Ollama setup complete. Run 'bash docs/02 - AI/install-models.sh' to install models."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

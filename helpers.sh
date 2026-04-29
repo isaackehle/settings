@@ -87,51 +87,6 @@ install_file() {
 
 
 
-# Compare two version strings. Returns 0 if $1 >= $2
-version_ge() {
-    [[ "$1" == "$2" ]] && return 0
-    local IFS=.
-    local i
-    local v1=($1)
-    local v2=($2)
-    for ((i=${#v1[@]}; i<${#v2[@]}; i++)); do v1[i]=0; done
-    for ((i=0; i<${#v1[@]}; i++)); do
-        if [[ ${v1[i]} -gt ${v2[i]} ]]; then return 0; fi
-        if [[ ${v1[i]} -lt ${v2[i]} ]]; then return 1; fi
-    done
-    return 0
-}
-
-# Check if a tool exists and meets a minimum version requirement
-# Usage: check_tool_with_version "tool-name" "1.2.3"
-check_tool_with_version() {
-    local tool="$1"
-    local min_version="$2"
-    local version=""
-
-    if [[ "$tool" == "zsh" ]]; then
-        version=$(zsh -c 'echo $ZSH_VERSION' 2>/dev/null || echo "")
-    elif command -v "$tool" >/dev/null 2>&1; then
-        version=$("$tool" --version 2>&1 | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1)
-    else
-        log_error "Tool '$tool' is not installed."
-        return 1
-    fi
-
-    if [[ -z "$version" ]]; then
-        log_error "Could not determine version for '$tool'."
-        return 1
-    fi
-
-    if ! version_ge "$version" "$min_version"; then
-        log_error "Tool '$tool' version $version is less than required $min_version."
-        return 1
-    fi
-
-    return 0
-}
-
-
 # ============================================================================
 # PROFILE DETECTION & MANAGEMENT
 # ============================================================================
