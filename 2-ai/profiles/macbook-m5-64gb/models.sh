@@ -38,7 +38,6 @@
 # OPENROUTER VARIANTS (append to model ID):
 #   :free     → Free tier (rate-limited)
 #   :nitro    → Fastest provider
-#   :thinking → Extended chain-of-thought
 #   :online   → Web search grounding
 #   :extended → Longer context
 
@@ -52,128 +51,91 @@ OPENROUTER_MODELS=(
     "sonar-pro:cloud"                               # Perplexity Sonar
 )
 
-# M5 Max 64GB - Extended configuration (local — pull with ollama)
+# M5 Max 64GB - Local models (pull with ollama)
 OLLAMA_MODELS=(
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     # PRIMARY MODELS (local — pull with ollama)
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
 
     # --- Qwen3 Coder Next (80B) ---
-    "qwen3-coder-next-80b:q4"                        # ~48 GB | Primary coding model
-    "qwen3-coder-next-80b:q4-16k"                  # ~48 GB | 16K ctx variant
-    "qwen3-coder-next-80b:q4-64k"                  # ~48 GB | 64K ctx variant
+    "bazobehram/qwen3-coder-next|qwen3-coder-next-80b:q4-256k"   # ~48 GB | Primary coding model (256k)
+    "qwen3-coder-next-80b:q4-256k|qwen3-coder-next-80b:q4-16k|16384|"
+    "qwen3-coder-next-80b:q4-256k|qwen3-coder-next-80b:q4-64k|65536|"
+    "qwen3-coder-next-80b:q4-256k|qwen3-coder-next-80b:q4-128k|131072|"
 
     # --- Qwen3.5 (27B) ---
-    "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters
+    "qwen3.5:27b"                                   # ~20 GB | Writing, docs, cover letters (32k)
 
     # --- Qwen3.6 (35B) ---
-    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact"
-    # "hf.co/Qwen/Qwen3.6-35B-A3B"
-    "qwen3.6:35b"                                   # ~35 GB | Stock (from Ollama)
-    "qwen3.6:35b-8k"                            # ~35 GB | 8K context
-    "qwen3.6:35b-32k"                           # ~35 GB | 32K context
-    "qwen3.6:35b-128k"                          # ~35 GB | 128K context (solo only)
+    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6:35b-256k" # ~35 GB | HF base (128k)
+    "qwen3.6:35b-256k|qwen3.6:35b-8k|8192|"
+    "qwen3.6:35b-256k|qwen3.6:35b-32k|32768|"
+    "qwen3.6:35b-256k|qwen3.6:35b-128k|131072|"
 
     # --- Qwen3 Coder 30B ---
-    "qwen3-coder-30b-a3b:q6"                       # ~26 GB | HF base (from unsloth)
-    "qwen3-coder-30b:q6-32k"                      # ~26 GB | 32K context
-    "qwen3-coder-30b:q6-220k"                     # ~26 GB | 220K context (solo only)
+    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6-256k" # ~26 GB | HF base (256k)
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-8k|8192|"
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-32k|32768|"
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-128k|131072|"
 
     # --- DeepSeek R1 ---
-    "deepseek-r1:14b"                               # ~9 GB  | Reasoning
-    "deepseek-r1-tools:14b"                         # ~10 GB | Tool calling
-    "deepseek-r1-tools:32b"                         # ~20 GB | Tool calling 32B
+    "deepseek-r1:14b"                               # ~9 GB  | Reasoning stock (128k)
+    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b-128k|" # HF base 14B (128k)
+    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b-128k|" # HF base 32B (128k)
 
     # --- Qwen3 32B ---
-    "dengcao/Qwen3-32B:Q5_K_M"                        # ~22 GB
-    "qwen3-32b:q5"                                 # ~22 GB | Research
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5|"       # ~22 GB | HF base Stock/Research (32k)
 
     # --- Gemma 4 (31B) ---
-    "gemma4:31b"                                    # ~18 GB | Reasoning
+    "gemma4:31b"                                    # ~18 GB | Reasoning (128k)
 
     # --- Gemma 3 (12B) ---
-    "gemma3:12b"                                     # ~7 GB | General purpose
+    "gemma3:12b"                                     # ~7 GB | General purpose (128k)
 
     # --- GLM-4.7 Flash ---
-    "glm-4.7-flash"                                 # ~5 GB | Fast, Chinese-optimized
+    "glm-4.7-flash"                                 # ~5 GB | Fast, Chinese-optimized (32k)
 
     # --- Phi-4 ---
-    "phi4"                                          # ~9 GB | Efficient, small footprint
+    "phi4"                                          # ~9 GB | Efficient, small footprint (16k)
 
     # --- Codestral ---
-    "codestral:22b"                                   # ~13 GB | Code, fill-in-middle
-    "codestral:22b-v0.1-q8_0"                       # ~23 GB | Code apply/insert (Q8_0)
+    "codestral-22b:q8-32k|codestral-22b:q8-32k|" # ~23 GB | Code apply/insert (Q8_0) (32k)
 
     # --- Llama 3.3 (70B) ---
-    "llama3.3:70b"                                  # ~43 GB | General purpose (solo only)
+    "llama3.3:70b"                                  # ~43 GB | General purpose (solo only) (128k)
 
     # --- Llama 3.2 ---
-    "llama3.2"                                       # ~2 GB | General purpose
+    "llama3.2"                                       # ~2 GB | General purpose (128k)
 
     # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                              # ~4.5 GB | Fast code
-    "qwen2.5-coder:1.5b"                            # ~1 GB  | Autocomplete
+    "qwen2.5-coder:7b"                              # ~4.5 GB | Fast code (32k)
+    "qwen2.5-coder:1.5b"                            # ~1 GB  | Autocomplete (32k)
 
     # --- Qwen3 14B ---
-    "dengcao/Qwen3-14B:Q8_0"                        # ~15 GB | Research Q8
-    "dengcao/Qwen3-14B:Q5_K_M"                      # ~12 GB | Research Q5
-    "qwen3-14b:q8"
-    "qwen3-14b:q5"
+    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8||"         # HF base Q8 (~15 GB) (32k)
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"       # HF base Q5 (~12 GB) (32k)
 
     # --- Qwen3 4B ---
-    "qwen3-4b:q8"                                   # ~5 GB | Planning
-    "qwen3-4b:q4"                                   # ~3 GB | Planning fast
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8||" # HF base (~5 GB) (32k)
+    "qwen3-4b:q4"                                   # ~3 GB | Planning fast (32k)
 
     # --- Embeddings ---
-    "nomic-embed-text"                             # ~0.3 GB | Codebase/RAG
+    "nomic-embed-text"                             # ~0.3 GB | Codebase/RAG (8k)
 
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
     "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
     "mistral-large-3:675b-cloud"                           # Mistral Large
     "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
-)
-
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # HF base aliases must come before derived aliases that reference them.
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # BASE MODELS -> ALIASES
-    # ═══════════════════════════════════════════
-    "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6||"
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b-2507:q8||"
-    "Qwen3-14B:q8|qwen3-14b:q8||"
-    "Qwen3-32B:q5|qwen3-32b:q5||"
-    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6:35b||"
-    "dengcao/Qwen3-14B:Q8_0|qwen3-14b:q8||"
-    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"
-    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5||"
-    "mfdoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b||"
-    "mfdoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b||"
-
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-32k|32768|"
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-220k|220000|"
-    "qwen3-coder-30b-a3b:q6|qwen3-coder-30b:q6-8192|8192|false"# 8K ctx
-
-    "qwen3-4b-2507:q8|qwen3-4b:q8||"
-
-    "qwen3.6:35b|qwen3.6:35b-8k|8192|"
-    "qwen3.6:35b|qwen3.6:35b-32k|32768|"
-    "qwen3.6:35b|qwen3.6:35b-128k|131072|"
-
+    "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
 )
 
 # 64GB agent map
 declare -A OPENCODE_AGENTS=(
     [code]="qwen3-coder-next-80b:q4-16k"                          # OpenCode #1 — switch to qwen3.6:35b-128k or qwen3-coder-30b:q6-32k via picker
-    [think]="deepseek-r1-tools:32b"                             # tradeoff analysis, debugging strategy, scoring
+    [think]="deepseek-r1-tools:32b-128k"                             # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3.5:27b"                                        # resumes, cover letters, docs, polished prose
     [research]="qwen3-32b:q5"                                     # codebase/web investigation
     [plan]="qwen3-4b:q8"                                         # next steps, task breakdown, routing
@@ -186,7 +148,7 @@ declare -A CONTINUE_ROLES=(
     [chat]="qwen3-coder-next-80b:q4-16k"                    # chat panel + inline edit (Ctrl+I)
     [kimi]="kimi-k2.6:cloud"                              # Cloud-based reasoning
     [chat_alt]="qwen3.5:27b"                            # manual model switch in chat
-    [apply]="codestral:22b-v0.1-q8_0"                    # applying suggested code to file (Q8_0)
+    [apply]="codestral-22b:q8-32k"                    # applying suggested code to file (Q8_0)
     [autocomplete]="qwen2.5-coder:1.5b"                # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"            # switch manually for complex files
     [embed]="nomic-embed-text"                        # @codebase semantic search

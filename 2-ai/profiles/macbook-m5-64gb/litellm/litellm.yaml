@@ -56,9 +56,9 @@ model_list:
       model: ollama_chat/qwen3-coder-30b:q6-32k
       api_base: http://localhost:11434
 
-  - model_name: qwen3-coder-30b:q6-220k
+  - model_name: qwen3-coder-30b:q6-128k
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b:q6-220k
+      model: ollama_chat/qwen3-coder-30b:q6-128k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-next-80b:q4
@@ -76,7 +76,7 @@ model_list:
       model: ollama_chat/qwen3-coder-next-80b:q4-64k
       api_base: http://localhost:11434
 
-  - model_name: codestral-22b-v0.1:q8_0
+  - model_name: codestral-22b-q8-32k
     litellm_params:
       model: ollama_chat/codestral:22b-v0.1:q8_0
       api_base: http://localhost:11434
@@ -119,14 +119,14 @@ model_list:
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
-  - model_name: deepseek-r1-tools:14b
+  - model_name: deepseek-r1-tools:14b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:14b
+      model: ollama_chat/deepseek-r1-tools:14b-128k
       api_base: http://localhost:11434
 
-  - model_name: deepseek-r1-tools:32b
+  - model_name: deepseek-r1-tools:32b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:32b
+      model: ollama_chat/deepseek-r1-tools:32b-128k
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1:14b
