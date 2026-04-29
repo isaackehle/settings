@@ -10,8 +10,8 @@
         "deepseek/deepseek-r1-tool-calling-32b": {
           "name": "DeepSeek R1 Tool-Calling 32B"
         },
-        "qwen/qwen3-4b": {
-          "name": "Qwen3 4B (fast, planning)"
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
         },
         "anthropic/claude-sonnet-4-6": {
           "name": "Claude Sonnet 4.6"

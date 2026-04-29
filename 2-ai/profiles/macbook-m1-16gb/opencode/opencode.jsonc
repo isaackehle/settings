@@ -9,8 +9,8 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "qwen/qwen3-4b": {
-          "name": "Qwen3 4B (fast, planning)"
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
         },
         "anthropic/claude-sonnet-4-6": {
           "name": "Claude Sonnet 4.6"
