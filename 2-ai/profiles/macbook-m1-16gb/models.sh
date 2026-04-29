@@ -59,8 +59,7 @@ OLLAMA_MODELS=(
 
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base tool calling / Tool calling alias (128k)
-
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b" # ~5 GB | HF base tool calling / Tool calling alias (128k)
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks (32k)
     "qwen2.5-coder:1.5b"                          # ~1 GB   | Autocomplete (32k)

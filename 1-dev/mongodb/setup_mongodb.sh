@@ -1,11 +1,14 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_mongodb() {
     print_info "Installing MongoDB..."
-    brew tap mongodb/brew \
-        && brew install mongodb-community \
-        && brew services start mongodb-community
+    brew tap mongodb/brew
+    brew install mongodb-community
+    brew services start mongodb-community
 }
 
 verify_mongodb() {

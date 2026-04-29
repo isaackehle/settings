@@ -1,5 +1,8 @@
-. "$(dirname "${BASH_SOURCE[0]}")/../../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+fi
+
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_jupyterlab() {
     print_info "Installing JupyterLab..."

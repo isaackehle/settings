@@ -8,7 +8,6 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
 fi
 
-# Source utilities
 . "${SETTINGS_BASE}/helpers.sh"
 
 log_info "Setting up Crush..."
