@@ -16,7 +16,6 @@ setup_opencode() {
     # TODO: Add OpenCode-specific installation/configuration steps here
 
     log_success "OpenCode setup complete."
-    log_info "Note: update_models_sh() is available from helpers.sh for model updates."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

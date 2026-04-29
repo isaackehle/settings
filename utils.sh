@@ -162,6 +162,28 @@ check_system_requirements() {
     return 0
 }
 
+# Check if a VS Code extension is installed and print its details
+# Usage: check_vscode_extension "extension.id"
+check_vscode_extension() {
+    local ext_id="$1"
+    if ! command_exists "code"; then
+        return 1
+    fi
+
+    local info
+    info=$(code --list-extensions --show-versions | grep "^${ext_id}@")
+
+    if [[ -z "$info" ]]; then
+        return 1
+    fi
+
+    # Output format: extension.id@version
+    # We can't easily get the 'Friendly Name' from CLI without parsing the marketplace or using a complex grep
+    # but we can provide ID and Version.
+    echo "$info"
+    return 0
+}
+
 # Install a package via npm
 install_via_npm() {
     local name="$1"
