@@ -15,7 +15,7 @@ _install_windsurf() {
 }
 
 verify_windsurf() {
-    check_tool_with_version "Windsurf" "windsurf"
+    check_tool_with_version "Windsurf" "0.0.0"
 }
 
 setup_windsurf() {

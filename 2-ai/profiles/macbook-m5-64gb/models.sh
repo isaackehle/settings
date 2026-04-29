@@ -62,7 +62,6 @@ OLLAMA_MODELS=(
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-8k|8192"
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-32k|32768"
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-128k|131072"
-    "mmproj.gguf" # (~1 GB) Vision projector - Required for image understanding
 
     # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
     "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k" # ~19 GB | Writing, docs, cover letters / Image
