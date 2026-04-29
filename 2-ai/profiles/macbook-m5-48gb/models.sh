@@ -58,7 +58,7 @@ OLLAMA_MODELS=(
     # ═══════════════════════════════════════════════════════════════════════════════════════
 
     # --- Qwen 3.6 (35B) ---
-    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6-35b:q4-256k" # ~35 GB | HF base (128k)
+    "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6-35b:q4-256k" # ~35 GB | HF base (256k)
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-8k|8192"
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-32k|32768"
     "qwen3.6-35b:q4-256k|qwen3.6-35b:q4-128k|131072"
@@ -84,8 +84,8 @@ OLLAMA_MODELS=(
     "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5"       # ~22 GB | HF base Stock/Research (32k)
 
     # --- Qwen 3 (14B) ---
-    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # Ollama Q8 (~16 GB) (32k)
-    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # Ollama Q5 (~11 GB) (32k)
+    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # base Q8 (16 GB) Research (40k)
+    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
 
     # --- Qwen 3 (4B) ---
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (256k)

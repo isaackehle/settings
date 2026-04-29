@@ -24,7 +24,7 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
-        "qwen3-14b": {
+        "qwen3-14b:q5-40k": {
           "name": "Qwen3 14B (primary)"
         },
         "deepseek-r1-tools:8b-128k": {

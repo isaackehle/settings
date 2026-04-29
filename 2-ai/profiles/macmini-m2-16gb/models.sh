@@ -70,7 +70,7 @@ OLLAMA_MODELS=(
     "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
 
     # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (32k)
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (256k)
 
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB  | Fast code tasks (32k)
@@ -111,7 +111,7 @@ declare -A OPENCODE_AGENTS=(
     [think]="deepseek-r1-tools:8b-128k"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3-14b:q5-40k"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b:q5-40k"                                      # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b:q4-256k"                                          # next steps, task breakdown, routing
+    [plan]="qwen3-4b:q8-256k"                                          # next steps, task breakdown, routing
 )
 
 # ----------------------------------------------
@@ -135,7 +135,7 @@ CLINE_MODEL="qwen3-14b:q5-40k"
 # Claude Code
 # ----------------------------------------------
 CLAUDE_CODE_SONNET="qwen3-14b:q5-40k"            # ANTHROPIC_DEFAULT_SONNET_MODEL
-CLAUDE_CODE_HAIKU="qwen3-4b:q4-256k"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_HAIKU="qwen3-4b:q8-256k"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
 CLAUDE_CODE_OPUS="codestral:22b"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 

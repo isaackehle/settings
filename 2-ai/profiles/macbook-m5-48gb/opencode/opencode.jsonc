@@ -4,7 +4,7 @@
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
-      "model": "ollama/qwen3.5:27b",
+      "model": "ollama/qwen3.5-27b:q8-256k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -68,7 +68,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3.5:27b",
+      "model": "ollama/qwen3.5-27b:q8-256k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -83,7 +83,7 @@
     }
   },
   "default_agent": "code",
-  "model": "ollama/qwen3.5:27b",
+  "model": "ollama/qwen3.5-27b:q8-256k",
   "permission": {
     "bash": "ask",
     "edit": "ask",
@@ -96,7 +96,7 @@
   "provider": {
     "ollama": {
       "models": {
-        "codestral:22b": {
+        "codestral-22b:q6-32k": {
           "name": "Codestral 22B (code)"
         },
         "deepseek-r1-tools:14b-128k": {
@@ -108,27 +108,21 @@
         "qwen2.5-coder:7b": {
           "name": "Qwen2.5 Coder 7B (fast code)"
         },
-        "qwen3-14b:q5": {
+        "qwen3-14b:q5-40k": {
           "name": "Qwen3 14B Q5 (research)"
         },
         "qwen3-4b:q8-256k": {
-          "name": "Qwen3 4B Q4 (plan, fast)"
+          "name": "Qwen3 4B Q8 (plan, fast)"
         },
         "qwen3-coder-30b:q5-32k": {
           "name": "Qwen3-Coder 30B A3B (code)"
         },
-        "qwen3.5:27b": {
+        "qwen3.5-27b:q8-256k": {
           "name": "Qwen3.5 27B (code #1 + write)"
-        },
-        "qwen3.6-35b:q4-128k": {
-          "name": "Qwen3.6 35B (128k) (general)"
         },
         "qwen3.6-35b:q4-32k": {
           "name": "Qwen3.6 35B (32k) (general)"
         },
-        "qwen3.6-35b:q4-8k": {
-          "name": "Qwen3.6 35B (8k) (general)"
-        }
       },
       "name": "Ollama (Local)",
       "npm": "@ai-sdk/ollama",
@@ -147,7 +141,7 @@
         "moonshot/kimi-k2.6": {
           "name": "Kimi k2.6 (reasoning)"
         },
-        "qwen/qwen3-14b": {
+        "qwen/qwen3-14b:q5-40k": {
           "name": "Qwen3 14B (research)"
         },
         "qwen/qwen3-8b": {

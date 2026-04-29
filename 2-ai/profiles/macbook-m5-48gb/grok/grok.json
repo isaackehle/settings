@@ -24,7 +24,7 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
-        "qwen3.5:27b": {
+        "qwen3.5-27b:q8-256k": {
           "name": "Qwen3.5 27B (general)"
         },
         "qwen3.6-35b:q4-32k": {

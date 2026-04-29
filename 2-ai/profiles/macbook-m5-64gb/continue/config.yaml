@@ -49,7 +49,7 @@ models:
   - name: "Qwen3 Coder Next 80B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-coder-next-80b:q4"
+    model: "qwen3-coder-next-80b:q4-16k"
     roles:
       - chat
       - edit
@@ -79,7 +79,7 @@ models:
   - name: "Codestral 22B (Q8)"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "codestral:22b-v0.1:q8_0"
+    model: "codestral-22b:q8-32k"
     roles:
       - apply
 

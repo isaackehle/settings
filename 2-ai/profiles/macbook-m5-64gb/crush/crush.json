@@ -20,37 +20,37 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-coder-30b:q6-32k",
+          "id": "qwen3-coder-30b-q6-32k",
           "name": "Qwen3 Coder 30B (32k)",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-coder-30b-220k:q6",
+          "id": "qwen3-coder-30b-220k-q6",
           "name": "Qwen3 Coder 30B (220k, solo)",
           "context_window": 220000,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3.5:27b",
+          "id": "qwen3.5-27b",
           "name": "Qwen3.5 27B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:32b-128k",
+          "id": "deepseek-r1-tools-32b-128k",
           "name": "DeepSeek R1 Tools 32B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:14b-128k",
+          "id": "deepseek-r1-tools-14b-128k",
           "name": "DeepSeek R1 Tools 14B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-4b:q8-256k",
+          "id": "qwen3-4b-q8-256k",
           "name": "Qwen3 4B (fast)",
           "context_window": 32768,
           "default_max_tokens": 4096
@@ -65,5 +65,5 @@
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-coder-30b:q6-32k"
+  "default_model": "qwen3-coder-30b-q6-32k"
 }

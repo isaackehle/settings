@@ -33,7 +33,7 @@ models:
   - name: "Qwen3 14B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-14b"
+    model: "qwen3-14b:q5-40k"
     roles:
       - chat
       - edit

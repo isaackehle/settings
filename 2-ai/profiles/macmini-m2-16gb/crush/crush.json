@@ -8,7 +8,7 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-14b",
+          "id": "qwen3-14b:q5-40k",
           "name": "Qwen3 14B",
           "context_window": 32768,
           "default_max_tokens": 8192
@@ -29,5 +29,5 @@
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-14b"
+  "default_model": "qwen3-14b:q5-40k"
 }

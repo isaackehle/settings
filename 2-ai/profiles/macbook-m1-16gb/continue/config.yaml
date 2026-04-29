@@ -29,11 +29,22 @@ models:
       - chat
 
   # ── Local Models (via Ollama) ───────────────────────────────────────────
+  # High-quality chat / edit / apply model
+  - name: "Qwen3.5 27B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "qwen3.5-27b:q5-256k"
+    roles:
+      - chat
+      - edit
+      - apply
+      - summarize
+
   # Primary chat / edit / apply model
   - name: "Qwen3 14B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-14b"
+    model: "qwen3-14b:q4-40k"
     roles:
       - chat
       - edit
@@ -45,6 +56,14 @@ models:
     provider: ollama
     apiBase: http://localhost:11434
     model: "deepseek-r1-tools:8b-128k"
+    roles:
+      - chat
+
+  # General reasoning
+  - name: "DeepSeek R1 8B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "deepseek-r1:8b"
     roles:
       - chat
 

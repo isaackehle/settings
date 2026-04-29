@@ -8,26 +8,32 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-14b:q4-40k",
+          "id": "qwen3.5-27b-q5-256k",
+          "name": "Qwen3.5 27B",
+          "context_window": 32768,
+          "default_max_tokens": 8192
+        },
+        {
+          "id": "qwen3-14b-q4-40k",
           "name": "Qwen3 14B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:8b-128k",
+          "id": "deepseek-r1-tools-8b-128k",
           "name": "DeepSeek R1 Tools 8B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-4b:q4-256k",
-          "name": "Qwen3 4B (fast, planning)",
+          "id": "deepseek-r1-8b",
+          "name": "DeepSeek R1 8B",
           "context_window": 32768,
-          "default_max_tokens": 4096
+          "default_max_tokens": 8192
         }
       ]
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-14b:q4-40k"
+  "default_model": "qwen3.5-27b-q5-256k"
 }
