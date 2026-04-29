@@ -26,16 +26,16 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:14b-128k",
+          "id": "qwen3-4b:q4-256k",
+          "name": "Qwen3 4B (fast, planning)",
+          "context_window": 32768,
+          "default_max_tokens": 4096
+        },
+        {
+          "id": "deepseek-r1-tools:8b-128k",
           "name": "DeepSeek R1 Tools 14B",
           "context_window": 32768,
           "default_max_tokens": 8192
-        },
-        {
-          "id": "qwen3-4b:q8",
-          "name": "Qwen3 4B (fast)",
-          "context_window": 32768,
-          "default_max_tokens": 4096
         }
       ]
     }

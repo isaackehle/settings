@@ -44,7 +44,7 @@ models:
   - name: "DeepSeek R1 Tool-Calling 8B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "deepseek-r1-tools:8b"
+    model: "deepseek-r1-tools:8b-128k"
     roles:
       - chat
 
@@ -77,10 +77,10 @@ models:
       - embed
 
   # Fast planning
-  - name: "Qwen3 4B"
+  - name: "Qwen3 4B (fast, planning)"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-4b:q4"
+    model: "qwen3-4b:q4-256k"
     roles:
       - chat
 

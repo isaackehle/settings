@@ -57,12 +57,22 @@ OLLAMA_MODELS=(
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    # --- DeepSeek R1 ---
-    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
+    "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k" # ~19 GB | Writing, docs, cover letters / Image
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-8k|8192"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-32k|32768"
+    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-128k|131072"
+
+    # --- Qwen 3 (14b) ---
+    "richardyoung/qwen3-14b-abliterated:Q4_K_M|qwen3-14b:q4-40k" # ~9 GB | HF base / Research (40k)
+
     # --- Qwen 2.5 Coder ---
     "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks (32k)
     "qwen2.5-coder:1.5b"                          # ~1 GB   | Autocomplete (32k)
+
+    # --- DeepSeek R1 ---
+    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b-128k" # ~5 GB | HF base tool calling / Tool calling alias (128k)
 
     # --- GPT-OSS ---
     "gpt-oss:latest"                              # ~14 GB  | General purpose (32k)
@@ -88,7 +98,7 @@ OLLAMA_MODELS=(
 # ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
     [code]="qwen2.5-coder:7b"                                 # OpenCode #1 (IndexNow benchmark)
-    [think]="deepseek-r1-tools:8b"                             # tradeoff analysis, debugging strategy
+    [think]="deepseek-r1-tools:8b-128k"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen2.5-coder:7b"                               # resumes, cover letters, docs
     [research]="qwen2.5-coder:7b"                             # codebase investigation
     [plan]="qwen2.5-coder:1.5b"                              # next steps, task breakdown

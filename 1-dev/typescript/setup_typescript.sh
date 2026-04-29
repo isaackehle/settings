@@ -9,7 +9,7 @@ _install_typescript() {
 }
 
 verify_typescript() {
-    check_tool_with_version "TypeScript" "tsc"
+    check_with_version_via_npm "TypeScript" "typescript"
 }
 
 setup_typescript() {

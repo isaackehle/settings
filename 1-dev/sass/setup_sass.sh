@@ -9,7 +9,7 @@ _install_sass() {
 }
 
 verify_sass() {
-    check_tool_with_version "Sass" "sass"
+    check_with_version_via_npm "Sass" "sass"
 }
 
 setup_sass() {

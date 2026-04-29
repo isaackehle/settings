@@ -7,7 +7,7 @@ fi
 
 _install_gemini() {
     if command_exists "npm"; then
-        print_info "Installing @google/gemini-cli via npm..."
+        print_info "Installing Google Gemini CLI via npm..."
         install_via_npm "Google Gemini CLI" "@google/gemini-cli" && return 0
     fi
     print_warning "npm not available — install manually: npm install -g @google/gemini-cli"
@@ -15,7 +15,7 @@ _install_gemini() {
 }
 
 verify_gemini() {
-    check_tool_with_version "Gemini CLI" "gemini"
+    check_with_version_via_npm "Gemini CLI" "@google/gemini-cli"
 }
 
 setup_gemini() {
@@ -43,13 +43,8 @@ setup_gemini() {
 
     # Write env file for local-model mode via LiteLLM proxy
     local env_file
-    if [ -n "$ZSH_VERSION" ]; then
-        mkdir -p "$HOME/.zshrc.d"
-        env_file="$HOME/.zshrc.d/_gemini"
-    else
-        mkdir -p "$HOME/.profile.d"
-        env_file="$HOME/.profile.d/_gemini"
-    fi
+    mkdir -p "$HOME/.profile.d"
+    env_file="$HOME/.profile.d/_gemini"
 
     cat > "$env_file" << 'EOF'
 # Gemini CLI — route to local LiteLLM proxy (comment out to use real Gemini API)

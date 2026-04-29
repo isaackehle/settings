@@ -27,14 +27,14 @@
         "qwen3.5:27b": {
           "name": "Qwen3.5 27B (general)"
         },
-        "qwen3.6:35b-32k": {
+        "qwen3.6-35b:q4-32k": {
           "name": "Qwen3.6 35B (general)"
         },
         "qwen3-coder-30b:q5-32k": {
           "name": "Qwen3-Coder 30B A3B (code)"
         },
-        "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 Tool-Calling 8B (local)"
+        "deepseek-r1-tools:14b-128k": {
+          "name": "DeepSeek R1 Tool-Calling 14B (local)"
         }
       }
     }

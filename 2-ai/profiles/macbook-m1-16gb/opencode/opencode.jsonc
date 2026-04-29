@@ -33,11 +33,11 @@
         "qwen2.5-coder:1.5b": {
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
         },
-        "deepseek-r1-tools:8b": {
+        "deepseek-r1-tools:8b-128k": {
           "name": "DeepSeek R1 8B (reason+tools, 5 GB)"
         },
-        "qwen3-4b:q4": {
-          "name": "Qwen3 4B Q4 (plan, fast)"
+        "qwen3-4b:q4-256k": {
+          "name": "Qwen3 4B (fast, planning)"
         },
         "nomic-embed-text": {
           "name": "Nomic Embed Text (embeddings)"
@@ -77,7 +77,7 @@
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/deepseek-r1-tools:8b",
+      "model": "ollama/deepseek-r1-tools:8b-128k",
       "temperature": 0.3,
       "permission": {
         "read": "allow",

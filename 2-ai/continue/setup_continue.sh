@@ -10,9 +10,15 @@ fi
 
 . "${SETTINGS_BASE}/helpers.sh"
 
-log_info "Setting up Continue..."
+setup_continue() {
+    log_info "Setting up Continue..."
 
-# TODO: Add Continue-specific installation/configuration steps here
+    # TODO: Add Continue-specific installation/configuration steps here
 
-log_success "Continue setup complete."
-log_info "Note: update_models_sh() is available from helpers.sh for model updates."
+    log_success "Continue setup complete."
+    log_info "Note: update_models_sh() is available from helpers.sh for model updates."
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    setup_continue
+fi

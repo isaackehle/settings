@@ -144,8 +144,10 @@ install_ollama_models() {
     echo "Installation Summary for $profile_name:"
     echo "✅ Passed:"
     [[ ${#passed[@]} -eq 0 ]] && echo "  none" || printf '  - %s\n' "${passed[@]}"
-    echo "❌ Failed:"
-    [[ ${#failed[@]} -eq 0 ]] && echo "  none" || printf '  - %s\n' "${failed[@]}"
+    if [[ ${#failed[@]} -gt 0 ]]; then
+        echo "❌ Failed:"
+        printf '  - %s\n' "${failed[@]}"
+    fi
     echo "===================================================="
     echo "✅ Installation process complete for $profile_name"
 }

@@ -17,7 +17,7 @@ _install_grok() {
 }
 
 verify_grok() {
-    check_tool_with_version "Grok CLI" "grok"
+    check_with_version_via_npm "Grok CLI" "@vibe-kit/grok-cli"
 }
 
 setup_grok() {
@@ -51,15 +51,9 @@ export GROKCLI_BASE_URL=http://localhost:4000/v1
 export GROKCLI_API_KEY=sk-local
 EOF
 
-    if [ -n "$ZSH_VERSION" ]; then
-        mkdir -p "$HOME/.zshrc.d"
-        cp "$env_file" "$HOME/.zshrc.d/_grok"
-        print_status "Grok env written to ~/.zshrc.d/_grok"
-    else
-        mkdir -p "$HOME/.profile.d"
-        cp "$env_file" "$HOME/.profile.d/_grok"
-        print_status "Grok env written to ~/.profile.d/_grok"
-    fi
+    mkdir -p "$HOME/.profile.d"
+    cp "$env_file" "$HOME/.profile.d/_grok"
+    print_status "Grok env written to ~/.profile.d/_grok"
 
     print_info ""
     print_info "=== Grok CLI usage ==="

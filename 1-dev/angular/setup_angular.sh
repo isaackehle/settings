@@ -9,7 +9,7 @@ _install_angular() {
 }
 
 verify_angular() {
-    check_tool_with_version "Angular CLI" "ng"
+    check_with_version_via_npm "Angular CLI" "@angular/cli"
 }
 
 setup_angular() {

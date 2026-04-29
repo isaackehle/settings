@@ -1,160 +1,166 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "openrouter": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter (Cloud)",
-      "options": {
-        "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY"
-      },
-      "models": {
-        "qwen/qwen3-4b": {
-          "name": "Qwen3 4B (fast, planning)"
-        },
-        "qwen/qwen3-14b": {
-          "name": "Qwen3 14B (research)"
-        },
-        "mistralai/codestral": {
-          "name": "Codestral (code)"
-        },
-        "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
-        },
-        "moonshot/kimi-k2.6": {
-          "name": "Kimi k2.6 (reasoning)"
-        }
-      }
-    },
-    "ollama": {
-      "npm": "@ai-sdk/ollama",
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434"
-      },
-      "models": {
-        "qwen3.5:27b": {
-          "name": "Qwen3.5 27B (code #1 + write)"
-        },
-        "qwen3.6:35b:q5-32k": {
-          "name": "Qwen3.6 35B (general)"
-        },
-        "qwen3-coder-30b:q5-32k": {
-          "name": "Qwen3-Coder 30B A3B (code)"
-        },
-        "qwen3-14b:q5": {
-          "name": "Qwen3 14B Q5 (research)"
-        },
-        "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B (reason+tools)"
-        },
-        "qwen3-4b:q4": {
-          "name": "Qwen3 4B Q4 (plan, fast)"
-        },
-        "codestral:22b": {
-          "name": "Codestral 22B (code)"
-        },
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7B (fast code)"
-        },
-        "qwen2.5-coder:1.5b": {
-          "name": "Qwen2.5 Coder 1.5B (autocomplete)"
-        }
-      }
-    }
-  },
-  "default_agent": "code",
-  "model": "ollama/qwen3.5:27b",
-  "small_model": "ollama/qwen3-4b:q4",
-  "permission": {
-    "read": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "webfetch": "allow",
-    "edit": "ask",
-    "bash": "ask"
-  },
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
       "model": "ollama/qwen3.5:27b",
-      "temperature": 0.2,
       "permission": {
-        "read": "allow",
+        "bash": "ask",
+        "edit": "ask",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "allow",
-        "edit": "ask",
-        "bash": "ask"
+        "read": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly."
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
+      "temperature": 0.2
+    },
+    "plan": {
+      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
+      "mode": "primary",
+      "model": "ollama/qwen3-4b:q8-256k",
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
+      "temperature": 0.25
+    },
+    "research": {
+      "description": "Research agent for company research, technical discovery, and structured findings.",
+      "mode": "primary",
+      "model": "ollama/qwen3-14b:q5-40k",
+      "permission": {
+        "bash": "deny",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.",
+      "temperature": 0.25
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
       "model": "openrouter/deepseek/deepseek-r1-tool-calling-32b",
-      "temperature": 0.3,
       "permission": {
-        "read": "allow",
+        "bash": "deny",
+        "edit": "deny",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "allow",
-        "edit": "deny",
-        "bash": "deny"
+        "read": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands."
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands.",
+      "temperature": 0.3
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
       "model": "ollama/qwen3.5:27b",
-      "temperature": 0.65,
       "permission": {
-        "read": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
+        "bash": "deny",
         "edit": "ask",
-        "bash": "deny"
-      },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials."
-    },
-    "research": {
-      "description": "Research agent for company research, technical discovery, and structured findings.",
-      "mode": "primary",
-      "model": "ollama/qwen3-14b:q5",
-      "temperature": 0.25,
-      "permission": {
-        "read": "allow",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "allow",
-        "edit": "ask",
-        "bash": "deny"
-      },
-      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`."
-    },
-    "plan": {
-      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
-      "mode": "primary",
-      "model": "ollama/qwen3-4b:q4",
-      "temperature": 0.25,
-      "permission": {
         "read": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
-        "edit": "deny",
-        "bash": "deny"
+        "webfetch": "allow"
       },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials.",
+      "temperature": 0.65
     }
-  }
+  },
+  "default_agent": "code",
+  "model": "ollama/qwen3.5:27b",
+  "permission": {
+    "bash": "ask",
+    "edit": "ask",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "read": "allow",
+    "webfetch": "allow"
+  },
+  "provider": {
+    "ollama": {
+      "models": {
+        "codestral:22b": {
+          "name": "Codestral 22B (code)"
+        },
+        "deepseek-r1-tools:14b-128k": {
+          "name": "DeepSeek R1 8B (reason+tools)"
+        },
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5B (autocomplete)"
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7B (fast code)"
+        },
+        "qwen3-14b:q5": {
+          "name": "Qwen3 14B Q5 (research)"
+        },
+        "qwen3-4b:q8-256k": {
+          "name": "Qwen3 4B Q4 (plan, fast)"
+        },
+        "qwen3-coder-30b:q5-32k": {
+          "name": "Qwen3-Coder 30B A3B (code)"
+        },
+        "qwen3.5:27b": {
+          "name": "Qwen3.5 27B (code #1 + write)"
+        },
+        "qwen3.6-35b:q4-128k": {
+          "name": "Qwen3.6 35B (128k) (general)"
+        },
+        "qwen3.6-35b:q4-32k": {
+          "name": "Qwen3.6 35B (32k) (general)"
+        },
+        "qwen3.6-35b:q4-8k": {
+          "name": "Qwen3.6 35B (8k) (general)"
+        }
+      },
+      "name": "Ollama (Local)",
+      "npm": "@ai-sdk/ollama",
+      "options": {
+        "baseURL": "http://localhost:11434"
+      }
+    },
+    "openrouter": {
+      "models": {
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        },
+        "mistralai/codestral": {
+          "name": "Codestral (code)"
+        },
+        "moonshot/kimi-k2.6": {
+          "name": "Kimi k2.6 (reasoning)"
+        },
+        "qwen/qwen3-14b": {
+          "name": "Qwen3 14B (research)"
+        },
+        "qwen/qwen3-4b": {
+          "name": "Qwen3 4B (fast, planning)"
+        }
+      },
+      "name": "OpenRouter (Cloud)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "env.OPENROUTER_API_KEY",
+        "baseURL": "https://openrouter.ai/api/v1"
+      }
+    }
+  },
+  "small_model": "ollama/qwen3-4b:q8-256k"
 }

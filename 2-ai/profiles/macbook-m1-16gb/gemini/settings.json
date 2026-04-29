@@ -6,10 +6,10 @@
                 "baseURL": "http://localhost:11434/v1"
             },
             "models": {
-                "qwen3:14b": {
+                "qwen3-14b:q4-40k": {
                     "name": "Qwen3 14B (general, 10 GB)"
                 },
-                "deepseek-r1-tools:8b": {
+                "deepseek-r1-tools:8b-128k": {
                     "name": "DeepSeek R1 Tool-Calling 8B (reason+tools, 5 GB)"
                 }
             }

@@ -36,9 +36,9 @@ model_list:
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
-  - model_name: deepseek-r1-tools-8b
+  - model_name: deepseek-r1-tools-8b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:8b
+      model: ollama_chat/deepseek-r1-tools:8b-128k
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1-8b
@@ -47,9 +47,9 @@ model_list:
       api_base: http://localhost:11434
 
   # --- Planning / fast ---
-  - model_name: qwen3-4b-q4
+  - model_name: qwen3-4b-q4-256k
     litellm_params:
-      model: ollama_chat/qwen3-4b:q4
+      model: ollama_chat/qwen3-4b:q4-256k
       api_base: http://localhost:11434
 
   # --- Embeddings ---
@@ -68,12 +68,12 @@ general_settings:
 
 router_settings:
   model_group_alias:
-    "gemini-2.5-pro":                       "qwen3-14b"
-    "gemini-2.5-flash":                     "qwen3-14b"
-    "gemini-2.5-flash-lite":                "qwen3-4b-q4"
-    "gemini-3-flash-preview":               "qwen3-14b"
-    "gemini-3-flash-preview-customtools":   "qwen3-14b"
-    "gemini-3-pro":                         "qwen3-14b"
-    "gemini-3-pro-customtools":             "qwen3-14b"
-    "gemini-3.1-pro-preview":               "qwen3-14b"
-    "gemini-3.1-pro-preview-customtools":   "qwen3-14b"
+    "gemini-2.5-pro": "qwen3-14b"
+    "gemini-2.5-flash": "qwen3-14b"
+    "gemini-2.5-flash-lite": "qwen3-4b-q4-256k"
+    "gemini-3-flash-preview": "qwen3-14b"
+    "gemini-3-flash-preview-customtools": "qwen3-14b"
+    "gemini-3-pro": "qwen3-14b"
+    "gemini-3-pro-customtools": "qwen3-14b"
+    "gemini-3.1-pro-preview": "qwen3-14b"
+    "gemini-3.1-pro-preview-customtools": "qwen3-14b"

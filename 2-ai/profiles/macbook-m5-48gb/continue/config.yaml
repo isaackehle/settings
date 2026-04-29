@@ -52,21 +52,21 @@ models:
   - name: "Qwen3.6 35B (8K)"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3.6:35b-8k"
+    model: "qwen3.6-35b:q4-8k"
     roles:
       - chat
 
   - name: "Qwen3.6 35B (32K)"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3.6:35b-32k"
+    model: "qwen3.6-35b:q4-32k"
     roles:
       - chat
 
   - name: "Qwen3.6 35B (128K)"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3.6:35b-128k"
+    model: "qwen3.6-35b:q4-128k"
     roles:
       - chat
 
@@ -79,10 +79,10 @@ models:
       - apply
 
   # Reasoning with tool calls
-  - name: "DeepSeek R1 Tool-Calling 8B"
+  - name: "DeepSeek R1 Tool-Calling 14B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "deepseek-r1-tools:8b"
+    model: "deepseek-r1-tools:14b-128k"
     roles:
       - chat
 
@@ -126,7 +126,7 @@ models:
   - name: "Qwen3 4B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-4b:q4"
+    model: "qwen3-4b:q8-256k"
     roles:
       - chat
 

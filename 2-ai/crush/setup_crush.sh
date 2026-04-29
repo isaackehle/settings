@@ -5,13 +5,13 @@ fi
 
 # Setup Crush
 setup_crush() {
-    print_info "Installing Crush..."
+    log_info "Installing Crush..."
 
     # Crush installation steps would go here
     # Currently placeholder as specific install method is not defined in crush.sh
 
-    print_info "Please manually configure Crush if necessary."
-    print_info "Documentation: https://github.com/crush-ai/crush"
+    log_info "Please manually configure Crush if necessary."
+    log_info "Documentation: https://github.com/crush-ai/crush"
 
     return 0
 }

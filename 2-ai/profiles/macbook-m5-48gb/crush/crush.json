@@ -32,7 +32,7 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-4b:q8",
+          "id": "qwen3-4b:q8-256k",
           "name": "Qwen3 4B (fast)",
           "context_window": 32768,
           "default_max_tokens": 4096
