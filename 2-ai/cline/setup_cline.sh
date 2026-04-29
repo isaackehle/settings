@@ -27,12 +27,12 @@ _install_cline_cli() {
 }
 
 verify_cline_cli() {
-    if command_exists "cline" && code --list-extensions 2>/dev/null | grep -q "saoudrizwan.claude-dev"; then
-        print_status "Cline cli installed"
+    if command_exists "cline"; then
+        print_status "Cline CLI installed"
         return 0
     fi
 
-    print_warning "Cline cli not found"
+    print_warning "Cline CLI not found"
     return 1
 }
 
@@ -52,7 +52,7 @@ _install_cline_extension() {
 }
 
 verify_cline_extension() {
-    if command_exists "code" && code --list-extensions 2>/dev/null | grep -q "saoudrizwan.claude-dev"; then
+    if check_vscode_extension "saoudrizwan.claude-dev" >/dev/null; then
         print_status "Cline VS Code extension installed"
         return 0
     fi

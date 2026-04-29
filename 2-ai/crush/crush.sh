@@ -15,4 +15,3 @@ log_info "Setting up Crush..."
 # TODO: Add Crush-specific installation/configuration steps here
 
 log_success "Crush setup complete."
-log_info "Note: update_models_sh() is available from helpers.sh for model updates."
