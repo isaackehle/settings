@@ -38,13 +38,13 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:32b",
+          "id": "deepseek-r1-tools:32b-128k",
           "name": "DeepSeek R1 Tools 32B",
           "context_window": 32768,
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools:14b",
+          "id": "deepseek-r1-tools:14b-128k",
           "name": "DeepSeek R1 Tools 14B",
           "context_window": 32768,
           "default_max_tokens": 8192

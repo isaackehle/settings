@@ -5,11 +5,11 @@
 # ==============================================
 #
 # NAMING CONVENTION (Jan 2026):
-#   Ollama:    model:quantization-context   (e.g., qwen3-coder-30b:q5-32k)
-#   LiteLLM:  model-quantization-context (e.g., qwen3-coder-30b-q5-32k)
+#   Ollama:    model:quantization-context   (e.g., qwen3-coder:q5-32k)
+#   LiteLLM:  model-quantization-context (e.g., qwen3-coder-q5-32k)
 #
 # The context size comes AFTER the quantization level.
-#   OLD: qwen3-coder-30b-32k:q5  →  NEW: qwen3-coder-30b:q5-32k
+#   OLD: qwen3-coder-32k:q5  →  NEW: qwen3-coder:q5-32k
 #
 # Example: qwen3-coder:q5-32k = Q5 quantization, 32K context window
 #
@@ -38,7 +38,6 @@
 # OPENROUTER VARIANTS (append to model ID):
 #   :free     → Free tier (rate-limited)
 #   :nitro    → Fastest provider
-#   :thinking → Extended chain-of-thought
 #   :online   → Web search grounding
 #   :extended → Longer context
 
@@ -53,66 +52,47 @@ OPENROUTER_MODELS=(
     "sonar-pro:cloud"                               # Perplexity Sonar
 )
 
-# M2 Max 32GB - Standard configuration
+# M2 Max 32GB - Standard configuration (local — pull with ollama)
 OLLAMA_MODELS=(
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     # PRIMARY MODELS (local — pull with ollama)
-    # ═══════════════════════════════════════════════════════════════════════════════
-
-    # --- Qwen 3 (14B) ---
-    "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters
+    # ═══════════════════════════════════════════════════════════════════════════════════════
 
     # --- DeepSeek R1 ---
-    "deepseek-r1:8b"                             # ~5 GB  | Reasoning, chat-only (no tools)
+    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+
+    # --- Qwen 3 (14B) ---
+    "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters (32k)
+
+    # --- Qwen 3 (4B) ---
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||" # ~3 GB | HF base (32k)
+    "qwen3-4b-2507:q4|qwen3-4b:q4||"                 # ~3 GB | Backward-compat alias / Planning fast (32k)
 
     # --- Codestral ---
-    "codestral:22b"                              # ~14 GB | Code apply/insert, light coding
+    "codestral:22b"                              # ~14 GB | Code apply/insert, light coding (32k)
 
     # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                            # ~5 GB  | Fast code tasks
-    "qwen2.5-coder:1.5b"                         # ~1 GB  | Autocomplete
-
-    # --- Embeddings ---
-    "nomic-embed-text"                            # ~0.3 GB| Embeddings (Continue/RAG)
+    "qwen2.5-coder:7b"                            # ~5 GB  | Fast code tasks (32k)
+    "qwen2.5-coder:1.5b"                         # ~1 GB  | Autocomplete (32k)
 
     # --- GPT-OSS ---
-    "gpt-oss:latest"                              # ~14 GB  | General purpose
-    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding
+    "gpt-oss:latest"                              # ~14 GB  | General purpose (32k)
+    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding (32k)
 
+    # --- Embeddings ---
+    "nomic-embed-text"                            # ~0.3 GB| Embeddings (Continue/RAG) (8k)
 
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
-    # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════════════
     "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
     "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
     "mistral-large-3:675b-cloud"                           # Mistral Large
     "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
     "gpt-oss:20b-cloud"                            # GPT-OSS 20B Cloud
     "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
-)
-
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # HF base aliases must come before derived aliases that reference them.
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||"                 # ~3 GB
-
-    # ═══════════════════════════════════════════
-    # BACKWARD-COMPAT ALIASES
-    # ═══════════════════════════════════════════
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"
-
-    # ═══════════════════════════════════════════
-    # COMMUNITY MODEL ALIASES
-    # ═══════════════════════════════════════════
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
+    "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
 )
 
 # ----------------------------------------------
@@ -123,7 +103,7 @@ declare -A OPENCODE_AGENTS=(
     [think]="deepseek-r1-tools:8b"                                # tradeoff analysis, debugging strategy, scoring
     [write]="qwen3-14b"                                         # resumes, cover letters, docs, polished prose
     [research]="qwen3-14b"                                      # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b:q4"                                      # next steps, task breakdown, routing
+    [plan]="qwen3-4b:q4"                                          # next steps, task breakdown, routing
 )
 
 # ----------------------------------------------
@@ -147,8 +127,8 @@ CLINE_MODEL="qwen3-14b"
 # Claude Code
 # ----------------------------------------------
 CLAUDE_CODE_SONNET="qwen3-14b"            # ANTHROPIC_DEFAULT_SONNET_MODEL
-CLAUDE_CODE_HAIKU="qwen3-4b:q4"        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
-CLAUDE_CODE_OPUS="codestral:22b"         # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+CLAUDE_CODE_HAIKU="qwen3-4b:q4"                        # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning, routing
+CLAUDE_CODE_OPUS="codestral:22b"             # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
 
 
 # ----------------------------------------------
@@ -156,7 +136,7 @@ CLAUDE_CODE_OPUS="codestral:22b"         # ANTHROPIC_DEFAULT_OPUS_MODEL — larg
 # ----------------------------------------------
 #   ollama list                                 all installed models
 #   ollama ps                                   currently loaded + memory usage
-#   ollama run qwen3-14b                        interactive shell with model
+#   ollama run <model>                          interactive shell with model
 #   ollama stop <model>                         force-unload to free memory
 #   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins
 # ----------------------------------------------

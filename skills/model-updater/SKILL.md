@@ -41,7 +41,7 @@ Read `scripts/models.sh` from the settings repo. Extract:
   - `alias` — the local Ollama name that will be created (e.g., `qwen3.6-35b-a3b:q5`)
   - `num_ctx` — optional context override (e.g., `32768`); empty means Ollama default
 
-Also read the per-machine `MODELS.md` files (e.g., `scripts/macbook-m5-48gb/MODELS.md`) to understand
+Also read the per-machine `models.sh` files (e.g., `scripts/macbook-m5-48gb/models.sh`) to understand
 what's currently documented as installed and to compare with any discovered upgrades.
 
 If the user specifies a profile, focus there. Otherwise check all profiles.
@@ -153,7 +153,7 @@ Write a focused report. Do not overwhelm — if nothing meaningful has changed, 
 - **[role]**: replace `current-model` → `new-model`
   - Why: [brief reason — benchmark improvement, newer architecture, smaller size]
   - RAM: [estimated footprint]
-  - Changes needed: models.sh · MODELS.md
+  - Changes needed: models.sh
 
 #### 🆕 New models worth evaluating
 - **model-name** ([size], [quant])
@@ -206,9 +206,9 @@ a profile bump), also update:
 - All derived alias entries in the same array
 - The role mapping variables (`CLAUDE_CODE_SONNET_48GB`, `OPENCODE_AGENTS`, etc.)
 
-### 2. Update the relevant `MODELS.md` matrix
+### 2. Update the relevant `models.sh` matrix
 
-Each machine has a `config/<machine>/MODELS.md` with the Model Matrix table. Update:
+Each machine has a `profiles/<machine>/models.sh` with the Model Matrix table. Update:
 
 - The **Source** row: new HF URL or Ollama model path
 - The **RAM loaded** row: if the new quant changes memory footprint
@@ -242,7 +242,7 @@ the installed stack was reviewed and verified, not just when the documentation w
 
 After presenting the report, offer to:
 
-1. Apply the upgrade (both files — models.sh + MODELS.md, including the `Models last updated:` date) — show a diff first.
+1. Apply the upgrade (both files — models.sh, including the `Models last updated:` date) — show a diff first.
 2. Run `llmfit` on each candidate if available.
 3. Re-run the install: `bash docs/02 - AI/install-models.sh` → select profile.
 4. Verify with `ollama list` and `ollama ps` after pulling.

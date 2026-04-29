@@ -31,9 +31,15 @@ load_profile_models() {
 # INSTALL FUNCTIONS
 # ==============================================
 
-# Pull direct Ollama models for a profile.
+# Pulls Ollama models and creates custom aliases for a profile.
+#
+# Entry formats:
+#   "model"                       -> Direct pull
+#   "source|alias"                -> Pull source, create alias
+#   "source|alias|num_ctx"         -> Pull source, create alias with context override
+#
 # $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
-install-models() {
+install_ollama_models() {
     local profile_name="$1"
     local arr_name="$2"
     local -a _models
@@ -45,134 +51,103 @@ install-models() {
 
     local -a passed=()
     local -a failed=()
-    local model
+    local -a pulled_sources=()
+    local -a created_aliases=()
+    local entry
 
-    for model in "${_models[@]}"; do
+    for entry in "${_models[@]}"; do
         # Skip cloud models
-        if [[ "$model" == *":cloud" ]]; then
-            echo "☁ Skipping cloud model: $model"
+        if [[ "$entry" == *":cloud" ]]; then
+            echo "☁ Skipping cloud model: $entry"
             continue
         fi
 
-        # Check if model already exists locally to avoid pulling aliases
-        if ollama list "$model" 2>/dev/null | grep -q "$model"; then
-            echo "✅ Already installed: $model"
-            passed+=("$model")
+        if [[ "$entry" == *"|"* ]]; then
+            # --- Custom Model / Alias Logic ---
+            IFS='|' read -r source alias_name num_ctx <<< "$entry"
+
+            # Determine if source is a local alias we already created this run
+            local is_local=0
+            local a
+            for a in "${created_aliases[@]}"; do
+                [[ "$a" == "$source" ]] && is_local=1 && break
+            done
+
+            # Pull remote source once (skip if local alias or already pulled)
+            local pull_success=1
+            if (( !is_local )); then
+                local already_pulled=0
+                local s
+                for s in "${pulled_sources[@]}"; do
+                    [[ "$s" == "$source" ]] && already_pulled=1 && break
+                done
+                if (( !already_pulled )); then
+                    echo "▶ Pulling source: $source"
+                    if ollama pull "$source"; then
+                        pulled_sources+=("$source")
+                        pull_success=0
+                    else
+                        pull_success=1
+                    fi
+                    echo ""
+                else
+                    pull_success=0
+                fi
+            else
+                pull_success=0
+            fi
+
+            # Write temp Modelfile, create alias, clean up
+            local create_success=1
+            if (( pull_success == 0 )); then
+                local tmp_mf
+                tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
+                printf 'FROM %s\n' "$source" > "$tmp_mf"
+                [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
+
+                echo "▶ Creating alias: $alias_name"
+                if ollama create "$alias_name" -f "$tmp_mf"; then
+                    create_success=0
+                fi
+                rm -f "$tmp_mf"
+            else
+                echo "⚠ Skipping alias creation for $alias_name due to pull failure of $source"
+            fi
+
+            if (( create_success == 0 )); then
+                passed+=("$alias_name")
+                created_aliases+=("$alias_name")
+            else
+                failed+=("$alias_name")
+            fi
             echo ""
-            continue
-        fi
-
-        echo "▶ Installing: $model"
-        if ollama pull "$model"; then
-            passed+=("$model")
         else
-            failed+=("$model")
+            # --- Direct Model Logic ---
+            if ollama list "$entry" 2>/dev/null | grep -q "$entry"; then
+                echo "✅ Already installed: $entry"
+                passed+=("$entry")
+                echo ""
+                continue
+            fi
+
+            echo "▶ Installing: $entry"
+            if ollama pull "$entry"; then
+                passed+=("$entry")
+            else
+                failed+=("$entry")
+            fi
+            echo ""
         fi
-        echo ""
     done
 
     echo "===================================================="
     echo "Installation Summary for $profile_name:"
-    echo "✅ Passed: ${passed[*]:-none}"
-    echo "❌ Failed: ${failed[*]:-none}"
+    echo "✅ Passed:"
+    [[ ${#passed[@]} -eq 0 ]] && echo "  none" || printf '  - %s\n' "${passed[@]}"
+    echo "❌ Failed:"
+    [[ ${#failed[@]} -eq 0 ]] && echo "  none" || printf '  - %s\n' "${failed[@]}"
     echo "===================================================="
     echo "✅ Installation process complete for $profile_name"
-}
-
-# Install custom models that require pull + ollama create via Modelfile.
-#
-# Entry format: "source|alias_name|num_ctx"
-#   source     — HF URL (hf.co/...), Ollama Hub model, or a previously-created
-#                local alias (no pull needed for local aliases)
-#   alias_name — the short name to register with Ollama
-#   num_ctx    — optional context size override; empty = Ollama model default
-#
-# Modelfiles are written to a temp file and deleted after each alias is created.
-# Entries that derive from a local alias (created earlier in the same array) are
-# recognised automatically — no network pull is attempted for them.
-# $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
-install_custom_models() {
-    local profile_name="$1"
-    local arr_name="$2"
-    local -a _custom
-    eval "_custom=(\"\${${arr_name}[@]}\")"
-    local -a pulled_sources=()
-    local -a created_aliases=()
-    local -a passed=()
-    local -a failed=()
-
-    echo "Creating custom model aliases for $profile_name..."
-    echo "===================================================="
-    echo ""
-
-    local entry source alias_name num_ctx thinking_mode
-    for entry in "${_custom[@]}"; do
-        IFS='|' read -r source alias_name num_ctx thinking_mode <<< "$entry"
-
-        # Determine if source is a local alias we already created this run
-        local is_local=0
-        local a
-        for a in "${created_aliases[@]}"; do
-            [[ "$a" == "$source" ]] && is_local=1 && break
-        done
-
-        # Pull remote source once (skip if local alias or already pulled)
-        local pull_success=1
-        if (( !is_local )); then
-            local already_pulled=0
-            local s
-            for s in "${pulled_sources[@]}"; do
-                [[ "$s" == "$source" ]] && already_pulled=1 && break
-            done
-            if (( !already_pulled )); then
-                echo "▶ Pulling: $source"
-                if ollama pull "$source"; then
-                    pulled_sources+=("$source")
-                    pull_success=0
-                else
-                    pull_success=1
-                fi
-                echo ""
-            else
-                pull_success=0
-            fi
-        else
-            pull_success=0
-        fi
-
-        # Write temp Modelfile, create alias, clean up
-        local create_success=1
-        if (( pull_success == 0 )); then
-            local tmp_mf
-            tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
-            printf 'FROM %s\n' "$source" > "$tmp_mf"
-            [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
-
-            echo "▶ Creating alias: $alias_name"
-            if ollama create "$alias_name" -f "$tmp_mf"; then
-                create_success=0
-            fi
-            rm -f "$tmp_mf"
-        else
-            echo "⚠ Skipping alias creation for $alias_name due to pull failure of $source"
-        fi
-
-        if (( create_success == 0 )); then
-            passed+=("$alias_name")
-            created_aliases+=("$alias_name")
-        else
-            failed+=("$alias_name")
-        fi
-        echo ""
-    done
-
-    echo "===================================================="
-    echo "Custom Alias Summary for $profile_name:"
-    echo "✅ Passed: ${passed[*]:-none}"
-    echo "❌ Failed: ${failed[*]:-none}"
-    echo "===================================================="
-    echo "✅ Custom aliases complete for $profile_name"
-    echo ""
 }
 
 # ==============================================
@@ -180,33 +155,33 @@ install_custom_models() {
 # ==============================================
 
 # Remove Ollama models that are installed but not part of the given profile.
-# Takes the same direct-models array and custom-models array that install uses,
-# so it knows exactly what "should" be present.
 #
-# Usage: prune_models "M5 Max 64GB" MODELS_M5_64GB CUSTOM_MODELS_64GB
-# $1 = profile label  $2 = direct array name  $3 = custom array name (bash 3.2 compat)
+# Usage: prune_models "M5 Max 64GB" OLLAMA_MODELS
+# $1 = profile label  $2 = model array name (bash 3.2 compat)
 prune_models() {
     local profile_name="$1"
-    local direct_name="$2"
-    local custom_name="$3"
-    local -a _direct _custom
-    eval "_direct=(\"\${${direct_name}[@]}\")"
-    eval "_custom=(\"\${${custom_name}[@]}\")"
+    local arr_name="$2"
+    local -a _models
+    eval "_models=(\"\${${arr_name}[@]}\")"
 
     # Build the full set of expected model names for this profile
     local -a expected=()
-    local m entry _src alias_name _ctx
-    for m in "${_direct[@]}"; do
-        expected+=("$m")
-        expected+=("${m}:latest")  # Ollama appends :latest to untagged names
-    done
-    for entry in "${_custom[@]}"; do
-        IFS='|' read -r _src alias_name _ctx <<< "$entry"
-        # Keep both the source (HF pull / community model) and the created alias
-        expected+=("$_src")
-        expected+=("${_src}:latest")
-        expected+=("$alias_name")
-        expected+=("${alias_name}:latest")
+    local entry _src alias_name _ctx
+    for entry in "${_models[@]}"; do
+        # Skip cloud models from expected list
+        [[ "$entry" == *":cloud" ]] && continue
+
+        if [[ "$entry" == *"|"* ]]; then
+            IFS='|' read -r _src alias_name _ctx <<< "$entry"
+            # Keep both the source (HF pull / community model) and the created alias
+            expected+=("$_src")
+            expected+=("${_src}:latest")
+            expected+=("$alias_name")
+            expected+=("${alias_name}:latest")
+        else
+            expected+=("$entry")
+            expected+=("${entry}:latest")  # Ollama appends :latest to untagged names
+        fi
     done
 
     # Get currently installed models (name column only, skip header)
@@ -327,20 +302,18 @@ install_coding_assistants() {
     case $action in
         1)
             print_step "Installing models for $profile_name"
-            install-models "$profile_name" OLLAMA_MODELS
-            install_custom_models "$profile_name" CUSTOM_MODELS
+            install_ollama_models "$profile_name" OLLAMA_MODELS
             ;;
         2)
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" OLLAMA_MODELS CUSTOM_MODELS
+            prune_models "$profile_name" OLLAMA_MODELS
             ;;
         3)
             print_step "Installing models for $profile_name"
-            install-models "$profile_name" OLLAMA_MODELS
-            install_custom_models "$profile_name" CUSTOM_MODELS
+            install_ollama_models "$profile_name" OLLAMA_MODELS
             echo ""
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" OLLAMA_MODELS CUSTOM_MODELS
+            prune_models "$profile_name" OLLAMA_MODELS
             ;;
         *)
             echo "Invalid action."

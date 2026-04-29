@@ -30,10 +30,10 @@
         "qwen3.6:35b-8k": {
           "name": "Qwen3.6 35B (general)"
         },
-        "deepseek-r1-tools:32b": {
+        "deepseek-r1-tools:32b-128k": {
           "name": "DeepSeek R1 Tool-Calling 32B (local)"
         },
-        "deepseek-r1-tools:14b": {
+        "deepseek-r1-tools:14b-128k": {
           "name": "DeepSeek R1 Tool-Calling 14B (local)"
         }
       }

@@ -8,139 +8,111 @@
         "baseURL": "https://openrouter.ai/api/v1",
         "apiKey": "env.OPENROUTER_API_KEY",
       },
-"models": {
+      "models": {
         // --- Qwen3 Coder Next (80B) — NEW Jan 2026 ---
         "qwen3-coder-next-80b:q4": {
           "name": "Qwen 3 Coder Next 80B",
-          "limit": { "context": 8192 }
+          "limit": {
+            "context": 8192,
+          },
         },
         "qwen3-coder-next-80b:q4-16k": {
           "name": "Qwen 3 Coder Next 80B, 16k context",
-          "limit": { "context": 16384, "output": 4096 }
+          "limit": {
+            "context": 16384,
+            "output": 4096,
+          },
         },
         "qwen3-coder-next-80b:q4-64k": {
           "name": "Qwen 3 Coder Next 80B, 64k context",
-          "limit": { "context": 65536 }
+          "limit": {
+            "context": 65536,
+          },
         },
         // --- Qwen3.5 (27B) ---
         "qwen3.5:27b": {
-          "name": "Qwen 3.5 27B (code #1 + write+vision)"
+          "name": "Qwen 3.5 27B (code #1 + write+vision)",
         },
         // --- Qwen3.6 (35B) ---
         "qwen3.6:35b-8k": {
-          "name": "Qwen3.6 35B, 8k context"
+          "name": "Qwen3.6 35B, 8k context",
         },
         "qwen3.6:35b-128k": {
           "name": "Qwen3.6 35B 128k (code, solo only)",
-          "limit": { "context": 131072 }
+          "limit": {
+            "context": 131072,
+          },
         },
         // --- Qwen3 Coder 30B (A3B) ---
         "qwen3-coder-30b:q6-32k": {
           "name": "Qwen3-Coder 30B A3B 32k (code)",
-          "limit": { "context": 32768 }
+          "limit": {
+            "context": 32768,
+          },
         },
-        "qwen3-coder-30b:q6-220k": {
+        "qwen3-coder-30b:q6-128k": {
           "name": "Qwen3-Coder 30B A3B 220k (large ctx)",
-          "limit": { "context": 220000 }
+          "limit": {
+            "context": 220000,
+          },
         },
         // --- DeepSeek R1 ---
         "deepseek-r1:14b": {
-          "name": "DeepSeek R1 14B"
+          "name": "DeepSeek R1 14B",
         },
-        "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B"
-        },
-        "deepseek-r1-tools:32b": {
-          "name": "DeepSeek R1 Tool-Calling 32B"
+        "deepseek-r1-tools:14b-128k": {
+          "name": "DeepSeek R1 Tool-Calling 14B",
         },
         // --- Qwen3 32B / 14B ---
-        "qwen3-32b:q5": {
-          "name": "Qwen3 32B Q5 (research)"
-        },
-        "qwen3-14b:q8": {
-          "name": "Qwen3 14B Q8 (research)"
-        },
         "qwen3-14b:q5": {
-          "name": "Qwen3 14B Q5 (research)"
+          "name": "Qwen3 14B Q5 (research)",
         },
         // --- Qwen3 4B ---
         "qwen3-4b:q8": {
-          "name": "Qwen3 4B Q8 (plan)"
+          "name": "Qwen3 4B Q8 (plan)",
         },
         "qwen3-4b:q4": {
-          "name": "Qwen3 4B Q4 (plan, fast)"
+          "name": "Qwen3 4B Q4 (plan, fast)",
         },
         // --- Gemma 4 ---
         "gemma4:31b": {
-          "name": "Gemma 4 31B"
+          "name": "Gemma 4 31B",
         },
         // --- Gemma 3 ---
         "gemma3:12b": {
-          "name": "Gemma 3 12B"
+          "name": "Gemma 3 12B",
         },
         // --- GLM ---
         "glm-4.7-flash": {
-          "name": "GLM-4.7 Flash"
+          "name": "GLM-4.7 Flash",
         },
         // --- Phi-4 ---
         "phi4": {
-          "name": "Phi-4"
+          "name": "Phi-4",
         },
         // --- Codestral ---
         "codestral:22b": {
-          "name": "Codestral 22B"
-        },
-        "codestral-22b-v0.1:q8_0": {
-          "name": "Codestral 22B Q8 (code apply/insert)"
+          "name": "Codestral 22B",
         },
         // --- Llama ---
         "llama3.3:70b": {
-          "name": "Llama 3.3 70B (solo only)"
+          "name": "Llama 3.3 70B (solo only)",
         },
         "llama3.2": {
-          "name": "Llama 3.2"
-        },
-        // --- Qwen 2.5 Coder ---
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7B"
-        },
-        "qwen2.5-coder:1.5b": {
-          "name": "Qwen2.5 Coder 1.5B (autocomplete)"
+          "name": "Llama 3.2",
         },
         // --- Cloud ---
         "kimi-k2.6:cloud": {
-          "name": "Kimi k2.6 Cloud"
+          "name": "Kimi k2.6 Cloud",
         },
         // --- Embeddings ---
         "nomic-embed-text": {
-          "name": "Nomic Embed (embeddings)"
-        },
-      },
-        "qwen3-coder-next-80b:q4": {
-          "name": "Qwen 3 Coder Next 80B",
-        },
-        "qwen3-coder-next-80b:q4-16k": {
-          "name": "Qwen 3 Coder Next 80B, 16k context",
-        },
-        "qwen3-coder-next-80b:q4-64k": {
-          "name": "Qwen 3 Coder Next 80B, 64k context",
-        },
-        "qwen3.6:35b-128k": {
-          "name": "Qwen3.6 35B 128k (code,  solo only)",
+          "name": "Nomic Embed (embeddings)",
         },
         "qwen3.6:35b-24k": {
           "name": "Qwen3.6 35B 24k (code, agentic)",
         },
-        "qwen3-coder-30b:q6-32k": {
-          "name": "Qwen3-Coder 30B A3B 32k (code, default)",
-        },
-        "qwen3-coder-30b:q6-220k": {
-          "name": "Qwen3-Coder 30B A3B 220k (code, large ctx)",
-        },
-        "qwen3-4b:q8": {
-          "name": "Qwen3 4B Q8 (plan, fast)",
-        },
-        "codestral-22b-v0.1:q8_0": {
+        "codestral-22b-q8-32k": {
           "name": "Codestral 22B Q8 (code apply/insert, 23 GB)",
         },
         "qwen2.5-coder:7b": {
@@ -149,11 +121,8 @@
         "qwen2.5-coder:1.5b": {
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)",
         },
-        "deepseek-r1-tools:32b": {
+        "deepseek-r1-tools:32b-128k": {
           "name": "DeepSeek R1 Tool-Calling 32B (reason+tools, 20 GB)",
-        },
-        "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (reason+tools, 10 GB)",
         },
         "qwen3-32b:q5": {
           "name": "Qwen3 32B Q5 (research, 22 GB)",
@@ -161,20 +130,11 @@
         "qwen3-14b:q8": {
           "name": "Qwen3 14B Q8 (research, 15 GB)",
         },
-        "qwen3.5:27b": {
-          "name": "Qwen 3.5 27B Q3 (code #1 + write+vision, 5.0% err, 20 GB)",
-        },
         "qwen3.5:27b:q5-8k": {
           "name": "Qwen 3.5 27B Q3, 8k context",
         },
         "qwen3.5:27b:q5-32k": {
           "name": "Qwen 3.5 27B Q3, 32k context",
-        },
-        "llama3.3:70b": {
-          "name": "Llama 3.3 70B (general, solo only, 43 GB)",
-        },
-        "kimi-k2.6:cloud": {
-          "name": "Kimi k2.6 Cloud (reasoning, cloud)",
         },
       },
     },

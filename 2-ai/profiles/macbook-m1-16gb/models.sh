@@ -38,7 +38,6 @@
 # OPENROUTER VARIANTS (append to model ID):
 #   :free     → Free tier (rate-limited)
 #   :nitro    → Fastest provider
-#   :thinking → Extended chain-of-thought
 #   :online   → Web search grounding
 #   :extended → Longer context
 
@@ -58,16 +57,20 @@ OLLAMA_MODELS=(
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks
-    "qwen2.5-coder:1.5b"                          # ~1 GB   | Autocomplete
+    # --- DeepSeek R1 ---
+    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base tool calling / Tool calling alias (128k)
 
-    # --- Embeddings ---
-    "nomic-embed-text"                            # ~0.3 GB | Embeddings (Continue/RAG)
+    # --- Qwen 2.5 Coder ---
+    "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks (32k)
+    "qwen2.5-coder:1.5b"                          # ~1 GB   | Autocomplete (32k)
 
     # --- GPT-OSS ---
-    "gpt-oss:latest"                              # ~14 GB  | General purpose
-    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding
+    "gpt-oss:latest"                              # ~14 GB  | General purpose (32k)
+    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding (32k)
+
+    # --- Embeddings ---
+    "nomic-embed-text"                            # ~0.3 GB | Embeddings (Continue/RAG) (8k)
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
@@ -78,21 +81,8 @@ OLLAMA_MODELS=(
     "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
     "gpt-oss:20b-cloud"                            # GPT-OSS 20B Cloud
     "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
+    "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
 )
-
-# ==============================================
-# CUSTOM MODEL DEFINITIONS (pull base + ollama create)
-# ==============================================
-CUSTOM_MODELS=(
-    # Format: "source|alias|num_ctx"
-    # ollama pull is idempotent — re-running won't re-download if already cached.
-
-    # ═══════════════════════════════════════════
-    # HF BASE MODELS/ALIASES
-    # ═══════════════════════════════════════════
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB
-)
-
 
 # ----------------------------------------------
 # opencode
