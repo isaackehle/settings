@@ -59,15 +59,15 @@ OLLAMA_MODELS=(
 
     # --- Qwen 3.6 (35B) ---
     "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6:35b-256k" # ~35 GB | HF base (128k)
-    "qwen3.6:35b|qwen3.6:35b-8k|8192|"
-    "qwen3.6:35b|qwen3.6:35b-32k|32768|"
-    "qwen3.6:35b|qwen3.6:35b-128k|131072|"
+    "qwen3.6:35b|qwen3.6:35b-8k|8192"
+    "qwen3.6:35b|qwen3.6:35b-32k|32768"
+    "qwen3.6:35b|qwen3.6:35b-128k|131072"
 
     # --- Qwen 3 Coder 30B (A3B) ---
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-q5_K_XL|qwen3-coder-30b-a3b:q5-256k" # ~21 GB | HF base (256k)
-    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-8k|8192|"
-    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-32k|32768|"
-    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-128k|131072|"
+    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-8k|8192"
+    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-32k|32768"
+    "qwen3-coder-30b-a3b:q5-256k|qwen3-coder-30b:q5-128k|131072"
 
 
     # --- Qwen 3.5 (27B) ---
@@ -75,14 +75,14 @@ OLLAMA_MODELS=(
 
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                               # ~5 GB  | Reasoning (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base (128k)
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b" # ~5 GB | HF base (128k)
 
     # --- Qwen 3 (14B) ---
-    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5||"        # ~12 GB | HF base / Research (32k)
+    "dengcao/Qwen3-14B:Q5_K_M|qwen3-14b:q5"        # ~12 GB | HF base / Research (32k)
 
     # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||" # ~3 GB | HF base (32k)
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"                 # ~3 GB | Backward-compat / Planning fast (32k)
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4" # ~3 GB | HF base (32k)
+    "qwen3-4b-2507:q4|qwen3-4b:q4"                 # ~3 GB | Backward-compat / Planning fast (32k)
 
     # --- Codestral ---
     "codestral:22b"                                 # ~14 GB | Code (32k)

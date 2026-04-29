@@ -60,14 +60,14 @@ OLLAMA_MODELS=(
 
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b||" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    "mfdoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b" # ~5 GB | HF base tool calling / Tool calling alias (128k)
 
     # --- Qwen 3 (14B) ---
     "qwen3-14b"                                  # ~9 GB  | Writing, docs, cover letters (32k)
 
     # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4||" # ~3 GB | HF base (32k)
-    "qwen3-4b-2507:q4|qwen3-4b:q4||"                 # ~3 GB | Backward-compat alias / Planning fast (32k)
+    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_M|qwen3-4b-2507:q4" # ~3 GB | HF base (32k)
+    "qwen3-4b-2507:q4|qwen3-4b:q4"                 # ~3 GB | Backward-compat alias / Planning fast (32k)
 
     # --- Codestral ---
     "codestral:22b"                              # ~14 GB | Code apply/insert, light coding (32k)

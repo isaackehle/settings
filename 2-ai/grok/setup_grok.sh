@@ -1,7 +1,6 @@
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
 fi
-. "${SETTINGS_BASE}/utils.sh"
 . "${SETTINGS_BASE}/helpers.sh"
 
 # Install and configure Grok CLI (@vibe-kit/grok-cli)
@@ -64,9 +63,9 @@ EOF
 
     print_info ""
     print_info "=== Grok CLI usage ==="
-    print_info "Start:   grok"
+    print_info "Start:    grok"
     print_info "Provider: LiteLLM (http://localhost:4000/v1)"
-    print_info "Repo:    https://github.com/superagent-ai/grok-cli"
+    print_info "Repo:     https://github.com/superagent-ai/grok-cli"
     print_info ""
 }
 

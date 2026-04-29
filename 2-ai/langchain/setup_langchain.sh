@@ -1,7 +1,6 @@
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
 fi
-. "${SETTINGS_BASE}/utils.sh"
 . "${SETTINGS_BASE}/helpers.sh"
 
 # Install LangChain Python package for building LLM-powered applications.

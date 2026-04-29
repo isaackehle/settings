@@ -6,7 +6,6 @@ set -euo pipefail
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
 fi
-. "${SETTINGS_BASE}/utils.sh"
 . "${SETTINGS_BASE}/helpers.sh"
 
 setup_claude() {
@@ -21,7 +20,7 @@ setup_claude() {
     fi
 
     # Configuration
-    # Note: Claude Code primarily uses a central config; tool-specific 
+    # Note: Claude Code primarily uses a central config; tool-specific
     # settings are managed via swap-models.sh when changing models.
     log_success "Claude Code setup complete."
 }
