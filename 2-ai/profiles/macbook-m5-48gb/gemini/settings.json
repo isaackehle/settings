@@ -6,8 +6,14 @@
                 "baseURL": "http://localhost:11434/v1"
             },
             "models": {
+                "qwen3-32b:q5": {
+                    "name": "Qwen3 32B Q5 (research, 22 GB)"
+                },
+                "qwen3-14b:q8-40k": {
+                    "name": "Qwen3 14B Q8 (research, 16 GB)"
+                },
                 "qwen3-14b:q5-40k": {
-                    "name": "Qwen3 14B Q5 (research, 12 GB)"
+                    "name": "Qwen3 14B Q8 (research, 11 GB)"
                 },
                 "qwen3.5:27b": {
                     "name": "Qwen3.5 27B (general, 20 GB)"

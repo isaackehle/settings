@@ -12,45 +12,39 @@ model_list:
       max_tokens: 4096
       num_ctx: 32768
 
-  - model_name: gemma4-31b-cloud
-    litellm_params:
-      model: ollama_chat/gemma4:31b-cloud
-      api_base: http://localhost:11434
-      max_tokens: 4096
-      num_ctx: 32768
-
   # --- General / coding ---
-  - model_name: qwen3-14b
+  - model_name: qwen3.5-27b-q5-256k
     litellm_params:
-      model: ollama_chat/qwen3:14b
+      model: ollama_chat/qwen3.5-27b-q5-256k
+      api_base: http://localhost:11434
+      num_ctx: 262144
+
+  - model_name: qwen3-14b-q5-40k
+    litellm_params:
+      model: ollama_chat/qwen3-14b-q5-40k
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-7b
     litellm_params:
-      model: ollama_chat/qwen2.5-coder:7b
+      model: ollama_chat/qwen2.5-coder-7b
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-1.5b
     litellm_params:
-      model: ollama_chat/qwen2.5-coder:1.5b
+      model: ollama_chat/qwen2.5-coder-1.5b
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
   - model_name: deepseek-r1-tools-8b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:8b-128k
+      model: ollama_chat/deepseek-r1-tools-8b-128k
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1-8b
     litellm_params:
-      model: ollama_chat/deepseek-r1:8b
+      model: ollama_chat/deepseek-r1-8b
       api_base: http://localhost:11434
 
-  # --- Planning / fast ---
-  - model_name: qwen3-4b-q4-256k
-    litellm_params:
-      model: ollama_chat/qwen3-4b:q4-256k
-      api_base: http://localhost:11434
 
   # --- Embeddings ---
   - model_name: nomic-embed-text
@@ -68,12 +62,12 @@ general_settings:
 
 router_settings:
   model_group_alias:
-    "gemini-2.5-pro": "qwen3-14b"
-    "gemini-2.5-flash": "qwen3-14b"
-    "gemini-2.5-flash-lite": "qwen3-4b-q4-256k"
-    "gemini-3-flash-preview": "qwen3-14b"
-    "gemini-3-flash-preview-customtools": "qwen3-14b"
-    "gemini-3-pro": "qwen3-14b"
-    "gemini-3-pro-customtools": "qwen3-14b"
-    "gemini-3.1-pro-preview": "qwen3-14b"
-    "gemini-3.1-pro-preview-customtools": "qwen3-14b"
+    "gemini-2.5-pro": "qwen3-14b-q5-40k"
+    "gemini-2.5-flash": "qwen3-14b-q5-40k"
+    "gemini-2.5-flash-lite": "qwen3-14b-q5-40k"
+    "gemini-3-flash-preview": "qwen3-14b-q5-40k"
+    "gemini-3-flash-preview-customtools": "qwen3-14b-q5-40k"
+    "gemini-3-pro": "qwen3-14b-q5-40k"
+    "gemini-3-pro-customtools": "qwen3-14b-q5-40k"
+    "gemini-3.1-pro-preview": "qwen3-14b-q5-40k"
+    "gemini-3.1-pro-preview-customtools": "qwen3-14b-q5-40k"

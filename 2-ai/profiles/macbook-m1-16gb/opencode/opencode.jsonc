@@ -27,6 +27,12 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
+        "qwen3.5-27b:q5-256k": {
+          "name": "Qwen3.5 27B (high quality)"
+        },
+        "qwen3-14b:q4-40k": {
+          "name": "Qwen3 14B (fast, planning)"
+        },
         "qwen2.5-coder:7b": {
           "name": "Qwen2.5 Coder 7B (code, 5 GB)"
         },
@@ -36,8 +42,8 @@
         "deepseek-r1-tools:8b-128k": {
           "name": "DeepSeek R1 8B (reason+tools, 5 GB)"
         },
-        "qwen3-4b:q4-256k": {
-          "name": "Qwen3 4B (fast, planning)"
+        "deepseek-r1:8b": {
+          "name": "DeepSeek R1 8B (reasoning, 5 GB)"
         },
         "nomic-embed-text": {
           "name": "Nomic Embed Text (embeddings)"
@@ -61,7 +67,7 @@
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "ollama/qwen3.5-27b:q5-256k",
       "temperature": 0.2,
       "permission": {
         "read": "allow",
@@ -93,7 +99,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "ollama/qwen3.5-27b:q5-256k",
       "temperature": 0.65,
       "permission": {
         "read": "allow",
@@ -109,7 +115,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen2.5-coder:7b",
+      "model": "ollama/qwen3.5-27b:q5-256k",
       "temperature": 0.25,
       "permission": {
         "read": "allow",

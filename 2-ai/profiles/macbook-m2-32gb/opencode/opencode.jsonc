@@ -4,7 +4,7 @@
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "mode": "primary",
-      "model": "ollama/qwen3-14b",
+      "model": "ollama/qwen3-14b:q5-40k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -36,7 +36,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-14b",
+      "model": "ollama/qwen3-14b:q5-40k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -68,7 +68,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3-14b",
+      "model": "ollama/qwen3-14b:q5-40k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -87,7 +87,7 @@
     "context": 32768,
     "output": 4096
   },
-  "model": "ollama/qwen3-14b",
+  "model": "ollama/qwen3-14b:q5-40k",
   "permission": {
     "bash": "ask",
     "edit": "ask",
@@ -112,7 +112,7 @@
         "qwen2.5-coder:7b": {
           "name": "Qwen2.5 Coder 7B (fast code)"
         },
-        "qwen3-14b": {
+        "qwen3-14b:q5-40k": {
           "name": "Qwen3 14B (primary coding)"
         },
         "qwen3-4b:q4-256k": {
@@ -127,14 +127,17 @@
     },
     "openrouter": {
       "models": {
-        "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
-        },
         "moonshot/kimi-k2.6": {
           "name": "Kimi k2.6 (reasoning)"
         },
-        "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (fast, planning)"
+        "thudm/glm-5.1": {
+          "name": "GLM-5.1"
+        },
+        "mistralai/mistral-large": {
+          "name": "Mistral Large 3"
+        },
+        "google/gemini-3-flash-preview": {
+          "name": "Gemini 3 Flash"
         }
       },
       "name": "OpenRouter (Cloud)",

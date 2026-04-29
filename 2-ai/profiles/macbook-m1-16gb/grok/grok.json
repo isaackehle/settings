@@ -24,11 +24,17 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
-        "qwen3-14b": {
-          "name": "Qwen3 14B (primary)"
+        "qwen3.5-27b:q5-256k": {
+          "name": "Qwen3.5 27B (high quality)"
+        },
+        "qwen3-14b:q4-40k": {
+          "name": "Qwen3 14B (fast, planning)"
         },
         "deepseek-r1-tools:8b-128k": {
           "name": "DeepSeek R1 8B (reason+tools)"
+        },
+        "deepseek-r1:8b": {
+          "name": "DeepSeek R1 8B (reasoning)"
         }
       }
     }

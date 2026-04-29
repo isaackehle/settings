@@ -8,38 +8,26 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3-coder-30b:q5-32k",
-          "name": "Qwen3 Coder 30B (32k)",
-          "context_window": 32768,
+          "id": "qwen3-14b-q5-40k",
+          "name": "Qwen3 14B (Primary Coding)",
+          "context_window": 40960,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3-coder-30b:q5-128k",
-          "name": "Qwen3 Coder 30B (220k, solo)",
-          "context_window": 220000,
+          "id": "deepseek-r1-tools-8b-128k",
+          "name": "DeepSeek R1 Tools 8B",
+          "context_window": 131072,
           "default_max_tokens": 8192
         },
         {
-          "id": "qwen3.5:27b",
-          "name": "Qwen3.5 27B",
-          "context_window": 32768,
-          "default_max_tokens": 8192
-        },
-        {
-          "id": "qwen3-4b:q4-256k",
-          "name": "Qwen3 4B (fast, planning)",
-          "context_window": 32768,
+          "id": "qwen3-4b-q4-256k",
+          "name": "Qwen3 4B (Fast Planning)",
+          "context_window": 262144,
           "default_max_tokens": 4096
-        },
-        {
-          "id": "deepseek-r1-tools:8b-128k",
-          "name": "DeepSeek R1 Tools 14B",
-          "context_window": 32768,
-          "default_max_tokens": 8192
         }
       ]
     }
   },
   "default_provider": "litellm",
-  "default_model": "qwen3-coder-30b:q5-32k"
+  "default_model": "qwen3-14b-q5-40k"
 }

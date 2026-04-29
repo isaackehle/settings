@@ -24,16 +24,16 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
-        "qwen3-coder-next-80b:q4": {
+        "qwen3-coder-next-80b-q4": {
           "name": "Qwen3 Coder Next 80B (primary coding)"
         },
-        "qwen3.6-35b:q4-8k": {
+        "qwen3.6-35b-q4-8k": {
           "name": "Qwen3.6 35B (general)"
         },
-        "deepseek-r1-tools:32b-128k": {
+        "deepseek-r1-tools-32b-128k": {
           "name": "DeepSeek R1 Tool-Calling 32B (local)"
         },
-        "deepseek-r1-tools:14b-128k": {
+        "deepseek-r1-tools-14b-128k": {
           "name": "DeepSeek R1 Tool-Calling 14B (local)"
         }
       }

@@ -43,112 +43,122 @@ model_list:
   # --- Coding ---
   - model_name: qwen3.6-35b-8k
     litellm_params:
-      model: ollama_chat/qwen3.6-35b:q4-8k
+      model: ollama_chat/qwen3.6-35b-q4-8k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.6-35b-32k
+    litellm_params:
+      model: ollama_chat/qwen3.6-35b-q4-32k
       api_base: http://localhost:11434
 
   - model_name: qwen3.6-35b-128k
     litellm_params:
-      model: ollama_chat/qwen3.6-35b:q4-128k
+      model: ollama_chat/qwen3.6-35b-q4-128k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.6-35b-256k
+    litellm_params:
+      model: ollama_chat/qwen3.6-35b-q4-256k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-30b-q6-32k
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b:q6-32k
+      model: ollama_chat/qwen3-coder-30b-q6-32k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-30b-q6-128k
     litellm_params:
-      model: ollama_chat/qwen3-coder-30b:q6-128k
+      model: ollama_chat/qwen3-coder-30b-q6-128k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-next-80b-q4
     litellm_params:
-      model: ollama_chat/qwen3-coder-next-80b:q4
+      model: ollama_chat/qwen3-coder-next-80b-q4
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-next-80b-q4-16k
     litellm_params:
-      model: ollama_chat/qwen3-coder-next-80b:q4-16k
+      model: ollama_chat/qwen3-coder-next-80b-q4-16k
       api_base: http://localhost:11434
 
   - model_name: qwen3-coder-next-80b-q4-64k
     litellm_params:
-      model: ollama_chat/qwen3-coder-next-80b:q4-64k
+      model: ollama_chat/qwen3-coder-next-80b-q4-64k
       api_base: http://localhost:11434
 
   - model_name: codestral-22b-q8-32k
     litellm_params:
-      model: ollama_chat/codestral:22b-v0.1:q8_0
+      model: ollama_chat/codestral-22b-v0-1-q8-0
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-7b
     litellm_params:
-      model: ollama_chat/qwen2.5-coder:7b
+      model: ollama_chat/qwen2.5-coder-7b
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-1.5b
     litellm_params:
-      model: ollama_chat/qwen2.5-coder:1.5b
+      model: ollama_chat/qwen2.5-coder-1.5b
       api_base: http://localhost:11434
 
   # --- Writing / general ---
   - model_name: qwen3.5-27b-q8-256k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b:q8-256k
+      model: ollama_chat/qwen3.5-27b-q8-256k
       api_base: http://localhost:11434
 
   - model_name: qwen3.5-27b-q5-8k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b:q5-8k
+      model: ollama_chat/qwen3.5-27b-q5-8k
       api_base: http://localhost:11434
 
   - model_name: qwen3.5-27b-q5-32k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b:q5-32k
+      model: ollama_chat/qwen3.5-27b-q5-32k
       api_base: http://localhost:11434
 
   # --- Research ---
   - model_name: qwen3-14b-q5-40k
     litellm_params:
-      model: ollama_chat/qwen3-14b:q5-40k
+      model: ollama_chat/qwen3-14b-q5-40k
       api_base: http://localhost:11434
 
   - model_name: qwen3-32b-q5
     litellm_params:
-      model: ollama_chat/qwen3-32b:q5
+      model: ollama_chat/qwen3-32b-q5
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
   - model_name: deepseek-r1-tools-14b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:14b-128k
+      model: ollama_chat/deepseek-r1-tools-14b-128k
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1-tools-32b-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools:32b-128k
+      model: ollama_chat/deepseek-r1-tools-32b-128k
       api_base: http://localhost:11434
 
   - model_name: deepseek-r1-14b
     litellm_params:
-      model: ollama_chat/deepseek-r1:14b
+      model: ollama_chat/deepseek-r1-14b
       api_base: http://localhost:11434
 
   # --- Planning / fast ---
   - model_name: qwen3-4b-q8-256k
     litellm_params:
-      model: ollama_chat/qwen3-4b:q8-256k
+      model: ollama_chat/qwen3-4b-q8-256k
       api_base: http://localhost:11434
 
   # --- General / large (solo use) ---
   - model_name: llama3.3-70b
     litellm_params:
-      model: ollama_chat/llama3.3:70b
+      model: ollama_chat/llama3.3-70b
       api_base: http://localhost:11434
 
   - model_name: gemma4-31b
     litellm_params:
-      model: ollama_chat/gemma4:31b
+      model: ollama_chat/gemma4-31b
       api_base: http://localhost:11434
 
   # --- Embeddings ---

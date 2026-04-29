@@ -20,11 +20,19 @@ models:
     roles:
       - chat
 
-  - name: "Claude Sonnet 4.6"
+  - name: "Mistral Large 3"
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: "env.OPENROUTER_API_KEY"
-    model: "anthropic/claude-sonnet-4-6"
+    model: "mistralai/mistral-large"
+    roles:
+      - chat
+
+  - name: "Gemini 3 Flash"
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: "env.OPENROUTER_API_KEY"
+    model: "google/gemini-3-flash-preview"
     roles:
       - chat
 
@@ -33,12 +41,22 @@ models:
   - name: "Qwen3 14B"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen3-14b"
+    model: "qwen3-14b:q5-40k"
     roles:
       - chat
       - edit
       - apply
       - summarize
+
+  # High-quality coding model
+  - name: "Codestral 22B"
+    provider: ollama
+    apiBase: http://localhost:11434
+    model: "codestral:22b"
+    roles:
+      - chat
+      - edit
+      - apply
 
   # Reasoning with tool calls
   - name: "DeepSeek R1 Tool-Calling 8B"
