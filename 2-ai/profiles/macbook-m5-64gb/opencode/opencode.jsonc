@@ -103,7 +103,7 @@
           "name": "Kimi k2.6 Cloud",
         },
         // --- Embeddings ---
-        "nomic-embed-text": {
+        "nomic-embed-text:latest": {
           "name": "Nomic Embed (embeddings)",
         },
         "qwen3.6-35b-256k24k": {

@@ -57,7 +57,6 @@ models:
     roles:
       - chat
 
-
   # Apply/insert — best code insertion
   - name: "Codestral 22B"
     provider: ollama
@@ -98,10 +97,9 @@ models:
   - name: "Nomic Embed Text"
     provider: ollama
     apiBase: http://localhost:11434
-    model: "nomic-embed-text"
+    model: "nomic-embed-text:latest"
     roles:
       - embed
-
 
   # Fast planning
   - name: "Qwen3 4B"

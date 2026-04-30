@@ -48,7 +48,7 @@
         "qwen2.5-coder:1.5b": {
           "name": "Qwen2.5 Coder 1.5B (autocomplete, 1 GB)"
         },
-        "nomic-embed-text": {
+        "nomic-embed-text:latest": {
           "name": "Nomic Embed Text (embeddings)"
         }
       }

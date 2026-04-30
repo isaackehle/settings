@@ -45,7 +45,7 @@
         "deepseek-r1:8b": {
           "name": "DeepSeek R1 8B (reasoning, 5 GB)"
         },
-        "nomic-embed-text": {
+        "nomic-embed-text:latest": {
           "name": "Nomic Embed Text (embeddings)"
         }
       }

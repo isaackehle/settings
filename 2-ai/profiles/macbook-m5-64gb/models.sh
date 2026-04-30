@@ -129,7 +129,7 @@ OLLAMA_MODELS=(
 
 
     # --- Embeddings ---
-    "nomic-embed-text"                             # ~0.3 GB | Codebase/RAG (8k)
+    "nomic-embed-text:latest"                             # ~0.3 GB | Codebase/RAG (8k)
 
     # ═══════════════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
@@ -156,7 +156,7 @@ declare -A CONTINUE_ROLES=(
     [apply]="codestral-22b:q8-32k"                    # applying suggested code to file (Q8_0)
     [autocomplete]="qwen2.5-coder:1.5b"                # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"            # switch manually for complex files
-    [embed]="nomic-embed-text"                        # @codebase semantic search
+    [embed]="nomic-embed-text:latest"                        # @codebase semantic search
 )
 
 # ----------------------------------------------

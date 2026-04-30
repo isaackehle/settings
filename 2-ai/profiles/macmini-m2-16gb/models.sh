@@ -89,7 +89,7 @@ OLLAMA_MODELS=(
     "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding (32k)
 
     # --- Embeddings ---
-    "nomic-embed-text"                            # ~0.3 GB| Embeddings (Continue/RAG) (8k)
+    "nomic-embed-text:latest"                            # ~0.3 GB| Embeddings (Continue/RAG) (8k)
 
     # ═══════════════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
@@ -123,7 +123,7 @@ declare -A CONTINUE_ROLES=(
     [apply]="codestral:22b"                          # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"          # switch manually for complex files
-    [embed]="nomic-embed-text"                       # @codebase semantic search
+    [embed]="nomic-embed-text:latest"                       # @codebase semantic search
 )
 
 # ----------------------------------------------
