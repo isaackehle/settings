@@ -152,87 +152,6 @@ install_ollama_models() {
     echo "✅ Installation process complete for $profile_name"
 }
 
-# ==============================================
-# PRUNE FUNCTION
-# ==============================================
-
-# Remove Ollama models that are installed but not part of the given profile.
-#
-# Usage: prune_models "M5 Max 64GB" OLLAMA_MODELS
-# $1 = profile label  $2 = model array name (bash 3.2 compat)
-prune_models() {
-    local profile_name="$1"
-    local arr_name="$2"
-    local -a _models
-    eval "_models=(\"\${${arr_name}[@]}\")"
-
-    # Build the full set of expected model names for this profile
-    local -a expected=()
-    local entry _src alias_name _ctx
-    for entry in "${_models[@]}"; do
-        # Skip cloud models from expected list
-        [[ "$entry" == *":cloud" ]] && continue
-
-        if [[ "$entry" == *"|"* ]]; then
-            IFS='|' read -r _src alias_name _ctx <<< "$entry"
-            # Keep both the source (HF pull / community model) and the created alias
-            expected+=("$_src")
-            expected+=("${_src}:latest")
-            expected+=("$alias_name")
-            expected+=("${alias_name}:latest")
-        else
-            expected+=("$entry")
-            expected+=("${entry}:latest")  # Ollama appends :latest to untagged names
-        fi
-    done
-
-    # Get currently installed models (name column only, skip header)
-    if ! command -v ollama &>/dev/null; then
-        echo "⚠ ollama not found — skipping prune"
-        return
-    fi
-
-    local installed_raw
-    installed_raw=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}')
-
-    if [[ -z "$installed_raw" ]]; then
-        echo "No models currently installed."
-        return
-    fi
-
-    # Find orphans: installed but not in expected set
-    local -a orphans=()
-    while IFS= read -r model; do
-        [[ -z "$model" ]] && continue
-        local found=0
-        for e in "${expected[@]}"; do
-            [[ "$model" == "$e" ]] && found=1 && break
-        done
-        (( !found )) && orphans+=("$model")
-    done <<< "$installed_raw"
-
-    if [[ ${#orphans[@]} -eq 0 ]]; then
-        echo "✅ No orphan models — everything installed matches the $profile_name profile."
-        return
-    fi
-
-    echo ""
-    echo "The following models are installed but not in the $profile_name stack:"
-    for m in "${orphans[@]}"; do
-        echo "  - $m"
-    done
-    echo ""
-    read -p "Remove all orphans? (y/N) " -n 1 -r; echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        for m in "${orphans[@]}"; do
-            echo "▶ Removing: $m"
-            ollama rm "$m"
-        done
-        echo "✅ Orphan models removed."
-    else
-        echo "ℹ Skipped. Run 'ollama rm <model>' manually to remove individual models."
-    fi
-}
 
 # ==============================================
 # MAIN INSTALLER MENU
@@ -308,14 +227,14 @@ install_coding_assistants() {
             ;;
         2)
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" OLLAMA_MODELS
+            bash "${SETTINGS_BASE}/2-ai/profiles/${profile}/prune_models.sh" "${SETTINGS_BASE}/2-ai/profiles/${profile}"
             ;;
         3)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
             echo ""
             print_step "Pruning orphan models for $profile_name"
-            prune_models "$profile_name" OLLAMA_MODELS
+            bash "${SETTINGS_BASE}/2-ai/profiles/${profile}/prune_models.sh" "${SETTINGS_BASE}/2-ai/profiles/${profile}"
             ;;
         *)
             echo "Invalid action."
