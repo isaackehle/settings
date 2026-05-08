@@ -27,9 +27,8 @@ setup_crush() {
     log_info "Setting up Crush..."
     verify_crush || _install_crush || { log_error "Failed to install Crush"; return 1; }
 
-    # Deploy machine-specific config if MACHINE_PROFILE is set
-    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE:-}/crush/crush.json"
-    if [ -n "${MACHINE_PROFILE:-}" ] && [ -f "$config_src" ]; then
+    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/crush/crush.json"
+    if [ -f "$config_src" ]; then
         log_info "Deploying crush.json for profile: ${MACHINE_PROFILE}"
         mkdir -p "$HOME/.config/crush"
         cp "$config_src" "$HOME/.config/crush/crush.json"

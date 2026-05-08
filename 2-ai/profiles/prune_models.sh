@@ -26,7 +26,7 @@ fi
 if [[ $# -ge 1 ]]; then
     PROFILE="$1"
 else
-    PROFILE=$(_detect_profile)
+    PROFILE="${MACHINE_PROFILE}"
 fi
 
 if [[ -z "$PROFILE" ]]; then

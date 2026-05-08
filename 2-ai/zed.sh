@@ -25,9 +25,9 @@ setup_zed() {
     log_info "Setting up Zed..."
     verify_zed || _install_zed || { log_error "Failed to install Zed"; return 1; }
 
-    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE:-}/zed/settings.json"
+    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/zed/settings.json"
     local config_dest="$HOME/.config/zed/settings.json"
-    if [ -n "${MACHINE_PROFILE:-}" ] && [ -f "$config_src" ]; then
+    if [ -f "$config_src" ]; then
         log_info "Deploying Zed settings for profile: ${MACHINE_PROFILE}"
         mkdir -p "$HOME/.config/zed"
         cp "$config_src" "$config_dest"

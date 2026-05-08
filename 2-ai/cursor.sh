@@ -25,9 +25,9 @@ setup_cursor() {
     log_info "Setting up Cursor..."
     verify_cursor || _install_cursor || log_warning "Cursor not installed — skipping config"
 
-    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE:-}/cursor/settings.jsonc"
+    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/cursor/settings.jsonc"
     local config_dest="$HOME/Library/Application Support/Cursor/User/settings.json"
-    if [ -n "${MACHINE_PROFILE:-}" ] && [ -f "$config_src" ]; then
+    if [ -f "$config_src" ]; then
         log_info "Profile config available: $config_src"
         log_info "Merge manually into: $config_dest"
         log_info "  (Cursor settings are JSONC — remove comments before merging)"

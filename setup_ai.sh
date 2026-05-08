@@ -93,7 +93,7 @@ deploy_configs() {
 
     # Resolve per-profile config directory once
     local _profile _profdir
-    _profile="$(_detect_profile)"
+    _profile="${MACHINE_PROFILE}"
     _profdir="${SETTINGS_BASE}/2-ai/profiles/${_profile}"
     [ -n "$_profile" ] && log_info "Profile: ${_profile}" \
                        || log_warning "Profile not detected — per-profile configs will be skipped"
@@ -135,6 +135,9 @@ deploy_configs() {
 
     mkdir -p "$HOME/.aider"
     copy_file "${_profdir}/aider/aider.conf.yml" "$HOME/.aider.conf.yml"
+
+    mkdir -p "$HOME/.kilo"
+    copy_file "${_profdir}/kilocode/kilo.jsonc" "$HOME/.kilo/kilo.jsonc"
 
     # --- IDE selection ---
     print_step "IDE Selection"
@@ -195,6 +198,7 @@ backup_existing_configs() {
     backup_grok
     backup_olol
     backup_litellm
+    backup_kilocode
     log_status "All existing configurations backed up successfully"
 }
 
@@ -208,6 +212,7 @@ restore_configs() {
     restore_grok
     restore_olol
     restore_litellm
+    restore_kilocode
     log_status "All configurations restored successfully"
 }
 
@@ -313,6 +318,8 @@ _run_one() {
         setup:grok)       setup_grok ;;
         setup:groq)       setup_groq ;;
         setup:kilocode)   setup_kilocode ;;
+        backup:kilocode)  backup_kilocode ;;
+        restore:kilocode) restore_kilocode ;;
         setup:models)     install_coding_assistants ;;
         setup:ollama)     setup_ollama ;;
         setup:olol)       setup_olol ;;

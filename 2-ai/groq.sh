@@ -28,7 +28,7 @@ setup_groq() {
     fi
 
     if [ -z "$src_cfg" ]; then
-        mac_model="$(_detect_profile)"
+        mac_model="${MACHINE_PROFILE}"
         src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/groq/local-settings.json"
     fi
 

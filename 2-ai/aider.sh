@@ -31,9 +31,8 @@ setup_aider() {
     log_info "Setting up Aider..."
     verify_aider || _install_aider || { log_error "Failed to install Aider"; return 1; }
 
-    # Deploy machine-specific config if MACHINE_PROFILE is set
-    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE:-}/aider/aider.conf.yml"
-    if [ -n "${MACHINE_PROFILE:-}" ] && [ -f "$config_src" ]; then
+    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/aider/aider.conf.yml"
+    if [ -f "$config_src" ]; then
         log_info "Deploying aider.conf.yml for profile: ${MACHINE_PROFILE}"
         cp "$config_src" "$HOME/.aider.conf.yml"
         log_status "Config deployed to ~/.aider.conf.yml"

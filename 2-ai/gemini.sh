@@ -29,7 +29,7 @@ setup_gemini() {
         src_cfg=$(find_source "gemini/settings.json")
     fi
     if [ -z "$src_cfg" ]; then
-        mac_model="$(_detect_profile)"
+        mac_model="${MACHINE_PROFILE}"
         src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/gemini/settings.json"
     fi
 

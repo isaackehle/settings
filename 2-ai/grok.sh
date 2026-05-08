@@ -32,7 +32,7 @@ setup_grok() {
         src_cfg=$(find_source "grok/grok.json")
     fi
     if [ -z "$src_cfg" ]; then
-        mac_model="$(_detect_profile)"
+        mac_model="${MACHINE_PROFILE}"
         src_cfg="${SETTINGS_BASE}/2-ai/profiles/$mac_model/grok/grok.json"
     fi
 

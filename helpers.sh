@@ -28,7 +28,7 @@ log_info()    { echo -e "${BLUE}ℹ${NC} $*"; }
 log_success() { echo -e "${PURPLE}✓${NC} $*"; }
 log_warning() { echo -e "${YELLOW}⚠${NC} $*"; }
 log_error()   { echo -e "${RED}✗${NC} $*" >&2; }
-log_status()  { echo -e "${GREEN}✗${NC} $*" >&2; }
+log_status()  { echo -e "${GREEN}>${NC} $*" >&2; }
 die()         { log_error "$*"; exit 1; }
 
 
@@ -235,7 +235,7 @@ declare -A MACHINE_DIRS=(
 find_source() {
     local rel="$1"
 
-    local model=$(_detect_profile)
+    local model="${MACHINE_PROFILE:-}"
 
     local model_path="$SETTINGS_BASE/profiles/$model/$rel"
     local default_path="$SETTINGS_BASE/scripts/$rel"
@@ -389,6 +389,14 @@ _detect_profile() {
     echo "${best_match:-}"
 }
 
+# Resolve machine profile once when helpers.sh is sourced.
+# Pre-set MACHINE_PROFILE in the environment to override auto-detection.
+if [ -z "${MACHINE_PROFILE:-}" ]; then
+    _detect_hw
+    MACHINE_PROFILE="$(_detect_profile)"
+fi
+export MACHINE_PROFILE HW_MODEL HW_MEM_GB
+
 get_profile_for_choice() {
     local choice="$1"
 
@@ -489,7 +497,7 @@ print_profile_menu() {
 
 prompt_machine_class() {
     local detected
-    detected=$(_detect_profile)
+    detected="${MACHINE_PROFILE}"
 
     echo "" >&2
     echo "── SELECT MACHINE ──────────────────────────────────────────────────" >&2
