@@ -12,10 +12,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
       },
       "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
-      "temperature": 0.2
+      "temperature": 0.2,
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
@@ -28,10 +28,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
       },
       "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
-      "temperature": 0.25
+      "temperature": 0.25,
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
@@ -44,15 +44,15 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
       },
       "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.",
-      "temperature": 0.25
+      "temperature": 0.25,
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/deepseek-r1-tools:8b-128k",
+      "model": "ollama/deepseek-r1-tools-8b:q4-128k",
       "permission": {
         "bash": "deny",
         "edit": "deny",
@@ -60,10 +60,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
       },
       "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands.",
-      "temperature": 0.3
+      "temperature": 0.3,
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
@@ -76,16 +76,16 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
       },
       "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials.",
-      "temperature": 0.65
-    }
+      "temperature": 0.65,
+    },
   },
   "default_agent": "code",
   "limit": {
     "context": 32768,
-    "output": 4096
+    "output": 4096,
   },
   "model": "ollama/qwen3-14b:q5-40k",
   "permission": {
@@ -95,58 +95,67 @@
     "grep": "allow",
     "list": "allow",
     "read": "allow",
-    "webfetch": "allow"
+    "webfetch": "allow",
   },
   "provider": {
-    "ollama": {
-      "models": {
-        "codestral:22b": {
-          "name": "Codestral 22B (code)"
-        },
-        "deepseek-r1-tools:8b-128k": {
-          "name": "DeepSeek R1 8B (reason+tools)"
-        },
-        "qwen2.5-coder:1.5b": {
-          "name": "Qwen2.5 Coder 1.5B (autocomplete)"
-        },
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7B (fast code)"
-        },
-        "qwen3-14b:q5-40k": {
-          "name": "Qwen3 14B (primary coding)"
-        },
-        "qwen3-4b:q4-256k": {
-          "name": "Qwen3 4B (fast, planning)"
-        }
-      },
-      "name": "Ollama (Local)",
-      "npm": "@ai-sdk/ollama",
-      "options": {
-        "baseURL": "http://localhost:11434"
-      }
-    },
     "openrouter": {
-      "models": {
-        "moonshot/kimi-k2.6": {
-          "name": "Kimi k2.6 (reasoning)"
-        },
-        "thudm/glm-5.1": {
-          "name": "GLM-5.1"
-        },
-        "mistralai/mistral-large": {
-          "name": "Mistral Large 3"
-        },
-        "google/gemini-3-flash-preview": {
-          "name": "Gemini 3 Flash"
-        }
-      },
-      "name": "OpenRouter (Cloud)",
       "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter",
       "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
         "apiKey": "env.OPENROUTER_API_KEY",
-        "baseURL": "https://openrouter.ai/api/v1"
-      }
-    }
+      },
+      "models": {
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5" },
+        "openai/gpt-4o": { "name": "GPT-4o" },
+        "openai/o3": { "name": "OpenAI o3" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
+        "mistralai/mistral-large": { "name": "Mistral Large" },
+        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro" },
+        "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B (fast, planning)" },
+      },
+    },
+    "ollama": {
+      "npm": "@ai-sdk/ollama",
+      "name": "Ollama (Local)",
+      "options": {
+        "baseURL": "http://localhost:11434",
+      },
+      "models": {
+        "codestral:22b": { "name": "Codestral 22b" },
+        "deepseek-r1-tools-8b:q4-128k": { "name": "Deepseek R1 Tools 8b (q4-128k)" },
+        "deepseek-r1:8b": { "name": "Deepseek R1 (8b-128k)" },
+        "gpt-oss": { "name": "GPT-OSS 20b" },
+        "gpt-oss": { "name": "GPT-OSS (latest)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (latest)" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5b (q4-32k)" },
+        "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7b (q4-32k)" },
+        "qwen3-14b:q5-40k": { "name": "Qwen3 14b (q5-40k)" },
+        "qwen3-14b:q8-40k": { "name": "Qwen3 14b (q8-40k)" },
+        "qwen3-4b:q4-256k": { "name": "Qwen3 4b (q4-256k)" },
+        "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27b (q5-128k)" },
+        "qwen3.5-27b:q5-256k": { "name": "Qwen3.5 27b (q5-256k)" },
+        "qwen3.5-27b:q5-32k": { "name": "Qwen3.5 27b (q5-32k)" },
+        "qwen3.5-27b:q5-8k": { "name": "Qwen3.5 27b (q5-8k)" },
+      },
+    },
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM (Local)",
+      "options": {
+        "baseURL": "http://localhost:4000/v1",
+        "apiKey": "sk-local",
+      },
+      "models": {
+        // LiteLLM model names use hyphens, e.g. qwen3-coder-30b-q5-32k
+        // Add model IDs matching model_name entries in litellm.yaml
+      },
+    },
   },
-  "small_model": "ollama/qwen3-4b:q4-256k"
+  "small_model": "ollama/qwen3-4b:q4-256k",
 }

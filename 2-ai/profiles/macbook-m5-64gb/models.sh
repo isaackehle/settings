@@ -5,11 +5,11 @@
 # ==============================================
 #
 # NAMING CONVENTION (Jan 2026):
-#   Ollama:    model:quantization-context   (e.g., qwen3-coder-30b:q6-32k)
+#   Ollama:    model:quantization-context   (e.g., qwen3-coder-30b-a3b:q6-32k)
 #   LiteLLM:  model-quantization-context (e.g., qwen3-coder-30b-q6-32k)
 #
 # The context size comes AFTER the quantization level.
-#   OLD: qwen3-coder-30b-32k:q5  →  NEW: qwen3-coder-30b:q5-32k
+#   OLD: qwen3-coder-30b-32k:q5  →  NEW: qwen3-coder-30b-a3b:q5-32k
 #
 # Example: qwen3-coder:q6-32k = Q6 quantization, 32K context window
 #
@@ -43,12 +43,12 @@
 
 # M5 Max 64GB - Cloud models (via OpenRouter — requires API key)
 OPENROUTER_MODELS=(
-    "claude-opus-4-6:cloud"                         # Claude Opus 4.6
-    "claude-sonnet-4-6:cloud"                      # Claude Sonnet 4.6
-    "claude-haiku-4-5:cloud"                       # Claude Haiku 4.5
-    "gpt-4o:cloud"                                  # GPT-4o
-    "o3:cloud"                                      # o3
-    "sonar-pro:cloud"                               # Perplexity Sonar
+    "claude-opus-4-6:cloud"
+    "claude-sonnet-4-6:cloud"
+    "claude-haiku-4-5:cloud"
+    "gpt-4o:cloud"
+    "o3:cloud"
+    "sonar-pro:cloud"
 )
 
 # M5 Max 64GB - Local models (pull with ollama)
@@ -56,6 +56,9 @@ OLLAMA_MODELS=(
     # ═══════════════════════════════════════════════════════════════════════════════════════
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════════════
+
+    # --- GPT-OSS ---
+    "gpt-oss"                       # ~14 GB  | General purpose/Reasoning/Coding (32k)
 
     # --- Qwen 3.6 (35B) ---
     "fredrezones55/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive:Q4|qwen3.6-35b:q4-256k" # ~22 GB Text / Image
@@ -81,12 +84,12 @@ OLLAMA_MODELS=(
 
     # --- Qwen 3 Coder 30B (A3B) ---
     "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL|qwen3-coder-30b-a3b:q6-256k" # ~26 GB | HF base (256k)
-    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-8k|8192"
-    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-32k|32768"
-    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b:q6-128k|131072"
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b-a3b:q6-8k|8192"
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b-a3b:q6-32k|32768"
+    "qwen3-coder-30b-a3b:q6-256k|qwen3-coder-30b-a3b:q6-128k|131072"
 
     # --- Qwen 3 (32B) ---
-    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5"       # ~22 GB | HF base Stock/Research (32k)
+    "dengcao/Qwen3-32B:Q5_K_M|qwen3-32b:q5-32k"       # ~22 GB | HF base Stock/Research (32k)
 
     # --- Qwen 3 (14B) ---
     "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # base Q8 (16 GB) Research (40k)
@@ -96,15 +99,19 @@ OLLAMA_MODELS=(
     "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q8_K_XL|qwen3-4b:q8-256k" # ~5 GB | HF base/Planning fast (256k)
 
     # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                              # ~4.5 GB | Fast code (32k)
-    "qwen2.5-coder:1.5b"                            # ~1 GB  | Autocomplete (32k)
-
-
+    "qwen2.5-coder:1.5b"          # ~1 GB  | Autocomplete (32k)
+    "qwen2.5-coder:7b"              # ~4 GB | Fast code tasks (32k)
+    "qwen2.5-coder:7b-base-q8_0|qwen2.5-coder-7b:q8-32k"                # ~8.1 GB | Fast code tasks (32k)
 
     # --- DeepSeek R1 ---
-    "deepseek-r1:14b"                               # ~9 GB  | Reasoning stock (128k)
-    "MFDoom/deepseek-r1-tool-calling:14b|deepseek-r1-tools:14b-128k" # 9 GB | HF base 14B (128k)
-    "MFDoom/deepseek-r1-tool-calling:32b|deepseek-r1-tools:32b-128k" # 20 GB | HF base 32B (128k)
+    "deepseek-r1:14b"                               # 9 GB
+    "deepseek-r1:14b-qwen-distill-q8_0|deepseek-r1-14b:q8-128k"                                 # 16 GB  | Reasoning stock (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q4_K_M|deepseek-r1-tools-8b:q4-128k"      # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q8_0|deepseek-r1-tools-8b:q8-128k"        # 9 GB  | HF base 14B (128k)
+    "MFDoom/deepseek-r1-tool-calling:14b-qwen-distill-q4_K_M|deepseek-r1-tools:14b-128k"    # 9 GB  | HF base 14B (128k)
+    "MFDoom/deepseek-r1-tool-calling:14b-qwen-distill-q8_0|deepseek-r1-tools:14b-128k"      # 16 GB | HF base 14B (128k)
+    "MFDoom/deepseek-r1-tool-calling:32b-qwen-distill-q4_K_M|deepseek-r1-tools:32b-128k"    # 20 GB | HF base 32B (128k)
+    "MFDoom/deepseek-r1-tool-calling:32b-qwen-distill-q8_0|deepseek-r1-tools:32b-128k"      # 35 GB | HF base 32B (128k)
 
     # --- Gemma 4 (31B) ---
     "gemma4:31b"                                    # ~18 GB | Reasoning (128k)
@@ -113,10 +120,12 @@ OLLAMA_MODELS=(
     "gemma3:12b"                                     # ~7 GB | General purpose (128k)
 
     # --- GLM-4.7 Flash ---
-    "glm-4.7-flash"                                 # ~5 GB | Fast, Chinese-optimized (32k)
+    "glm-4.7-flash"    # ~19 GB 198K | Fast, Chinese-optimized (32k)
+    "glm-4.7-flash:q8_0|glm-4.7-flash:q8-198k"      # ~32 GB 198K
 
     # --- Phi-4 ---
-    "phi4"                                          # ~9 GB | Efficient, small footprint (16k)
+    "phi4"               # ~9 GB | Efficient, small footprint (16k)
+    "phi4:14b-q8_0|phi4-14b:q8-16k"                 # ~16 GB | Efficient, small footprint (16k)
 
     # --- Codestral ---
     "codestral:22b-v0.1-q8_0|codestral-22b:q8-32k"  # ~23 GB | Code apply/insert (Q8_0) (32k)
@@ -125,38 +134,39 @@ OLLAMA_MODELS=(
     "llama3.3:70b"                                  # ~43 GB | General purpose (solo only) (128k)
 
     # --- Llama 3.2 ---
-    "llama3.2"                                       # ~2 GB | General purpose (128k)
-
+    "llama3.2"                                      # ~2 GB | General purpose (128k)
 
     # --- Embeddings ---
-    "nomic-embed-text:latest"                             # ~0.3 GB | Codebase/RAG (8k)
+    "nomic-embed-text"                       # ~0.3 GB | Codebase/RAG (8k)
 
     # ═══════════════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
     # ═══════════════════════════════════════════════════════════════════════════════════════
-    "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
-    "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
-    "mistral-large-3:675b-cloud"                           # Mistral Large
-    "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
-    "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
+    "deepseek-v4-pro:cloud"
+    "gemini-3-flash-preview:cloud"
+    "glm-5.1:cloud"
+    "gpt-oss:120b-cloud"
+    "gpt-oss:20b-cloud"
+    "kimi-k2.6:cloud"
+    "mistral-large-3:675b-cloud"
 )
 
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-coder-next-80b:q4-16k"                          # OpenCode #1 — switch to qwen3.6-35b:q4-128k or qwen3-coder-30b:q6-32k via picker
+    [code]="qwen3-coder-next-80b:q4-16k"                          # OpenCode #1 — switch to qwen3.6-35b:q4-128k or qwen3-coder-30b-a3b:q6-32k via picker
     [think]="deepseek-r1-tools:32b-128k"                             # tradeoff analysis, debugging strategy, scoring
-    [write]="qwen3.5:27b"                                        # resumes, cover letters, docs, polished prose
-    [research]="qwen3-32b:q5"                                     # codebase/web investigation
+    [write]="qwen3.5-27b:q8-32k"                                   # resumes, cover letters, docs, polished prose
+    [research]="qwen3-32b:q5-32k"                                     # codebase/web investigation
     [plan]="qwen3-4b:q8-256k"                                         # next steps, task breakdown, routing
 )
 
 declare -A CONTINUE_ROLES=(
     [chat]="qwen3-coder-next-80b:q4-16k"                    # chat panel + inline edit (Ctrl+I)
     [kimi]="kimi-k2.6:cloud"                              # Cloud-based reasoning
-    [chat_alt]="qwen3.5:27b"                            # manual model switch in chat
+    [chat_alt]="qwen3.5-27b:q8-32k"                        # manual model switch in chat
     [apply]="codestral-22b:q8-32k"                    # applying suggested code to file (Q8_0)
     [autocomplete]="qwen2.5-coder:1.5b"                # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"            # switch manually for complex files
-    [embed]="nomic-embed-text:latest"                        # @codebase semantic search
+    [embed]="nomic-embed-text"                        # @codebase semantic search
 )
 
 # ----------------------------------------------
@@ -166,11 +176,50 @@ CLINE_MODEL="qwen3-coder-next-80b:q4-16k"
 CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
 
 # ----------------------------------------------
+# Roo Code (VS Code) — per-mode model assignments
+# ----------------------------------------------
+ROOCODE_MODEL="qwen3-coder-next-80b:q4-16k"
+ROOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
+ROOCODE_MODE_CODE="qwen3-coder-next-80b:q4-16k"         # Code mode
+ROOCODE_MODE_ARCHITECT="qwen3.6-35b:q4-128k"            # Architect mode
+ROOCODE_MODE_ASK="qwen3-32b:q5-32k"                     # Ask mode
+ROOCODE_MODE_DEBUG="deepseek-r1-tools:32b-128k"         # Debug mode
+
+# ----------------------------------------------
+# Kilo Code (VS Code)
+# ----------------------------------------------
+KILOCODE_MODEL="qwen3-coder-next-80b:q4-16k"
+KILOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
+
+# ----------------------------------------------
+# Aider (CLI) — routes through LiteLLM proxy
+# ----------------------------------------------
+AIDER_MODEL="qwen3-coder-next-80b:q4-16k"               # primary coding model
+AIDER_WEAK_MODEL="qwen3-4b:q8-256k"                     # commit messages, simple tasks
+AIDER_EDITOR_MODEL="codestral-22b:q8-32k"               # applying diffs to files
+
+# ----------------------------------------------
+# Zed (Editor)
+# ----------------------------------------------
+ZED_MODEL="qwen3-coder-next-80b:q4-64k"                 # larger context for editor chat
+
+# ----------------------------------------------
+# Cursor (IDE)
+# ----------------------------------------------
+CURSOR_MODEL="qwen3-coder-next-80b:q4-16k"
+CURSOR_MODEL_CLOUD="kimi-k2.6:cloud"
+
+# ----------------------------------------------
 # Claude Code
 # ----------------------------------------------
-CLAUDE_CODE_SONNET="qwen3-coder-next-80b:q4-16k"        # ANTHROPIC_DEFAULT_SONNET_MODEL
-CLAUDE_CODE_HAIKU="qwen3-4b:q8-256k"                          # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning
-CLAUDE_CODE_OPUS="qwen3.6-35b:q4-128k"                  # ANTHROPIC_DEFAULT_OPUS_MODEL — large context (solo)
+declare -A CLAUDE_CODE=(
+    [primary]="qwen3-coder-next-80b:q4-16k"
+    [fast]="qwen3-4b:q8-256k"
+    [reasoning]="deepseek-r1-tools:32b-128k"
+    [research]="qwen3-32b:q5-32k"
+    [coding]="qwen3-coder-30b-a3b:q6-32k"
+    [opus]="qwen3.6-35b:q4-128k"
+)
 
 # ----------------------------------------------
 # Ollama direct

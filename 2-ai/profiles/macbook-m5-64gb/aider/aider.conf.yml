@@ -1,0 +1,49 @@
+# Aider config — M5 64GB profile
+# DEPLOY TO: ~/.aider.conf.yml (global) or .aider.conf.yml (per-project)
+# Docs: https://aider.chat/docs/config/aider_conf.html
+#
+# All models route through LiteLLM proxy (localhost:4000).
+# LiteLLM model names use hyphens: openai/<litellm-model-name>
+
+## ── Model assignments ──────────────────────────────────────────────────────
+
+# Primary coding model
+model: openai/qwen3-coder-next-80b-q4-16k
+
+# Weak model — commit messages, simple edits, routing decisions
+weak-model: openai/qwen3-4b-q8-256k
+
+# Editor model — applies aider's diffs back to files (Codestral is best for this)
+editor-model: openai/codestral-22b-q8-32k
+
+## ── LiteLLM proxy endpoint ─────────────────────────────────────────────────
+
+openai-api-base: http://localhost:4000/v1
+openai-api-key: sk-local
+
+## ── Git ────────────────────────────────────────────────────────────────────
+
+auto-commits: true
+dirty-commits: true
+# Don't add "Aider" to git author/committer (keeps history clean)
+attribute-author: false
+attribute-committer: false
+commit-prompt: "Write a conventional commit message for these changes."
+
+## ── Output ─────────────────────────────────────────────────────────────────
+
+pretty: true
+stream: true
+show-diffs: false
+
+## ── Context ────────────────────────────────────────────────────────────────
+
+# Map tokens — controls how much of the repo is sent in context
+map-tokens: 2048
+# Cache prompts where supported
+cache-prompts: true
+
+## ── Cloud fallback (comment in to switch) ──────────────────────────────────
+# model: openrouter/moonshot/kimi-k2.6
+# openai-api-base: https://openrouter.ai/api/v1
+# openai-api-key: ${OPENROUTER_API_KEY}

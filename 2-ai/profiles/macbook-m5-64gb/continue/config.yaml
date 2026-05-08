@@ -1,154 +1,167 @@
-name: "Continue Config - Local + Cloud Models (M5 64GB)"
-version: "1.0.0"
-schema: "v1"
+name: 'Continue Config - Local + Cloud Models (M5 64GB)'
+version: '1.0.0'
+schema: 'v1'
 
 models:
-  # ── Cloud Models (via OpenRouter) ──────────────────────────────────────
-  - name: "Kimi k2.6 Cloud"
+  # ── Cloud Models (via OpenRouter — direct, not proxied) ────────────────────
+  - name: 'Kimi k2.6 Cloud'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
-    apiKey: "env.OPENROUTER_API_KEY"
-    model: "moonshot/kimi-k2.6"
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'moonshot/kimi-k2.6'
     roles:
       - chat
 
-  - name: "GLM-5.1 Cloud"
+  - name: 'GLM-5.1 Cloud'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
-    apiKey: "env.OPENROUTER_API_KEY"
-    model: "thudm/glm-5.1"
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'thudm/glm-5.1'
     roles:
       - chat
 
-  - name: "Codestral Cloud"
+  - name: 'Codestral Cloud'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
-    apiKey: "env.OPENROUTER_API_KEY"
-    model: "mistralai/codestral"
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'mistralai/codestral'
     roles:
       - chat
 
-  - name: "Claude Sonnet 4.6"
+  - name: 'Claude Sonnet 4.6'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
-    apiKey: "env.OPENROUTER_API_KEY"
-    model: "anthropic/claude-sonnet-4-6"
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'anthropic/claude-sonnet-4-6'
     roles:
       - chat
 
-  - name: "Claude Opus 4.6"
+  - name: 'Claude Opus 4.6'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
-    apiKey: "env.OPENROUTER_API_KEY"
-    model: "anthropic/claude-opus-4-6"
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'anthropic/claude-opus-4-6'
     roles:
       - chat
 
-  # ── Local Models (via Ollama) ───────────────────────────────────────────
-  # Primary coding model — 80B, tool-capable
-  - name: "Qwen3 Coder Next 80B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3-coder-next-80b:q4-16k"
+  # ── Local Models via LiteLLM proxy (chat / edit / apply / summarize) ───────
+  # Primary coding model — 80B, bumped to 64k for chat context depth
+  - name: 'Qwen3 Coder Next 80B (64k)'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'qwen3-coder-next-80b-q4-64k'
     roles:
       - chat
       - edit
-      - apply
       - summarize
 
-  # Qwen3.6 35B
-  - name: "Qwen3.6 35B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3.6-35b:q4-8k"
+  # Qwen3.6 35B — general / large context
+  - name: 'Qwen3.6 35B'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'qwen3.6-35b-8k'
     roles:
       - chat
       - edit
-      - apply
-      - summarize
 
-  # Qwen3.5 27B — general chat / writing
-  - name: "Qwen3.5 27B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3.5:27b"
+  # Qwen3.5 27B — writing / general chat alt
+  - name: 'Qwen3.5 27B Q8'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'qwen3.5-27b-q8-32k'
     roles:
       - chat
 
   # Apply/insert — best code insertion
-  - name: "Codestral 22B (Q8)"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "codestral-22b:q8-32k"
+  - name: 'Codestral 22B (Q8)'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'codestral-22b-q8-32k'
     roles:
       - apply
 
-  # Reasoning with tool calls — 32B (fits at 64GB)
-  - name: "DeepSeek R1 Tool-Calling 32B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "deepseek-r1-tools:32b-128k"
+  # Reasoning with tool calls — 32B
+  - name: 'DeepSeek R1 Tool-Calling 32B'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'deepseek-r1-tools-32b-128k'
     roles:
       - chat
 
   # Reasoning with tool calls — 14B fallback
-  - name: "DeepSeek R1 Tool-Calling 14B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "deepseek-r1-tools:14b-128k"
+  - name: 'DeepSeek R1 Tool-Calling 14B'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'deepseek-r1-tools-14b-128k'
     roles:
       - chat
 
   # Large general model (solo use)
-  - name: "Llama 3.3 70B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "llama3.3:70b"
+  - name: 'Llama 3.3 70B'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'llama3.3-70b'
+    roles:
+      - chat
+
+  # llama.cpp server models (available when llama-server is running on :8080)
+  - name: 'Qwen3 Coder 30B Q6 (llama.cpp)'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'llama-qwen3-coder-30b-q6-32k'
     roles:
       - chat
       - edit
 
-  # Autocomplete — default (fast, low RAM)
-  - name: "Qwen2.5 Coder 1.5B"
+  # ── Autocomplete — Ollama direct (latency-critical, keep off proxy) ─────────
+  - name: 'Qwen2.5 Coder 1.5B (autocomplete)'
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen2.5-coder:1.5b"
+    model: 'qwen2.5-coder:1.5b'
     roles:
       - autocomplete
     requestOptions:
       timeout: 8000
 
-  # Autocomplete — quality
-  - name: "Qwen2.5 Coder 7B"
+  - name: 'Qwen2.5 Coder 7B (autocomplete quality)'
     provider: ollama
     apiBase: http://localhost:11434
-    model: "qwen2.5-coder:7b"
+    model: 'qwen2.5-coder:7b'
     roles:
       - autocomplete
     requestOptions:
       timeout: 8000
 
-  # Embedding model — stay on Ollama directly
-  - name: "Nomic Embed Text"
+  # ── Embeddings — Ollama direct ─────────────────────────────────────────────
+  - name: 'Nomic Embed Text'
     provider: ollama
     apiBase: http://localhost:11434
-    model: "nomic-embed-text:latest"
+    model: 'nomic-embed-text'
     roles:
       - embed
 
-  # Reranking
-  - name: "Qwen3 Reranker 0.6B"
+  # ── Reranking — Ollama direct ──────────────────────────────────────────────
+  - name: 'Qwen3 Reranker 0.6B'
     provider: ollama
     apiBase: http://localhost:11434
-    model: "dengcao/Qwen3-Reranker-0.6B:Q8_0"
+    model: 'dengcao/Qwen3-Reranker-0.6B:Q8_0'
     roles:
       - rerank
 
-  # Fast planning
-  - name: "Qwen3 4B"
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: "qwen3-4b:q8-256k"
+  # ── Fast planning — via LiteLLM ────────────────────────────────────────────
+  - name: 'Qwen3 4B (fast)'
+    provider: openai
+    apiBase: http://localhost:4000/v1
+    apiKey: 'sk-local'
+    model: 'qwen3-4b-q8-256k'
     roles:
       - chat
 

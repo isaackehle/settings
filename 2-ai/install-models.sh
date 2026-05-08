@@ -227,14 +227,14 @@ install_coding_assistants() {
             ;;
         2)
             print_step "Pruning orphan models for $profile_name"
-            bash "${SETTINGS_BASE}/2-ai/profiles/${profile}/prune_models.sh" "${SETTINGS_BASE}/2-ai/profiles/${profile}"
+            bash "${SETTINGS_BASE}/2-ai/profiles/prune_models.sh" "$profile"
             ;;
         3)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
             echo ""
             print_step "Pruning orphan models for $profile_name"
-            bash "${SETTINGS_BASE}/2-ai/profiles/${profile}/prune_models.sh" "${SETTINGS_BASE}/2-ai/profiles/${profile}"
+            bash "${SETTINGS_BASE}/2-ai/profiles/prune_models.sh" "$profile"
             ;;
         *)
             echo "Invalid action."

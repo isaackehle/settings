@@ -30,14 +30,14 @@ model_list:
       model: ollama_chat/codestral-22b
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-7b
+  - model_name: qwen2.5-coder-7b-q4-32k
     litellm_params:
-      model: ollama_chat/qwen2.5-coder-7b
+      model: ollama_chat/qwen2.5-coder:7b
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-1.5b
+  - model_name: qwen2.5-coder-1.5b-q4-32k
     litellm_params:
-      model: ollama_chat/qwen2.5-coder-1.5b
+      model: ollama_chat/qwen2.5-coder:1.5b
       api_base: http://localhost:11434
 
   # --- Writing / General ---
@@ -68,20 +68,20 @@ model_list:
       api_base: http://localhost:11434
 
   # --- Reasoning / Tool Calls ---
-  - model_name: deepseek-r1-tools-8b-128k
+  - model_name: deepseek-r1-tools-8b-q4-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-tools-8b-128k
+      model: ollama_chat/deepseek-r1-tools-8b:q4-128k
       api_base: http://localhost:11434
 
-  - model_name: deepseek-r1-8b
+  - model_name: deepseek-r1-8b-q4-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-8b
+      model: ollama_chat/deepseek-r1:8b
       api_base: http://localhost:11434
 
   # --- Planning / Fast ---
   - model_name: qwen3-4b-q4-256k
     litellm_params:
-      model: ollama_chat/qwen3-4b-q4-256k
+      model: ollama_chat/qwen3-4b:q4-256k
       api_base: http://localhost:11434
 
   # --- Embeddings ---
@@ -93,6 +93,7 @@ model_list:
 litellm_settings:
   set_verbose: false
   drop_params: true
+  request_timeout: 600
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
@@ -100,12 +101,12 @@ general_settings:
 
 router_settings:
   model_group_alias:
-    "gemini-2.5-pro": "qwen3.5-27b-q5-256k"
-    "gemini-2.5-flash": "qwen3-14b-q5-40k"
-    "gemini-2.5-flash-lite": "qwen3-4b-q4-256k"
-    "gemini-3-flash-preview": "qwen3.5-27b-q5-256k"
-    "gemini-3-flash-preview-customtools": "deepseek-r1-tools-8b-128k"
-    "gemini-3-pro": "codestral-22b"
-    "gemini-3-pro-customtools": "deepseek-r1-tools-8b-128k"
-    "gemini-3.1-pro-preview": "qwen3-14b-q8-40k"
-    "gemini-3.1-pro-preview-customtools": "deepseek-r1-tools-8b-128k"
+    'gemini-2.5-pro': 'qwen3.5-27b-q5-256k'
+    'gemini-2.5-flash': 'qwen3-14b-q5-40k'
+    'gemini-2.5-flash-lite': 'qwen3-4b-q4-256k'
+    'gemini-3-flash-preview': 'qwen3.5-27b-q5-256k'
+    'gemini-3-flash-preview-customtools': 'deepseek-r1-tools-8b-q4-128k'
+    'gemini-3-pro': 'codestral-22b'
+    'gemini-3-pro-customtools': 'deepseek-r1-tools-8b-q4-128k'
+    'gemini-3.1-pro-preview': 'qwen3-14b-q8-40k'
+    'gemini-3.1-pro-preview-customtools': 'deepseek-r1-tools-8b-q4-128k'

@@ -1,0 +1,762 @@
+---
+tags: [ai, index, reference]
+---
+
+# AI Tools Reference
+
+Comprehensive reference for all AI tools in this setup. Install scripts live in each tool's subfolder (`2-ai/<tool>/<tool>.sh`) and are orchestrated by `setup-ai.sh` one level up. Machine-specific configs live in `profiles/<machine>/<tool>/`.
+
+## Contents
+
+- [Infrastructure](#infrastructure)
+  - [Ollama](#ollama) · [LiteLLM](#litellm) · [Olol](#olol) · [Exo](#exo)
+- [Local Runtimes](#local-runtimes)
+  - [LM Studio](#lm-studio) · [GPT4All](#gpt4all) · [Llama.cpp](#llamacpp) · [vLLM](#vllm)
+- [Terminal Coding Agents](#terminal-coding-agents)
+  - [Claude Code](#claude-code) · [OpenCode](#opencode) · [Crush](#crush) · [Aider](#aider) · [Gemini CLI](#gemini-cli) · [Grok CLI](#grok-cli) · [Open Interpreter](#open-interpreter) · [OpenHands](#openhands) · [OpenShell](#openshell) · [Codex](#codex)
+- [VS Code Extensions](#vs-code-extensions)
+  - [VS Code](#vs-code) · [Cline](#cline) · [Continue](#continue) · [GitHub Copilot](#github-copilot) · [Windsurf](#windsurf)
+- [Self-Hosted Assistants](#self-hosted-assistants)
+  - [AnythingLLM](#anythingllm) · [Tabby](#tabby)
+- [APIs & Services](#apis--services)
+  - [OpenRouter](#openrouter) · [Groq](#groq) · [Perplexity](#perplexity) · [Hugging Face](#hugging-face)
+- [Image Generation](#image-generation)
+  - [Automatic1111](#automatic1111) · [Draw Things](#draw-things)
+- [Frameworks & Libraries](#frameworks--libraries)
+  - [LangChain](#langchain) · [LlamaIndex](#llamaindex) · [PyTorch](#pytorch)
+
+---
+
+## Infrastructure
+
+### Ollama
+
+Local LLM manager for Apple Silicon. Handles model downloads and serves an OpenAI-compatible API on `:11434`. Used by most tools in this setup as the model source.
+
+```shell
+brew install ollama
+```
+
+```shell
+# Start server
+brew services start ollama
+
+# Pull a model
+ollama pull qwen3-14b:q5-40k
+
+# List installed models
+ollama list
+```
+
+All tools route through **LiteLLM** (`:4000`) rather than Ollama directly, except autocomplete and embeddings (which go to `:11434` for latency).
+
+- [ollama.com](https://ollama.com) · [docs](https://ollama.com/docs) · `2-ai/ollama/ollama.sh`
+
+---
+
+### LiteLLM
+
+OpenAI-compatible proxy that sits in front of Ollama (and other providers). Single endpoint at `:4000` with a web UI, spend tracking, and rate limiting. **All tools except autocomplete/embed point here.**
+
+**Prerequisites:** `uv`, Docker (for PostgreSQL), Ollama on `:11434`.
+
+```shell
+uv tool install 'litellm[proxy]'
+```
+
+```shell
+# Start PostgreSQL (first time)
+docker run -d --name litellm-postgres --restart unless-stopped \
+  -e POSTGRES_DB=litellm_db -e POSTGRES_USER=litellm -e POSTGRES_PASSWORD=litellm \
+  -p 5432:5432 postgres:16
+
+# Start proxy (uses profile config)
+litellm --config ~/.config/litellm/litellm.yaml
+```
+
+Config deployed from `profiles/<machine>/litellm/litellm.yaml` → `~/.config/litellm/litellm.yaml`.
+
+Web UI: `http://localhost:4000/ui` · API: `http://localhost:4000/v1`
+
+- [litellm.ai](https://litellm.ai) · [docs](https://docs.litellm.ai) · `2-ai/litellm/litellm.sh`
+
+---
+
+### Olol
+
+Ollama load balancer. Routes requests round-robin across multiple Ollama backends on different machines. Each backend runs the full model independently.
+
+> Different from Exo — olol distributes traffic, Exo splits model layers.
+
+```shell
+npm install -g https://github.com/K2/olol.git
+```
+
+Config at `~/.config/olol/config.json`:
+
+```json
+{
+  "port": 11435,
+  "backends": [
+    { "url": "http://127.0.0.1:11434", "name": "local" },
+    { "url": "http://192.168.1.100:11434", "name": "mac-studio" }
+  ]
+}
+```
+
+```shell
+olol --config ~/.config/olol/config.json
+# Point tools at http://localhost:11435/v1
+```
+
+- [github.com/K2/olol](https://github.com/K2/olol) · `2-ai/olol/olol.sh`
+
+---
+
+### Exo
+
+Distributed inference that splits a single large model's layers across multiple Apple Silicon Macs. No primary/secondary distinction — all nodes run the same command and discover each other via mDNS.
+
+> Different from Olol — exo shards one model, Olol load-balances across full copies.
+
+**Prerequisites:** Xcode, uv, node, Rust nightly, macmon (pinned fork for M5).
+
+```shell
+brew install uv node
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup toolchain install nightly
+cargo install --git https://github.com/vladkels/macmon --rev a1cd06b6cc0d5e61db24fd8832e74cd992097a7d macmon --force
+
+git clone https://github.com/exo-explore/exo
+cd exo/dashboard && npm install && npm run build && cd ..
+```
+
+```shell
+# Run on each Mac — same command everywhere
+uv run exo
+
+# Dashboard + API at http://localhost:52415/
+```
+
+Exposes OpenAI, Anthropic, and Ollama-compatible APIs on `:52415`.
+
+- [github.com/exo-explore/exo](https://github.com/exo-explore/exo) · `2-ai/exo/exo.sh`
+
+---
+
+## Local Runtimes
+
+### LM Studio
+
+Native macOS GUI for discovering and running local LLMs. Exposes an OpenAI-compatible server on `:1234`.
+
+```shell
+brew install --cask lm-studio
+```
+
+Start: Open from Applications → enable the local server under the API tab.
+
+- [lmstudio.ai](https://lmstudio.ai) · [docs](https://docs.lmstudio.ai) · `2-ai/lmstudio/lmstudio.sh`
+
+---
+
+### GPT4All
+
+Privacy-focused local chatbot app. Runs entirely offline, no internet required.
+
+```shell
+brew install --cask gpt4all
+```
+
+Start: Open from Applications.
+
+- [nomic.ai/gpt4all](https://www.nomic.ai/gpt4all) · [github](https://github.com/nomic-ai/gpt4all) · `2-ai/gpt4all/gpt4all.sh`
+
+---
+
+### Llama.cpp
+
+Apple Silicon-optimized inference library for GGUF models. Provides a local HTTP server with an OpenAI-compatible API.
+
+```shell
+brew install llama.cpp
+```
+
+```shell
+# Start server
+llama-server --model path/to/model.gguf --port 8080
+
+# API at http://localhost:8080/v1
+```
+
+- [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) · `2-ai/llama.cpp/llama_cpp.sh`
+
+---
+
+### vLLM
+
+High-throughput LLM serving engine. Best on Linux + NVIDIA GPU; macOS support is CPU-only (slow for large models).
+
+```shell
+uv pip install vllm
+# or
+pip install vllm
+```
+
+```shell
+python3 -m vllm.entrypoints.openai.api_server --model <model>
+# API at http://localhost:8000/v1
+```
+
+Docker is recommended on macOS:
+
+```shell
+docker run --runtime nvidia --gpus all -p 8000:8000 vllm/vllm-openai:latest --model <model>
+```
+
+- [vllm.ai](https://vllm.ai) · [docs](https://docs.vllm.ai) · `2-ai/vllm/vllm.sh`
+
+---
+
+## Terminal Coding Agents
+
+### Claude Code
+
+Anthropic's agentic coding CLI. Reads, writes, and runs code in your terminal.
+
+**Install via curl only** (npm/Homebrew installs are deprecated):
+
+```shell
+npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || true
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Profile config (`profiles/<machine>/claude/settings.json`) is deployed to `~/.claude/settings.json`. Includes pre-approved read-only git commands and local model routing.
+
+- [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code) · `2-ai/claude/claude.sh`
+
+---
+
+### OpenCode
+
+Terminal TUI coding agent with multi-provider support, LSP integration, and MCP tools.
+
+```shell
+brew install anomalyco/tap/opencode
+# or
+curl -fsSL https://opencode.ai/install | bash
+```
+
+Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config/opencode/opencode.jsonc`. All models route through LiteLLM on `:4000`.
+
+```shell
+opencode          # interactive TUI
+opencode "task"   # one-shot
+```
+
+- [opencode.ai](https://opencode.ai) · `2-ai/opencode/opencode.sh`
+
+---
+
+### Crush
+
+Terminal TUI coding assistant by Charm. Supports LSPs, MCPs, and multiple LLM providers.
+
+```shell
+brew install charmbracelet/tap/crush
+```
+
+Config deployed from `profiles/<machine>/crush/crush.json` → `~/.config/crush/crush.json`. All profiles point at LiteLLM on `:4000`.
+
+```shell
+crush
+```
+
+- [github.com/charmbracelet/crush](https://github.com/charmbracelet/crush) · `2-ai/crush/crush.sh`
+
+---
+
+### Aider
+
+AI pair programmer in your terminal. Keeps every change in git — every session is fully auditable.
+
+```shell
+brew install aider
+# or
+uv tool install aider-chat
+```
+
+Config deployed from `profiles/<machine>/aider/aider.conf.yml` → `~/.aider.conf.yml`. All models route through LiteLLM (`openai/<model>` format).
+
+```shell
+aider                          # interactive session in current git repo
+aider path/to/file.py          # start with a file
+aider --message "refactor X"   # one-shot
+
+# Key in-session commands
+/add <file>     /drop <file>    /diff    /undo    /ask <question>
+```
+
+- [aider.chat](https://aider.chat) · [config reference](https://aider.chat/docs/config/aider_conf.html) · `2-ai/aider/aider.sh`
+
+---
+
+### Gemini CLI
+
+Google's open-source terminal agent. Supports code generation, file operations, web search, and MCP integrations.
+
+```shell
+npm install -g @google/gemini-cli
+```
+
+Config deployed from `profiles/<machine>/gemini/settings.json` → `~/.gemini/settings.json`. Routes through LiteLLM for local models.
+
+```shell
+gemini                            # interactive
+gemini -p "explain this codebase" # non-interactive
+gemini -m gemini-2.5-flash        # specific model
+```
+
+Auth: `gemini` → choose "Sign in with Google" (free tier), or set `GEMINI_API_KEY`.
+
+- [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) · `2-ai/gemini/gemini.sh`
+
+---
+
+### Grok CLI
+
+Terminal AI tool by Superagent AI (VibeKit), powered by local Ollama models. Not to be confused with Groq (cloud inference API).
+
+```shell
+npm install -g @vibe-kit/grok-cli
+```
+
+Configured to use Ollama backend:
+
+```shell
+export GROKCLI_PROVIDER=ollama
+export OLLAMA_BASE_URL=http://localhost:11434
+ollama pull MFDoom/deepseek-r1-tool-calling:latest
+```
+
+Profile config (`profiles/<machine>/grok/grok.json`) is deployed by the setup script.
+
+```shell
+grok
+```
+
+- [github.com/superagent-ai/grok-cli](https://github.com/superagent-ai/grok-cli) · `2-ai/grok/grok.sh`
+
+---
+
+### Open Interpreter
+
+Terminal agent that writes and executes code (Python, JS, shell), manages files, and can control your computer.
+
+```shell
+uv tool install open-interpreter
+# or
+pip install open-interpreter
+```
+
+```shell
+interpreter                      # interactive
+interpreter -y "list .py files"  # one-shot, auto-approve
+interpreter --safe_mode ask      # confirm every shell command
+
+# Local model via LiteLLM
+interpreter --api_base http://localhost:4000/v1 --api_key sk-local \
+  --model openai/qwen3-coder-30b-a3b-q5-32k
+```
+
+- [openinterpreter.com](https://openinterpreter.com) · [docs](https://docs.openinterpreter.com) · `2-ai/open-interpreter/open_interpreter.sh`
+
+---
+
+### OpenHands
+
+Autonomous AI software development agent (formerly OpenDevin). Writes code, runs tests, fixes bugs, and operates a terminal end-to-end. Runs in Docker.
+
+**Prerequisites:** Docker (Rancher Desktop or Colima), LiteLLM on `:4000`.
+
+```shell
+# Setup: pull images
+bash 2-ai/open-hands/open_hands.sh setup
+
+# Start web UI on :3000
+bash 2-ai/open-hands/open_hands.sh start
+```
+
+Local model config in the web UI Settings:
+- Provider: `OpenAI` · Base URL: `http://host.docker.internal:4000/v1` · API Key: `sk-local`
+
+State persisted at `~/.openhands-state/`.
+
+- [docs.all-hands.dev](https://docs.all-hands.dev) · `2-ai/open-hands/open_hands.sh`
+
+---
+
+### OpenShell
+
+NVIDIA's sandboxed runtime for running autonomous AI agents safely. Wraps Claude Code, OpenCode, Codex, etc. in an isolated container with YAML policies controlling filesystem, network, and process access.
+
+```shell
+curl -LsSf https://raw.githubusercontent.com/NVIDIA/OpenShell/main/install.sh | sh
+# or
+uv tool install -U openshell
+```
+
+**Prerequisite:** Docker running locally.
+
+```shell
+openshell sandbox create -- claude     # Claude Code in sandbox
+openshell sandbox create -- opencode   # OpenCode in sandbox
+openshell sandbox create -- codex      # Codex in sandbox
+openshell sandbox list                 # view running sandboxes
+openshell sandbox connect [name]       # SSH into sandbox
+```
+
+- [github.com/NVIDIA/OpenShell](https://github.com/NVIDIA/OpenShell) · `2-ai/openshell/openshell.sh`
+
+---
+
+### Codex
+
+OpenAI's CLI coding agent. Powered by the `codex-1` model (o3 family). Requires `OPENAI_API_KEY`.
+
+```shell
+npm install -g @openai/codex
+```
+
+```shell
+codex                                          # interactive
+codex "add input validation to login form"     # one-shot
+codex --approval-mode full-auto "refactor X"   # no prompts
+```
+
+Approval modes: `suggest` (default, shows diff) · `auto-edit` (applies file edits, asks for shell) · `full-auto` (no prompts, sandboxed).
+
+- [github.com/openai/codex](https://github.com/openai/codex) · `2-ai/codex/codex.sh`
+
+---
+
+## VS Code Extensions
+
+### VS Code
+
+Microsoft's open-source editor. Primary host for Cline, Roo Code, Kilo Code, Continue, GitHub Copilot, and Cursor extensions.
+
+```shell
+brew install --cask visual-studio-code
+```
+
+Install AI extensions:
+
+```shell
+code --install-extension saoudrizwan.claude-dev   # Cline
+code --install-extension RooVetGit.roo-cline      # Roo Code
+code --install-extension continue.continue         # Continue
+code --install-extension GitHub.copilot            # GitHub Copilot
+```
+
+Each extension's config is deployed from its own profile folder (e.g., `profiles/<machine>/cline/`).
+
+- [code.visualstudio.com](https://code.visualstudio.com) · `2-ai/vscode/vscode.sh`
+
+---
+
+### Cline
+
+Autonomous AI coding agent extension for VS Code. Creates and edits files, runs terminal commands, uses a browser, and calls MCP tools.
+
+**Extension ID:** `saoudrizwan.claude-dev`
+
+Config (`profiles/<machine>/cline/settings.jsonc`) configures the LiteLLM endpoint. Set in the Cline sidebar:
+- API Provider: `OpenAI Compatible`
+- Base URL: `http://localhost:4000/v1`
+- API Key: `sk-local`
+- Model: your profile's `CLINE_MODEL`
+
+Key features: autonomous agent mode, MCP support, git checkpoints, plan mode, browser use.
+
+- [cline.bot](https://cline.bot) · [github](https://github.com/cline/cline) · `2-ai/cline/cline.sh`
+
+---
+
+### Continue
+
+Open-source AI code assistant for VS Code and JetBrains. Chat, inline edit, autocomplete, and codebase indexing.
+
+**Extension ID:** `Continue.continue`
+
+Config deployed from `profiles/<machine>/continue/config.yaml` → `~/.continue/config.yaml`. Main chat/edit/apply models route through LiteLLM; autocomplete and embed stay on Ollama direct for latency.
+
+| Shortcut | Action |
+|----------|--------|
+| `Cmd+L` | Open chat / send selection |
+| `Tab` | Accept autocomplete |
+| `Cmd+I` | Inline edit |
+
+- [continue.dev](https://www.continue.dev) · [docs](https://docs.continue.dev) · `2-ai/continue/continue.sh`
+
+---
+
+### GitHub Copilot
+
+Industry standard AI pair programmer. Native Ollama integration in VS Code 1.113+ — no extra extension needed.
+
+**Extension ID:** `GitHub.copilot`
+
+```shell
+gh extension install github/gh-copilot   # CLI
+```
+
+**Ollama integration (VS Code):** Copilot Chat sidebar → gear icon → Add Models → Ollama → Unhide. Requires Ollama v0.18.3+, VS Code 1.113+, Copilot Chat 0.41.0+.
+
+Inline completions require a paid Copilot subscription; Ollama works for chat.
+
+- [github.com/features/copilot](https://github.com/features/copilot) · `2-ai/github-copilot/github_copilot.sh`
+
+---
+
+### Windsurf
+
+AI-native IDE from Codeium, built on VS Code. Includes **Cascade** — an agentic AI with full codebase context, terminal access, and multi-file edits.
+
+```shell
+brew install --cask windsurf
+```
+
+Profile config deploys `argv.json` and `codeium-config.json`. Local Ollama models for autocomplete: Settings → AI → Autocomplete → OpenAI Compatible → `http://localhost:11434/v1`.
+
+- [codeium.com/windsurf](https://codeium.com/windsurf) · `2-ai/windsurf/windsurf.sh`
+
+---
+
+## Self-Hosted Assistants
+
+### AnythingLLM
+
+Local RAG and chat UI. Use Ollama as the model provider — no separate model downloads needed.
+
+```shell
+brew install --cask anythingllm
+```
+
+Configuration (in app):
+1. Settings → LLM Preference → Ollama → `http://127.0.0.1:11434`
+2. Settings → Embedding Preference → Ollama → `http://127.0.0.1:11434` → `nomic-embed-text`
+3. Settings → Vector Database → LanceDB (built-in)
+
+```shell
+# Pull embedding model if missing
+ollama pull nomic-embed-text
+```
+
+- [anythingllm.com](https://anythingllm.com) · [docs](https://docs.anythingllm.com) · `2-ai/anythingllm/anythingllm.sh`
+
+---
+
+### Tabby
+
+Self-hosted AI coding assistant focused on code completion. IDE plugin connects to your Tabby server.
+
+```shell
+brew install tabbyml/tabby/tabby
+```
+
+```shell
+# Start server (Apple Silicon Metal)
+tabby serve --model TabbyML/StarCoder-1B --device metal
+
+# Health check
+curl http://localhost:8080/v1/health
+```
+
+Models are downloaded automatically on first run. Recommended models:
+
+| Model | RAM | Quality |
+|-------|-----|---------|
+| `TabbyML/StarCoder-1B` | ~2GB | Fast autocomplete |
+| `TabbyML/CodeLlama-7B` | ~7GB | Better quality |
+| `TabbyML/DeepseekCoder-6.7B` | ~7GB | Strong code completion |
+
+IDE plugins: VS Code and JetBrains — search "Tabby", set server URL to `http://localhost:8080`.
+
+- [tabby.tabbyml.com](https://tabby.tabbyml.com) · [docs](https://tabby.tabbyml.com/docs) · `2-ai/tabby/tabby.sh`
+
+---
+
+## APIs & Services
+
+### OpenRouter
+
+Unified API gateway giving access to hundreds of models through a single OpenAI-compatible endpoint. One key for Claude, GPT, Gemini, Llama, Mistral, and more.
+
+```shell
+export OPENROUTER_API_KEY="sk-or-..."
+```
+
+Base URL: `https://openrouter.ai/api/v1` — drop-in replacement for OpenAI SDK.
+
+```python
+from openai import OpenAI
+client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ["OPENROUTER_API_KEY"])
+response = client.chat.completions.create(model="anthropic/claude-sonnet-4-6", messages=[...])
+```
+
+Used in profile configs as the cloud fallback provider. Model IDs use `provider/model` format (e.g., `moonshot/kimi-k2.6`).
+
+- [openrouter.ai](https://openrouter.ai) · [models](https://openrouter.ai/models) · `2-ai/openrouter/openrouter.sh`
+
+---
+
+### Groq
+
+Cloud LLM inference API with extremely fast token generation via custom LPU hardware. Free tier available.
+
+```shell
+export GROQ_API_KEY="gsk_..."
+```
+
+No official CLI — used via API key in LiteLLM, Continue, OpenCode, etc.
+
+| Model | Best for |
+|-------|----------|
+| `llama-3.3-70b-versatile` | General purpose |
+| `qwen-3-32b` | Reasoning + coding |
+| `llama-4-scout-17b-16e-instruct` | Fast, multilingual |
+
+Profile config deploys `local-settings.json` for the Groq Code CLI.
+
+- [console.groq.com](https://console.groq.com) · [docs](https://console.groq.com/docs) · `2-ai/groq/groq.sh`
+
+---
+
+### Perplexity
+
+AI search with real-time web grounding. Returns cited, up-to-date answers sourced from the web. OpenAI-compatible API.
+
+```shell
+export PERPLEXITY_API_KEY="pplx-..."
+```
+
+Base URL: `https://api.perplexity.ai`
+
+| Model | Best for |
+|-------|----------|
+| `sonar` | Fast, cheap web-grounded answers |
+| `sonar-pro` | Complex queries, follow-ups |
+| `sonar-reasoning-pro` | Multi-step reasoning + web search |
+| `sonar-deep-research` | Exhaustive research reports |
+
+```shell
+curl https://api.perplexity.ai/chat/completions \
+  -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "sonar-pro", "messages": [{"role": "user", "content": "Latest Rust release?"}]}'
+```
+
+- [docs.perplexity.ai](https://docs.perplexity.ai) · `2-ai/perplexity/perplexity.sh`
+
+---
+
+### Hugging Face
+
+Hub for sharing models and datasets, with a CLI for downloading them locally.
+
+```shell
+pip install -U "huggingface_hub[cli]"
+huggingface-cli login
+```
+
+```shell
+huggingface-cli download meta-llama/Meta-Llama-3-8B
+```
+
+- [huggingface.co](https://huggingface.co) · [CLI docs](https://huggingface.co/docs/huggingface_hub/guides/cli) · `2-ai/huggingface/huggingface.sh`
+
+---
+
+## Image Generation
+
+### Automatic1111
+
+Feature-rich web UI for Stable Diffusion. Supports txt2img, img2img, inpainting, ControlNet, LoRA, and hundreds of extensions.
+
+**Prerequisites:** Python 3.10+, git.
+
+```shell
+git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+cd stable-diffusion-webui
+./webui.sh   # first run installs deps and downloads base model
+```
+
+Web UI at `http://localhost:7860`. Place models (`.safetensors`) in `models/Stable-diffusion/`.
+
+```shell
+./webui.sh --api                 # enable REST API
+./webui.sh --skip-torch-cuda-test  # required on macOS MPS
+```
+
+API: `POST http://localhost:7860/sdapi/v1/txt2img`
+
+- [github.com/AUTOMATIC1111](https://github.com/AUTOMATIC1111/stable-diffusion-webui) · `2-ai/automatic1111/automatic1111.sh`
+
+---
+
+### Draw Things
+
+Native macOS/iOS app for on-device image generation. Runs Stable Diffusion, FLUX, and other models via Core ML and MPS. No Python setup required.
+
+Install from [App Store](https://apps.apple.com/us/app/draw-things-ai-generation/id6444050820) or [drawthings.ai](https://drawthings.ai).
+
+Models downloaded in-app. Popular: FLUX.1 [schnell] (fast), FLUX.1 [dev] (quality), SDXL, SD 1.5.
+
+**API server:** Settings → API Server → Enable → `http://localhost:7860` (Automatic1111-compatible).
+
+- [drawthings.ai](https://drawthings.ai) · `2-ai/draw-things/draw_things.sh`
+
+---
+
+## Frameworks & Libraries
+
+### LangChain
+
+Framework for building LLM-powered applications. Chains, agents, tools, and retrieval.
+
+```shell
+pip install langchain
+```
+
+- [langchain.com](https://www.langchain.com) · [docs](https://docs.langchain.com) · [github](https://github.com/langchain-ai/langchain) · `2-ai/langchain/langchain.sh`
+
+---
+
+### LlamaIndex
+
+Data framework for connecting custom data sources to LLMs. Primary tool for building RAG pipelines.
+
+```shell
+pip install llama-index
+```
+
+- [llamaindex.ai](https://www.llamaindex.ai) · [docs](https://docs.llamaindex.ai) · [github](https://github.com/run-llama/llama_index) · `2-ai/llamaindex/llamaindex.sh`
+
+---
+
+### PyTorch
+
+Standard ML framework. Supports Metal Performance Shaders (MPS) for GPU acceleration on Apple Silicon.
+
+```shell
+pip install torch torchvision torchaudio
+```
+
+```python
+import torch
+print(torch.backends.mps.is_available())  # True on Apple Silicon
+device = torch.device("mps")
+```
+
+- [pytorch.org](https://pytorch.org) · [MPS backend](https://pytorch.org/docs/stable/notes/mps.html) · `2-ai/pytorch/pytorch.sh`
