@@ -1,15 +1,17 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Zsh - Default shell on macOS with Oh My Zsh for themes and plugins.
 
 _install_zsh_core() {
     print_info "Installing Zsh and Oh My Zsh..."
-    
+
     # Install Zsh via Homebrew
     brew install zsh
-    
+
     # Install Oh My Zsh (non-interactive)
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         print_info "Installing Oh My Zsh..."
@@ -27,7 +29,7 @@ _install_zsh_plugins() {
 _install_zsh_theme() {
     print_info "Installing Powerlevel10k theme..."
     brew install powerlevel10k
-    
+
     # Add theme to .zshrc if not present
     if ! grep -q "powerlevel10k.zsh-theme" "$HOME/.zshrc"; then
         echo "source \$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >> "$HOME/.zshrc"
@@ -36,18 +38,18 @@ _install_zsh_theme() {
 
 setup_zsh() {
     print_info "Setting up Zsh environment..."
-    
+
     _install_zsh_core
     _install_zsh_plugins
     _install_zsh_theme
-    
+
     print_info "--- Configuration ---"
     print_info "Recommended plugins for ~/.zshrc:"
     print_info "plugins=(git bundler macos rake ruby)"
-    
+
     print_info "--- Usage ---"
     print_info "Restart your terminal to trigger the Powerlevel10k configuration wizard."
-    
+
     print_status "Zsh setup complete."
 }
 

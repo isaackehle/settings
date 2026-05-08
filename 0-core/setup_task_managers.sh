@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Task Managers & Design - Project management and design tools.
 
@@ -15,9 +17,9 @@ verify_task_managers() {
 
 setup_task_managers() {
     print_info "Setting up task managers and design tools..."
-    
+
     verify_task_managers || _install_task_managers || { print_error "Failed to install task management tools"; return 1; }
-    
+
     print_status "Task managers and design tools setup complete. Start: Open the apps from Applications."
 }
 

@@ -1,8 +1,10 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
-# Ghostty - Fast, native macOS terminal emulator written in Zig. 
+# Ghostty - Fast, native macOS terminal emulator written in Zig.
 # GPU-accelerated, supports splits, tabs, and shell integration.
 # Drop-in replacement for iTerm2 or Wezterm with lower latency.
 # Website: https://ghostty.org
@@ -79,7 +81,7 @@ setup_ghostty() {
     print_info "  - Delete Word:  Cmd+Backspace"
     print_info "  - Tmux Session: Cmd+S"
     print_info ""
-    
+
     print_status "Ghostty setup complete."
 }
 

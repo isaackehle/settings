@@ -15,26 +15,34 @@ REPO_ROOT="$SETTINGS_BASE"
 
 . "${SETTINGS_BASE}/helpers.sh"
 # Source AI tool setup scripts
-. "${SETTINGS_BASE}/2-ai/anythingllm/anythingllm.sh"
-. "${SETTINGS_BASE}/2-ai/claude/claude.sh"
-. "${SETTINGS_BASE}/2-ai/cline/cline.sh"
-. "${SETTINGS_BASE}/2-ai/codex/codex.sh"
-. "${SETTINGS_BASE}/2-ai/continue/continue.sh"
-. "${SETTINGS_BASE}/2-ai/crush/crush.sh"
-. "${SETTINGS_BASE}/2-ai/exo/exo.sh"
-. "${SETTINGS_BASE}/2-ai/gemini/gemini.sh"
-. "${SETTINGS_BASE}/2-ai/github-copilot/github_copilot.sh"
-. "${SETTINGS_BASE}/2-ai/grok/grok.sh"
-. "${SETTINGS_BASE}/2-ai/groq/groq.sh"
+. "${SETTINGS_BASE}/2-ai/aider.sh"
+. "${SETTINGS_BASE}/2-ai/anythingllm.sh"
+. "${SETTINGS_BASE}/2-ai/claude.sh"
+. "${SETTINGS_BASE}/2-ai/cline.sh"
+. "${SETTINGS_BASE}/2-ai/codex.sh"
+. "${SETTINGS_BASE}/2-ai/continue.sh"
+. "${SETTINGS_BASE}/2-ai/crush.sh"
+. "${SETTINGS_BASE}/2-ai/cursor.sh"
+. "${SETTINGS_BASE}/2-ai/exo.sh"
+. "${SETTINGS_BASE}/2-ai/gemini.sh"
+. "${SETTINGS_BASE}/2-ai/github-copilot.sh"
+. "${SETTINGS_BASE}/2-ai/grok.sh"
+. "${SETTINGS_BASE}/2-ai/groq.sh"
 . "${SETTINGS_BASE}/2-ai/install-models.sh"
-. "${SETTINGS_BASE}/2-ai/litellm/litellm.sh"
-. "${SETTINGS_BASE}/2-ai/lmstudio/lmstudio.sh"
-. "${SETTINGS_BASE}/2-ai/ollama/ollama.sh"
-. "${SETTINGS_BASE}/2-ai/olol/olol.sh"
-. "${SETTINGS_BASE}/2-ai/opencode/opencode.sh"
-. "${SETTINGS_BASE}/2-ai/openrouter/openrouter.sh"
-. "${SETTINGS_BASE}/2-ai/vscode/vscode.sh"
-. "${SETTINGS_BASE}/2-ai/windsurf/windsurf.sh"
+. "${SETTINGS_BASE}/2-ai/kilocode.sh"
+. "${SETTINGS_BASE}/2-ai/litellm.sh"
+. "${SETTINGS_BASE}/2-ai/lmstudio.sh"
+. "${SETTINGS_BASE}/2-ai/ollama.sh"
+. "${SETTINGS_BASE}/2-ai/olol.sh"
+. "${SETTINGS_BASE}/2-ai/open-hands.sh"
+. "${SETTINGS_BASE}/2-ai/open-interpreter.sh"
+. "${SETTINGS_BASE}/2-ai/opencode.sh"
+. "${SETTINGS_BASE}/2-ai/openrouter.sh"
+. "${SETTINGS_BASE}/2-ai/roocode.sh"
+. "${SETTINGS_BASE}/2-ai/tabby.sh"
+. "${SETTINGS_BASE}/2-ai/vscode.sh"
+. "${SETTINGS_BASE}/2-ai/windsurf.sh"
+. "${SETTINGS_BASE}/2-ai/zed.sh"
 
 # ============================================================================
 # CONFIGURATION DEPLOYMENT
@@ -83,22 +91,50 @@ deploy_configs() {
     # --- AI tool configs ---
     print_step "Copying AI tool configs"
 
+    # Resolve per-profile config directory once
+    local _profile _profdir
+    _profile="$(_detect_profile)"
+    _profdir="${SETTINGS_BASE}/2-ai/profiles/${_profile}"
+    [ -n "$_profile" ] && log_info "Profile: ${_profile}" \
+                       || log_warning "Profile not detected — per-profile configs will be skipped"
+
     [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
     mkdir -p "$HOME/.groq"
-    _install_file "groq/local-settings.json" "$HOME/.groq/local-settings.json"
+    copy_file "${_profdir}/groq/local-settings.json" "$HOME/.groq/local-settings.json"
 
     [ -L "$HOME/.gemini" ] && rm "$HOME/.gemini"
     mkdir -p "$HOME/.gemini"
-    _install_file "gemini/settings.json"  "$HOME/.gemini/settings.json"
-    _install_file "gemini/GEMINI.md"      "$HOME/.gemini/GEMINI.md"
-    _install_file "gemini/projects.json"  "$HOME/.gemini/projects.json"
+    copy_file "${_profdir}/gemini/settings.json" "$HOME/.gemini/settings.json"
+    copy_file "${_profdir}/gemini/GEMINI.md"     "$HOME/.gemini/GEMINI.md"
+    copy_file "${SETTINGS_BASE}/2-ai/gemini-projects.json" "$HOME/.gemini/projects.json"
 
     [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
     mkdir -p "$HOME/.continue"
-    local cont_src
-    cont_src=$(find_source "continue/config.yaml")
-    [ -z "$cont_src" ] && cont_src="$SETTINGS_BASE/2-ai/continue/config.yaml"
-    _copy_file "$cont_src" "$HOME/.continue/config.yaml"
+    copy_file "${_profdir}/continue/config.yaml" "$HOME/.continue/config.yaml"
+
+    [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
+    mkdir -p "$HOME/.config/opencode"
+    copy_file "${_profdir}/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+
+    [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
+    mkdir -p "$HOME/.ollama"
+    copy_file "${_profdir}/ollama/config.json" "$HOME/.ollama/config.json"
+
+    mkdir -p "$HOME/.config/crush"
+    copy_file "${_profdir}/crush/crush.json" "$HOME/.config/crush/crush.json"
+
+    mkdir -p "$HOME/.config/grok"
+    copy_file "${_profdir}/grok/grok.json" "$HOME/.config/grok/grok.json"
+
+    mkdir -p "$HOME/.config/litellm"
+    copy_file "${SETTINGS_BASE}/2-ai/litellm/.env"         "$HOME/.config/litellm/.env"
+    copy_file "${_profdir}/litellm/litellm.yaml"            "$HOME/.config/litellm/config.yaml"
+
+    mkdir -p "$HOME/.config/zed"
+    copy_file "${_profdir}/zed/settings.json" "$HOME/.config/zed/settings.json"
+
+    mkdir -p "$HOME/.aider"
+    copy_file "${_profdir}/aider/aider.conf.yml" "$HOME/.aider.conf.yml"
 
     # --- IDE selection ---
     print_step "IDE Selection"
@@ -112,11 +148,11 @@ deploy_configs() {
     if [[ "$IDE_CHOICE" == "2" || "$IDE_CHOICE" == "3" ]]; then
         [ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
         mkdir -p "$HOME/.codeium"
-        _install_file "windsurf/codeium-config.json" "$HOME/.codeium/config.json"
+        copy_file "${_profdir}/windsurf/codeium-config.json" "$HOME/.codeium/config.json"
 
         [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
         mkdir -p "$HOME/.windsurf"
-        _install_file "windsurf/argv.json" "$HOME/.windsurf/argv.json"
+        copy_file "${_profdir}/windsurf/argv.json" "$HOME/.windsurf/argv.json"
         log_status "Windsurf config deployed."
     fi
 
@@ -125,27 +161,9 @@ deploy_configs() {
         log_info "Continue config is shared with both IDEs at ~/.continue/config.yaml."
     fi
 
-    [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
-    mkdir -p "$HOME/.config/opencode"
-    _install_file "opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
-
-    [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
-    mkdir -p "$HOME/.ollama"
-    _install_file "ollama/config.json" "$HOME/.ollama/config.json"
-
-    mkdir -p "$HOME/.config/crush"
-    _install_file "crush/crush.json" "$HOME/.config/crush/crush.json"
-
-    mkdir -p "$HOME/.config/grok"
-    _install_file "grok/grok.json" "$HOME/.config/grok/grok.json"
-
-    mkdir -p "$HOME/.config/litellm"
-    _install_file "litellm/.env"         "$HOME/.config/litellm/.env"
-    _install_file "litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
-
     # --- Shell profile.d ---
     print_step "Copying profile.d files"
-    local profiled_src="$SETTINGS_BASE/2-ai/$MAC_MODEL/profile.d"
+    local profiled_src="${_profdir}/profile.d"
     [ ! -d "$profiled_src" ] && profiled_src="$SETTINGS_BASE/config/profile.d"
         if [ -d "$profiled_src" ]; then
             mkdir -p "$HOME/.profile.d"
@@ -197,7 +215,7 @@ verify_installations() {
     log_info "Verifying tool installations..."
     local verification_results=""
     local all_passed=true
-    for check in verify_ollama verify_litellm verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot; do
+    for check in verify_ollama verify_litellm verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_roocode verify_kilocode verify_zed verify_tabby; do
         local label="${check#verify_}"
         if $check; then
             verification_results="$verification_results ✓ $label - OK\n"
@@ -260,6 +278,20 @@ install_tools() {
     verify_anythingllm  || setup_anythingllm  || log_error "Failed to install AnythingLLM"
     print_step "GitHub Copilot"
     verify_github_copilot || setup_github_copilot || log_error "Failed to install GitHub Copilot"
+    print_step "Aider"
+    verify_aider       || setup_aider       || log_error "Failed to install Aider"
+    print_step "Cursor"
+    verify_cursor      || setup_cursor      || log_error "Failed to install Cursor"
+    print_step "RooCode"
+    verify_roocode     || setup_roocode     || log_error "Failed to install RooCode"
+    print_step "Kilo Code"
+    verify_kilocode    || setup_kilocode    || log_error "Failed to install Kilo Code"
+    print_step "Zed"
+    verify_zed         || setup_zed         || log_error "Failed to install Zed"
+    print_step "Tabby"
+    verify_tabby       || setup_tabby       || log_error "Failed to install Tabby"
+    print_step "Open Hands"
+    setup_openhands    || log_error "Failed to install Open Hands"
     print_step "Verifying all installations"
     verify_installations
 }
@@ -268,27 +300,34 @@ install_tools() {
 _run_one() {
     local action="$1" tool="$2"
     case "$action:$tool" in
+        setup:aider)      setup_aider ;;
         setup:claude)     setup_claude ;;
         setup:cline)      setup_cline ;;
         setup:codex)      setup_codex ;;
         setup:continue)   setup_continue ;;
         setup:crush)      setup_crush ;;
+        setup:cursor)     setup_cursor ;;
         setup:exo)        setup_exo ;;
         teardown:exo)     teardown_exo ;;
         setup:gemini)     setup_gemini ;;
         setup:grok)       setup_grok ;;
         setup:groq)       setup_groq ;;
+        setup:kilocode)   setup_kilocode ;;
         setup:models)     install_coding_assistants ;;
         setup:ollama)     setup_ollama ;;
         setup:olol)       setup_olol ;;
         setup:anythingllm) setup_anythingllm ;;
         setup:lmstudio)    setup_lmstudio ;;
         setup:litellm)    setup_litellm ;;
+        setup:open-hands) setup_openhands ;;
         setup:openrouter) setup_openrouter ;;
         setup:opencode)   setup_opencode ;;
+        setup:roocode)    setup_roocode ;;
+        setup:tabby)      setup_tabby ;;
         setup:copilot)    setup_github_copilot ;;
         setup:vscode)     setup_vscode ;;
         setup:windsurf)   setup_windsurf ;;
+        setup:zed)        setup_zed ;;
         restore:claude)   restore_claude ;;
         restore:continue) restore_continue ;;
         restore:crush)    restore_crush ;;
@@ -337,6 +376,13 @@ interactive_menu() {
         "gemini|tools|Install Gemini CLI"
         "opencode|tools|Install + deploy opencode config"
         "anythingllm|tools|Install + configure Ollama provider"
+        "aider|tools|Install Aider coding agent + deploy config"
+        "open-hands|tools|Install Open Hands (Docker) + deploy config"
+        "cursor|editors|Install Cursor IDE + show LiteLLM config"
+        "roocode|editors|Install RooCode VS Code extension"
+        "kilocode|editors|Install Kilo Code VS Code extension"
+        "zed|editors|Install Zed editor + deploy config"
+        "tabby|servers|Install Tabby autocomplete server"
         "vscode|editors|Install VS Code + Continue + Cline extensions"
         "windsurf|editors|Install Windsurf IDE + deploy argv.json"
         "continue|extensions|Deploy Continue.dev config"
@@ -482,11 +528,32 @@ main() {
         restore)
             restore_configs
         ;;
+        aider)
+            setup_aider
+        ;;
         continue)
             setup_continue
         ;;
+        cursor)
+            setup_cursor
+        ;;
+        kilocode)
+            setup_kilocode
+        ;;
+        open-hands)
+            setup_openhands
+        ;;
         opencode)
             setup_opencode
+        ;;
+        roocode)
+            setup_roocode
+        ;;
+        tabby)
+            setup_tabby
+        ;;
+        zed)
+            setup_zed
         ;;
         crush)
             setup_crush
@@ -569,7 +636,7 @@ main() {
             interactive_menu
         ;;
         *)
-            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
+            echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|roocode|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
             echo "  (no args)   - Interactive tool picker"
             echo "  deploy      - Copy all AI tool configs to their home-directory locations"
             echo ""
@@ -595,15 +662,22 @@ main() {
             echo "  groq        - Deploy Groq config + API key instructions"
             echo "  opencode    - Setup OpenCode + deploy config"
             echo "  anythingllm - Install AnythingLLM + configure Ollama provider"
+            echo "  aider       - Install Aider coding agent + deploy config"
+            echo "  open-hands  - Install Open Hands (Docker) + deploy config"
             echo "  lmstudio    - Install LM Studio"
             echo ""
             echo "=== EDITORS ==="
             echo "  vscode      - Install VS Code + Continue + Cline extensions"
             echo "  windsurf    - Install Windsurf IDE + deploy configs"
+            echo "  cursor      - Install Cursor IDE + show LiteLLM config"
+            echo "  zed         - Install Zed editor + deploy config"
             echo ""
             echo "=== EXTENSIONS ==="
             echo "  continue    - Deploy Continue.dev config"
             echo "  copilot     - Install gh-copilot extension + VS Code Copilot extensions"
+            echo "  roocode     - Install RooCode VS Code extension + show config"
+            echo "  kilocode    - Install Kilo Code VS Code extension + show config"
+            echo "  tabby       - Install Tabby autocomplete server"
             echo ""
             echo "=== COMMANDS ==="
             echo "  setup       - Setup all tool configs at once"
