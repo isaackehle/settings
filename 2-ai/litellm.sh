@@ -9,12 +9,16 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
 fi
 . "${SETTINGS_BASE}/helpers.sh"
 
+_src_dir="$SETTINGS_BASE/2-ai/litellm"
+
 # Config paths
 _local_dir="$HOME/.config/litellm"
-_local_cfg="$_local_dir/litellm.yaml"
+_local_cfg="$_local_dir/config.yaml"
 _svc_dir="/usr/local/bin"
 _svc_cfg="$_svc_dir/litellm.yaml"
 _db_url="postgresql://litellm:litellm@localhost:5432/litellm_db"
+
+
 
 verify_litellm() {
     command -v litellm &> /dev/null || [ -x "$HOME/.local/share/uv/tools/litellm/bin/litellm" ]
@@ -100,8 +104,14 @@ setup_litellm() {
         if [ -f "$_local_cfg" ]; then
             backup_litellm
         fi
+        log_info "copying litellm config from $src_cfg to $_local_cfg"
         cp "$src_cfg" "$_local_cfg"
         print_status "Deployed litellm config ($mac_model) to $_local_cfg"
+
+        if [ -f "$_local_dir/litellm.yaml" ]; then
+            log_warning "removing old litellm config $_local_dir/litellm.yaml"
+            rm "$_local_dir/litellm.yaml"
+        fi
     else
         print_warning "No source config found at $src_cfg — skipping config deploy"
     fi
@@ -111,7 +121,7 @@ setup_litellm() {
     local env_src
     env_src="$(find_source "litellm/.env" 2>/dev/null)"
 
-    [ -z "$env_src" ] && env_src="$SETTINGS_BASE/litellm/.env"
+    [ -z "$env_src" ] && env_src="$_src_dir/.env"
     if [ -f "$env_src" ]; then
         cp "$env_src" "$env_file"
         print_status "Deployed .env to $env_file"
@@ -123,7 +133,7 @@ setup_litellm() {
 
     # Configure litellm to run as a user-level service on port 4000 (optional)
     if command_exists "launchctl"; then
-        local src_plist="$SETTINGS_BASE/2-ai/ai.litellm.proxy.plist"
+        local src_plist="$_src_dir/ai.litellm.proxy.plist"
 
         if [ ! -f "$src_plist" ]; then
             print_warning "Plist not found at $src_plist — skipping service setup"
