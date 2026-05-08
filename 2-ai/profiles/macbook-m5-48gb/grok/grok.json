@@ -30,7 +30,7 @@
         "qwen3.6-35b:q4-32k": {
           "name": "Qwen3.6 35B (general)"
         },
-        "qwen3-coder-30b:q5-32k": {
+        "qwen3-coder-30b-a3b:q5-32k": {
           "name": "Qwen3-Coder 30B A3B (code)"
         },
         "deepseek-r1-tools:14b-128k": {

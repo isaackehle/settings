@@ -86,46 +86,86 @@ model_list:
       model: ollama_chat/qwen3-coder-next-80b-q4-64k
       api_base: http://localhost:11434
 
+  - model_name: qwen3-coder-next-80b-q4-128k
+    litellm_params:
+      model: ollama_chat/qwen3-coder-next-80b-q4-128k
+      api_base: http://localhost:11434
+
   - model_name: codestral-22b-q8-32k
     litellm_params:
       model: ollama_chat/codestral-22b-v0-1-q8-0
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-7b
+  - model_name: qwen2.5-coder-1.5b-q4-32k
     litellm_params:
-      model: ollama_chat/qwen2.5-coder-7b
+      model: ollama_chat/qwen2.5-coder:1.5b
       api_base: http://localhost:11434
 
-  - model_name: qwen2.5-coder-1.5b
+  - model_name: qwen2.5-coder-7b-q4-32k
     litellm_params:
-      model: ollama_chat/qwen2.5-coder-1.5b
+      model: ollama_chat/qwen2.5-coder:7b
+      api_base: http://localhost:11434
+
+  - model_name: qwen2.5-coder-7b-q8-32k
+    litellm_params:
+      model: ollama_chat/qwen2.5-coder-7b:q8-32k
       api_base: http://localhost:11434
 
   # --- Writing / general ---
+  - model_name: qwen3.5-27b-q8-8k
+    litellm_params:
+      model: ollama_chat/qwen3.5-27b:q8-8k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.5-27b-q8-32k
+    litellm_params:
+      model: ollama_chat/qwen3.5-27b:q8-32k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.5-27b-q8-128k
+    litellm_params:
+      model: ollama_chat/qwen3.5-27b:q8-128k
+      api_base: http://localhost:11434
+
   - model_name: qwen3.5-27b-q8-256k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b-q8-256k
+      model: ollama_chat/qwen3.5-27b:q8-256k
       api_base: http://localhost:11434
 
   - model_name: qwen3.5-27b-q5-8k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b-q5-8k
+      model: ollama_chat/qwen3.5-27b:q5-8k
       api_base: http://localhost:11434
 
   - model_name: qwen3.5-27b-q5-32k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b-q5-32k
+      model: ollama_chat/qwen3.5-27b:q5-32k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.5-27b-q5-128k
+    litellm_params:
+      model: ollama_chat/qwen3.5-27b:q5-128k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3.5-27b-q5-256k
+    litellm_params:
+      model: ollama_chat/qwen3.5-27b:q5-256k
       api_base: http://localhost:11434
 
   # --- Research ---
   - model_name: qwen3-14b-q5-40k
     litellm_params:
-      model: ollama_chat/qwen3-14b-q5-40k
+      model: ollama_chat/qwen3-14b:q5-40k
       api_base: http://localhost:11434
 
-  - model_name: qwen3-32b-q5
+  - model_name: qwen3-14b-q8-40k
     litellm_params:
-      model: ollama_chat/qwen3-32b-q5
+      model: ollama_chat/qwen3-14b:q8-40k
+      api_base: http://localhost:11434
+
+  - model_name: qwen3-32b-q5-32k
+    litellm_params:
+      model: ollama_chat/qwen3-32b:q5-32k
       api_base: http://localhost:11434
 
   # --- Reasoning / tool calls ---
@@ -139,9 +179,9 @@ model_list:
       model: ollama_chat/deepseek-r1-tools-32b-128k
       api_base: http://localhost:11434
 
-  - model_name: deepseek-r1-14b
+  - model_name: deepseek-r1-q8-128k
     litellm_params:
-      model: ollama_chat/deepseek-r1-14b
+      model: ollama_chat/deepseek-r1:q8-128k
       api_base: http://localhost:11434
 
   # --- Planning / fast ---
@@ -161,6 +201,29 @@ model_list:
       model: ollama_chat/gemma4-31b
       api_base: http://localhost:11434
 
+  # --- llama.cpp server (optional) ---
+  # Compile llama.cpp and start with:
+  #   llama-server -m <model>.gguf --ctx-size 32768 --n-gpu-layers 999 --flash-attn \
+  #     --cache-type-k q8_0 --alias qwen3-coder-30b-q6 --port 8080
+  # Models below are only reachable when llama-server is running on port 8080.
+  - model_name: llama-qwen3-coder-30b-q6-32k
+    litellm_params:
+      model: openai/qwen3-coder-30b-q6
+      api_base: http://localhost:8080/v1
+      api_key: none
+
+  - model_name: llama-qwen3-coder-30b-q6-128k
+    litellm_params:
+      model: openai/qwen3-coder-30b-q6
+      api_base: http://localhost:8080/v1
+      api_key: none
+
+  - model_name: llama-qwen3.6-35b-q5-32k
+    litellm_params:
+      model: openai/qwen3.6-35b-q5
+      api_base: http://localhost:8080/v1
+      api_key: none
+
   # --- Embeddings ---
   - model_name: nomic-embed-text
     litellm_params:
@@ -170,6 +233,7 @@ model_list:
 litellm_settings:
   set_verbose: false
   drop_params: true
+  request_timeout: 600
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
@@ -177,12 +241,12 @@ general_settings:
 
 router_settings:
   model_group_alias:
-    "gemini-2.5-pro": "qwen3.5-27b-q5-32k"
-    "gemini-2.5-flash": "qwen3.5-27b-q5-8k"
-    "gemini-2.5-flash-lite": "qwen3-4b-q8-256k"
-    "gemini-3-flash-preview": "qwen3.5-27b-q8-256k"
-    "gemini-3-flash-preview-customtools": "qwen3.5-27b-q8-32k"
-    "gemini-3-pro": "qwen3-coder-30b-q6-32k"
-    "gemini-3-pro-customtools": "qwen3-coder-30b-q6-32k"
-    "gemini-3.1-pro-preview": "qwen3.6-35b-32k"
-    "gemini-3.1-pro-preview-customtools": "qwen3.6-35b-32k"
+    'gemini-2.5-pro': 'qwen3.5-27b-q5-32k'
+    'gemini-2.5-flash': 'qwen3.5-27b-q5-8k'
+    'gemini-2.5-flash-lite': 'qwen3-4b-q8-256k'
+    'gemini-3-flash-preview': 'qwen3.5-27b-q8-256k'
+    'gemini-3-flash-preview-customtools': 'qwen3.5-27b-q8-32k'
+    'gemini-3-pro': 'qwen3-coder-30b-q6-32k'
+    'gemini-3-pro-customtools': 'qwen3-coder-30b-q6-32k'
+    'gemini-3.1-pro-preview': 'qwen3.6-35b-32k'
+    'gemini-3.1-pro-preview-customtools': 'qwen3.6-35b-32k'

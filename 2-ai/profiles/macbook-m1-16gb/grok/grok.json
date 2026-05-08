@@ -30,7 +30,7 @@
         "qwen3-14b:q4-40k": {
           "name": "Qwen3 14B (fast, planning)"
         },
-        "deepseek-r1-tools:8b-128k": {
+        "deepseek-r1-tools-8b:q4-128k": {
           "name": "DeepSeek R1 8B (reason+tools)"
         },
         "deepseek-r1:8b": {

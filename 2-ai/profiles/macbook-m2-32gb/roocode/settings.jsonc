@@ -1,0 +1,54 @@
+{
+  // Roo Code (rooveterinaryinc.roo-cline) — VS Code settings snippet
+  // MERGE INTO: ~/Library/Application Support/Code/User/settings.json
+  //
+  // API config is set via the Roo Code sidebar → API Provider: OpenAI Compatible
+  //   Base URL  → http://localhost:4000/v1
+  //   API Key   → sk-local
+  //
+  // Roo Code supports per-mode model selection. Recommended assignments:
+  //   Code mode      → qwen3-14b:q8-40k
+  //   Architect mode → qwen3.5-27b:q5-32k
+  //   Ask mode       → qwen3-14b:q8-40k
+  //   Debug mode     → deepseek-r1-tools-8b:q4-128k
+  //
+  // Cloud fallback (any mode):
+  //   Provider  → OpenRouter
+  //   API Key   → $OPENROUTER_API_KEY
+  //   Model     → moonshot/kimi-k2.6
+
+  "roo-cline.preferredLanguage": "English",
+  "roo-cline.alwaysAllowReadOnly": true,
+  "roo-cline.alwaysAllowReadOnlyOutsideWorkspace": false,
+  "roo-cline.alwaysAllowWrite": false,
+  "roo-cline.alwaysAllowExecute": false,
+  "roo-cline.alwaysAllowBrowser": false,
+
+  // Roo Code mode-specific model overrides:
+  "roo-cline.modeApiConfigs": {
+    "code": {
+      "apiProvider": "openai",
+      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiApiKey": "sk-local",
+      "openAiModelId": "qwen3-14b-q8-40k"
+    },
+    "architect": {
+      "apiProvider": "openai",
+      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiApiKey": "sk-local",
+      "openAiModelId": "qwen3.5-27b-q5-256k"
+    },
+    "ask": {
+      "apiProvider": "openai",
+      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiApiKey": "sk-local",
+      "openAiModelId": "qwen3-14b-q8-40k"
+    },
+    "debug": {
+      "apiProvider": "openai",
+      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiApiKey": "sk-local",
+      "openAiModelId": "deepseek-r1-tools-8b-q4-128k"
+    }
+  }
+}

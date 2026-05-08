@@ -1,0 +1,48 @@
+{
+  "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from LiteLLM's /v1/models endpoint automatically",
+
+  "assistant": {
+    "default_model": {
+      "provider": "openai",
+      "model": "qwen3-14b-q5-40k"
+    },
+    "version": "2"
+  },
+
+  "language_models": {
+    "openai": {
+      "api_url": "http://localhost:4000/v1",
+      "available_models": [
+        {
+          "name": "qwen3-14b-q5-40k",
+          "display_name": "Primary (M1 16GB)",
+          "max_tokens": 40960
+        },
+        {
+          "name": "qwen3.5-27b-q5-256k",
+          "display_name": "Writing / General",
+          "max_tokens": 32768
+        },
+        {
+          "name": "deepseek-r1-tools-8b-q4-128k",
+          "display_name": "Reasoning + Tools",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen2.5-coder-1.5b-q4-32k",
+          "display_name": "Fast / Planning",
+          "max_tokens": 8192
+        },
+        {
+          "name": "kimi-k2.6-cloud",
+          "display_name": "Kimi k2.6 Cloud",
+          "max_tokens": 131072
+        }
+      ]
+    }
+  },
+
+  "features": {
+    "inline_completion_provider": "none"
+  }
+}

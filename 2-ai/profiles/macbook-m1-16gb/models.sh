@@ -43,12 +43,12 @@
 
 # Cloud models (via OpenRouter — requires API key)
 OPENROUTER_MODELS=(
-    "claude-opus-4-6:cloud"                         # Claude Opus 4.6
-    "claude-sonnet-4-6:cloud"                      # Claude Sonnet 4.6
-    "claude-haiku-4-5:cloud"                       # Claude Haiku 4.5
-    "gpt-4o:cloud"                                  # GPT-4o
-    "o3:cloud"                                      # o3
-    "sonar-pro:cloud"                               # Perplexity Sonar
+    "claude-opus-4-6:cloud"
+    "claude-sonnet-4-6:cloud"
+    "claude-haiku-4-5:cloud"
+    "gpt-4o:cloud"
+    "o3:cloud"
+    "sonar-pro:cloud"
 )
 
 # M1 16GB - Lightweight configuration
@@ -68,41 +68,47 @@ OLLAMA_MODELS=(
     "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
 
     # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"                            # ~5 GB   | Fast code tasks (32k)
-    "qwen2.5-coder:1.5b"                          # ~1 GB   | Autocomplete (32k)
+    "qwen2.5-coder:7b"              # ~5 GB   | Fast code tasks (32k)
+    "qwen2.5-coder:1.5b"            # ~1 GB   | Autocomplete (32k)
+
+    # --- Codestral ---
+    "codestral:22b"                 # ~14 GB | Code apply/insert, light coding (32k)
 
     # --- DeepSeek R1 ---
-    "deepseek-r1:8b"                               # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "MFDoom/deepseek-r1-tool-calling:8b|deepseek-r1-tools:8b-128k" # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    "deepseek-r1:8b"                                                                        # ~5 GB  | Reasoning, chat-only (no tools) (128k)
+    "deepseek-r1:8b-llama-distill-q8_0|deepseek-r1-8b:q8-128k"                              # 8.5 GB
+    "deepseek-r1:14b"                           # 9 GB
+    "deepseek-r1:14b-qwen-distill-q8_0|deepseek-r1-14b:q8-128k"                             # 16 GB  | Reasoning stock (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q4_K_M|deepseek-r1-tools-8b:q4-128k"  # ~5 GB | HF base tool calling / Tool calling alias (128k)
+    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q8_0|deepseek-r1-tools-8b:q8-128k"    # 9 GB  | HF base 14B (128k)
 
     # --- GPT-OSS ---
-    "gpt-oss:latest"                              # ~14 GB  | General purpose (32k)
-    "gpt-oss:20b"                                 # ~14 GB  | Reasoning/Coding (32k)
+    "gpt-oss"                       # ~14 GB  | General purpose/Reasoning/Coding (32k)
 
     # --- Embeddings ---
-    "nomic-embed-text:latest"                            # ~0.3 GB | Embeddings (Continue/RAG) (8k)
+    "nomic-embed-text"                     # ~0.3 GB | Embeddings (Continue/RAG) (8k)
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # CLOUD MODELS
     # ═══════════════════════════════════════════════════════════════════════════════
-    "kimi-k2.6:cloud"                               # Kimi k2.6 (long context, reasoning)
-    "glm-5.1:cloud"                                # GLM 5.1 (reasoning, Chinese-optimized)
-    "mistral-large-3:675b-cloud"                           # Mistral Large
-    "gemini-3-flash-preview:cloud"                          # Gemini 3 Flash
-    "gpt-oss:20b-cloud"                            # GPT-OSS 20B Cloud
-    "gpt-oss:120b-cloud"                           # GPT-OSS 120B Cloud
-    "deepseek-v4-pro:cloud"                                 # DeepSeek V4 Pro
+    "deepseek-v4-pro:cloud"
+    "gemini-3-flash-preview:cloud"
+    "glm-5.1:cloud"
+    "gpt-oss:120b-cloud"
+    "gpt-oss:20b-cloud"
+    "kimi-k2.6:cloud"
+    "mistral-large-3:675b-cloud"
 )
 
 # ----------------------------------------------
 # opencode
 # ----------------------------------------------
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen2.5-coder:7b"                                 # OpenCode #1 (IndexNow benchmark)
-    [think]="deepseek-r1-tools:8b-128k"                                # tradeoff analysis, debugging strategy, scoring
-    [write]="qwen2.5-coder:7b"                               # resumes, cover letters, docs
-    [research]="qwen2.5-coder:7b"                             # codebase investigation
-    [plan]="qwen2.5-coder:1.5b"                              # next steps, task breakdown
+    [code]="qwen2.5-coder:7b"                     # OpenCode #1 (IndexNow benchmark)
+    [think]="deepseek-r1-tools-8b:q4-128k"        # tradeoff analysis, debugging strategy, scoring
+    [write]="qwen2.5-coder:7b"                    # resumes, cover letters, docs
+    [research]="qwen2.5-coder:7b"                 # codebase investigation
+    [plan]="qwen2.5-coder:1.5b"                   # next steps, task breakdown
 )
 
 # ----------------------------------------------
@@ -113,18 +119,17 @@ declare -A CONTINUE_ROLES=(
     [chat_alt]="codestral:22b"                                # manual model switch in chat
     [apply]="qwen2.5-coder:7b"                               # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"                     # inline completions (default)
-    [embed]="nomic-embed-text:latest"                                # @codebase semantic search
+    [embed]="nomic-embed-text"                                # @codebase semantic search
 )
-
-# ----------------------------------------------
-# Cline (VS Code)
-# ----------------------------------------------
-CLINE_MODEL="qwen2.5-coder:7b"
 
 # ----------------------------------------------
 # Claude Code
 # ----------------------------------------------
-CLAUDE_CODE_HAIKU="qwen2.5-coder:1.5b"                     # ANTHROPIC_DEFAULT_HAIKU_MODEL — planning
+declare -A CLAUDE_CODE=(
+    [primary]="qwen2.5-coder:7b"
+    [fast]="qwen2.5-coder:1.5b"
+    [reasoning]="deepseek-r1-tools-8b:q4-128k"
+)
 
 # ----------------------------------------------
 # Ollama direct
@@ -135,3 +140,43 @@ CLAUDE_CODE_HAIKU="qwen2.5-coder:1.5b"                     # ANTHROPIC_DEFAULT_H
 #   ollama stop <model>                         force-unload to free memory
 #   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins
 # ----------------------------------------------
+
+# ----------------------------------------------
+# Cline (VS Code)
+# ----------------------------------------------
+CLINE_MODEL="qwen3-14b:q5-40k"
+CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
+
+# ----------------------------------------------
+# Roo Code (VS Code)
+# ----------------------------------------------
+ROOCODE_MODEL="qwen3-14b:q5-40k"
+ROOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
+ROOCODE_MODE_CODE="qwen3-14b:q5-40k"
+ROOCODE_MODE_ARCHITECT="qwen3.5-27b:q5-32k"
+ROOCODE_MODE_ASK="qwen3-14b:q5-40k"
+ROOCODE_MODE_DEBUG="deepseek-r1-tools-8b:q4-128k"
+
+# ----------------------------------------------
+# Kilo Code (VS Code)
+# ----------------------------------------------
+KILOCODE_MODEL="qwen3-14b:q5-40k"
+KILOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
+
+# ----------------------------------------------
+# Aider
+# ----------------------------------------------
+AIDER_MODEL="qwen3-14b:q5-40k"
+AIDER_WEAK_MODEL="qwen2.5-coder:1.5b"
+AIDER_EDITOR_MODEL="codestral:22b"
+
+# ----------------------------------------------
+# Zed
+# ----------------------------------------------
+ZED_MODEL="qwen3-14b:q5-40k"
+
+# ----------------------------------------------
+# Cursor
+# ----------------------------------------------
+CURSOR_MODEL="qwen3-14b:q5-40k"
+CURSOR_MODEL_CLOUD="kimi-k2.6:cloud"

@@ -14,7 +14,7 @@
           "default_max_tokens": 8192
         },
         {
-          "id": "deepseek-r1-tools-8b-128k",
+          "id": "deepseek-r1-tools-8b-q4-128k",
           "name": "DeepSeek R1 Tools 8B",
           "context_window": 131072,
           "default_max_tokens": 8192

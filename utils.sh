@@ -18,7 +18,7 @@ log_status()  { echo -e "${GREEN}✗${NC} $*" >&2; }
 die()         { log_error "$*"; exit 1; }
 
 
-# Ollama colon form → LiteLLM dash form  (qwen3-32b:q5 → qwen3-32b-q5)
+# Ollama colon form → LiteLLM dash form  (qwen3-32b:q5-32k → qwen3-32b-q5-32k)
 colon_to_dash() { echo "${1//:/-}"; }
 
 # Logging function
