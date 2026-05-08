@@ -3,8 +3,11 @@
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
 . "${SETTINGS_BASE}/helpers.sh"
-. "${SETTINGS_BASE}/2-ai/exo/setup_exo.sh"
+. "${SETTINGS_BASE}/2-ai/exo.sh"
 
 # Ollama Model Management Library
 # This library provides functions to manage Ollama models by purpose

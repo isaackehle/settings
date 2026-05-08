@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_pdf_tools() {
     print_info "Installing PDF tools..."
@@ -13,9 +15,9 @@ verify_pdf_tools() {
 
 setup_pdf() {
     print_info "Setting up PDF tools..."
-    
+
     verify_pdf_tools || _install_pdf_tools || { print_error "Failed to install PDF tools"; return 1; }
-    
+
     print_status "PDF tools setup complete. Start: Open the apps from Applications."
 }
 

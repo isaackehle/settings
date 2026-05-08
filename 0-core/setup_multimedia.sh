@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_multimedia_casks() {
     print_info "Installing multimedia GUI applications..."
@@ -18,12 +20,12 @@ verify_multimedia() {
 
 setup_multimedia() {
     print_info "Setting up multimedia tools..."
-    
+
     verify_multimedia || {
         _install_multimedia_casks || { print_error "Failed to install multimedia casks"; return 1; }
         _install_multimedia_formulae || { print_error "Failed to install multimedia formulae"; return 1; }
     }
-    
+
     print_status "Multimedia tools setup complete."
 }
 

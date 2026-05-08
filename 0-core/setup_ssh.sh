@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 # SSH - Secure Shell for encrypted remote connections.
 
@@ -15,9 +17,9 @@ verify_ssh() {
 
 setup_ssh() {
     print_info "Setting up SSH..."
-    
+
     verify_ssh || _install_ssh || { print_error "Failed to install SSH tools"; return 1; }
-    
+
     print_status "SSH tools setup complete."
     print_info "Manual Configuration:"
     print_info "  - Generate key: ssh-keygen -t ed25519 -C \"your_email@example.com\""

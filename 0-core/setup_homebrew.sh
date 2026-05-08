@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_homebrew() {
     print_info "Installing Homebrew..."
@@ -14,10 +16,10 @@ verify_homebrew() {
 setup_homebrew() {
     print_info "Setting up Homebrew..."
     verify_homebrew || _install_homebrew || { print_error "Failed to install Homebrew"; return 1; }
-    
+
     print_info "Updating Homebrew..."
     brew update && brew upgrade
-    
+
     print_status "Homebrew setup complete."
 }
 

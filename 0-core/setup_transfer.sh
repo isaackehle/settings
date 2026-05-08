@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 # Transfer - Steps for migrating settings and connections to a new Mac.
 
@@ -20,7 +22,7 @@ _transfer_oracle_tns() {
     if [[ -f ~/Documents/tnsnames.ora && -f ~/Documents/sqlnet.ora ]]; then
         ln -sf ~/Documents/tnsnames.ora ~/.tnsnames.ora
         ln -sf ~/Documents/sqlnet.ora ~/.sqlnet.ora
-        
+
         sudo mkdir -p /opt/oracle/instantclient/network/admin/
         sudo ln -sf ~/Documents/tnsnames.ora /opt/oracle/instantclient/network/admin/
         sudo ln -sf ~/Documents/sqlnet.ora /opt/oracle/instantclient/network/admin/
@@ -45,14 +47,14 @@ _check_dns() {
 
 setup_transfer() {
     print_info "Starting transfer/migration process..."
-    
+
     print_info "--- Manual Step: Studio 3T ---"
     print_info "1. Open Connect dialog -> Select connections -> Export (Include passwords)"
     print_info "2. On new Mac: Open Connect dialog -> Import"
-    
+
     print_info "--- Navicat Settings ---"
     _transfer_navicat_settings
-    
+
     print_info "--- Oracle TNS ---"
     _transfer_oracle_tns
     print_info "Manual Navicat UI Config: Preferences -> Environments"
@@ -60,13 +62,13 @@ setup_transfer() {
     print_info "  - ORACLE_HOME -> /opt/oracle/instantclient"
     print_info "  - DYLD_LIBRARY_PATH -> /opt/oracle/instantclient"
     print_info "  - TNS_ADMIN -> /opt/oracle/instantclient/network/admin"
-    
+
     print_info "--- AI Stack ---"
     _setup_ai_stack
-    
+
     print_info "--- Network Check ---"
     _check_dns
-    
+
     print_status "Transfer/Migration steps completed."
 }
 

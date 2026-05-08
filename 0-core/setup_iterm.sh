@@ -1,6 +1,8 @@
 #!/bin/bash
-. "$(dirname "${BASH_SOURCE[0]}")/../utils.sh"
-. "$(dirname "${BASH_SOURCE[0]}")/../helpers.sh"
+if [ -z "${SETTINGS_BASE:-}" ]; then
+    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+fi
+. "${SETTINGS_BASE}/helpers.sh"
 
 _install_iterm() {
     print_info "Installing iTerm2..."
@@ -27,10 +29,10 @@ verify_starship() {
 
 setup_iterm() {
     print_info "Setting up iTerm2 and Starship..."
-    
+
     verify_iterm || _install_iterm || { print_error "Failed to install iTerm2"; return 1; }
     verify_starship || _install_starship || { print_error "Failed to install Starship"; return 1; }
-    
+
     print_status "iTerm2 and Starship setup complete. Start: Open iTerm2 from Applications."
 }
 
