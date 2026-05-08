@@ -29,8 +29,8 @@ setup_roocode() {
     log_info "Setting up RooCode..."
     verify_roocode || _install_roocode || log_warning "RooCode not installed — skipping"
 
-    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE:-}/roocode/settings.jsonc"
-    if [ -n "${MACHINE_PROFILE:-}" ] && [ -f "$config_src" ]; then
+    local config_src="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/roocode/settings.jsonc"
+    if [ -f "$config_src" ]; then
         log_info "Profile config available: $config_src"
         log_info "Merge into: ~/Library/Application Support/Code/User/settings.json"
     else

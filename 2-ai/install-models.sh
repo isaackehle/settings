@@ -3,9 +3,6 @@
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
-if [ -z "${SETTINGS_BASE:-}" ]; then
-    SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
-fi
 . "${SETTINGS_BASE}/helpers.sh"
 . "${SETTINGS_BASE}/2-ai/exo.sh"
 
@@ -163,7 +160,7 @@ install_ollama_models() {
 install_coding_assistants() {
     print_step "Detecting hardware profile"
     local detected
-    detected=$(_detect_profile)
+    detected="${MACHINE_PROFILE}"
 
     echo ""
     echo "Ollama Model Installer"

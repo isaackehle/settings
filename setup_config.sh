@@ -12,9 +12,7 @@ SETTINGS_BASE="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=helpers.sh
 source "$SETTINGS_BASE/helpers.sh"
 
-MAC_MODEL=$(_detect_profile)   # also sets HW_MODEL and HW_MEM_GB
-
-echo "Detected: $MAC_MODEL ($HW_MODEL, ${HW_MEM_GB}GB)"
+echo "Detected: $MACHINE_PROFILE ($HW_MODEL, ${HW_MEM_GB}GB)"
 echo ""
 
 if [ ! -d "$SETTINGS_BASE" ]; then
@@ -50,40 +48,40 @@ done
 install_file "shellrc" "$HOME/.shellrc"
 
 # profile.d — mirror to ~/.profile.d/ (sourced by shellrc)
-PROFILED_SRC="$SETTINGS_BASE/2-ai/profiles/$MAC_MODEL/profile.d"
+PROFILED_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/profile.d"
 [ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_BASE/config/profile.d"
 if [ -d "$PROFILED_SRC" ]; then
     [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
     mkdir -p "$HOME/.profile.d"
     cp -R "$PROFILED_SRC/." "$HOME/.profile.d/"
     echo "  copied profile.d/ -> $HOME/.profile.d/"
-    
+
     # Patch Home Assistant credentials in _home_assistant if present
     HA_PROFILED="$HOME/.profile.d/_home_assistant"
     if [ -f "$HA_PROFILED" ] && grep -q "YOUR_HOMEASSISTANT_URL\|YOUR_LONG_LIVED_TOKEN" "$HA_PROFILED"; then
         echo ""
         echo "  Home Assistant credentials needed for profile.d/_home_assistant."
-        
+
         read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
         HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
         if [ -n "$HA_URL" ]; then
             sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$HA_PROFILED"
             echo "    Set HOMEASSISTANT_URL."
         fi
-        
+
         read -p "    Long-lived token (enter = ${HOMEASSISTANT_TOKEN:+use from .env.local --> }${HOMEASSISTANT_TOKEN:-keep placeholder}): " HA_TOKEN
         HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
         if [ -n "$HA_TOKEN" ]; then
             sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$HA_PROFILED"
             echo "    Set HOMEASSISTANT_TOKEN."
         fi
-        
+
         chmod 600 "$HA_PROFILED"
     fi
 fi
 
 # zshrc.d — mirror to ~/.zshrc.d/ (sourced by zshrc)
-ZSHRCD_SRC="$SETTINGS_BASE/2-ai/profiles/$MAC_MODEL/zshrc.d"
+ZSHRCD_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/zshrc.d"
 [ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_BASE/config/zshrc.d"
 if [ -d "$ZSHRCD_SRC" ]; then
     [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
@@ -109,7 +107,7 @@ echo "Copying .env.local..."
 
 ENV_DEST="$HOME/.env.local"
 ENV_SRC=$(find_source "env.local")
-[ -z "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/2-ai/profiles/$MAC_MODEL/env.local"
+[ -z "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/env.local"
 [ ! -f "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/env.local"
 
 if [ ! -f "$ENV_SRC" ]; then
@@ -147,14 +145,14 @@ if [ -n "$PHP_VER" ]; then
     echo ""
     read -p "  Variant [1-4] (Enter = 1): " PHP_VARIANT_CHOICE
     PHP_VARIANT_CHOICE="${PHP_VARIANT_CHOICE:-1}"
-    
+
     case "$PHP_VARIANT_CHOICE" in
         2) PHP_VARIANT="-debug" ;;
         3) PHP_VARIANT="-zts" ;;
         4) PHP_VARIANT="-debug-zts" ;;
         *) PHP_VARIANT="" ;;
     esac
-    
+
     # 8.5 formula is 'php' (not 'php@8.5'); opt path matches formula name
     if [[ "$PHP_VER" == "8.5" ]]; then
         PHP_FORMULA="php${PHP_VARIANT}"
@@ -163,15 +161,15 @@ if [ -n "$PHP_VER" ]; then
         PHP_FORMULA="php@${PHP_VER}${PHP_VARIANT}"
         PHP_OPT_PATH="/opt/homebrew/opt/php@${PHP_VER}${PHP_VARIANT}"
     fi
-    
+
     echo ""
     echo "  Tapping shivammathur/php..."
     brew tap shivammathur/php
-    
+
     echo "  Installing shivammathur/php/${PHP_FORMULA}..."
     brew install "shivammathur/php/${PHP_FORMULA}"
     brew link --overwrite --force "shivammathur/php/${PHP_FORMULA}" 2>/dev/null || true
-    
+
     # Write _php directly with the active path (overwrite, no comment/uncomment)
     PHP_PROFILED="$HOME/.profile.d/_php"
     mkdir -p "$(dirname "$PHP_PROFILED")"
@@ -196,7 +194,7 @@ if [ -z "$PROTON_DRIVE" ]; then
     if [ -n "$DETECTED" ]; then
         echo ""
         echo "Detected ProtonDrive at: $DETECTED"
-        
+
         # Set environment variable in ~/.profile.d/
         PROTON_PROFILED="$HOME/.profile.d/_protondrive"
         mkdir -p "$(dirname "$PROTON_PROFILED")"
@@ -205,7 +203,7 @@ if [ -z "$PROTON_DRIVE" ]; then
 export PROTON_DRIVE="$DETECTED"
 EOF
         echo "  Set PROTON_DRIVE environment variable in $PROTON_PROFILED"
-        
+
         # Create softlink in user root
         PROTON_LINK="$HOME/ProtonDrive"
         [ -L "$PROTON_LINK" ] && rm "$PROTON_LINK"
@@ -216,12 +214,12 @@ fi
 
 # ---------------------------------------------------------------------------
 echo ""
-echo "Setup complete! ($MAC_MODEL)"
+echo "Setup complete! ($MACHINE_PROFILE)"
 echo ""
 echo "Next steps:"
 echo "  1. Edit ~/.env.local and verify your API keys"
 echo "  2. Reload your shell: source ~/.zshrc"
 echo "  3. Run ./setup_ai.sh deploy to copy AI tool configs (Claude, Gemini, Continue, etc.)"
 echo ""
-echo "Model-specific overrides live in: $SETTINGS_BASE/2-ai/profiles/$MAC_MODEL/"
+echo "Model-specific overrides live in: $SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/"
 echo ""
