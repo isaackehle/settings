@@ -15,13 +15,13 @@ model_list:
   # --- General / coding ---
   - model_name: qwen3.5-27b-q5-256k
     litellm_params:
-      model: ollama_chat/qwen3.5-27b-q5-256k
+      model: ollama_chat/qwen3.5-27b:q5-256k
       api_base: http://localhost:11434
       num_ctx: 262144
 
   - model_name: qwen3-14b-q5-40k
     litellm_params:
-      model: ollama_chat/qwen3-14b-q5-40k
+      model: ollama_chat/qwen3-14b:q5-40k
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-7b-q4-32k
