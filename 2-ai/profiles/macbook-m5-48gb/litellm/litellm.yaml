@@ -37,7 +37,7 @@ model_list:
 
   - model_name: codestral-22b-q6-32k
     litellm_params:
-      model: ollama_chat/codestral-22b:q6-32k
+      model: ollama_chat/codestral-22b:q8-32k
       api_base: http://localhost:11434
 
   - model_name: qwen2.5-coder-1.5b-q4-32k
