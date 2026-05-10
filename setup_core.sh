@@ -1,120 +1,149 @@
 #!/bin/bash
 
-# setup_core.sh - Interactive installer for 0-core tools
-# Allows users to select/deselect tools via spacebar and execute them.
-
-# Load utilities if available
-. "${SETTINGS_BASE}/helpers.sh"
-
-# Define Categories and their associated scripts
-declare -A CATEGORIES
-CATEGORIES["Base & System"]="setup_homebrew.sh setup_installations.sh setup_bash.sh setup_zsh.sh setup_fonts.sh setup_tweaks.sh"
-CATEGORIES["Connectivity"]="setup_internet.sh setup_ssh.sh setup_autossh.sh setup_vpn.sh setup_vnc.sh setup_transfer.sh setup_wget.sh"
-CATEGORIES["Terminal"]="setup_ghostty.sh setup_iterm.sh"
-CATEGORIES["Browsers"]="setup_arc.sh setup_brave.sh setup_chrome.sh setup_chromium.sh setup_edge.sh setup_firefox.sh"
-CATEGORIES["Communication"]="setup_slack.sh setup_teams.sh setup_telegram.sh setup_discord.sh setup_comet.sh"
-CATEGORIES["Security & Auth"]="setup_auth.sh setup_1password.sh setup_2fas.sh setup_encryption.sh setup_keepassxc.sh setup_proton_pass.sh"
-CATEGORIES["Productivity"]="setup_fantastical.sh setup_itsycal.sh setup_task_managers.sh setup_pdf.sh setup_multimedia.sh setup_deluge.sh setup_folx.sh setup_filezilla.sh setup_kiwi_for_gmail.sh"
-CATEGORIES["DevOps & Infra"]="setup_ansible.sh setup_grafana.sh setup_prometheus.sh setup_vm.sh"
-
-# Order of categories to display
-ORDER=("Base & System" "Connectivity" "Terminal" "Browsers" "Communication" "Security & Auth" "Productivity" "DevOps & Infra")
-
-# State
-SELECTED_SCRIPTS=()
-CURSOR=0
-
-# Function to render the menu
-render_menu() {
-    clear
-    echo "========================================================================"
-    echo "                  CORE SETUP INTERACTIVE INSTALLER                     "
-    echo "========================================================================"
-    echo " Use [↑/↓] to navigate, [Space] to select/deselect, [Enter] to install"
-    echo "------------------------------------------------------------------------"
-
-    for cat in "${ORDER[@]}"; do
-        echo -e "\n\033[1;36m$cat\033[0m"
-        read -a scripts <<< "${CATEGORIES[$cat]}"
-        for script in "${scripts[@]}"; do
-            local marker=" [ ] "
-            [[ " ${SELECTED_SCRIPTS[*]} " == *" $script "* ]] && marker=" [x] "
-
-            if [ "$script" == "${CURRENT_SCRIPT}" ]; then
-                echo -e "\033[1;33m>$marker $script\033[0m"
-            else
-                echo -e "$marker $script"
-            fi
-        done
-    done
-    echo -e "\n------------------------------------------------------------------------"
-}
-
-# Initialize
-ALL_SCRIPTS=()
-for cat in "${ORDER[@]}"; do
-    read -a scripts <<< "${CATEGORIES[$cat]}"
-    ALL_SCRIPTS+=("${scripts[@]}")
-done
-
-CURRENT_SCRIPT="${ALL_SCRIPTS[0]}"
-
-while true; do
-    render_menu
-
-    # Read single character input
-    read -rsn1 key
-    case "$key" in
-        $'\x1b') # Escape sequence
-            read -rsn2 -d '' key
-            if [[ "$key" == "[A" ]]; then # Up
-                ((CURSOR--))
-                [ $CURSOR -lt 0 ] && CURSOR=$((${#ALL_SCRIPTS[@]} - 1))
-            elif [[ "$key" == "[B" ]]; then # Down
-                ((CURSOR++))
-                [ $CURSOR -ge ${#ALL_SCRIPTS[@]} ] && CURSOR=0
-            fi
-            ;;
-        " ") # Space
-            if [[ " ${SELECTED_SCRIPTS[*]} " == *" ${CURRENT_SCRIPT} "* ]]; then
-                # Deselect: remove from array
-                new_selected=()
-                for s in "${SELECTED_SCRIPTS[@]}"; do
-                    [[ "$s" != "$CURRENT_SCRIPT" ]] && new_selected+=("$s")
-                done
-                SELECTED_SCRIPTS=("${new_selected[@]}")
-            else
-                # Select: add to array
-                SELECTED_SCRIPTS+=("$CURRENT_SCRIPT")
-            fi
-            ;;
-        "") # Enter
-            break
-            ;;
-    esac
-    CURRENT_SCRIPT="${ALL_SCRIPTS[$CURSOR]}"
-done
-
-# Execution phase
-clear
-echo "========================================================================"
-echo "                      STARTING INSTALLATION                               "
-echo "========================================================================"
-
-if [ ${#SELECTED_SCRIPTS[@]} -eq 0 ]; then
-    print_warning "No scripts selected. Exiting."
-    exit 0
+if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
+  echo "setup_core.sh must be executed, not sourced. Run: bash setup_core.sh" >&2
+  return 1 2>/dev/null || exit 1
 fi
 
-for script in "${SELECTED_SCRIPTS[@]}"; do
-    script_path="0-core/$script"
-    if [ -f "$script_path" ]; then
-        print_info "Running $script..."
-        bash "$script_path"
-        print_status "Finished $script"
-    else
-        print_warning "Script $script_path not found, skipping."
-    fi
-done
+if [ -z "${SETTINGS_BASE:-}" ]; then
+  SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 
-print_status "Core setup process complete!"
+. "${SETTINGS_BASE}/helpers.sh"
+
+# ============================================================================
+# DISPATCH
+# ============================================================================
+
+_run_one() {
+  local name="$1"
+  local script="$SETTINGS_BASE/0-core/setup_${name}.sh"
+  if [ -f "$script" ]; then
+    print_info "Running setup_${name}.sh..."
+    bash "$script"
+    print_status "Finished setup_${name}.sh"
+  else
+    log_warning "Script not found: $script"
+  fi
+}
+
+_run_for_tools() {
+  for tool in "$@"; do
+    _run_one "$tool"
+  done
+}
+
+# ============================================================================
+# INTERACTIVE MENU
+# ============================================================================
+
+interactive_menu() {
+  local tools_info=(
+    "homebrew|base|Install Homebrew package manager"
+    "installations|base|Install core CLI tools and apps"
+    "bash|base|Update Bash to Homebrew version"
+    "zsh|base|Install Zsh + Oh My Zsh"
+    "fonts|base|Install developer fonts (Nerd Fonts etc.)"
+    "tweaks|base|Apply macOS system preferences"
+    "internet|connectivity|Configure network settings"
+    "ssh|connectivity|Generate SSH keys + configure ssh-agent"
+    "autossh|connectivity|Install autossh for persistent tunnels"
+    "vpn|connectivity|Install VPN client"
+    "vnc|connectivity|Install VNC client"
+    "transfer|connectivity|Install file transfer tools"
+    "wget|connectivity|Install wget"
+    "ghostty|terminal|Install Ghostty terminal + deploy config"
+    "iterm|terminal|Install iTerm2"
+    "arc|browsers|Install Arc browser"
+    "brave|browsers|Install Brave browser"
+    "chrome|browsers|Install Google Chrome"
+    "chromium|browsers|Install Chromium"
+    "edge|browsers|Install Microsoft Edge"
+    "firefox|browsers|Install Firefox"
+    "slack|communication|Install Slack"
+    "teams|communication|Install Microsoft Teams"
+    "telegram|communication|Install Telegram"
+    "discord|communication|Install Discord"
+    "comet|communication|Install Comet"
+    "auth|security|Configure authentication"
+    "1password|security|Install 1Password"
+    "2fas|security|Install 2FAS authenticator"
+    "encryption|security|Set up disk encryption"
+    "keepassxc|security|Install KeePassXC"
+    "proton_pass|security|Install Proton Pass"
+    "fantastical|productivity|Install Fantastical calendar"
+    "itsycal|productivity|Install Itsycal menu bar calendar"
+    "task_managers|productivity|Install task manager apps"
+    "pdf|productivity|Install PDF tools"
+    "multimedia|productivity|Install media players"
+    "deluge|productivity|Install Deluge torrent client"
+    "folx|productivity|Install Folx download manager"
+    "filezilla|productivity|Install FileZilla FTP client"
+    "kiwi_for_gmail|productivity|Install Kiwi for Gmail"
+    "ansible|devops|Install Ansible"
+    "grafana|devops|Install Grafana"
+    "prometheus|devops|Install Prometheus"
+    "vm|devops|Install virtualization tools"
+  )
+
+  local max_name=0 max_group=0
+  for entry in "${tools_info[@]}"; do
+    IFS='|' read -r _n _g _d <<<"$entry"
+    (( ${#_n} > max_name )) && max_name=${#_n}
+    (( ${#_g} > max_group )) && max_group=${#_g}
+  done
+
+  local tools=() entries=()
+  for entry in "${tools_info[@]}"; do
+    IFS='|' read -r name group desc <<<"$entry"
+    tools+=("$name")
+    entries+=("${name}"$'\t'"$(printf '[%-*s]  %-*s  %s' "$max_group" "$group" "$max_name" "$name" "$desc")")
+  done
+
+  if ! command -v fzf >/dev/null 2>&1; then
+    log_error "fzf is not installed. Run: brew install fzf"
+    return 1
+  fi
+
+  local selected
+  selected=$(printf "%s\n" "${entries[@]}" | \
+    fzf --multi --header "Select tools (Tab/Space=toggle, Enter=confirm, q=quit)" \
+        --layout=reverse -d $'\t' --with-nth=2)
+
+  local chosen=()
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    chosen+=("$(cut -f1 <<<"$line")")
+  done <<< "$selected"
+
+  if [ ${#chosen[@]} -eq 0 ]; then
+    log_warning "No tools selected."
+    return
+  fi
+
+  echo ""
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║  Starting installation                                         ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  _run_for_tools "${chosen[@]}"
+  echo ""
+  log_status "Core setup complete."
+}
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+main() {
+  case "${1:-}" in
+  "")
+    interactive_menu
+    ;;
+  *)
+    _run_for_tools "$@"
+    ;;
+  esac
+}
+
+main "$@"
