@@ -1,8 +1,22 @@
 #!/opt/homebrew/bin/bash
-set -e
 
 # Setup script for this repo's dotfiles and Claude Code config
-# Usage: ./setup.sh
+# Usage: bash ./setup_config.sh
+
+set -e
+
+# Refuse to run when sourced — the script calls `exit` on completion and on
+# errors, which would close the parent shell (terminal) instead of just
+# stopping the script. Return cleanly so the parent shell survives.
+if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
+  echo "setup_config.sh must be executed, not sourced. Run it with: bash setup_config.sh" >&2
+  return 1 2>/dev/null || exit 1
+fi
+
+# Resolve SETTINGS_BASE from this script's own directory when not provided.
+if [ -z "${SETTINGS_BASE:-}" ]; then
+  SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 
 SETTINGS_BASE="$(cd "$(dirname "$0")" && pwd)"
 
@@ -16,17 +30,17 @@ echo "Detected: $MACHINE_PROFILE ($HW_MODEL, ${HW_MEM_GB}GB)"
 echo ""
 
 if [ ! -d "$SETTINGS_BASE" ]; then
-    echo "Error: Settings repo not found at $SETTINGS_BASE"
-    exit 1
+  echo "Error: Settings repo not found at $SETTINGS_BASE"
+  exit 1
 fi
 
 # ---------------------------------------------------------------------------
 # Source ~/.env.local for pre-seeding credentials
 # ---------------------------------------------------------------------------
 if [ -f "$HOME/.env.local" ]; then
-    # shellcheck disable=SC1091
-    source "$HOME/.env.local"
-    echo "Sourced ~/.env.local"
+  # shellcheck disable=SC1091
+  source "$HOME/.env.local"
+  echo "Sourced ~/.env.local"
 fi
 
 # ---------------------------------------------------------------------------
@@ -40,54 +54,53 @@ mkdir -p "$SETTINGS_BASE"
 echo "Copying shell config files..."
 
 for file in zshrc zprofile bash_profile bashrc brew; do
-    src=$(find_source "$file")
-    copy_file "$src" "$HOME/.$file"
+  install_config_file "$file" "$HOME/.$file"
 done
 
 # shellrc — installed to ~/.shellrc (sourced by bashrc + zshrc)
-install_file "shellrc" "$HOME/.shellrc"
+install_config_file "shellrc" "$HOME/.shellrc"
 
 # profile.d — mirror to ~/.profile.d/ (sourced by shellrc)
 PROFILED_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/profile.d"
 [ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_BASE/config/profile.d"
 if [ -d "$PROFILED_SRC" ]; then
-    [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
-    mkdir -p "$HOME/.profile.d"
-    cp -R "$PROFILED_SRC/." "$HOME/.profile.d/"
-    echo "  copied profile.d/ -> $HOME/.profile.d/"
+  [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
+  mkdir -p "$HOME/.profile.d"
+  cp -R "$PROFILED_SRC/." "$HOME/.profile.d/"
+  log_info "  copied profile.d/ -> $HOME/.profile.d/"
 
-    # Patch Home Assistant credentials in _home_assistant if present
-    HA_PROFILED="$HOME/.profile.d/_home_assistant"
-    if [ -f "$HA_PROFILED" ] && grep -q "YOUR_HOMEASSISTANT_URL\|YOUR_LONG_LIVED_TOKEN" "$HA_PROFILED"; then
-        echo ""
-        echo "  Home Assistant credentials needed for profile.d/_home_assistant."
+  # Patch Home Assistant credentials in _home_assistant if present
+  HA_PROFILED="$HOME/.profile.d/_home_assistant"
+  if [ -f "$HA_PROFILED" ] && grep -q "YOUR_HOMEASSISTANT_URL\|YOUR_LONG_LIVED_TOKEN" "$HA_PROFILED"; then
+    echo ""
+    echo "  Home Assistant credentials needed for profile.d/_home_assistant."
 
-        read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
-        HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
-        if [ -n "$HA_URL" ]; then
-            sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$HA_PROFILED"
-            echo "    Set HOMEASSISTANT_URL."
-        fi
-
-        read -p "    Long-lived token (enter = ${HOMEASSISTANT_TOKEN:+use from .env.local --> }${HOMEASSISTANT_TOKEN:-keep placeholder}): " HA_TOKEN
-        HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
-        if [ -n "$HA_TOKEN" ]; then
-            sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$HA_PROFILED"
-            echo "    Set HOMEASSISTANT_TOKEN."
-        fi
-
-        chmod 600 "$HA_PROFILED"
+    read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
+    HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
+    if [ -n "$HA_URL" ]; then
+      sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$HA_PROFILED"
+      echo "    Set HOMEASSISTANT_URL."
     fi
+
+    read -p "    Long-lived token (enter = ${HOMEASSISTANT_TOKEN:+use from .env.local --> }${HOMEASSISTANT_TOKEN:-keep placeholder}): " HA_TOKEN
+    HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
+    if [ -n "$HA_TOKEN" ]; then
+      sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$HA_PROFILED"
+      echo "    Set HOMEASSISTANT_TOKEN."
+    fi
+
+    chmod 600 "$HA_PROFILED"
+  fi
 fi
 
 # zshrc.d — mirror to ~/.zshrc.d/ (sourced by zshrc)
 ZSHRCD_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/zshrc.d"
 [ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_BASE/config/zshrc.d"
 if [ -d "$ZSHRCD_SRC" ]; then
-    [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
-    mkdir -p "$HOME/.zshrc.d"
-    cp -R "$ZSHRCD_SRC/." "$HOME/.zshrc.d/"
-    echo "  copied zshrc.d/ -> $HOME/.zshrc.d/"
+  [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
+  mkdir -p "$HOME/.zshrc.d"
+  cp -R "$ZSHRCD_SRC/." "$HOME/.zshrc.d/"
+  log_info "  copied zshrc.d/ -> $HOME/.zshrc.d/"
 fi
 
 # ---------------------------------------------------------------------------
@@ -95,15 +108,14 @@ fi
 # ---------------------------------------------------------------------------
 [ -L "$HOME/.config/ghostty" ] && rm "$HOME/.config/ghostty"
 mkdir -p "$HOME/.config/ghostty"
-src=$(find_source "ghostty/config")
-[ -z "$src" ] && src="$SETTINGS_BASE/ghostty/config"
-copy_file "$src" "$HOME/.config/ghostty/config"
+install_config_file "ghostty/config" "$HOME/.config/ghostty/config"
+
 
 # ---------------------------------------------------------------------------
 # .env.local  (model-specific first, then shared sync copy)
 # ---------------------------------------------------------------------------
-echo ""
-echo "Copying .env.local..."
+log_info ""
+log_info "Copying .env.local..."
 
 ENV_DEST="$HOME/.env.local"
 ENV_SRC=$(find_source "env.local")
@@ -111,16 +123,16 @@ ENV_SRC=$(find_source "env.local")
 [ ! -f "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/env.local"
 
 if [ ! -f "$ENV_SRC" ]; then
-    if [ -f "$SETTINGS_BASE/.env.local.example" ]; then
-        cp "$SETTINGS_BASE/.env.local.example" "$ENV_DEST"
-        chmod 600 "$ENV_DEST"
-        echo "  Created $ENV_DEST from template — add your API keys"
-    else
-        echo "  (skip) .env.local.example not found — create $ENV_DEST manually"
-    fi
-else
-    copy_file "$ENV_SRC" "$ENV_DEST"
+  if [ -f "$SETTINGS_BASE/.env.local.example" ]; then
+    cp "$SETTINGS_BASE/.env.local.example" "$ENV_DEST"
     chmod 600 "$ENV_DEST"
+    log_info "  Created $ENV_DEST from template — add your API keys"
+  else
+    log_warning "  (skip) .env.local.example not found — create $ENV_DEST manually"
+  fi
+else
+  copy_file "$ENV_SRC" "$ENV_DEST"
+  chmod 600 "$ENV_DEST"
 fi
 
 # ---------------------------------------------------------------------------
@@ -129,87 +141,98 @@ fi
 echo ""
 echo "PHP  (shivammathur/php — https://github.com/shivammathur/homebrew-php)"
 echo "---"
-echo "  Versions: 5.6  7.0  7.1  7.2  7.3  7.4"
-echo "            8.0  8.1  8.2  8.3  8.4  8.5  8.6-dev"
+echo "  Versions: 5.6"
+echo "            7.0"
+echo "            7.1"
+echo "            7.2"
+echo "            7.3"
+echo "            7.4"
+echo "            8.0"
+echo "            8.1"
+echo "            8.2"
+echo "            8.3"
+echo "            8.4"
+echo "            8.5"
+echo "            8.6-dev"
 echo ""
 read -p "  PHP version (e.g. 8.4) or Enter to skip: " PHP_VER
 PHP_VER="${PHP_VER:-}"
 
 if [ -n "$PHP_VER" ]; then
-    echo ""
-    echo "  Variant:"
-    echo "    1) standard"
-    echo "    2) debug      (enables PECL debug extensions)"
-    echo "    3) zts        (Zend Thread Safety)"
-    echo "    4) debug-zts  (both)"
-    echo ""
-    read -p "  Variant [1-4] (Enter = 1): " PHP_VARIANT_CHOICE
-    PHP_VARIANT_CHOICE="${PHP_VARIANT_CHOICE:-1}"
+  echo ""
+  echo "  Variant:"
+  echo "    1) standard"
+  echo "    2) debug      (enables PECL debug extensions)"
+  echo "    3) zts        (Zend Thread Safety)"
+  echo "    4) debug-zts  (both)"
+  echo ""
+  read -p "  Variant [1-4] (Enter = 1): " PHP_VARIANT_CHOICE
+  PHP_VARIANT_CHOICE="${PHP_VARIANT_CHOICE:-1}"
 
-    case "$PHP_VARIANT_CHOICE" in
-        2) PHP_VARIANT="-debug" ;;
-        3) PHP_VARIANT="-zts" ;;
-        4) PHP_VARIANT="-debug-zts" ;;
-        *) PHP_VARIANT="" ;;
-    esac
+  case "$PHP_VARIANT_CHOICE" in
+  2) PHP_VARIANT="-debug" ;;
+  3) PHP_VARIANT="-zts" ;;
+  4) PHP_VARIANT="-debug-zts" ;;
+  *) PHP_VARIANT="" ;;
+  esac
 
-    # 8.5 formula is 'php' (not 'php@8.5'); opt path matches formula name
-    if [[ "$PHP_VER" == "8.5" ]]; then
-        PHP_FORMULA="php${PHP_VARIANT}"
-        PHP_OPT_PATH="/opt/homebrew/opt/php${PHP_VARIANT}"
-    else
-        PHP_FORMULA="php@${PHP_VER}${PHP_VARIANT}"
-        PHP_OPT_PATH="/opt/homebrew/opt/php@${PHP_VER}${PHP_VARIANT}"
-    fi
+  # 8.5 formula is 'php' (not 'php@8.5'); opt path matches formula name
+  if [[ "$PHP_VER" == "8.5" ]]; then
+    PHP_FORMULA="php${PHP_VARIANT}"
+    PHP_OPT_PATH="/opt/homebrew/opt/php${PHP_VARIANT}"
+  else
+    PHP_FORMULA="php@${PHP_VER}${PHP_VARIANT}"
+    PHP_OPT_PATH="/opt/homebrew/opt/php@${PHP_VER}${PHP_VARIANT}"
+  fi
 
-    echo ""
-    echo "  Tapping shivammathur/php..."
-    brew tap shivammathur/php
+  echo ""
+  echo "  Tapping shivammathur/php..."
+  brew tap shivammathur/php
 
-    echo "  Installing shivammathur/php/${PHP_FORMULA}..."
-    brew install "shivammathur/php/${PHP_FORMULA}"
-    brew link --overwrite --force "shivammathur/php/${PHP_FORMULA}" 2>/dev/null || true
+  echo "  Installing shivammathur/php/${PHP_FORMULA}..."
+  brew install "shivammathur/php/${PHP_FORMULA}"
+  brew link --overwrite --force "shivammathur/php/${PHP_FORMULA}" 2>/dev/null || true
 
-    # Write _php directly with the active path (overwrite, no comment/uncomment)
-    PHP_PROFILED="$HOME/.profile.d/_php"
-    mkdir -p "$(dirname "$PHP_PROFILED")"
-    cat > "$PHP_PROFILED" <<EOF
+  # Write _php directly with the active path (overwrite, no comment/uncomment)
+  PHP_PROFILED="$HOME/.profile.d/_php"
+  mkdir -p "$(dirname "$PHP_PROFILED")"
+  cat >"$PHP_PROFILED" <<EOF
 # PHP ${PHP_VER}${PHP_VARIANT} — written by setup_config.sh $(date +%Y-%m-%d)
 # Re-run setup_config.sh to change version or variant.
 # Source: shivammathur/php tap (https://github.com/shivammathur/homebrew-php)
 [ -d "${PHP_OPT_PATH}" ] && export PATH="${PHP_OPT_PATH}/bin:\$PATH"
 [ -d "${PHP_OPT_PATH}" ] && export PATH="${PHP_OPT_PATH}/sbin:\$PATH"
 EOF
-    echo "  PHP ${PHP_VER}${PHP_VARIANT} → ${PHP_OPT_PATH}"
+  echo "  PHP ${PHP_VER}${PHP_VARIANT} → ${PHP_OPT_PATH}"
 else
-    echo "  PHP skipped"
+  echo "  PHP skipped"
 fi
 
 # ---------------------------------------------------------------------------
 # ProtonDrive detection and configuration
 # ---------------------------------------------------------------------------
 if [ -z "$PROTON_DRIVE" ]; then
-    CLOUD_STORAGE="$HOME/Library/CloudStorage"
-    DETECTED=$(find "$CLOUD_STORAGE" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
-    if [ -n "$DETECTED" ]; then
-        echo ""
-        echo "Detected ProtonDrive at: $DETECTED"
+  CLOUD_STORAGE="$HOME/Library/CloudStorage"
+  DETECTED=$(find "$CLOUD_STORAGE" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
+  if [ -n "$DETECTED" ]; then
+    echo ""
+    echo "Detected ProtonDrive at: $DETECTED"
 
-        # Set environment variable in ~/.profile.d/
-        PROTON_PROFILED="$HOME/.profile.d/_protondrive"
-        mkdir -p "$(dirname "$PROTON_PROFILED")"
-        cat > "$PROTON_PROFILED" <<EOF
+    # Set environment variable in ~/.profile.d/
+    PROTON_PROFILED="$HOME/.profile.d/_protondrive"
+    mkdir -p "$(dirname "$PROTON_PROFILED")"
+    cat >"$PROTON_PROFILED" <<EOF
 # ProtonDrive path — written by setup_config.sh \$(date +%Y-%m-%d)
 export PROTON_DRIVE="$DETECTED"
 EOF
-        echo "  Set PROTON_DRIVE environment variable in $PROTON_PROFILED"
+    echo "  Set PROTON_DRIVE environment variable in $PROTON_PROFILED"
 
-        # Create softlink in user root
-        PROTON_LINK="$HOME/ProtonDrive"
-        [ -L "$PROTON_LINK" ] && rm "$PROTON_LINK"
-        ln -s "$DETECTED" "$PROTON_LINK"
-        echo "  Created softlink: $PROTON_LINK -> $DETECTED"
-    fi
+    # Create softlink in user root
+    PROTON_LINK="$HOME/ProtonDrive"
+    [ -L "$PROTON_LINK" ] && rm "$PROTON_LINK"
+    ln -s "$DETECTED" "$PROTON_LINK"
+    echo "  Created softlink: $PROTON_LINK -> $DETECTED"
+  fi
 fi
 
 # ---------------------------------------------------------------------------

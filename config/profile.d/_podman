@@ -1,1 +1,4 @@
+command -v podman > /dev/null 2 >& 1 || return 0
+
 export DOCKER_HOST=unix://${HOME}/.local/share/containers/podman/machine/podman-machine-default/podman.sock
+alias docker=podman

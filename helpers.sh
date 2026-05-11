@@ -3,13 +3,21 @@
 # Cascades the change to all affected config files.
 # Usage: swap-model.sh [--help]
 
-set -euo pipefail
+# Only enable strict mode when this file is executed directly, not when sourced.
+# Sourcing into an interactive shell with `set -e` would cause the parent shell
+# to exit on the first non-zero status (e.g. closing the terminal).
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    set -euo pipefail
+fi
 
 
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 
+CONFIG_DIR="$SETTINGS_BASE/config"
+
+CONFIG_DIR="$SETTINGS_BASE/config"
 REPO_ROOT="$(cd "$SETTINGS_BASE/.." && pwd)"
 
 # Color codes
@@ -254,13 +262,13 @@ copy_file() {
     local dest="$2"
 
     if [ -z "$src" ] || [ ! -f "$src" ]; then
-        echo "  (skip) source not found for $dest"
+        log_warning "  (skip) source not found for $dest [$src]"
         return
     fi
 
     # Skip if destination is already a file and identical to source
     if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
-        echo "  (skip) $dest is already up to date"
+        log_warning "  (skip) $dest is already up to date"
         return
     fi
 
@@ -279,16 +287,15 @@ copy_file() {
 }
 
 # Same as copy_file but looks up the source via find_source.
-# Usage: install_file <rel-path-in-settings> <dest>
-install_file() {
-    local rel="$1"
+# Usage: install_config_file <config_file> <dest>
+install_config_file() {
+    local config_file="$1"
     local dest="$2"
     local src
-    src=$(find_source "$rel")
+    src="$CONFIG_DIR/$config_file"
+    log_info "Installing $(basename "$dest") from $src..."
     copy_file "$src" "$dest"
 }
-
-
 
 # ============================================================================
 # PROFILE DETECTION & MANAGEMENT
@@ -355,7 +362,12 @@ _does_profile_match_computer() {
     fi
 
     local types=${_PROFILE_CACHE[p${folder}_COMPUTER_TYPES]:-""}
-    IFS=',' read -ra patterns <<< "$types"
+    local patterns=()
+    if [[ -n "${ZSH_VERSION:-}" ]]; then
+        IFS=',' read -rA patterns <<< "$types"
+    else
+        IFS=',' read -ra patterns <<< "$types"
+    fi
     for pattern in "${patterns[@]}"; do
         if [[ "$hw_model" == $pattern ]]; then
             return 0
