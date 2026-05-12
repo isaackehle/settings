@@ -164,8 +164,8 @@ echo "Use SPACE to select models for removal, ENTER to confirm."
 
 # Check for fzf
 if command -v fzf >/dev/null 2>&1; then
-    # Use fzf for interactive multi-selection
-    SELECTED_MODELS=$(printf "%s\n" "${OBSOLETE_MODELS[@]}" | fzf --multi --header "Select models to DELETE (Space=Select, Enter=Confirm)")
+     # Use fzf for interactive multi-selection
+     SELECTED_MODELS=$(printf "%s\n" "${OBSOLETE_MODELS[@]}" | fzf --multi --header "Select models to DELETE (Space=Select, Enter=Confirm)" --bind 'space:toggle')
 
     if [[ -n "$SELECTED_MODELS" ]]; then
         echo -e "\nRemoving selected models..."
