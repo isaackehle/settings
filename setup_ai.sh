@@ -434,10 +434,10 @@ interactive_menu() {
     return 1
   fi
 
-  local selected
-  selected=$(printf "%s\n" "${entries[@]}" | \
-    fzf --multi --header "Select tools (Tab/Space=toggle, Enter=confirm, q=quit)" \
-        --layout=reverse -d $'\t' --with-nth=2)
+   local selected
+   selected=$(printf "%s\n" "${entries[@]}" | \
+     fzf --multi --header "Select tools (Tab/Space=toggle, Enter=confirm, q=quit)" \
+         --layout=reverse -d $'\t' --with-nth=2 --bind 'space:toggle')
 
   local chosen=()
   while IFS= read -r line; do
