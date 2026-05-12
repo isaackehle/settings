@@ -1308,12 +1308,6 @@
     "error": ""
   },
   {
-    "url": "https://marketplace.visualstudio.com/items?itemName=cline.cline",
-    "status": null,
-    "final": "https://marketplace.visualstudio.com/items?itemName=cline.cline",
-    "error": "HTTP Error 404: Not Found"
-  },
-  {
     "url": "https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev",
     "status": 200,
     "final": "https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev",

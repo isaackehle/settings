@@ -137,6 +137,28 @@ deploy_configs() {
   mkdir -p "$HOME/.config/grok"
   copy_file "${_profdir}/grok/grok.json" "$HOME/.config/grok/grok.json"
 
+  # --- Cline (VS Code extension) ---
+  local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
+  local cline_src="${_profdir}/cline/settings.jsonc"
+  if [ -f "$cline_src" ]; then
+    if [ -f "$vscode_settings" ]; then
+      local tmp_settings
+      tmp_settings=$(awk '/"cline\./ {skip=1} skip && /^[[:space:]]*}[[:space:]]*,?$/ {skip=0; next} !skip {print} {skip=0}' "$vscode_settings")
+      echo "$tmp_settings" > "$vscode_settings"
+    fi
+    local cline_block
+    cline_block=$(sed '/^\s*\/\//d; /^\s*$/d' "$cline_src" | sed '1d;$d' | sed 's/^  //')
+    if [ -f "$vscode_settings" ] && [ -s "$vscode_settings" ]; then
+      sed -i '' '$ d' "$vscode_settings"
+      echo "," >> "$vscode_settings"
+      echo "$cline_block" >> "$vscode_settings"
+      echo "}" >> "$vscode_settings"
+    else
+      sed 's/\/\/.*$//' "$cline_src" | sed '/^\s*$/d' > "$vscode_settings"
+    fi
+    log_status "Cline settings merged into $vscode_settings"
+  fi
+
   mkdir -p "$HOME/.config/litellm"
   copy_file "${SETTINGS_BASE}/2-ai/litellm/.env" "$HOME/.config/litellm/.env"
   copy_file "${_profdir}/litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
@@ -523,6 +545,7 @@ main() {
     setup_opencode
     setup_crush
     setup_claude
+    setup_cline
     setup_github_copilot
     log_status "All tool configurations applied"
     ;;
