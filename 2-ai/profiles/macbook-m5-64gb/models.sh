@@ -113,8 +113,8 @@ OLLAMA_MODELS=(
     "MFDoom/deepseek-r1-tool-calling:32b-qwen-distill-q4_K_M|deepseek-r1-tools:32b-128k"    # 20 GB | HF base 32B (128k)
     "MFDoom/deepseek-r1-tool-calling:32b-qwen-distill-q8_0|deepseek-r1-tools:32b-128k"      # 35 GB | HF base 32B (128k)
 
-    # --- Gemma 4 (31B) ---
-    "gemma4:31b"                                    # ~18 GB | Reasoning (128k)
+    # --- Gemma 4 (26B) ---
+    "gemma4:26b"                                     # ~18 GB | Reasoning (128k)
 
     # --- Gemma 3 (12B) ---
     "gemma3:12b"                                     # ~7 GB | General purpose (128k)

@@ -3,6 +3,7 @@
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
+      "maxTokens": 16000,
       "mode": "primary",
       "model": "ollama/qwen3.5-27b:q8-256k",
       "permission": {
@@ -12,10 +13,27 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
-      "temperature": 0.2,
+      "temperature": 0.2
+    },
+    "local": {
+      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
+      "maxTokens": 8000,
+      "mode": "primary",
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "permission": {
+        "bash": "ask",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "deny"
+      },
+      "prompt": "You are a fully local coding agent with no internet access. Work only with files and context provided. Be explicit when you need information you cannot access.",
+      "temperature": 0.2
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
@@ -28,10 +46,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
-      "temperature": 0.25,
+      "temperature": 0.25
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
@@ -44,10 +62,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.",
-      "temperature": 0.25,
+      "temperature": 0.25
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
@@ -60,10 +78,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands.",
-      "temperature": 0.3,
+      "temperature": 0.3
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
@@ -76,11 +94,11 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials.",
-      "temperature": 0.65,
-    },
+      "temperature": 0.65
+    }
   },
   "default_agent": "code",
   "model": "ollama/qwen3.5-27b:q8-256k",
@@ -91,95 +109,217 @@
     "grep": "allow",
     "list": "allow",
     "read": "allow",
-    "webfetch": "allow",
+    "webfetch": "allow"
   },
   "provider": {
-    "openrouter": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter",
-      "options": {
-        "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY",
-      },
+    "litellm": {
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5" },
-        "openai/gpt-4o": { "name": "GPT-4o" },
-        "openai/o3": { "name": "OpenAI o3" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
-        "mistralai/mistral-large": { "name": "Mistral Large" },
-        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro" },
-        "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
-        "thudm/glm-5.1": { "name": "GLM 5.1" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B (fast, planning)" },
-        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 Tool Calling 32B (reasoning)" },
+        "llama-qwen3-coder-30b-q6-128k": {
+          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 128k)"
+        },
+        "llama-qwen3-coder-30b-q6-32k": {
+          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 32k)"
+        },
+        "llama-qwen3.6-35b-q5-32k": {
+          "name": "Qwen3.6 35B Q5 (llama.cpp, 32k)"
+        }
       },
+      "name": "LiteLLM (Proxy)",
+      // LiteLLM proxy — provides access to llama.cpp server models (port 8080).
+      // Start llama-server first; see litellm/litellm.yaml for model definitions.
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "sk-local",
+        "baseURL": "http://localhost:4000/v1"
+      }
     },
     "ollama": {
-      "npm": "@ai-sdk/ollama",
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434",
-      },
       "models": {
-        "codestral-22b:q6-32k": { "name": "Codestral 22b (q6-32k)" },
-        "deepseek-r1-14b:q8-128k": { "name": "Deepseek R1 14b (q8-128k)" },
-        "deepseek-r1-tools:14b-128k": { "name": "Deepseek R1 Tools (14b-128k)" },
-        "deepseek-r1-tools:32b-128k": { "name": "Deepseek R1 Tools (32b-128k)" },
-        "gemma3:12b": { "name": "Gemma3 12b" },
-        "gemma4:31b": { "name": "Gemma4 31b" },
-        "glm-4.7-flash": { "name": "GLM 4.7 Flash (q4-198k)" },
-        "glm-4.7-flash:q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" },
-        "llama3.2:latest": { "name": "Llama3.2 (latest)" },
-        "llama3.3:70b": { "name": "Llama3.3 70b" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (latest)" },
-        "phi4": { "name": "Phi4 14b (q4-16k)" },
-        "phi4-14b:q8-16k": { "name": "Phi4 14b (q8-16k)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5b (q4-32k)" },
-        "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7b (q4-32k)" },
-        "qwen2.5-coder-7b:q8-32k": { "name": "Qwen2.5 Coder 7b (q8-32k)" },
-        "qwen3-14b:q5-40k": { "name": "Qwen3 14b (q5-40k)" },
-        "qwen3-14b:q8-40k": { "name": "Qwen3 14b (q8-40k)" },
-        "qwen3-32b:q5-32k": { "name": "Qwen3 32b (q5)" },
-        "qwen3-4b:q8-256k": { "name": "Qwen3 4b (q8-256k)" },
-        "qwen3-coder-30b-a3b:q5-256k": { "name": "Qwen3 Coder 30b A3B (q5-256k)" },
-        "qwen3-coder-30b-a3b:q5-128k": { "name": "Qwen3 Coder 30b (q5-128k)" },
-        "qwen3-coder-30b-a3b:q5-32k": { "name": "Qwen3 Coder 30b (q5-32k)" },
-        "qwen3-coder-30b-a3b:q5-8k": { "name": "Qwen3 Coder 30b (q5-8k)" },
-        "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27b (q5-128k)" },
-        "qwen3.5-27b:q5-256k": { "name": "Qwen3.5 27b (q5-256k)" },
-        "qwen3.5-27b:q5-32k": { "name": "Qwen3.5 27b (q5-32k)" },
-        "qwen3.5-27b:q5-8k": { "name": "Qwen3.5 27b (q5-8k)" },
-        "qwen3.5-27b:q8-128k": { "name": "Qwen3.5 27b (q8-128k)" },
-        "qwen3.5-27b:q8-256k": { "name": "Qwen3.5 27b (q8-256k)" },
-        "qwen3.5-27b:q8-32k": { "name": "Qwen3.5 27b (q8-32k)" },
-        "qwen3.5-27b:q8-8k": { "name": "Qwen3.5 27b (q8-8k)" },
-        "qwen3.6-35b:q4-128k": { "name": "Qwen3.6 35b (q4-128k)" },
-        "qwen3.6-35b:q4-256k": { "name": "Qwen3.6 35b (q4-256k)" },
-        "qwen3.6-35b:q4-32k": { "name": "Qwen3.6 35b (q4-32k)" },
-        "qwen3.6-35b:q4-8k": { "name": "Qwen3.6 35b (q4-8k)" },
-      },
-    },
-    "litellm": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM (Local)",
-      "options": {
-        "baseURL": "http://localhost:4000/v1",
-        "apiKey": "sk-local",
-      },
-      "models": {
-        // LiteLLM model names use hyphens, e.g. qwen3-coder-30b-q5-32k
-        // Add model IDs matching model_name entries in litellm.yaml
-      },
-    },
-      "models": {
-        "ggml-gpt4all-j-v1.3-groovy": {
-          "name": "GPT4All J (groovy)",
+        "codestral-22b:q6-32k": {
+          "name": "Codestral 22b (q6-32k)"
         },
+        "deepseek-r1-14b:q8-128k": {
+          "name": "DeepSeek R1 14b (q8-128k)"
+        },
+        "deepseek-r1-tools:14b-128k": {
+          "name": "DeepSeek R1 Tools (14b-128k)"
+        },
+        "deepseek-r1-tools:32b-128k": {
+          "name": "DeepSeek R1 Tools (32b-128k)"
+        },
+        "deepseek-r1:8b": {
+          "name": "DeepSeek R1 8B"
+        },
+        "deepseek-r1:14b": {
+          "name": "DeepSeek R1 14B"
+        },
+        "deepseek-r1-14b:q8-128k": {
+          "name": "DeepSeek R1 8B (q8 128k)"
+        },
+        "gemma3:12b": {
+          "name": "Gemma3 12b"
+        },
+        "gemma4:26b": {
+          "name": "Gemma4 26b"
+        },
+        "glm-4.7-flash:latest": {
+          "name": "GLM 4.7 Flash (q4-198k)"
+        },
+        "glm-4.7-flash:q8-198k": {
+          "name": "GLM 4.7 Flash (q8-198k)"
+        },
+        "gpt-oss:latest": {
+          "name": "GPT-OSS (14b)"
+        },
+        "llama3.2:latest": {
+          "name": "Llama3.2 (latest)"
+        },
+        "llama3.3:70b": {
+          "name": "Llama3.3 70b"
+        },
+        "nomic-embed-text:latest": {
+          "name": "Nomic Embed Text (latest)"
+        },
+        "phi4:latest": {
+          "name": "Phi4 14b (q4-16k)"
+        },
+        "phi4-14b:q8-16k": {
+          "name": "Phi4 14b (q8-16k)"
+        },
+        "qwen2.5-coder-7b:q8-32k": {
+          "name": "Qwen2.5 Coder 7b (q8-32k)"
+        },
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5b (q4-32k)"
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7b (q4-32k)"
+        },
+        "qwen3-14b:q5-40k": {
+          "name": "Qwen3 14b (q5-40k)"
+        },
+        "qwen3-14b:q8-40k": {
+          "name": "Qwen3 14b (q8-40k)"
+        },
+        "qwen3-32b:q5-32k": {
+          "name": "Qwen3 32b (q5-32k)"
+        },
+        "qwen3-4b:q8-256k": {
+          "name": "Qwen3 4b (q8-256k)"
+        },
+        "qwen3-coder-30b-a3b:q5-128k": {
+          "name": "Qwen3 Coder 30b (q5-128k)"
+        },
+        "qwen3-coder-30b-a3b:q5-256k": {
+          "name": "Qwen3 Coder 30b A3B (q5-256k)"
+        },
+        "qwen3-coder-30b-a3b:q5-32k": {
+          "name": "Qwen3 Coder 30b A3B (q5-32k)"
+        },
+        "qwen3-coder-30b-a3b:q5-8k": {
+          "name": "Qwen3 Coder 30b A3B (q5-8k)"
+        },
+        "qwen3.5-27b:q5-128k": {
+          "name": "Qwen3.5 27b (q5-128k)"
+        },
+        "qwen3.5-27b:q5-256k": {
+          "name": "Qwen3.5 27b (q5-256k)"
+        },
+        "qwen3.5-27b:q5-32k": {
+          "name": "Qwen3.5 27b (q5-32k)"
+        },
+        "qwen3.5-27b:q5-8k": {
+          "name": "Qwen3.5 27b (q5-8k)"
+        },
+        "qwen3.5-27b:q8-128k": {
+          "name": "Qwen3.5 27b (q8-128k)"
+        },
+        "qwen3.5-27b:q8-256k": {
+          "name": "Qwen3.5 27b (q8-256k)"
+        },
+        "qwen3.5-27b:q8-32k": {
+          "name": "Qwen3.5 27b (q8-32k)"
+        },
+        "qwen3.5-27b:q8-8k": {
+          "name": "Qwen3.5 27b (q8-8k)"
+        },
+        "qwen3.6-35b:q4-128k": {
+          "name": "Qwen3.6 35b (q4-128k)"
+        },
+        "qwen3.6-35b:q4-256k": {
+          "name": "Qwen3.6 35b (q4-256k)"
+        },
+        "qwen3.6-35b:q4-32k": {
+          "name": "Qwen3.6 35b (q4-32k)"
+        },
+        "qwen3.6-35b:q4-8k": {
+          "name": "Qwen3.6 35b (q4-8k)"
+        }
       },
+      "name": "Ollama (Local)",
+      "npm": "@ai-sdk/ollama",
+      "options": {
+        "baseURL": "http://localhost:11434"
+      }
     },
+    "openrouter": {
+      "models": {
+        "anthropic/claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5"
+        },
+        "anthropic/claude-opus-4-6": {
+          "name": "Claude Opus 4.6"
+        },
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        },
+        "deepseek/deepseek-r1-tool-calling-32b": {
+          "name": "DeepSeek R1 Tool Calling 32B (reasoning)"
+        },
+        "google/gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash"
+        },
+        "google/gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro"
+        },
+        "mistralai/mistral-large": {
+          "name": "Mistral Large"
+        },
+        "moonshot/kimi-k2.6": {
+          "name": "Kimi k2.6 (reasoning)"
+        },
+        "openai/gpt-4o": {
+          "name": "GPT-4o"
+        },
+        "openai/o3": {
+          "name": "OpenAI o3"
+        },
+        "perplexity/sonar-pro": {
+          "name": "Perplexity Sonar Pro"
+        },
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
+        },
+        "qwen/qwen3-coder-next-80b": {
+          "name": "Qwen3 Coder Next 80B (code)"
+        },
+        "thudm/glm-5.1": {
+          "name": "GLM 5.1"
+        },
+        "x-ai/grok-3": {
+          "name": "Grok 3"
+        },
+        "x-ai/grok-3-mini": {
+          "name": "Grok 3 Mini"
+        }
+      },
+      "name": "OpenRouter",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "env.OPENROUTER_API_KEY",
+        "baseURL": "https://openrouter.ai/api/v1"
+      }
+    }
   },
-  "small_model": "ollama/qwen3-4b:q8-256k",
+  "small_model": "ollama/qwen3-4b:q8-256k"
 }
