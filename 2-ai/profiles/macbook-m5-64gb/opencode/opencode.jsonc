@@ -1,211 +1,341 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "openrouter": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter",
-      "options": {
-        "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY",
-      },
-      "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5" },
-        "openai/gpt-4o": { "name": "GPT-4o" },
-        "openai/o3": { "name": "OpenAI o3" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
-        "mistralai/mistral-large": { "name": "Mistral Large" },
-        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro" },
-        "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
-        "thudm/glm-5.1": { "name": "GLM 5.1" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B (fast, planning)" },
-        "qwen/qwen3-coder-next-80b": { "name": "Qwen3 Coder Next 80B (code)" },
-        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 Tool Calling 32B (reasoning)" },
-        "mistralai/codestral": { "name": "Codestral (code)" },
-        "x-ai/grok-3": { "name": "Grok 3" },
-        "x-ai/grok-3-mini": { "name": "Grok 3 Mini" },
-        "deepseek/deepseek-v3": { "name": "DeepSeek V3" },
-      },
-    },
-    "ollama": {
-      "npm": "@ai-sdk/ollama",
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434",
-      },
-      "models": {
-        "codestral-22b:q8-32k": { "name": "Codestral 22b (q8-32k)" },
-        "deepseek-r1-tools:14b-128k": { "name": "DeepSeek R1 Tools (14b-128k)" },
-        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 Tools (32b-128k)" },
-        "deepseek-r1:q8-128k": { "name": "DeepSeek R1 (q8-128k)" },
-        "gemma3:12b": { "name": "Gemma3 12b" },
-        "gemma4:31b": { "name": "Gemma4 31b" },
-        "glm-4.7-flash:latest": { "name": "GLM 4.7 Flash (q4-198k)" },
-        "glm-4.7-flash:q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" },
-        "gpt-oss:latest": { "name": "GPT-OSS (14b)" },
-        "llama3.2:latest": { "name": "Llama3.2" },
-        "llama3.3:70b": { "name": "Llama3.3 70b (solo only)" },
-        "nomic-embed-text:latest": { "name": "Nomic Embed Text" },
-        "phi4:latest": { "name": "Phi4 14b (q4-16k)" },
-        "phi4-14b:q8-16k": { "name": "Phi4 14b (q8-16k)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5b (autocomplete)" },
-        "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7b (q4-32k)" },
-        "qwen2.5-coder-7b:q8-32k": { "name": "Qwen2.5 Coder 7b (q8-32k)" },
-        "qwen3-14b:q5-40k": { "name": "Qwen3 14b (q5-40k)" },
-        "qwen3-14b:q8-40k": { "name": "Qwen3 14b (q8-40k)" },
-        "qwen3-32b:q5-32k": { "name": "Qwen3 32b (q5-32k)" },
-        "qwen3-4b:q8-256k": { "name": "Qwen3 4b (q8-256k, fast)" },
-        "qwen3-coder-30b-a3b:q6-8k": { "name": "Qwen3 Coder 30b A3B (q6-8k)" },
-        "qwen3-coder-30b-a3b:q6-32k": { "name": "Qwen3 Coder 30b A3B (q6-32k)" },
-        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30b A3B (q6-128k)" },
-        "qwen3-coder-30b-a3b:q6-256k": { "name": "Qwen3 Coder 30b A3B (q6-256k)" },
-        "qwen3-coder-next-80b:q4-16k": { "name": "Qwen3 Coder Next 80b (q4-16k)" },
-        "qwen3-coder-next-80b:q4-64k": { "name": "Qwen3 Coder Next 80b (q4-64k)" },
-        "qwen3-coder-next-80b:q4-128k": { "name": "Qwen3 Coder Next 80b (q4-128k)" },
-        "qwen3-coder-next-80b:q4-256k": { "name": "Qwen3 Coder Next 80b (q4-256k)" },
-        "qwen3.5-27b:q5-8k": { "name": "Qwen3.5 27b (q5-8k)" },
-        "qwen3.5-27b:q5-32k": { "name": "Qwen3.5 27b (q5-32k)" },
-        "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27b (q5-128k)" },
-        "qwen3.5-27b:q5-256k": { "name": "Qwen3.5 27b (q5-256k)" },
-        "qwen3.5-27b:q8-8k": { "name": "Qwen3.5 27b (q8-8k)" },
-        "qwen3.5-27b:q8-32k": { "name": "Qwen3.5 27b (q8-32k)" },
-        "qwen3.5-27b:q8-128k": { "name": "Qwen3.5 27b (q8-128k)" },
-        "qwen3.5-27b:q8-256k": { "name": "Qwen3.5 27b (q8-256k)" },
-        "qwen3.6-35b:q4-8k": { "name": "Qwen3.6 35b (q4-8k)" },
-        "qwen3.6-35b:q4-32k": { "name": "Qwen3.6 35b (q4-32k)" },
-        "qwen3.6-35b:q4-128k": { "name": "Qwen3.6 35b (q4-128k)" },
-        "qwen3.6-35b:q4-256k": { "name": "Qwen3.6 35b (q4-256k)" },
-      },
-    },
-    "litellm": {
-      // LiteLLM proxy — provides access to llama.cpp server models (port 8080).
-      // Start llama-server first; see litellm/litellm.yaml for model definitions.
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM (Proxy)",
-      "options": {
-        "baseURL": "http://localhost:4000/v1",
-        "apiKey": "sk-local",
-      },
-      "models": {
-        "llama-qwen3-coder-30b-q6-32k": { "name": "Qwen3 Coder 30B Q6 (llama.cpp, 32k)" },
-        "llama-qwen3-coder-30b-q6-128k": { "name": "Qwen3 Coder 30B Q6 (llama.cpp, 128k)" },
-        "llama-qwen3.6-35b-q5-32k": { "name": "Qwen3.6 35B Q5 (llama.cpp, 32k)" },
-      },
-    },
-  },
-  "default_agent": "code",
-  "model": "openrouter/anthropic/claude-sonnet-4-6",
-  "small_model": "ollama/qwen3-4b:q8-256k",
-  "permission": {
-    "read": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "webfetch": "allow",
-    "edit": "ask",
-    "bash": "ask",
-  },
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
+      "maxTokens": 16000,
       "mode": "primary",
       "model": "openrouter/qwen/qwen3-coder-next-80b",
-      "temperature": 0.2,
-      "maxTokens": 16000,
       "permission": {
-        "read": "allow",
+        "bash": "ask",
+        "edit": "ask",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "allow",
-        "edit": "ask",
-        "bash": "ask",
+        "read": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
+      "temperature": 0.2
     },
-    "think": {
-      "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
+    "local": {
+      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
+      "maxTokens": 8000,
       "mode": "primary",
-      "model": "openrouter/deepseek/deepseek-r1-tool-calling-32b",
-      "temperature": 0.3,
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
       "permission": {
-        "read": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
-        "edit": "deny",
-        "bash": "deny",
-      },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations.",
-    },
-    "write": {
-      "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
-      "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q8-32k",
-      "temperature": 0.65,
-      "permission": {
-        "read": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
+        "bash": "ask",
         "edit": "ask",
-        "bash": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "deny"
       },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific.",
+      "prompt": "You are a fully local coding agent with no internet access. Work only with files and context provided. Be explicit when you need information you cannot access.",
+      "temperature": 0.2
+    },
+    "plan": {
+      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
+      "maxTokens": 1500,
+      "mode": "primary",
+      "model": "openrouter/qwen/qwen3-8b",
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
+      "temperature": 0.25
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
       "model": "ollama/qwen3-32b:q5-32k",
-      "temperature": 0.25,
       "permission": {
-        "read": "allow",
+        "bash": "deny",
+        "edit": "ask",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "allow",
-        "edit": "ask",
-        "bash": "deny",
+        "read": "allow",
+        "webfetch": "allow"
       },
       "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n\n## Findings\n<bullet points, organized by sub-topic>\n\n## Open Questions\n<what still needs investigation>\n\n## Next Steps\n<concrete recommended actions>\n\nIf the user explicitly says not to save, skip writing the file.",
+      "temperature": 0.25
     },
-    "plan": {
-      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
+    "think": {
+      "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "openrouter/qwen/qwen3-8b",
-      "temperature": 0.25,
-      "maxTokens": 1500,
+      "model": "openrouter/deepseek/deepseek-r1-tool-calling-32b",
       "permission": {
-        "read": "allow",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "webfetch": "allow",
-        "edit": "deny",
         "bash": "deny",
-      },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
-    },
-    "local": {
-      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
-      "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
-      "temperature": 0.2,
-      "maxTokens": 8000,
-      "permission": {
-        "read": "allow",
+        "edit": "deny",
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "webfetch": "deny",
-        "edit": "ask",
-        "bash": "ask",
+        "read": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are a fully local coding agent with no internet access. Work only with files and context provided. Be explicit when you need information you cannot access.",
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations.",
+      "temperature": 0.3
     },
+    "write": {
+      "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
+      "mode": "primary",
+      "model": "ollama/qwen3.5-27b:q8-32k",
+      "permission": {
+        "bash": "deny",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific.",
+      "temperature": 0.65
+    }
   },
+  "default_agent": "code",
+  "model": "openrouter/anthropic/claude-sonnet-4-6",
+  "permission": {
+    "bash": "ask",
+    "edit": "ask",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "read": "allow",
+    "webfetch": "allow"
+  },
+  "provider": {
+    "litellm": {
+      "models": {
+        "llama-qwen3-coder-30b-q6-128k": {
+          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 128k)"
+        },
+        "llama-qwen3-coder-30b-q6-32k": {
+          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 32k)"
+        },
+        "llama-qwen3.6-35b-q5-32k": {
+          "name": "Qwen3.6 35B Q5 (llama.cpp, 32k)"
+        }
+      },
+      "name": "LiteLLM (Proxy)",
+      // LiteLLM proxy — provides access to llama.cpp server models (port 8080).
+      // Start llama-server first; see litellm/litellm.yaml for model definitions.
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "sk-local",
+        "baseURL": "http://localhost:4000/v1"
+      }
+    },
+    "ollama": {
+      "models": {
+        "codestral-22b:q8-32k": {
+          "name": "Codestral 22b (q8-32k)"
+        },
+        "deepseek-r1-14b:q8-128k": {
+          "name": "DeepSeek R1 14b (q8-128k)"
+        },
+        "deepseek-r1-tools:14b-128k": {
+          "name": "DeepSeek R1 Tools (14b-128k)"
+        },
+        "deepseek-r1-tools:32b-128k": {
+          "name": "DeepSeek R1 Tools (32b-128k)"
+        },
+        "deepseek-r1:8b": {
+          "name": "DeepSeek R1 8B"
+        },
+        "deepseek-r1:14b": {
+          "name": "DeepSeek R1 14B"
+        },
+        "deepseek-r1-14b:q8-128k": {
+          "name": "DeepSeek R1 8B (q8 128k)"
+        },
+        "gemma3:12b": {
+          "name": "Gemma3 12b"
+        },
+        "gemma4:26b": {
+          "name": "Gemma4 26b"
+        },
+        "glm-4.7-flash:latest": {
+          "name": "GLM 4.7 Flash (q4-198k)"
+        },
+        "glm-4.7-flash:q8-198k": {
+          "name": "GLM 4.7 Flash (q8-198k)"
+        },
+        "gpt-oss:latest": {
+          "name": "GPT-OSS (14b)"
+        },
+        "llama3.2:latest": {
+          "name": "Llama3.2"
+        },
+        "llama3.3:70b": {
+          "name": "Llama3.3 70b"
+        },
+        "nomic-embed-text:latest": {
+          "name": "Nomic Embed Text"
+        },
+        "phi4-14b:q8-16k": {
+          "name": "Phi4 14b (q8-16k)"
+        },
+        "phi4:latest": {
+          "name": "Phi4 14b (q4-16k)"
+        },
+        "qwen2.5-coder-7b:q8-32k": {
+          "name": "Qwen2.5 Coder 7b (q8-32k)"
+        },
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5b (q4-32k)"
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7b (q4-32k)"
+        },
+        "qwen3-14b:q5-40k": {
+          "name": "Qwen3 14b (q5-40k)"
+        },
+        "qwen3-14b:q8-40k": {
+          "name": "Qwen3 14b (q8-40k)"
+        },
+        "qwen3-32b:q5-32k": {
+          "name": "Qwen3 32b (q5-32k)"
+        },
+        "qwen3-4b:q8-256k": {
+          "name": "Qwen3 4b (q8-256k, fast)"
+        },
+        "qwen3-coder-30b-a3b:q6-128k": {
+          "name": "Qwen3 Coder 30b A3B (q6-128k)"
+        },
+        "qwen3-coder-30b-a3b:q6-256k": {
+          "name": "Qwen3 Coder 30b A3B (q6-256k)"
+        },
+        "qwen3-coder-30b-a3b:q6-32k": {
+          "name": "Qwen3 Coder 30b A3B (q6-32k)"
+        },
+        "qwen3-coder-30b-a3b:q6-8k": {
+          "name": "Qwen3 Coder 30b A3B (q6-8k)"
+        },
+        "qwen3-coder-next-80b:q4-128k": {
+          "name": "Qwen3 Coder Next 80b (q4-128k)"
+        },
+        "qwen3-coder-next-80b:q4-16k": {
+          "name": "Qwen3 Coder Next 80b (q4-16k)"
+        },
+        "qwen3-coder-next-80b:q4-256k": {
+          "name": "Qwen3 Coder Next 80b (q4-256k)"
+        },
+        "qwen3-coder-next-80b:q4-64k": {
+          "name": "Qwen3 Coder Next 80b (q4-64k)"
+        },
+        "qwen3.5-27b:q5-128k": {
+          "name": "Qwen3.5 27b (q5-128k)"
+        },
+        "qwen3.5-27b:q5-256k": {
+          "name": "Qwen3.5 27b (q5-256k)"
+        },
+        "qwen3.5-27b:q5-32k": {
+          "name": "Qwen3.5 27b (q5-32k)"
+        },
+        "qwen3.5-27b:q5-8k": {
+          "name": "Qwen3.5 27b (q5-8k)"
+        },
+        "qwen3.5-27b:q8-128k": {
+          "name": "Qwen3.5 27b (q8-128k)"
+        },
+        "qwen3.5-27b:q8-256k": {
+          "name": "Qwen3.5 27b (q8-256k)"
+        },
+        "qwen3.5-27b:q8-32k": {
+          "name": "Qwen3.5 27b (q8-32k)"
+        },
+        "qwen3.5-27b:q8-8k": {
+          "name": "Qwen3.5 27b (q8-8k)"
+        },
+        "qwen3.6-35b:q4-128k": {
+          "name": "Qwen3.6 35b (q4-128k)"
+        },
+        "qwen3.6-35b:q4-256k": {
+          "name": "Qwen3.6 35b (q4-256k)"
+        },
+        "qwen3.6-35b:q4-32k": {
+          "name": "Qwen3.6 35b (q4-32k)"
+        },
+        "qwen3.6-35b:q4-8k": {
+          "name": "Qwen3.6 35b (q4-8k)"
+        }
+      },
+      "name": "Ollama (Local)",
+      "npm": "@ai-sdk/ollama",
+      "options": {
+        "baseURL": "http://localhost:11434"
+      }
+    },
+    "openrouter": {
+      "models": {
+        "anthropic/claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5"
+        },
+        "anthropic/claude-opus-4-6": {
+          "name": "Claude Opus 4.6"
+        },
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        },
+        "deepseek/deepseek-r1-tool-calling-32b": {
+          "name": "DeepSeek R1 Tool Calling 32B (reasoning)"
+        },
+        "google/gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash"
+        },
+        "google/gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro"
+        },
+        "mistralai/codestral": {
+          "name": "Codestral (code)"
+        },
+        "mistralai/mistral-large": {
+          "name": "Mistral Large"
+        },
+        "moonshot/kimi-k2.6": {
+          "name": "Kimi k2.6 (reasoning)"
+        },
+        "openai/gpt-4o": {
+          "name": "GPT-4o"
+        },
+        "openai/o3": {
+          "name": "OpenAI o3"
+        },
+        "perplexity/sonar-pro": {
+          "name": "Perplexity Sonar Pro"
+        },
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B (fast, planning)"
+        },
+        "qwen/qwen3-coder-next-80b": {
+          "name": "Qwen3 Coder Next 80B (code)"
+        },
+        "thudm/glm-5.1": {
+          "name": "GLM 5.1"
+        },
+        "x-ai/grok-3": {
+          "name": "Grok 3"
+        },
+        "x-ai/grok-3-mini": {
+          "name": "Grok 3 Mini"
+        }
+      },
+      "name": "OpenRouter",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "apiKey": "env.OPENROUTER_API_KEY",
+        "baseURL": "https://openrouter.ai/api/v1"
+      }
+    }
+  },
+  "small_model": "ollama/qwen3-4b:q8-256k"
 }
