@@ -63,6 +63,14 @@ verify_cline_extension() {
 setup_cline() {
     print_info "Setting up Cline..."
 
+    # Source profile-specific models to get CLINE_MODEL
+    if [ -n "${MACHINE_PROFILE:-}" ]; then
+        local models_file="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_PROFILE}/models.sh"
+        if [ -f "$models_file" ]; then
+            . "$models_file"
+        fi
+    fi
+
     if command_exists "code"; then
         print_info "Installing Cline VS Code extension..."
         code --install-extension saoudrizwan.claude-dev && \
@@ -76,11 +84,20 @@ setup_cline() {
     verify_cline_cli || _install_cline_cli || print_warning "Cline cli not installed"
 
     print_info ""
-    print_info "=== Cline VS Code Extenstion setup ==="
+    print_info "=== Cline VS Code Extension setup ==="
     print_info "Extension:  saoudrizwan.claude-dev"
     print_info "Configure:  Cline panel → Settings → API Provider"
     print_info "LiteLLM:    API Provider = OpenAI Compatible, Base URL = http://localhost:4000/v1"
-    print_info "Model:      qwen3-coder-30b-a3b:q6-32k (64GB) / qwen3:14b (16GB)"
+
+    # Show the model name in LiteLLM format (hyphens, not colons)
+    if [ -n "${CLINE_MODEL:-}" ]; then
+        local litellm_model
+        litellm_model=$(colon_to_dash "$CLINE_MODEL")
+        print_info "Model:      $litellm_model"
+    else
+        print_info "Model:      (not configured - check profiles/${MACHINE_PROFILE:-unknown}/models.sh)"
+    fi
+
     print_info "Docs:       https://docs.cline.bot"
     print_info ""
 }
