@@ -18,7 +18,7 @@ font-thicken = true
 # -----------------------------------------------------------------------------
 
 # Auto light/dark (follows macOS appearance)
-theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+theme = light:desert,dark:Catppuccin Mocha
 
 # --- Single theme options (uncomment to override auto-switch above) ---
 # theme = Catppuccin Mocha
@@ -84,7 +84,7 @@ copy-on-select = clipboard
 # -----------------------------------------------------------------------------
 keybind = cmd+backspace=esc:w
 keybind = cmd+delete=text:\u000B
-keybind = cmd+option+backspace=backward-kill-word
+#keybind = cmd+option+backspace=backward-kill-word
 
 # -----------------------------------------------------------------------------
 # Keybindings — splits & tabs

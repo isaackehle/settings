@@ -1,4 +1,5 @@
 command -v podman > /dev/null 2 >& 1 || return 0
 
-export DOCKER_HOST=unix://${HOME}/.local/share/containers/podman/machine/podman-machine-default/podman.sock
+#export DOCKER_HOST=unix://${HOME}/.local/share/containers/podman/machine/podman-machine-default/podman.sock
+export DOCKER_HOST="unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
 alias docker=podman
