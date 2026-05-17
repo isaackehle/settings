@@ -45,6 +45,7 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/open-hands.sh"
 . "${SETTINGS_BASE}/2-ai/open-interpreter.sh"
 . "${SETTINGS_BASE}/2-ai/opencode.sh"
+. "${SETTINGS_BASE}/2-ai/openwebui.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter.sh"
 . "${SETTINGS_BASE}/2-ai/roocode.sh"
 . "${SETTINGS_BASE}/2-ai/sublime.sh"
@@ -271,67 +272,156 @@ verify_installations() {
   fi
 }
 
+# ============================================================================
+# GROUP DEFINITIONS
+# ============================================================================
+
+declare -A TOOL_GROUPS=(
+  ["infrastructure"]="ollama openrouter litellm openwebui"
+  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok"
+  ["vscode-extensions"]="continue copilot roocode kilocode"
+  ["ides"]="windsurf cursor zed"
+  ["self-hosted"]="anythingllm tabby open-hands"
+  ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
+)
+
+# Map group names to setup functions
+declare -A GROUP_SETUP_FUNCS=(
+  ["ollama"]="setup_ollama"
+  ["openrouter"]="setup_openrouter"
+  ["litellm"]="setup_litellm"
+  ["openwebui"]="setup_openwebui"
+  ["claude"]="setup_claude"
+  ["cline"]="setup_cline"
+  ["opencode"]="setup_opencode"
+  ["crush"]="setup_crush"
+  ["aider"]="setup_aider"
+  ["codex"]="setup_codex"
+  ["gemini"]="setup_gemini"
+  ["grok"]="setup_grok"
+  ["continue"]="setup_continue"
+  ["copilot"]="setup_github_copilot"
+  ["roocode"]="setup_roocode"
+  ["kilocode"]="setup_kilocode"
+  ["windsurf"]="setup_windsurf"
+  ["cursor"]="setup_cursor"
+  ["zed"]="setup_zed"
+  ["anythingllm"]="setup_anythingllm"
+  ["tabby"]="setup_tabby"
+  ["open-hands"]="setup_openhands"
+)
+
+# Verify functions map
+declare -A GROUP_VERIFY_FUNCS=(
+  ["ollama"]="verify_ollama"
+  ["openrouter"]="verify_openrouter"
+  ["litellm"]="verify_litellm"
+  ["openwebui"]="verify_openwebui"
+  ["claude"]="verify_claude_code"
+  ["cline"]="verify_cline_cli"
+  ["opencode"]="verify_opencode"
+  ["crush"]="verify_crush"
+  ["aider"]="verify_aider"
+  ["codex"]="verify_codex"
+  ["gemini"]="verify_gemini"
+  ["grok"]="verify_grok"
+  ["continue"]="verify_continue"
+  ["copilot"]="verify_github_copilot"
+  ["roocode"]="verify_roocode"
+  ["kilocode"]="verify_kilocode"
+  ["windsurf"]="verify_windsurf"
+  ["cursor"]="verify_cursor"
+  ["zed"]="verify_zed"
+  ["anythingllm"]="verify_anythingllm"
+  ["tabby"]="verify_tabby"
+  ["open-hands"]="verify_openhands"
+)
+
+# Display names for groups/tools
+declare -A DISPLAY_NAMES=(
+  ["infrastructure"]="Infrastructure (Ollama + LiteLLM + OpenWebUI)"
+  ["terminal-agents"]="Terminal Agents (Claude, OpenCode, Crush, etc.)"
+  ["vscode-extensions"]="VS Code Extensions (Cline, Continue, Copilot, etc.)"
+  ["ides"]="IDEs (Windsurf, Cursor, Zed)"
+  ["self-hosted"]="Self-Hosted (AnythingLLM, Tabby, OpenHands)"
+  ["all"]="All Tools"
+  ["ollama"]="Ollama"
+  ["openrouter"]="OpenRouter"
+  ["litellm"]="LiteLLM"
+  ["openwebui"]="OpenWebUI"
+  ["claude"]="Claude Code"
+  ["cline"]="Cline"
+  ["opencode"]="OpenCode"
+  ["crush"]="Crush"
+  ["aider"]="Aider"
+  ["codex"]="Codex"
+  ["gemini"]="Gemini CLI"
+  ["grok"]="Grok CLI"
+  ["continue"]="Continue"
+  ["copilot"]="GitHub Copilot"
+  ["roocode"]="Roo Code"
+  ["kilocode"]="Kilo Code"
+  ["windsurf"]="Windsurf"
+  ["cursor"]="Cursor"
+  ["zed"]="Zed"
+  ["anythingllm"]="AnythingLLM"
+  ["tabby"]="Tabby"
+  ["open-hands"]="OpenHands"
+)
+
+install_tool() {
+  local tool="$1"
+  local setup_func="${GROUP_SETUP_FUNCS[$tool]}"
+  local verify_func="${GROUP_VERIFY_FUNCS[$tool]}"
+  local display_name="${DISPLAY_NAMES[$tool]:-$tool}"
+
+  if [ -n "$verify_func" ] && [ -n "$setup_func" ]; then
+    print_step "$display_name"
+    if $verify_func 2>/dev/null; then
+      log_status "  $display_name already installed"
+    else
+      $setup_func || log_error "Failed to install $display_name"
+    fi
+  else
+    log_warning "  $display_name: setup function not defined"
+  fi
+}
+
+install_group() {
+  local group="$1"
+  local tools="${TOOL_GROUPS[$group]}"
+
+  if [ -z "$tools" ]; then
+    log_error "Unknown group: $group"
+    return 1
+  fi
+
+  log_info ""
+  log_info "=== Installing group: ${DISPLAY_NAMES[$group]:-$group} ==="
+
+  for tool in $tools; do
+    install_tool "$tool"
+  done
+}
+
+install_groups() {
+  local groups="$1"
+
+  # Split by comma
+  IFS=',' read -ra GROUP_ARRAY <<< "$groups"
+
+  for group in "${GROUP_ARRAY[@]}"; do
+    install_group "$group"
+  done
+}
+
 install_tools() {
-  print_step "Checking system requirements"
-  check_system_requirements
-  print_step "Ollama"
-  if ! verify_ollama; then
-    setup_ollama || log_error "Failed to install Ollama"
-  fi
-  print_step "OpenRouter"
-  if ! verify_openrouter; then
-    setup_openrouter || log_error "Failed to setup OpenRouter"
-  fi
-  print_step "LiteLLM"
-  if ! verify_litellm; then
-    setup_litellm || log_error "Failed to install LiteLLM"
-  fi
-  print_step "Claude Code"
-  if ! verify_claude_code; then
-    setup_claude || log_error "Failed to install Claude Code"
-  fi
-  print_step "Cline"
-  if ! verify_cline_cli; then
-    setup_cline || log_error "Failed to install Cline"
-  fi
-  print_step "OpenCode"
-  if ! verify_opencode; then
-    setup_opencode || log_error "Failed to install OpenCode"
-  fi
-  print_step "Crush"
-  if ! verify_crush; then
-    setup_crush || log_error "Failed to install Crush"
-  fi
-  print_step "Codex"
-  if ! verify_codex; then
-    setup_codex || log_error "Failed to install Codex"
-  fi
-  print_step "Gemini"
-  verify_gemini || setup_gemini || log_error "Failed to install Gemini"
-  print_step "Grok"
-  verify_grok || setup_grok || log_error "Failed to install Grok"
-  print_step "Groq"
-  verify_groq || setup_groq || log_error "Failed to install Groq"
-  print_step "AnythingLLM"
-  verify_anythingllm || setup_anythingllm || log_error "Failed to install AnythingLLM"
-  print_step "GitHub Copilot"
-  verify_github_copilot || setup_github_copilot || log_error "Failed to install GitHub Copilot"
-  print_step "Aider"
-  verify_aider || setup_aider || log_error "Failed to install Aider"
-  print_step "Cursor"
-  verify_cursor || setup_cursor || log_error "Failed to install Cursor"
-  print_step "RooCode"
-  verify_roocode || setup_roocode || log_error "Failed to install RooCode"
-  print_step "Kilo Code"
-  verify_kilocode || setup_kilocode || log_error "Failed to install Kilo Code"
-  print_step "Zed"
-  verify_zed || setup_zed || log_error "Failed to install Zed"
-  print_step "Tabby"
-  verify_tabby || setup_tabby || log_error "Failed to install Tabby"
-  print_step "Open Hands"
-  setup_openhands || log_error "Failed to install Open Hands"
-  print_step "Verifying all installations"
-  verify_installations
+  # Legacy: install all tools
+  install_group "infrastructure"
+  install_group "terminal-agents"
+  install_group "vscode-extensions"
+  install_group "ides"
+  install_group "self-hosted"
 }
 
 # Dispatch a single action+tool pair
@@ -591,6 +681,9 @@ main() {
   lmstudio)
     setup_lmstudio
     ;;
+  openwebui)
+    setup_openwebui
+    ;;
   copilot)
     setup_github_copilot
     ;;
@@ -602,6 +695,28 @@ main() {
     ;;
   install)
     install_tools
+    ;;
+  install:infrastructure)
+    install_group "infrastructure"
+    ;;
+  install:terminal-agents)
+    install_group "terminal-agents"
+    ;;
+  install:vscode-extensions)
+    install_group "vscode-extensions"
+    ;;
+  install:ides)
+    install_group "ides"
+    ;;
+  install:self-hosted)
+    install_group "self-hosted"
+    ;;
+  install:all)
+    install_group "all"
+    ;;
+  install:*)
+    local groups="${1#install:}"
+    install_groups "$groups"
     ;;
   models)
     install_coding_assistants
@@ -617,40 +732,34 @@ main() {
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
-    echo "=== SERVERS ==="
+    echo "=== GROUPS (recommended) ==="
+    echo "  install:infrastructure   - Ollama + LiteLLM + OpenWebUI"
+    echo "  install:terminal-agents    - Claude Code, Cline, OpenCode, Crush, Aider, etc."
+    echo "  install:vscode-extensions  - Continue, Copilot, Roo Code, Kilo Code"
+    echo "  install:ides               - Windsurf, Cursor, Zed"
+    echo "  install:self-hosted        - AnythingLLM, Tabby, OpenHands"
+    echo "  install:all                - Everything"
+    echo "  install:infra,terminal    - Multiple groups (comma-separated)"
+    echo ""
+    echo "=== LEGACY (individual tools) ==="
+    echo "  install     - Install all tools (legacy)"
     echo "  ollama      - Install + start Ollama server"
-    echo "  olol        - Setup olol: Ollama load balancer across multiple machines"
-    echo "  exo         - Setup exo: split inference across Apple Silicon devices"
+    echo "  litellm     - Setup LiteLLM proxy"
+    echo "  openwebui   - Setup OpenWebUI (Docker)"
+    echo "  claude      - Install Claude Code CLI"
+    echo "  cline       - Install Cline VS Code extension"
+    echo "  opencode    - Setup OpenCode"
+    echo "  windsurf    - Install Windsurf IDE"
+    echo "  cursor      - Install Cursor IDE"
+    echo "  zed         - Install Zed editor"
+    echo "  anythingllm - Install AnythingLLM"
     echo ""
-    echo "=== PROXIES ==="
-    echo "  openrouter  - Setup OpenRouter (API key + config)"
-    echo "  litellm     - Setup LiteLLM proxy (install + deploy config)"
-    echo ""
-    echo "=== MODELS ==="
-    echo "  models      - Install / prune Ollama models (auto-detects hardware)"
-    echo ""
-    echo "=== TOOLS ==="
-    echo "  claude      - Install Claude Code CLI + deploy config"
-    echo "  cline       - Install Cline VS Code extension + CLI"
-    echo "  codex       - Install Codex CLI"
-    echo "  crush       - Install Crush + deploy config"
-    echo "  gemini      - Install Gemini CLI"
-    echo "  grok        - Setup Grok CLI (offline AI via Ollama)"
-    echo "  groq        - Deploy Groq config + API key instructions"
-    echo "  opencode    - Setup OpenCode + deploy config"
-    echo "  anythingllm - Install AnythingLLM + configure Ollama provider"
-    echo "  aider       - Install Aider coding agent + deploy config"
-    echo "  open-hands  - Install Open Hands (Docker) + deploy config"
-    echo "  lmstudio    - Install LM Studio"
-    echo ""
-    echo "=== EDITORS ==="
-    echo "  vscode      - Install VS Code + Continue + Cline extensions"
-    echo "  windsurf    - Install Windsurf IDE + deploy configs"
-    echo "  cursor      - Install Cursor IDE + show LiteLLM config"
-    echo "  zed         - Install Zed editor + deploy config"
-    echo ""
-    echo "=== EXTENSIONS ==="
-    echo "  continue    - Deploy Continue.dev config"
+    echo "=== OTHER ==="
+    echo "  olol        - Setup Ollama load balancer"
+    echo "  exo         - Setup distributed inference"
+    echo "  models      - Install / prune Ollama models"
+    echo "  verify      - Verify all installations"
+    echo "  check       - Check system requirements"
     echo "  copilot     - Install gh-copilot extension + VS Code Copilot extensions"
     echo "  roocode     - Install RooCode VS Code extension + show config"
     echo "  kilocode    - Install Kilo Code VS Code extension + show config"
