@@ -1,3 +1,4 @@
+# helpers.sh will set SETTINGS_BASE if not already set
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
 fi
@@ -20,7 +21,6 @@ verify_groq() {
 
 setup_groq() {
     print_info "Setting up Groq..."
-    mkdir -p "$_groq_cfg_dir"
 
     local src_cfg mac_model
     if declare -f find_source > /dev/null 2>&1; then
@@ -33,9 +33,8 @@ setup_groq() {
     fi
 
     if [ -f "$src_cfg" ]; then
-        [ -f "$_groq_cfg" ] && backup_groq
-        cp "$src_cfg" "$_groq_cfg"
-        print_status "Deployed Groq config to $_groq_cfg"
+        # Use copy_file which handles broken symlinks properly
+        copy_file "$src_cfg" "$_groq_cfg"
     else
         print_warning "No Groq config found at $src_cfg"
     fi

@@ -261,22 +261,31 @@ copy_file() {
     local src="$1"
     local dest="$2"
 
+    # Resolve source if it's a symlink
+    if [ -L "$src" ]; then
+        local real_src
+        real_src=$(readlink -f "$src")
+        if [ -n "$real_src" ] && [ -f "$real_src" ]; then
+            src="$real_src"
+        fi
+    fi
+
     if [ -z "$src" ] || [ ! -f "$src" ]; then
         log_warning "  (skip) source not found for $dest [$src]"
         return
     fi
 
-    # Skip if destination is already a file and identical to source
-    if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
-        log_warning "  (skip) $dest is already up to date"
-        return
-    fi
-
-    # Remove stale symlink
+    # Handle destination symlink (including broken symlinks) BEFORE other checks
+    # Use -e to check if path exists (works for broken symlinks too)
     if [ -L "$dest" ]; then
         rm "$dest"
+    elif [ -f "$dest" ]; then
+        # Skip if destination is identical to source
+        if cmp -s "$src" "$dest"; then
+            log_warning "  (skip) $dest is already up to date"
+            return
+        fi
         # Back up a real file that is different from what we'd copy
-        elif [ -f "$dest" ]; then
         mv "$dest" "${dest}.backup-$(date +%s)"
         echo "  backed up existing $(basename "$dest")"
     fi

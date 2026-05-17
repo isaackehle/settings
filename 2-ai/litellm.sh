@@ -18,6 +18,9 @@ _svc_dir="/usr/local/bin"
 _svc_cfg="$_svc_dir/litellm.yaml"
 _db_url="postgresql://litellm:litellm@localhost:5432/litellm_db"
 
+# Database mode — set LITELLM_USE_DB=true to enable Postgres + Prisma
+_use_db="${LITELLM_USE_DB:-false}"
+
 
 
 verify_litellm() {
@@ -31,21 +34,60 @@ _install_litellm() {
         return 1
     fi
     uv tool install litellm
+
+    # Install additional dependencies for proxy mode
+    print_info "Installing LiteLLM proxy dependencies..."
+    local litellm_venv="$HOME/.local/share/uv/tools/litellm"
+    uv pip install 'litellm[proxy]' --python "$litellm_venv/bin/python" --reinstall
+
+    # Patch uvloop for Python 3.14 compatibility
+    print_info "Patching uvloop for Python 3.14 compatibility..."
+    local uvloop_file="$litellm_venv/lib/python3.14/site-packages/uvicorn/loops/uvloop.py"
+    if [ -f "$uvloop_file" ]; then
+        cat > "$uvloop_file" << 'EOF'
+import asyncio
+
+# Python 3.14 compatibility: use standard asyncio instead of uvloop
+def uvloop_setup(use_subprocess: bool = False) -> None:
+    asyncio.set_event_loop_policy(asyncio.DefaultEventLoopPolicy())
+EOF
+    fi
+
+    # Install prisma for database schema initialization (only if DB mode enabled)
+    if [ "$_use_db" = "true" ]; then
+        print_info "Installing prisma..."
+        uv tool install prisma
+
+        # Install prisma in litellm venv for LiteLLM proxy
+        print_info "Installing prisma in litellm venv..."
+        uv pip install prisma --python "$litellm_venv/bin/python"
+
+        # Run prisma generate for LiteLLM
+        print_info "Running prisma generate..."
+        prisma generate --schema="$litellm_venv/lib/python3.14/site-packages/litellm/proxy/schema.prisma" 2>/dev/null || true
+    fi
 }
 
 setup_litellm_postgres() {
     print_info "Setting up LiteLLM Postgres database..."
-    if ! command -v docker &> /dev/null; then
-        print_error "docker not found. Please install Docker first."
+
+    # Use podman if available, otherwise docker
+    local container_cmd="docker"
+    if command -v podman &> /dev/null; then
+        container_cmd="podman"
+    fi
+
+    if ! command -v "$container_cmd" &> /dev/null; then
+        print_error "docker/podman not found. Please install a container runtime first."
         return 1
     fi
 
-    if docker ps -a --format '{{.Names}}' | grep -q "^litellm-postgres$"; then
+    if $container_cmd ps -a --format '{{.Names}}' | grep -q "^litellm-postgres$"; then
         print_status "LiteLLM Postgres container already exists. Ensuring it is running..."
-        docker start litellm-postgres
+        $container_cmd start litellm-postgres
     else
         print_info "Creating LiteLLM Postgres container..."
-        docker run -d \
+        $container_cmd run -d \
         --name litellm-postgres \
         -e POSTGRES_USER=litellm \
         -e POSTGRES_PASSWORD=litellm \
@@ -60,11 +102,14 @@ setup_litellm_postgres() {
 _generate_prisma_client() {
     print_info "Initializing LiteLLM database schema..."
     local tools_bin="$HOME/.local/share/uv/tools/litellm/bin"
-    local prisma_bin="$tools_bin/prisma"
     local litellm_py="$tools_bin/python3"
 
-    if [ ! -x "$prisma_bin" ] || [ ! -x "$litellm_py" ]; then
-        print_warning "prisma not found in litellm tools — schema will initialize on first start."
+    # Check for prisma in PATH (installed globally via pyenv/pip)
+    local prisma_bin
+    prisma_bin=$(command -v prisma 2>/dev/null) || true
+
+    if [ -z "$prisma_bin" ] || [ ! -x "$litellm_py" ]; then
+        print_warning "prisma not found — schema will initialize on first start."
         return 0
     fi
 
@@ -85,9 +130,13 @@ setup_litellm() {
 
     verify_litellm || _install_litellm || { print_error "Failed to install litellm"; return 1; }
 
-    setup_litellm_postgres
-
-    _generate_prisma_client
+    if [ "$_use_db" = "true" ]; then
+        setup_litellm_postgres
+        _generate_prisma_client
+    else
+        print_info "LiteLLM configured for file-based config (no database)."
+        print_info "To enable DB mode, set LITELLM_USE_DB=true."
+    fi
 
     mkdir -p "$_local_dir"
 
@@ -166,7 +215,9 @@ setup_litellm() {
     print_info "Web UI:        http://localhost:4000"
     print_info "API endpoint:  http://localhost:4000/v1  (OpenAI-compatible)"
     print_info "Master key:    set LITELLM_MASTER_KEY in $_local_dir/.env"
-    print_info "DB container:  docker start litellm-postgres"
+    if [ "$_use_db" = "true" ]; then
+        print_info "DB container:  docker start litellm-postgres"
+    fi
     print_info ""
 }
 
