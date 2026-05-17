@@ -199,7 +199,7 @@ When adding a new page, also add an entry to `Home.md` under the correct `##` se
 
 - **Never** add a `Co-Authored-By` trailer to commit messages.
 - Keep commit messages concise: a short imperative subject line only.
-- Follow [Conventional Commits](https://www.conventionalcommits.org/):
+- Always follow [Conventional Commits](https://www.conventionalcommits.org/). Conventional commits are always to be used for all commits.
 
 `feat(api): add /v1/chat streaming endpoint` — scope is the affected layer
 (`api`, `models`, `services`, `core`). Subject ≤ 72 chars. No `Co-Authored-By`.
