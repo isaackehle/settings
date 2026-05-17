@@ -13,6 +13,11 @@ OPENWEBUI_PORT="${OPENWEBUI_PORT:-8080}"
 OPENWEBUI_CONTAINER="openwebui"
 
 _check_docker() {
+    # Check for Rancher Desktop docker socket first
+    if [ -S "$HOME/.rd/docker.sock" ]; then
+        export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
+    fi
+
     if ! command_exists "docker"; then
         log_error "Docker is required. Install Rancher Desktop or Colima."
         return 1
