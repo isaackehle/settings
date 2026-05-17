@@ -165,18 +165,35 @@ setup_litellm() {
         print_warning "No source config found at $src_cfg — skipping config deploy"
     fi
 
-    # Deploy .env (always overwrite so repo changes take effect)
-    local env_file="$_local_dir/.env"
-    local env_src
-    env_src="$(find_source "litellm/.env" 2>/dev/null)"
-
-    [ -z "$env_src" ] && env_src="$_src_dir/.env"
-    if [ -f "$env_src" ]; then
-        cp "$env_src" "$env_file"
-        print_status "Deployed .env to $env_file"
+    # Source user environment for API keys (OpenRouter, etc.)
+    # LiteLLM will read from ~/.env.local or ~/.env
+    if [ -f "$HOME/.env.local" ]; then
+        set -a && source "$HOME/.env.local" && set +a
+        print_status "Sourced ~/.env.local for API keys"
+    elif [ -f "$HOME/.env" ]; then
+        set -a && source "$HOME/.env" && set +a
+        print_status "Sourced ~/.env for API keys"
     else
-        print_warning "No .env source found at $env_src — skipping .env deploy"
+        print_warning "No ~/.env.local or ~/.env found — set OPENROUTER_API_KEY there for cloud models"
     fi
+
+    # Create minimal .env for litellm (non-sensitive settings only)
+    local env_file="$_local_dir/.env"
+    cat > "$env_file" << 'ENVEOF'
+LITELLM_MASTER_KEY="sk-local"
+LITELLM_SALT_KEY="sk-local-salt"
+UI_USERNAME="admin"
+UI_PASSWORD="admin"
+LITELLM_DROP_PARAMS=True
+STORE_MODEL_IN_DB=False
+PORT=4000
+SKIP_DB_MIGRATIONS=true
+ENVEOF
+    print_status "Deployed litellm settings to $env_file"
+    print_info "Add your API keys to ~/.env.local (or ~/.env):"
+    print_info "  OPENROUTER_API_KEY=sk-or-..."
+    print_info "  ANTHROPIC_API_KEY=sk-ant-..."
+    print_info "  OPENAI_API_KEY=sk-..."
 
     print_status "Configure litellm to run as a service"
 

@@ -1,7 +1,8 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "litellm/qwen3-coder-next-80b-q4-16k",
+  "model": "litellm/qwen3-coder-next-80b-q4-128k",
   "small_model": "litellm/qwen2.5-coder-7b-q4-32k",
+  "autocomplete_model": "litellm/qwen2.5-coder-1.5b-q4-32k",
   "disabled_providers": [],
   "provider": {
     "litellm": {
@@ -9,7 +10,7 @@
       "name": "LiteLLM (Local)",
       "options": {
         "baseURL": "http://localhost:4000/v1",
-        "apiKey": "sk-local",
+        "apiKey": "sk-local"
       },
       "models": {
         "kimi-k2.6-cloud": { "name": "Kimi K2.6 (cloud)" },
@@ -50,24 +51,24 @@
         "gemma4-26b": { "name": "Gemma 4 26B" },
         "llama-qwen3-coder-30b-q6-32k": { "name": "llama.cpp Qwen3 Coder 30B Q6 (32k)" },
         "llama-qwen3-coder-30b-q6-128k": { "name": "llama.cpp Qwen3 Coder 30B Q6 (128k)" },
-        "llama-qwen3.6-35b-q5-32k": { "name": "llama.cpp Qwen3.6 35B Q5 (32k)" },
-      },
+        "llama-qwen3.6-35b-q5-32k": { "name": "llama.cpp Qwen3.6 35B Q5 (32k)" }
+      }
     },
     "openrouter": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "OpenRouter",
       "options": {
         "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY",
+        "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
         "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
         "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
         "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
         "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
-        "openai/gpt-4o": { "name": "GPT-4o" },
-      },
-    },
+        "openai/gpt-4o": { "name": "GPT-4o" }
+      }
+    }
   },
   "agent": {
     "code": {
@@ -82,9 +83,41 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers.",
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
+    },
+    "ask": {
+      "description": "Q&A agent — answer questions about code, explain logic, provide context.",
+      "model": "litellm/qwen3-coder-next-80b-q4-128k",
+      "mode": "primary",
+      "temperature": 0.2,
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a read-only Q&A agent. Answer questions about the codebase clearly and concisely. Explain logic, trace flows, and provide context. Do not edit files or run commands."
+    },
+    "debug": {
+      "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
+      "model": "litellm/deepseek-r1-tools-14b-128k",
+      "mode": "primary",
+      "temperature": 0.3,
+      "permission": {
+        "bash": "ask",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "You are a debugging agent. Diagnose errors, trace bugs through the codebase, and suggest targeted fixes. Read logs, inspect code, and propose minimal, precise solutions. Explain root causes before suggesting changes."
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
@@ -98,13 +131,13 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "litellm/qwen3.6-35b-128k",
+      "model": "litellm/deepseek-r1-tools-14b-128k",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
@@ -114,9 +147,9 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands.",
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands."
     },
     "write": {
       "description": "Writing agent — docs, summaries, cover letters, polished prose.",
@@ -136,7 +169,7 @@
     },
     "summary": {
       "description": "Commit message and session summary agent.",
-      "model": "litellm/qwen2.5-coder-7b-q4-32k",
+      "model": "litellm/qwen3-4b-q8-256k",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -149,10 +182,23 @@
         "webfetch": "allow"
       },
       "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
-    }
-  },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication.",
     },
+    "description": {
+      "description": "MR/PR description agent — longer summaries with context.",
+      "model": "litellm/qwen3-4b-q8-256k",
+      "mode": "primary",
+      "temperature": 0.3,
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "Generate detailed MR/PR descriptions. Include: summary of changes, motivation/context, key files changed, testing notes. Use markdown formatting with headers, bullet points, and code snippets where helpful. Be concise but thorough — aim for 2-4 paragraphs."
+    }
   },
   "default_agent": "code",
   "permission": {
@@ -162,6 +208,6 @@
     "grep": "allow",
     "list": "allow",
     "read": "allow",
-    "webfetch": "allow",
-  },
+    "webfetch": "allow"
+  }
 }

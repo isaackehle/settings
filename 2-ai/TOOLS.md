@@ -15,7 +15,7 @@ Comprehensive reference for all AI tools in this setup. Install scripts live in 
 - [Terminal Coding Agents](#terminal-coding-agents)
   - [Claude Code](#claude-code) · [OpenCode](#opencode) · [Crush](#crush) · [Aider](#aider) · [Gemini CLI](#gemini-cli) · [Grok CLI](#grok-cli) · [Open Interpreter](#open-interpreter) · [OpenHands](#openhands) · [OpenShell](#openshell) · [Codex](#codex)
 - [VS Code Extensions](#vs-code-extensions)
-  - [VS Code](#vs-code) · [Cline](#cline) · [Continue](#continue) · [GitHub Copilot](#github-copilot) · [Windsurf](#windsurf)
+  - [VS Code](#vs-code) · [Cline](#cline) · [Continue](#continue) · [GitHub Copilot](#github-copilot) · [Kilo Code](#kilo-code) · [Windsurf](#windsurf)
 - [Self-Hosted Assistants](#self-hosted-assistants)
   - [AnythingLLM](#anythingllm) · [Tabby](#tabby)
 - [APIs & Services](#apis--services)
@@ -375,24 +375,35 @@ interpreter --api_base http://localhost:4000/v1 --api_key sk-local \
 
 ### OpenHands
 
-Autonomous AI software development agent (formerly OpenDevin). Writes code, runs tests, fixes bugs, and operates a terminal end-to-end. Runs in Docker.
+Autonomous AI software development agent. Writes code, runs tests, fixes bugs, and operates a terminal end-to-end. Runs in Docker.
 
-**Prerequisites:** Docker (Rancher Desktop or Colima), LiteLLM on `:4000`.
+**Prerequisites:** Docker (Rancher Desktop or Colima), LiteLLM on `:4000`, uv.
 
 ```shell
-# Setup: pull images
-bash 2-ai/open-hands/open_hands.sh setup
+# Install uv if needed
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Setup: install CLI
+bash 2-ai/open-hands.sh setup
 
 # Start web UI on :3000
-bash 2-ai/open-hands/open_hands.sh start
+bash 2-ai/open-hands.sh start
+```
+
+Or run directly:
+
+```shell
+# With current directory mounted
+openhands serve --mount-cwd
 ```
 
 Local model config in the web UI Settings:
+
 - Provider: `OpenAI` · Base URL: `http://host.docker.internal:4000/v1` · API Key: `sk-local`
 
-State persisted at `~/.openhands-state/`.
+Config persisted at `~/.openhands/`.
 
-- [docs.all-hands.dev](https://docs.all-hands.dev) · `2-ai/open-hands/open_hands.sh`
+- [docs.openhands.dev](https://docs.openhands.dev) · `2-ai/open-hands.sh`
 
 ---
 
@@ -472,6 +483,7 @@ Autonomous AI coding agent extension for VS Code. Creates and edits files, runs 
 **Extension ID:** `saoudrizwan.claude-dev`
 
 Config (`profiles/<machine>/cline/settings.jsonc`) configures the LiteLLM endpoint. Set in the Cline sidebar:
+
 - API Provider: `OpenAI Compatible`
 - Base URL: `http://localhost:4000/v1`
 - API Key: `sk-local`
@@ -491,11 +503,11 @@ Open-source AI code assistant for VS Code and JetBrains. Chat, inline edit, auto
 
 Config deployed from `profiles/<machine>/continue/config.yaml` → `~/.continue/config.yaml`. Main chat/edit/apply models route through LiteLLM; autocomplete and embed stay on Ollama direct for latency.
 
-| Shortcut | Action |
-|----------|--------|
-| `Cmd+L` | Open chat / send selection |
-| `Tab` | Accept autocomplete |
-| `Cmd+I` | Inline edit |
+| Shortcut | Action                     |
+| -------- | -------------------------- |
+| `Cmd+L`  | Open chat / send selection |
+| `Tab`    | Accept autocomplete        |
+| `Cmd+I`  | Inline edit                |
 
 - [continue.dev](https://www.continue.dev) · [docs](https://docs.continue.dev) · `2-ai/continue/continue.sh`
 
@@ -516,6 +528,88 @@ gh extension install github/gh-copilot   # CLI
 Inline completions require a paid Copilot subscription; Ollama works for chat.
 
 - [github.com/features/copilot](https://github.com/features/copilot) · `2-ai/github-copilot/github_copilot.sh`
+
+---
+
+### Kilo Code
+
+AI coding agent extension for VS Code and Windsurf. Multi-agent architecture with mode-specific models, LiteLLM routing, and configurable permissions.
+
+**Extension ID:** `kilohealth.kilo-code`
+
+Config deployed from `profiles/<machine>/kilocode/kilo.jsonc` → `~/.kilo/kilo.jsonc`. All models route through LiteLLM on `:4000`.
+
+```shell
+code --install-extension kilohealth.kilo-code
+```
+
+#### Config Structure
+
+| Field                | Purpose                      | Example                             |
+| -------------------- | ---------------------------- | ----------------------------------- |
+| `model`              | Default model (fallback)     | `litellm/qwen3-coder-30b-q5-128k`   |
+| `small_model`        | Lightweight tasks, summaries | `litellm/qwen2.5-coder-7b-q4-32k`   |
+| `autocomplete_model` | Inline code completion       | `litellm/qwen2.5-coder-1.5b-q4-32k` |
+
+#### Model per Mode (agents)
+
+| Agent         | Purpose                              | Profile Model Selection             |
+| ------------- | ------------------------------------ | ----------------------------------- |
+| `code`        | Implementation, editing, refactoring | Largest available coder model       |
+| `ask`         | Q&A, code explanation, context       | Same as code (read-only)            |
+| `debug`       | Error diagnosis, bug tracing         | Reasoning model (DeepSeek R1 Tools) |
+| `description` | MR/PR descriptions                   | Small/fast model                    |
+| `plan`        | Planning, next steps, breakdowns     | Small/fast model                    |
+| `think`       | Reasoning, tradeoffs, analysis       | Reasoning model (DeepSeek R1 Tools) |
+| `write`       | Docs, summaries, polished prose      | Larger context model (Qwen3.5/3.6)  |
+| `summary`     | Commit messages, session summaries   | Smallest model                      |
+
+#### Agent Permissions
+
+Each agent has its own permission set:
+
+- `bash`: `ask` (prompt), `allow` (auto), `deny` (blocked)
+- `edit`: same options
+- `glob`, `grep`, `list`, `read`, `webfetch`: typically `allow`
+
+#### Model Selection by Agent
+
+| Agent           | Recommended Model                                         | Avoid                            |
+| --------------- | --------------------------------------------------------- | -------------------------------- |
+| **code**        | Largest model available (e.g., `qwen3-coder-30b-q5-128k`) | Small models — needs capacity    |
+| **ask**         | Same as code (read-only, needs comprehension)             | Small models                     |
+| **debug**       | `deepseek-r1-tools-*` (better for reasoning)              | General models                   |
+| **think**       | `deepseek-r1-tools-*` (better for reasoning)              | General models                   |
+| **write**       | `qwen3.5-27b-q5-256k` or `qwen3.6-35b-256k`               | Main code model — different task |
+| **plan**        | Small/fast model (e.g., `qwen3-4b-q8-256k`)               | Large models — just routing      |
+| **description** | Small/fast model                                          | Large models — just summaries    |
+| **summary**     | Small model (e.g., `qwen2.5-coder-7b-q4-32k`)             | Large — just commit messages     |
+
+#### Memory-Based Guidelines
+
+| RAM      | Default Model                  | Write Model               | Summary Model             |
+| -------- | ------------------------------ | ------------------------- | ------------------------- |
+| **64GB** | `qwen3-coder-next-80b-q4-128k` | `qwen3.6-35b-256k`        | `qwen2.5-coder-7b-q4-32k` |
+| **48GB** | `qwen3-coder-30b-q5-128k`      | `qwen3.5-27b-q8-256k`     | `qwen3-4b-q8-256k`        |
+| **32GB** | `qwen3-14b-q8-40k`             | `qwen3.5-27b-q5-256k`     | `qwen3-4b-q4-256k`        |
+| **16GB** | `qwen3-14b-q5-40k`             | `qwen2.5-coder-7b-q4-32k` | `qwen3-4b-q8-256k`        |
+
+#### Common Issues to Check
+
+1. **Context size mismatch** — top-level `model` must match agent `model` context (e.g., both `128k`)
+2. **Missing permissions** — all agents need `grep` in permissions
+3. **Wrong model for task** — write agent should not use code model
+4. **Cloud models unavailable** — verify cloud models (e.g., `kimi-k2.6-cloud`) are actually accessible
+
+#### Validation
+
+After editing any `kilo.jsonc`:
+
+- Verify JSON is valid (no trailing commas)
+- Ensure all referenced models exist in the `provider.litellm.models` list
+- Check agent models are defined in the profile's LiteLLM config
+
+- [kilocode.ai](https://kilocode.ai) · [docs](https://kilocode.ai/docs) · `2-ai/kilocode.sh`
 
 ---
 
@@ -544,6 +638,7 @@ brew install --cask anythingllm
 ```
 
 Configuration (in app):
+
 1. Settings → LLM Preference → Ollama → `http://127.0.0.1:11434`
 2. Settings → Embedding Preference → Ollama → `http://127.0.0.1:11434` → `nomic-embed-text`
 3. Settings → Vector Database → LanceDB (built-in)
@@ -575,10 +670,10 @@ curl http://localhost:8080/v1/health
 
 Models are downloaded automatically on first run. Recommended models:
 
-| Model | RAM | Quality |
-|-------|-----|---------|
-| `TabbyML/StarCoder-1B` | ~2GB | Fast autocomplete |
-| `TabbyML/CodeLlama-7B` | ~7GB | Better quality |
+| Model                        | RAM  | Quality                |
+| ---------------------------- | ---- | ---------------------- |
+| `TabbyML/StarCoder-1B`       | ~2GB | Fast autocomplete      |
+| `TabbyML/CodeLlama-7B`       | ~7GB | Better quality         |
 | `TabbyML/DeepseekCoder-6.7B` | ~7GB | Strong code completion |
 
 IDE plugins: VS Code and JetBrains — search "Tabby", set server URL to `http://localhost:8080`.
@@ -621,10 +716,10 @@ export GROQ_API_KEY="gsk_..."
 
 No official CLI — used via API key in LiteLLM, Continue, OpenCode, etc.
 
-| Model | Best for |
-|-------|----------|
-| `llama-3.3-70b-versatile` | General purpose |
-| `qwen-3-32b` | Reasoning + coding |
+| Model                            | Best for           |
+| -------------------------------- | ------------------ |
+| `llama-3.3-70b-versatile`        | General purpose    |
+| `qwen-3-32b`                     | Reasoning + coding |
 | `llama-4-scout-17b-16e-instruct` | Fast, multilingual |
 
 Profile config deploys `local-settings.json` for the Groq Code CLI.
@@ -643,12 +738,12 @@ export PERPLEXITY_API_KEY="pplx-..."
 
 Base URL: `https://api.perplexity.ai`
 
-| Model | Best for |
-|-------|----------|
-| `sonar` | Fast, cheap web-grounded answers |
-| `sonar-pro` | Complex queries, follow-ups |
+| Model                 | Best for                          |
+| --------------------- | --------------------------------- |
+| `sonar`               | Fast, cheap web-grounded answers  |
+| `sonar-pro`           | Complex queries, follow-ups       |
 | `sonar-reasoning-pro` | Multi-step reasoning + web search |
-| `sonar-deep-research` | Exhaustive research reports |
+| `sonar-deep-research` | Exhaustive research reports       |
 
 ```shell
 curl https://api.perplexity.ai/chat/completions \

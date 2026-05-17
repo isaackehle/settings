@@ -3,8 +3,6 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
 fi
 . "${SETTINGS_BASE}/helpers.sh"
 
-OPENHANDS_IMAGE="docker.all-hands.dev/all-hands-ai/openhands:latest"
-OPENHANDS_RUNTIME="docker.all-hands.dev/all-hands-ai/runtime:latest"
 OPENHANDS_PORT="${OPENHANDS_PORT:-3000}"
 
 _check_docker() {
@@ -20,11 +18,11 @@ _check_docker() {
 }
 
 verify_openhands() {
-    if docker image inspect "$OPENHANDS_IMAGE" > /dev/null 2>&1; then
-        log_status "OpenHands image found locally"
+    if command_exists "openhands"; then
+        log_status "OpenHands CLI installed"
         return 0
     fi
-    log_warning "OpenHands image not pulled yet"
+    log_warning "OpenHands CLI not installed"
     return 1
 }
 
@@ -32,23 +30,31 @@ setup_openhands() {
     log_info "Setting up OpenHands..."
     _check_docker || return 1
 
-    log_info "Pulling OpenHands image (this may take a while)..."
-    docker pull "$OPENHANDS_IMAGE" || { log_error "Failed to pull OpenHands image"; return 1; }
-    docker pull "$OPENHANDS_RUNTIME" || log_warning "Failed to pull runtime image — will pull on first run"
+    if ! command_exists "uv"; then
+        log_info "Installing uv..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
 
-    mkdir -p "$HOME/.openhands-state"
+    log_info "Installing OpenHands CLI..."
+    uv tool install openhands --python 3.12 || { log_error "Failed to install OpenHands"; return 1; }
+
+    mkdir -p "$HOME/.openhands"
 
     log_info ""
     log_info "=== OpenHands ==="
-    log_info "Start:    ./open_hands.sh start"
+    log_info "Start:    openhands serve"
     log_info "Web UI:   http://localhost:${OPENHANDS_PORT}"
-    log_info "State:    ~/.openhands-state"
-    log_info "Docs:     https://docs.all-hands.dev/"
+    log_info "Config:   ~/.openhands"
+    log_info "Docs:     https://docs.openhands.dev/"
     log_info ""
     log_info "Local model config (in web UI Settings):"
     log_info "  Provider: OpenAI"
     log_info "  Base URL: http://host.docker.internal:4000/v1"
     log_info "  API Key:  sk-local"
+    log_info ""
+    log_info "Or run with current directory mounted:"
+    log_info "  openhands serve --mount-cwd"
     log_info ""
 }
 
@@ -56,15 +62,8 @@ start_openhands() {
     log_info "Starting OpenHands on port ${OPENHANDS_PORT}..."
     _check_docker || return 1
 
-    docker run -it --rm \
-        --pull=always \
-        -e SANDBOX_RUNTIME_CONTAINER_IMAGE="$OPENHANDS_RUNTIME" \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        -v "$HOME/.openhands-state:/.openhands-state" \
-        -p "${OPENHANDS_PORT}:3000" \
-        --add-host host.docker.internal:host-gateway \
-        --name openhands-app \
-        "$OPENHANDS_IMAGE"
+    export PATH="$HOME/.local/bin:$PATH"
+    openhands serve
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

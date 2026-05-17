@@ -1,16 +1,38 @@
 model_list:
-  # --- Cloud Models ---
+  # --- Cloud Models (via OpenRouter) ---
   - model_name: kimi-k2.6-cloud
     litellm_params:
       model: openrouter/moonshot/kimi-k2.6
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
   - model_name: glm-5.1-cloud
     litellm_params:
       model: openrouter/thudm/glm-5.1
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
+
+  # --- Cloud: Claude (for complex reasoning) ---
+  - model_name: claude-sonnet-4-6-cloud
+    litellm_params:
+      model: openrouter/anthropic/claude-sonnet-4-20250514
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 200000
+
+  # --- Cloud: DeepSeek R1 (reasoning fallback) ---
+  - model_name: deepseek-r1-cloud
+    litellm_params:
+      model: openrouter/deepseek/deepseek-r1
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 65536
 
   # --- Coding ---
   - model_name: gemma4-26b

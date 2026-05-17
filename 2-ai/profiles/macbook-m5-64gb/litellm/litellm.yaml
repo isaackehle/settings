@@ -1,5 +1,30 @@
 model_list:
   # --- Cloud Models (via OpenRouter) ---
+  # Best-in-class models for 64GB
+  - model_name: claude-opus-4-6-cloud
+    litellm_params:
+      model: openrouter/anthropic/claude-opus-4-20250514
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 200000
+
+  - model_name: claude-sonnet-4-6-cloud
+    litellm_params:
+      model: openrouter/anthropic/claude-sonnet-4-20250514
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 200000
+
+  - model_name: gpt-4o-cloud
+    litellm_params:
+      model: openrouter/openai/gpt-4o
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 128000
+
   - model_name: kimi-k2.6-cloud
     litellm_params:
       model: openrouter/moonshot/kimi-k2.6

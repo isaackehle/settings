@@ -8,8 +8,6 @@
         <dict>
             <key>PATH</key>
             <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HOME}/.local/bin:${HOME}/.local/share/uv/tools/litellm/bin:${HOME}/.pyenv/shims</string>
-            <key>PYTHONPATH</key>
-            <string>${HOME}/.local/share/uv/tools/prisma/lib/python3.14/site-packages:${HOME}/.pyenv/versions/3.14.3/lib/python3.14/site-packages</string>
             <key>LITELLM_MASTER_KEY</key>
             <string>sk-local</string>
             <key>LITELLM_SALT_KEY</key>
@@ -33,11 +31,7 @@
         <true/>
         <key>ProgramArguments</key>
         <array>
-            <string>${HOME}/.local/share/uv/tools/litellm/bin/litellm</string>
-            <string>--config</string>
-            <string>${HOME}/.config/litellm/config.yaml</string>
-            <string>--port</string>
-            <string>4000</string>
+            <string>${HOME}/.local/bin/litellm-start</string>
         </array>
         <key>StandardErrorPath</key>
         <string>/tmp/litellm.stderr.log</string>
