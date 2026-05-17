@@ -1,0 +1,12 @@
+# Commit message format:
+# type(scope): short description (imperative mood, ≤72 chars)
+#
+# Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build
+# Scope: affected layer/component (optional but preferred)
+#
+# Examples:
+# feat(api): add user authentication endpoint
+# fix(core): resolve database connection timeout
+# docs(readme): update installation instructions
+#
+# No Co-Authored-By trailers. No trailing periods on subject line.

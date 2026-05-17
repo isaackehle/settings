@@ -84,7 +84,7 @@
         "read": "allow",
         "webfetch": "allow",
       },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers.",
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
@@ -130,8 +130,27 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow",
+        "webfetch": "allow"
       },
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication."
+    },
+    "summary": {
+      "description": "Commit message and session summary agent.",
+      "model": "litellm/qwen2.5-coder-7b-q4-32k",
+      "mode": "primary",
+      "temperature": 0.2,
+      "permission": {
+        "bash": "allow",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
+      "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
+    }
+  },
       "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication.",
     },
   },

@@ -76,7 +76,6 @@ OLLAMA_MODELS=(
 
     # --- DeepSeek R1 ---
     "deepseek-r1:8b"                                                                        # ~5 GB  | Reasoning, chat-only (no tools) (128k)
-    "deepseek-r1:8b-llama-distill-q8_0|deepseek-r1-8b:q8-128k"                              # 8.5 GB
     "deepseek-r1:14b"                           # 9 GB
     "deepseek-r1:14b-qwen-distill-q8_0|deepseek-r1-14b:q8-128k"                             # 16 GB  | Reasoning stock (128k)
     "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q4_K_M|deepseek-r1-tools-8b:q4-128k"  # ~5 GB | HF base tool calling / Tool calling alias (128k)

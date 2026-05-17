@@ -33,6 +33,7 @@ model_list:
     litellm_params:
       model: ollama_chat/qwen2.5-coder:1.5b
       api_base: http://localhost:11434
+      num_ctx: 32768
 
   # --- Reasoning / tool calls ---
   - model_name: deepseek-r1-tools-8b-q4-128k
@@ -65,7 +66,7 @@ litellm_settings:
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-  database_url: os.environ/DATABASE_URL
+  # database_url: os.environ/DATABASE_URL  # Uncomment to enable DB (requires Postgres)
 
 router_settings:
   model_group_alias:
