@@ -1,18 +1,31 @@
 model_list:
-  # --- Cloud Models ---
+  # --- Cloud Models (via OpenRouter) ---
   - model_name: kimi-k2.6-cloud
     litellm_params:
       model: openrouter/moonshot/kimi-k2.6
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
   - model_name: glm-5.1-cloud
     litellm_params:
       model: openrouter/thudm/glm-5.1
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
       max_tokens: 4096
       num_ctx: 32768
 
-  # --- General / coding ---
+  # --- Cloud: Claude (for heavier tasks) ---
+  - model_name: claude-haiku-3-5-cloud
+    litellm_params:
+      model: openrouter/anthropic/claude-3-haiku-20240307
+      api_base: https://openrouter.ai/api/v1
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 4096
+      num_ctx: 200000
+
+  # --- Local: Small models for 16GB ---
   - model_name: qwen3-14b-q5-40k
     litellm_params:
       model: ollama_chat/qwen3-14b:q5-40k
