@@ -1,20 +1,4 @@
-# Git Commit Rules
 
-Always follow [Conventional Commits](https://www.conventionalcommits.org/).
-
-## Format
-
-```
-type(scope): short description
-```
-
-- `type` is one of: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`, `perf`, `build`
-- `scope` is optional but preferred — use the affected layer or component (e.g., `api`, `core`, `config`, `litellm`, `kilocode`)
-- Subject line ≤ 72 characters, imperative mood, no period at end
-- Body is optional — only include if the change needs explanation beyond the subject
-- **Never** add `Co-Authored-By` trailers
-
-## Examples
 
 ```
 feat(litellm): add SKIP_DB_MIGRATIONS to plist
