@@ -27,6 +27,7 @@ setup_container_platforms() {
         print_info "Choose a container runtime:"
         print_info "  Docker Desktop: brew install --cask docker"
         print_info "  OrbStack (recommended, faster): brew install --cask orbstack"
+        print_info "  Podman (daemonless): brew install podman && podman machine init"
         print_info "  Colima (lightweight): brew install colima docker docker-compose"
         print_info "  Rancher Desktop: brew install --cask rancher"
     fi
