@@ -54,6 +54,81 @@ All tools route through **LiteLLM** (`:4000`) rather than Ollama directly, excep
 
 ---
 
+## Local LLM Server Architectures
+
+Choose the architecture that matches your setup. All configurations support hybrid local + cloud via OpenRouter.
+
+### Architecture Options
+
+| Architecture                     | Components                                | Best For                              |
+| -------------------------------- | ----------------------------------------- | ------------------------------------- |
+| **Ollama only**                  | Ollama `:11434`                           | Simple setup, single machine          |
+| **Ollama + OpenWebUI**           | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans, agents use Ollama |
+| **Ollama + LiteLLM**             | Ollama `:11434` + LiteLLM `:4000`         | Unified API, cloud fallback, agents   |
+| **Ollama + LiteLLM + OpenWebUI** | Ollama + LiteLLM + OpenWebUI `:8080`      | Full stack: agents + UI               |
+| **LMStudio**                     | LMStudio `:1234`                          | Prefer GUI over CLI, no proxy needed  |
+| **LMStudio + OpenRouter**        | LMStudio + cloud models                   | GUI-first, cloud fallback             |
+| **llama.cpp server**             | llama-server `:8080`                      | Custom quantization, max performance  |
+| **vLLM**                         | vLLM `:8000`                              | Linux server, NVIDIA GPU              |
+| **Olol (load balancer)**         | Olol `:11435` + multiple Ollama instances | Multi-machine inference               |
+| **Exo (distributed)**            | Exo `:52415`                              | Split model across machines           |
+
+### Recommended: Ollama + LiteLLM + OpenWebUI
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Agents (Kilo, Claude Code, etc.)     │
+│                         ↓                               │
+│               http://localhost:4000/v1                  │
+│                         ↓                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │               LiteLLM Proxy                     │    │
+│  │  - Model routing                                │    │
+│  │  - Cloud fallback (OpenRouter)                  │    │
+│  │  - Spend tracking                               │    │
+│  └─────────────────────────────────────────────────┘    │
+│         ↓                        ↓                      │
+│  ┌──────────────┐      ┌──────────────────┐             │
+│  │ Ollama       │      │ OpenRouter       │             │
+│  │ :11434       │      │ (cloud models)   │             │
+│  │ (local)      │      │                  │             │
+│  └──────────────┘      └──────────────────┘             │
+└─────────────────────────────────────────────────────────┘
+         ↓
+  ┌──────────────────┐
+  │ OpenWebUI        │
+  │ :8080 (optional) │
+  │ (human chat UI)  │
+  └──────────────────┘
+```
+
+**Why this stack:**
+
+- Single endpoint for all agents
+- Cloud fallback when local models can't handle
+- Optional UI for human use
+- Easy to swap components
+
+### Cross-Machine Options
+
+- **Olol** — Load balancer. Routes requests round-robin across multiple Ollama instances. See [### Olol](#olol) for details.
+- **Exo** — Distributed inference. Splits model layers across machines. See [### Exo](#exo) for details.
+
+### Starting the Full Stack
+
+```shell
+# 1. Start Ollama (background service)
+brew services start ollama
+
+# 2. Start LiteLLM (unified API)
+litellm --config ~/.config/litellm/config.yaml --port 4000
+
+# 3. Start OpenWebUI (optional, for human chat)
+# See 2-ai/openwebui.sh
+```
+
+---
+
 ### LiteLLM
 
 OpenAI-compatible proxy that sits in front of Ollama (and other providers). Single endpoint at `:4000` with a web UI, spend tracking, and rate limiting. **All tools except autocomplete/embed point here.**
@@ -79,6 +154,39 @@ Config deployed from `profiles/<machine>/litellm/litellm.yaml` → `~/.config/li
 Web UI: `http://localhost:4000/ui` · API: `http://localhost:4000/v1`
 
 - [litellm.ai](https://litellm.ai) · [docs](https://docs.litellm.ai) · `2-ai/litellm/litellm.sh`
+
+---
+
+### OpenWebUI
+
+Web UI for local LLMs. Connects to Ollama or LiteLLM for human-friendly chat interface.
+
+**Prerequisites:** Docker, Ollama or LiteLLM running.
+
+```shell
+# Using Docker
+docker run -d --name openwebui \
+  -p 8080:8080 \
+  -v openwebui:/app/backend/data \
+  --add-host=host.docker.internal:host-gateway \
+  ghcr.io/open-webui/open-webui:main
+
+# Or use the setup script
+bash 2-ai/openwebui.sh setup
+```
+
+**Connect to LiteLLM:**
+
+1. Open http://localhost:8080
+2. Settings → Admin Settings → Connections
+3. Add API URL: `http://host.docker.internal:4000/v1`
+4. Add API Key: `sk-local`
+
+**Connect to Ollama directly:**
+
+1. Add API URL: `http://host.docker.internal:11434/v1`
+
+- [docs.openwebui.com](https://docs.openwebui.com) · `2-ai/openwebui.sh`
 
 ---
 
