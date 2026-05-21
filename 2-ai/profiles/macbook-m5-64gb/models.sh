@@ -120,7 +120,7 @@ OLLAMA_MODELS=(
     "gemma3:12b"                                     # ~7 GB | General purpose (128k)
 
     # --- GLM-4.7 Flash ---
-    "glm-4.7-flash"    # ~19 GB 198K | Fast, Chinese-optimized (32k)
+    "glm-4.7-flash"                                 # ~19 GB 198K | Fast, Chinese-optimized (32k)
     "glm-4.7-flash:q8_0|glm-4.7-flash:q8-198k"      # ~32 GB 198K
 
     # --- Phi-4 ---

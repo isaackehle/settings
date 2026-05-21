@@ -5,4 +5,5 @@ MEMORY=32
 MEMORY_RANGE_MIN=20
 MEMORY_RANGE_MAX=40
 COMPUTER_TYPES=MacBook*,Mac1*,Mac14*,MacStudio*
+CLASS=medium
 DESCRIPTION=Q5 stack + 30B coder + 32B reasoning

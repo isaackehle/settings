@@ -5,7 +5,7 @@
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "maxTokens": 16000,
       "mode": "primary",
-      "model": "openrouter/qwen/qwen3-coder-next-80b",
+      "model": "litellm/qwen3-coder-next-80b-q4",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -22,7 +22,7 @@
       "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
       "maxTokens": 8000,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "litellm/qwen3-coder-30b-q6-32k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -39,7 +39,7 @@
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "maxTokens": 1500,
       "mode": "primary",
-      "model": "openrouter/qwen/qwen3-8b",
+      "model": "litellm/qwen3-4b-q8-256k",
       "permission": {
         "bash": "deny",
         "edit": "deny",
@@ -55,7 +55,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-32b:q5-32k",
+      "model": "litellm/qwen3-32b-q5-32k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -87,7 +87,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q8-32k",
+      "model": "litellm/qwen3.5-27b-q8-32k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -102,7 +102,7 @@
     }
   },
   "default_agent": "code",
-  "model": "openrouter/anthropic/claude-sonnet-4-6",
+  "model": "litellm/qwen3.5-27b-q8-256k",
   "permission": {
     "bash": "ask",
     "edit": "ask",
@@ -115,19 +115,46 @@
   "provider": {
     "litellm": {
       "models": {
-        "llama-qwen3-coder-30b-q6-128k": {
-          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 128k)"
+        "qwen3-coder-next-80b-q4": {
+          "name": "Qwen3 Coder Next 80B Q4"
         },
-        "llama-qwen3-coder-30b-q6-32k": {
-          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 32k)"
+        "qwen3-coder-30b-q6-32k": {
+          "name": "Qwen3 Coder 30B Q6 (32k)"
         },
-        "llama-qwen3.6-35b-q5-32k": {
-          "name": "Qwen3.6 35B Q5 (llama.cpp, 32k)"
+        "qwen3-4b-q8-256k": {
+          "name": "Qwen3 4B Q8 (256k)"
+        },
+        "qwen3-32b-q5-32k": {
+          "name": "Qwen3 32B Q5 (32k)"
+        },
+        "qwen3.5-27b-q8-32k": {
+          "name": "Qwen3.5 27B Q8 (32k)"
+        },
+        "qwen3.5-27b-q8-256k": {
+          "name": "Qwen3.5 27B Q8 (256k)"
+        },
+        "glm-4.7-flash-latest": {
+          "name": "GLM 4.7 Flash (q4-198k)"
+        },
+        "glm-4.7-flash-q8-198k": {
+          "name": "GLM 4.7 Flash (q8-198k)"
+        },
+        "glm-4.7-flash-q4-198k": {
+          "name": "GLM 4.7 Flash (q4-198k)"
+        },
+        "glm-4.7-flash-q8-198k-litellm": {
+          "name": "GLM 4.7 Flash (q8-198k)"
+        },
+        "glm-4.7-flash-latest-litellm": {
+          "name": "GLM 4.7 Flash (latest)"
+        },
+        "glm-4.7-flash-q4-198k-litellm": {
+          "name": "GLM 4.7 Flash (q4-198k)"
         }
       },
       "name": "LiteLLM (Proxy)",
-      // LiteLLM proxy — provides access to llama.cpp server models (port 8080).
-      // Start llama-server first; see litellm/litellm.yaml for model definitions.
+      // LiteLLM proxy — provides access to ollama server models (port 11434) via litellm.
+      // Start litellm proxy first; see litellm.sh for setup.
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "apiKey": "sk-local",

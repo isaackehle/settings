@@ -356,6 +356,12 @@ _profile_description() {
     echo "${_PROFILE_CACHE[p${folder}_DESCRIPTION]:-No description}"
 }
 
+_profile_class() {
+    local folder="$1"
+    _load_profile "$folder"
+    echo "${_PROFILE_CACHE[p${folder}_CLASS]:-medium}"
+}
+
 _does_profile_match_computer() {
     local folder="$1"
     local hw_mem=$2

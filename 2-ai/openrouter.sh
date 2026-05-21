@@ -5,6 +5,14 @@ fi
 
 # Set up OpenRouter — unified API key env var for the openrouter.ai gateway.
 
+verify_openrouter() {
+    local env_file="$HOME/.env.local"
+    if [ -f "$env_file" ] && grep -q "OPENROUTER_API_KEY=sk-" "$env_file" 2>/dev/null; then
+        return 0
+    fi
+    return 1
+}
+
 setup_openrouter() {
     log_info "Setting up OpenRouter..."
 

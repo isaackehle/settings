@@ -2,7 +2,6 @@
   "$schema": "https://app.kilo.ai/config.json",
   "model": "litellm/qwen3-14b-q5-40k",
   "small_model": "litellm/qwen3-4b-q8-256k",
-  "autocomplete_model": "litellm/qwen2.5-coder-1.5b-q4-32k",
   "disabled_providers": [],
   "provider": {
     "litellm": {
@@ -13,20 +12,20 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "kimi-k2.6-cloud":               { "name": "Kimi K2.6 (cloud)" },
-        "glm-5.1-cloud":                 { "name": "GLM 5.1 (cloud)" },
-        "qwen3-14b-q5-40k":              { "name": "Qwen3 14B Q5 (40k)" },
-        "qwen2.5-coder-7b-q4-32k":       { "name": "Qwen2.5 Coder 7B Q4 (32k)" },
-        "qwen2.5-coder-1.5b-q4-32k":     { "name": "Qwen2.5 Coder 1.5B Q4 (32k)" },
-        "qwen3.5-27b-q5-256k":           { "name": "Qwen3.5 27B Q5 (256k)" },
-        "deepseek-r1-tools-8b-q4-128k":  { "name": "DeepSeek R1 Tools 8B Q4 (128k)" },
-        "deepseek-r1-8b-q4-128k":        { "name": "DeepSeek R1 8B Q4 (128k)" },
-        "deepseek-r1-8b-q8-128k":        { "name": "DeepSeek R1 8B Q8 (128k)" },
-        "deepseek-r1-14b-q4-128k":       { "name": "DeepSeek R1 14B Q4 (128k)" },
-        "deepseek-r1-14b-q8-128k":       { "name": "DeepSeek R1 14B Q8 (128k)" },
-        "deepseek-r1-tools-8b-q8-128k":  { "name": "DeepSeek R1 Tools 8B Q8 (128k)" },
-        "qwen3-4b-q8-256k":              { "name": "Qwen3 4B Q8 (256k)" },
-        "codestral-22b":                 { "name": "Codestral 22B" }
+        "kimi-k2.6-cloud": { "name": "Kimi K2.6 (cloud)" },
+        "glm-5.1-cloud": { "name": "GLM 5.1 (cloud)" },
+        "qwen3-14b-q5-40k": { "name": "Qwen3 14B Q5 (40k)" },
+        "qwen2.5-coder-7b-q4-32k": { "name": "Qwen2.5 Coder 7B Q4 (32k)" },
+        "qwen2.5-coder-1.5b-q4-32k": { "name": "Qwen2.5 Coder 1.5B Q4 (32k)" },
+        "qwen3.5-27b-q5-256k": { "name": "Qwen3.5 27B Q5 (256k)" },
+        "deepseek-r1-tools-8b-q4-128k": { "name": "DeepSeek R1 Tools 8B Q4 (128k)" },
+        "deepseek-r1-8b-q4-128k": { "name": "DeepSeek R1 8B Q4 (128k)" },
+        "deepseek-r1-8b-q8-128k": { "name": "DeepSeek R1 8B Q8 (128k)" },
+        "deepseek-r1-14b-q4-128k": { "name": "DeepSeek R1 14B Q4 (128k)" },
+        "deepseek-r1-14b-q8-128k": { "name": "DeepSeek R1 14B Q8 (128k)" },
+        "deepseek-r1-tools-8b-q8-128k": { "name": "DeepSeek R1 Tools 8B Q8 (128k)" },
+        "qwen3-4b-q8-256k": { "name": "Qwen3 4B Q8 (256k)" },
+        "codestral-22b": { "name": "Codestral 22B" }
       }
     },
     "openrouter": {
@@ -38,10 +37,10 @@
       },
       "models": {
         "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
-        "anthropic/claude-opus-4-6":   { "name": "Claude Opus 4.6" },
-        "moonshot/kimi-k2.6":          { "name": "Kimi k2.6 (reasoning)" },
-        "google/gemini-2.5-flash":     { "name": "Gemini 2.5 Flash" },
-        "openai/gpt-4o":               { "name": "GPT-4o" }
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
+        "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
+        "openai/gpt-4o": { "name": "GPT-4o" }
       }
     }
   },
@@ -51,7 +50,15 @@
       "model": "litellm/qwen3-14b-q5-40k",
       "mode": "primary",
       "temperature": 0.2,
-      "permission": { "bash": "ask", "edit": "ask", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "ask",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
     },
     "ask": {
@@ -59,7 +66,15 @@
       "model": "litellm/qwen3-14b-q5-40k",
       "mode": "primary",
       "temperature": 0.2,
-      "permission": { "bash": "deny", "edit": "deny", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are a read-only Q&A agent. Answer questions about the codebase clearly and concisely. Explain logic, trace flows, and provide context. Do not edit files or run commands."
     },
     "debug": {
@@ -67,7 +82,15 @@
       "model": "litellm/deepseek-r1-tools-8b-q4-128k",
       "mode": "primary",
       "temperature": 0.3,
-      "permission": { "bash": "ask", "edit": "ask", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "ask",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are a debugging agent. Diagnose errors, trace bugs through the codebase, and suggest targeted fixes. Read logs, inspect code, and propose minimal, precise solutions. Explain root causes before suggesting changes."
     },
     "plan": {
@@ -75,7 +98,15 @@
       "model": "litellm/qwen3-4b-q8-256k",
       "mode": "primary",
       "temperature": 0.25,
-      "permission": { "bash": "deny", "edit": "deny", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
     },
     "think": {
@@ -83,7 +114,15 @@
       "model": "litellm/deepseek-r1-tools-8b-q4-128k",
       "mode": "primary",
       "temperature": 0.3,
-      "permission": { "bash": "deny", "edit": "deny", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands."
     },
     "write": {
@@ -91,7 +130,15 @@
       "model": "litellm/qwen2.5-coder-7b-q4-32k",
       "mode": "primary",
       "temperature": 0.65,
-      "permission": { "bash": "deny", "edit": "ask", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "deny",
+        "edit": "ask",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication."
     },
     "summary": {
@@ -99,7 +146,15 @@
       "model": "litellm/qwen3-4b-q8-256k",
       "mode": "primary",
       "temperature": 0.2,
-      "permission": { "bash": "allow", "edit": "deny", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "allow",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
     },
     "description": {
@@ -107,7 +162,15 @@
       "model": "litellm/qwen3-4b-q8-256k",
       "mode": "primary",
       "temperature": 0.3,
-      "permission": { "bash": "deny", "edit": "deny", "glob": "allow", "grep": "allow", "list": "allow", "read": "allow", "webfetch": "allow" },
+      "permission": {
+        "bash": "deny",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "read": "allow",
+        "webfetch": "allow"
+      },
       "prompt": "Generate detailed MR/PR descriptions. Include: summary of changes, motivation/context, key files changed, testing notes. Use markdown formatting with headers, bullet points, and code snippets where helpful. Be concise but thorough — aim for 2-4 paragraphs."
     }
   },

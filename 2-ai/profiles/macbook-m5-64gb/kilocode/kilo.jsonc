@@ -2,7 +2,6 @@
   "$schema": "https://app.kilo.ai/config.json",
   "model": "litellm/qwen3-coder-next-80b-q4-128k",
   "small_model": "litellm/qwen2.5-coder-7b-q4-32k",
-  "autocomplete_model": "litellm/qwen2.5-coder-1.5b-q4-32k",
   "disabled_providers": [],
   "provider": {
     "litellm": {
@@ -49,9 +48,10 @@
         "qwen3-4b-q8-256k": { "name": "Qwen3 4B Q8 (256k)" },
         "llama3.3-70b": { "name": "Llama 3.3 70B" },
         "gemma4-26b": { "name": "Gemma 4 26B" },
-        "llama-qwen3-coder-30b-q6-32k": { "name": "llama.cpp Qwen3 Coder 30B Q6 (32k)" },
-        "llama-qwen3-coder-30b-q6-128k": { "name": "llama.cpp Qwen3 Coder 30B Q6 (128k)" },
-        "llama-qwen3.6-35b-q5-32k": { "name": "llama.cpp Qwen3.6 35B Q5 (32k)" }
+        "glm-4.7-flash-latest": { "name": "GLM 4.7 Flash (latest)" },
+        "glm-4.7-flash-q4-198k": { "name": "GLM 4.7 Flash (q4-198k)" },
+        "glm-4.7-flash-q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" },
+        "qwen3.6-35b-q5-32k": { "name": "llama.cpp Qwen3.6 35B Q5 (32k)" }
       }
     },
     "openrouter": {
