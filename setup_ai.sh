@@ -369,6 +369,222 @@ declare -A DISPLAY_NAMES=(
   ["open-hands"]="OpenHands"
 )
 
+# ============================================================================
+# INFRASTRUCTURE RECOMMENDATIONS
+# ============================================================================
+
+# Get recommended infrastructure components based on profile CLASS
+get_recommended_infrastructure() {
+  local profile="${MACHINE_PROFILE:-unknown}"
+  local class
+  class=$(_profile_class "$profile")
+
+  case "$class" in
+    lightweight|server)
+      echo "ollama litellm"
+      ;;
+    medium)
+      echo "ollama litellm openrouter"
+      ;;
+    powerful|maximum)
+      echo "ollama litellm openrouter openwebui"
+      ;;
+    *)
+      echo "ollama litellm openrouter"
+      ;;
+  esac
+}
+
+# Get profile description for display
+get_profile_description() {
+  local profile="${MACHINE_PROFILE:-unknown}"
+  local class
+  class=$(_profile_class "$profile")
+  local name
+  name=$(_profile_name "$profile")
+
+  echo "${name} (${class})"
+}
+
+# Check which infrastructure components are currently installed/running
+check_current_infrastructure() {
+  local current=""
+  verify_ollama 2>/dev/null && current="$current ollama"
+  verify_litellm 2>/dev/null && current="$current litellm"
+  verify_openrouter 2>/dev/null && current="$current openrouter"
+  verify_openwebui 2>/dev/null && current="$current openwebui"
+  echo "${current# }"
+}
+
+# Uninstall an infrastructure component
+uninstall_infrastructure_component() {
+  local component="$1"
+  local removed=false
+
+  case "$component" in
+    ollama)
+      print_step "Uninstalling Ollama"
+      if brew list ollama &>/dev/null; then
+        read -p "  Uninstall Ollama? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          brew uninstall ollama
+          removed=true
+          log_status "Ollama uninstalled"
+        fi
+      else
+        log_status "Ollama not installed via brew"
+      fi
+      ;;
+    litellm)
+      print_step "Uninstalling LiteLLM"
+      if uv tool list 2>/dev/null | grep -q "litellm"; then
+        read -p "  Uninstall LiteLLM? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          uv tool uninstall litellm
+          removed=true
+          log_status "LiteLLM uninstalled"
+        fi
+      else
+        log_status "LiteLLM not installed via uv"
+      fi
+      ;;
+    openwebui)
+      print_step "Stopping OpenWebUI"
+      if docker ps -a | grep -q open-webui; then
+        read -p "  Stop and remove OpenWebUI container? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          docker stop open-webui 2>/dev/null || true
+          docker rm open-webui 2>/dev/null || true
+          removed=true
+          log_status "OpenWebUI stopped and removed"
+        fi
+      else
+        log_status "OpenWebUI container not found"
+      fi
+      ;;
+    openrouter)
+      # OpenRouter is just config, no real uninstall needed
+      log_status "OpenRouter config can be removed manually if desired"
+      ;;
+  esac
+  echo "$removed"
+}
+
+# Handle infrastructure changes - uninstall components that won't be used
+handle_infrastructure_change() {
+  local current="$1"
+  local desired="$2"
+
+  # Parse current and desired into arrays
+  local current_arr=($current)
+  local desired_arr=($desired)
+
+  # Find components to remove
+  for comp in "${current_arr[@]}"; do
+    local found=false
+    for want in "${desired_arr[@]}"; do
+      if [[ "$comp" == "$want" ]]; then
+        found=true
+        break
+      fi
+    done
+    if [[ "$found" == false ]]; then
+      uninstall_infrastructure_component "$comp"
+    fi
+  done
+}
+
+# Interactive infrastructure selection menu
+select_infrastructure() {
+  local recommended
+  recommended=$(get_recommended_infrastructure)
+  local current
+  current=$(check_current_infrastructure)
+  local profile_desc
+  profile_desc=$(get_profile_description)
+
+  echo ""
+  echo "╔════════════════════════════════════════════════════════════════╗"
+  echo "║  INFRASTRUCTURE SETUP                                         ║"
+  echo "╚════════════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "  Profile: $profile_desc"
+  echo "  Recommended: $recommended"
+  echo "  Current:    ${current:-none}"
+  echo ""
+  echo "  Choose infrastructure stack:"
+  echo ""
+  echo "  1) Minimal      - Ollama only (local models)"
+  echo "  2) Local Proxy - Ollama + LiteLLM (unified local API)"
+  echo "  3) Cloud Fallback - Ollama + LiteLLM + OpenRouter"
+  echo "  4) Full Stack  - Ollama + LiteLLM + OpenRouter + OpenWebUI"
+  echo "  5) Custom      - Choose individual components"
+  echo ""
+  echo "  Recommendation for your profile: $(echo $recommended | tr ' ' '+')"
+  echo ""
+
+  printf "Select option [4]: "
+  read -r choice
+  choice="${choice:-4}"
+
+  local desired=""
+  case "$choice" in
+    1) desired="ollama" ;;
+    2) desired="ollama litellm" ;;
+    3) desired="ollama litellm openrouter" ;;
+    4) desired="ollama litellm openrouter openwebui" ;;
+    5)
+      echo ""
+      echo "Select components (space-separated, enter to confirm):"
+      echo "  ollama      - Local LLM server"
+      echo "  litellm    - Unified API proxy (port 4000)"
+      echo "  openrouter - Cloud model fallback (requires API key)"
+      echo "  openwebui  - Web UI (Docker)"
+      echo ""
+      printf "Components [ollama litellm openrouter openwebui]: "
+      read -r desired
+      desired="${desired:-ollama litellm openrouter openwebui}"
+      ;;
+    *)
+      log_error "Invalid option"
+      return 1
+      ;;
+  esac
+
+  echo ""
+  echo "  Selected: $desired"
+
+  # Handle uninstalls if changing infrastructure
+  if [[ -n "$current" && "$current" != "$desired" ]]; then
+    echo ""
+    read -p "  Change infrastructure? This may uninstall unused components. Continue? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      log_info "Cancelled."
+      return 1
+    fi
+    handle_infrastructure_change "$current" "$desired"
+  fi
+
+  # Install the selected components
+  echo ""
+  log_info "Installing infrastructure: $desired"
+
+  for comp in $desired; do
+    case "$comp" in
+      ollama)     setup_ollama ;;
+      litellm)    setup_litellm ;;
+      openrouter) setup_openrouter ;;
+      openwebui)  setup_openwebui ;;
+    esac
+  done
+
+  log_status "Infrastructure setup complete!"
+}
+
 install_tool() {
   local tool="$1"
   local setup_func="${GROUP_SETUP_FUNCS[$tool]}"
@@ -724,13 +940,24 @@ main() {
   deploy)
     deploy_configs
     ;;
+  infrastructure)
+    select_infrastructure
+    ;;
   "")
     interactive_menu
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|roocode|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|roocode|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
+    echo ""
+    echo "=== INFRASTRUCTURE (recommended) ==="
+    echo "  infrastructure - Interactive menu to select LLM stack (profile-based)"
+    echo ""
+    echo "    Profile-based recommendations:"
+    echo "      16GB machines  - Ollama + LiteLLM"
+    echo "      32GB machines - Ollama + LiteLLM + OpenRouter"
+    echo "      48GB+ machines - Full stack with OpenWebUI"
     echo ""
     echo "=== GROUPS (recommended) ==="
     echo "  install:infrastructure   - Ollama + LiteLLM + OpenWebUI"

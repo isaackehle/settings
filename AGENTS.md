@@ -246,4 +246,35 @@ against the current installation.
 | GLM-4 Flash    | `ollama pull glm-4-flash`         |
 | Codestral      | `ollama pull codestral:22b`       |
 
+---
+
+## Profile Configuration
+
+Each machine profile is defined in `2-ai/profiles/<profile-name>/PROFILE`. This file contains all machine-specific metadata:
+
+```bash
+FOLDER=macbook-m5-64gb
+NAME=MacBook Pro M5 Max 64GB+
+MEMORY=64
+MEMORY_RANGE_MIN=56
+MEMORY_RANGE_MAX=999
+COMPUTER_TYPES=MacBook*,Mac1*,Mac14*
+CLASS=maximum
+DESCRIPTION=Q6 stack + 30B coder + 32B reasoning + 70B solo
+```
+
+**Always use the PROFILE file for profile-related information.** Do not hardcode profile names or class names in scripts. Use the helper functions in `helpers.sh`:
+
+- `_profile_name <folder>` — Get the human-readable name
+- `_profile_class <folder>` — Get the class (lightweight, medium, powerful, maximum, server)
+- `_profile_memory <folder>` — Get the memory in GB
+- `_profile_description <folder>` — Get the description
+
+**Available classes:**
+- `lightweight` — 16GB machines (Ollama + LiteLLM only)
+- `medium` — 32GB machines (adds OpenRouter)
+- `powerful` — 48GB machines (adds OpenWebUI)
+- `maximum` — 64GB+ machines (full stack)
+- `server` — Mac mini / server machines
+
 <!-- markdownlint-enable MD013 -->

@@ -2,7 +2,6 @@
   "$schema": "https://app.kilo.ai/config.json",
   "model": "litellm/qwen3-14b-q5-40k",
   "small_model": "litellm/qwen2.5-coder-7b-q4-32k",
-  "autocomplete_model": "litellm/qwen2.5-coder-1.5b-q4-32k",
   "disabled_providers": [],
   "provider": {
     "litellm": {

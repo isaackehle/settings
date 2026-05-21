@@ -5,7 +5,7 @@
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "maxTokens": 16000,
       "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q8-256k",
+      "model": "litellm/qwen3.5-27b-q8-256k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -22,7 +22,7 @@
       "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
       "maxTokens": 8000,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "litellm/qwen3-coder-30b-q5-32k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -38,7 +38,7 @@
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
       "mode": "primary",
-      "model": "ollama/qwen3-4b:q8-256k",
+      "model": "litellm/qwen3-4b-q8-256k",
       "permission": {
         "bash": "deny",
         "edit": "deny",
@@ -54,7 +54,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-14b:q5-40k",
+      "model": "litellm/qwen3-14b-q5-40k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -86,7 +86,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q8-256k",
+      "model": "litellm/qwen3.5-27b-q8-256k",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -101,7 +101,7 @@
     }
   },
   "default_agent": "code",
-  "model": "ollama/qwen3.5-27b:q8-256k",
+  "model": "litellm/qwen3.5-27b-q8-256k",
   "permission": {
     "bash": "ask",
     "edit": "ask",
@@ -111,44 +111,36 @@
     "read": "allow",
     "webfetch": "allow"
   },
-  "provider": {
+    "provider": {
     "litellm": {
       "models": {
-        "llama-qwen3-coder-30b-q6-128k": {
-          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 128k)"
+        "qwen3.5-27b-q8-256k": {
+          "name": "Qwen3.5 27B Q8 (256k)"
         },
-        "llama-qwen3-coder-30b-q6-32k": {
-          "name": "Qwen3 Coder 30B Q6 (llama.cpp, 32k)"
+        "qwen3-coder-30b-q5-32k": {
+          "name": "Qwen3 Coder 30B Q5 (32k)"
         },
-        "llama-qwen3.6-35b-q5-32k": {
-          "name": "Qwen3.6 35B Q5 (llama.cpp, 32k)"
+        "qwen3-4b-q8-256k": {
+          "name": "Qwen3 4B Q8 (256k)"
+        },
+        "qwen3-14b-q5-40k": {
+          "name": "Qwen3 14B Q5 (40k)"
         }
       },
       "name": "LiteLLM (Proxy)",
-      // LiteLLM proxy — provides access to llama.cpp server models (port 8080).
-      // Start llama-server first; see litellm/litellm.yaml for model definitions.
+      // LiteLLM proxy — provides access to ollama server models (port 11434) via litellm.
+      // Start litellm proxy first; see litellm.sh for setup.
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "apiKey": "sk-local",
         "baseURL": "http://localhost:4000/v1"
       }
-    },
+    }
+  },
     "ollama": {
       "models": {
         "codestral-22b:q6-32k": {
           "name": "Codestral 22b (q6-32k)"
-        },
-        "deepseek-r1-14b:q8-128k": {
-          "name": "DeepSeek R1 14b (q8-128k)"
-        },
-        "deepseek-r1-tools:14b-128k": {
-          "name": "DeepSeek R1 Tools (14b-128k)"
-        },
-        "deepseek-r1-tools:32b-128k": {
-          "name": "DeepSeek R1 Tools (32b-128k)"
-        },
-        "deepseek-r1:8b": {
-          "name": "DeepSeek R1 8B"
         },
         "deepseek-r1:14b": {
           "name": "DeepSeek R1 14B"
