@@ -9,7 +9,7 @@ Comprehensive reference for all AI tools in this setup. Install scripts live in 
 ## Contents
 
 - [Infrastructure](#infrastructure)
-  - [Ollama](#ollama) · [LiteLLM](#litellm) · [Olol](#olol) · [Exo](#exo)
+  - [Ollama](#ollama) · [OpenWebUI](#openwebui) · [Olol](#olol) · [Exo](#exo)
 - [Local Runtimes](#local-runtimes)
   - [LM Studio](#lm-studio) · [GPT4All](#gpt4all) · [Llama.cpp](#llamacpp) · [vLLM](#vllm)
 - [Terminal Coding Agents](#terminal-coding-agents)
@@ -48,9 +48,9 @@ ollama pull qwen3-14b:q5-40k
 ollama list
 ```
 
-All tools route through **LiteLLM** (`:4000`) rather than Ollama directly, except autocomplete and embeddings (which go to `:11434` for latency).
+All tools route through **Ollama** (`:11434/v1` OpenAI-compatible endpoint) directly. Cloud models via OpenRouter provider blocks natively in each tool — no proxy required.
 
-- [ollama.com](https://ollama.com) · [docs](https://ollama.com/docs) · `2-ai/ollama/ollama.sh`
+- [ollama.com](https://ollama.com) · [docs](https://ollama.com/docs) · `2-ai/ollama.sh`
 
 ---
 
@@ -62,106 +62,63 @@ Choose the architecture that matches your setup. All configurations support hybr
 
 | Architecture                     | Components                                | Best For                              |
 | -------------------------------- | ----------------------------------------- | ------------------------------------- |
-| **Ollama only**                  | Ollama `:11434`                           | Simple setup, single machine          |
-| **Ollama + OpenWebUI**           | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans, agents use Ollama |
-| **Ollama + LiteLLM**             | Ollama `:11434` + LiteLLM `:4000`         | Unified API, cloud fallback, agents   |
-| **Ollama + LiteLLM + OpenWebUI** | Ollama + LiteLLM + OpenWebUI `:8080`      | Full stack: agents + UI               |
-| **LMStudio**                     | LMStudio `:1234`                          | Prefer GUI over CLI, no proxy needed  |
+| **Ollama only**                  | Ollama `:11434`                           | Default — direct, no proxy            |
+| **Ollama + OpenWebUI**           | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans                    |
+| **LMStudio**                     | LMStudio `:1234`                          | Prefer GUI over CLI                   |
 | **LMStudio + OpenRouter**        | LMStudio + cloud models                   | GUI-first, cloud fallback             |
 | **llama.cpp server**             | llama-server `:8080`                      | Custom quantization, max performance  |
 | **vLLM**                         | vLLM `:8000`                              | Linux server, NVIDIA GPU              |
 | **Olol (load balancer)**         | Olol `:11435` + multiple Ollama instances | Multi-machine inference               |
 | **Exo (distributed)**            | Exo `:52415`                              | Split model across machines           |
 
-### Recommended: Ollama + LiteLLM + OpenWebUI
+### Recommended: Ollama Direct
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Agents (Kilo, Claude Code, etc.)     │
-│                         ↓                               │
-│               http://localhost:4000/v1                  │
-│                         ↓                               │
-│  ┌─────────────────────────────────────────────────┐    │
-│  │               LiteLLM Proxy                     │    │
-│  │  - Model routing                                │    │
-│  │  - Cloud fallback (OpenRouter)                  │    │
-│  │  - Spend tracking                               │    │
-│  └─────────────────────────────────────────────────┘    │
-│         ↓                        ↓                      │
-│  ┌──────────────┐      ┌──────────────────┐             │
-│  │ Ollama       │      │ OpenRouter       │             │
-│  │ :11434       │      │ (cloud models)   │             │
-│  │ (local)      │      │                  │             │
-│  └──────────────┘      └──────────────────┘             │
+│              Agents (OpenCode, Claude Code, etc.)       │
+│                            ↓                            │
+│               http://localhost:11434/v1                 │
+│                            ↓                            │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │                    Ollama                         │   │
+│  │  - Model serving                  ───────────    │   │
+│  │  - OpenAI-compatible API              │   │      │   │
+│  │  - Cloud models via tool-native      │   │      │   │
+│  │    OpenRouter provider blocks        │   │      │   │
+│  └──────────────────────────────────────┴───┴──────┘   │
+│                            ↓                            │
+│                   ┌──────────────────┐                  │
+│                   │ OpenWebUI        │                  │
+│                   │ :8080 (optional) │                  │
+│                   │ (human chat UI)  │                  │
+│                   └──────────────────┘                  │
 └─────────────────────────────────────────────────────────┘
-         ↓
-  ┌──────────────────┐
-  │ OpenWebUI        │
-  │ :8080 (optional) │
-  │ (human chat UI)  │
-  └──────────────────┘
 ```
 
 **Why this stack:**
 
 - Single endpoint for all agents
-- Cloud fallback when local models can't handle
+- No proxy overhead (no LiteLLM)
+- Cloud models via tool-native OpenRouter providers
 - Optional UI for human use
-- Easy to swap components
 
-### Cross-Machine Options
-
-- **Olol** — Load balancer. Routes requests round-robin across multiple Ollama instances. See [### Olol](#olol) for details.
-- **Exo** — Distributed inference. Splits model layers across machines. See [### Exo](#exo) for details.
-
-### Starting the Full Stack
+### Starting the Stack
 
 ```shell
 # 1. Start Ollama (background service)
 brew services start ollama
 
-# 2. Start LiteLLM (unified API)
-litellm --config ~/.config/litellm/config.yaml --port 4000
-
-# 3. Start OpenWebUI (optional, for human chat)
+# 2. Start OpenWebUI (optional, for human chat)
 # See 2-ai/openwebui.sh
 ```
 
 ---
 
-### LiteLLM
-
-OpenAI-compatible proxy that sits in front of Ollama (and other providers). Single endpoint at `:4000` with a web UI, spend tracking, and rate limiting. **All tools except autocomplete/embed point here.**
-
-**Prerequisites:** `uv`, Docker (for PostgreSQL), Ollama on `:11434`.
-
-```shell
-uv tool install 'litellm[proxy]'
-```
-
-```shell
-# Start PostgreSQL (first time)
-docker run -d --name litellm-postgres --restart unless-stopped \
-  -e POSTGRES_DB=litellm_db -e POSTGRES_USER=litellm -e POSTGRES_PASSWORD=litellm \
-  -p 5432:5432 postgres:16
-
-# Start proxy (uses profile config)
-litellm --config ~/.config/litellm/litellm.yaml
-```
-
-Config deployed from `profiles/<machine>/litellm/litellm.yaml` → `~/.config/litellm/litellm.yaml`.
-
-Web UI: `http://localhost:4000/ui` · API: `http://localhost:4000/v1`
-
-- [litellm.ai](https://litellm.ai) · [docs](https://docs.litellm.ai) · `2-ai/litellm/litellm.sh`
-
----
-
 ### OpenWebUI
 
-Web UI for local LLMs. Connects to Ollama or LiteLLM for human-friendly chat interface.
+Web UI for local LLMs. Connects to Ollama for human-friendly chat interface.
 
-**Prerequisites:** Docker, Ollama or LiteLLM running.
+**Prerequisites:** Docker, Ollama running.
 
 ```shell
 # Using Docker
@@ -175,16 +132,11 @@ docker run -d --name openwebui \
 bash 2-ai/openwebui.sh setup
 ```
 
-**Connect to LiteLLM:**
+**Connect to Ollama:**
 
 1. Open http://localhost:8080
 2. Settings → Admin Settings → Connections
-3. Add API URL: `http://host.docker.internal:4000/v1`
-4. Add API Key: `sk-local`
-
-**Connect to Ollama directly:**
-
-1. Add API URL: `http://host.docker.internal:11434/v1`
+3. Add API URL: `http://host.docker.internal:11434/v1`
 
 - [docs.openwebui.com](https://docs.openwebui.com) · `2-ai/openwebui.sh`
 
@@ -339,7 +291,7 @@ npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || true
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-Profile config (`profiles/<machine>/claude/settings.json`) is deployed to `~/.claude/settings.json`. Includes pre-approved read-only git commands and local model routing.
+Profile config (`profiles/<machine>/claude/settings.json`) is deployed to `~/.claude/settings.json`. Routes through Ollama on `:11434`.
 
 - [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code) · `2-ai/claude/claude.sh`
 
@@ -355,7 +307,7 @@ brew install anomalyco/tap/opencode
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config/opencode/opencode.jsonc`. All models route through LiteLLM on `:4000`.
+Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config/opencode/opencode.jsonc`. All models route through Ollama on `:11434`.
 
 ```shell
 opencode          # interactive TUI
@@ -374,7 +326,7 @@ Terminal TUI coding assistant by Charm. Supports LSPs, MCPs, and multiple LLM pr
 brew install charmbracelet/tap/crush
 ```
 
-Config deployed from `profiles/<machine>/crush/crush.json` → `~/.config/crush/crush.json`. All profiles point at LiteLLM on `:4000`.
+Config deployed from `profiles/<machine>/crush/crush.json` → `~/.config/crush/crush.json`. All profiles point at Ollama on `:11434/v1`.
 
 ```shell
 crush
@@ -394,7 +346,7 @@ brew install aider
 uv tool install aider-chat
 ```
 
-Config deployed from `profiles/<machine>/aider/aider.conf.yml` → `~/.aider.conf.yml`. All models route through LiteLLM (`openai/<model>` format).
+Config deployed from `profiles/<machine>/aider/aider.conf.yml` → `~/.aider.conf.yml`. All models route through Ollama (`ollama_chat/<model>` format).
 
 ```shell
 aider                          # interactive session in current git repo
@@ -417,7 +369,7 @@ Google's open-source terminal agent. Supports code generation, file operations, 
 npm install -g @google/gemini-cli
 ```
 
-Config deployed from `profiles/<machine>/gemini/settings.json` → `~/.gemini/settings.json`. Routes through LiteLLM for local models.
+Config deployed from `profiles/<machine>/gemini/settings.json` → `~/.gemini/settings.json`. Routes through Ollama for local models.
 
 ```shell
 gemini                            # interactive
@@ -472,9 +424,9 @@ interpreter                      # interactive
 interpreter -y "list .py files"  # one-shot, auto-approve
 interpreter --safe_mode ask      # confirm every shell command
 
-# Local model via LiteLLM
-interpreter --api_base http://localhost:4000/v1 --api_key sk-local \
-  --model openai/qwen3-coder-30b-a3b-q5-32k
+# Local model via Ollama
+interpreter --api_base http://localhost:11434/v1 --api_key ollama \
+  --model qwen3-coder-30b-a3b:q5-32k
 ```
 
 - [openinterpreter.com](https://openinterpreter.com) · [docs](https://docs.openinterpreter.com) · `2-ai/open-interpreter/open_interpreter.sh`
@@ -485,7 +437,7 @@ interpreter --api_base http://localhost:4000/v1 --api_key sk-local \
 
 Autonomous AI software development agent. Writes code, runs tests, fixes bugs, and operates a terminal end-to-end. Runs in Docker.
 
-**Prerequisites:** Docker (Rancher Desktop or Colima), LiteLLM on `:4000`, uv.
+**Prerequisites:** Docker (Rancher Desktop or Colima), Ollama on `:11434`, uv.
 
 ```shell
 # Install uv if needed
@@ -507,7 +459,7 @@ openhands serve --mount-cwd
 
 Local model config in the web UI Settings:
 
-- Provider: `OpenAI` · Base URL: `http://host.docker.internal:4000/v1` · API Key: `sk-local`
+- Provider: `OpenAI` · Base URL: `http://host.docker.internal:11434/v1` · API Key: `ollama`
 
 Config persisted at `~/.openhands/`.
 
@@ -590,11 +542,11 @@ Autonomous AI coding agent extension for VS Code. Creates and edits files, runs 
 
 **Extension ID:** `saoudrizwan.claude-dev`
 
-Config (`profiles/<machine>/cline/settings.jsonc`) configures the LiteLLM endpoint. Set in the Cline sidebar:
+Config (`profiles/<machine>/cline/settings.jsonc`) configures the Ollama endpoint. Set in the Cline sidebar:
 
 - API Provider: `OpenAI Compatible`
-- Base URL: `http://localhost:4000/v1`
-- API Key: `sk-local`
+- Base URL: `http://localhost:11434/v1`
+- API Key: `ollama`
 - Model: your profile's `CLINE_MODEL`
 
 Key features: autonomous agent mode, MCP support, git checkpoints, plan mode, browser use.
@@ -609,7 +561,7 @@ Open-source AI code assistant for VS Code and JetBrains. Chat, inline edit, auto
 
 **Extension ID:** `Continue.continue`
 
-Config deployed from `profiles/<machine>/continue/config.yaml` → `~/.continue/config.yaml`. Main chat/edit/apply models route through LiteLLM; autocomplete and embed stay on Ollama direct for latency.
+Config deployed from `profiles/<machine>/continue/config.yaml` → `~/.continue/config.yaml`. All models route through Ollama direct (`provider: ollama`).
 
 | Shortcut | Action                     |
 | -------- | -------------------------- |
@@ -641,11 +593,11 @@ Inline completions require a paid Copilot subscription; Ollama works for chat.
 
 ### Kilo Code
 
-AI coding agent extension for VS Code and Windsurf. Multi-agent architecture with mode-specific models, LiteLLM routing, and configurable permissions.
+AI coding agent extension for VS Code and Windsurf. Multi-agent architecture with mode-specific models and configurable permissions.
 
 **Extension ID:** `kilohealth.kilo-code`
 
-Config deployed from `profiles/<machine>/kilocode/kilo.jsonc` → `~/.kilo/kilo.jsonc`. All models route through LiteLLM on `:4000`.
+Config deployed from `profiles/<machine>/kilocode/kilo.jsonc` → `~/.kilo/kilo.jsonc`. All models route through Ollama on `:11434/v1`.
 
 ```shell
 code --install-extension kilohealth.kilo-code
@@ -653,11 +605,11 @@ code --install-extension kilohealth.kilo-code
 
 #### Config Structure
 
-| Field                | Purpose                      | Example                             |
-| -------------------- | ---------------------------- | ----------------------------------- |
-| `model`              | Default model (fallback)     | `litellm/qwen3-coder-30b-q5-128k`   |
-| `small_model`        | Lightweight tasks, summaries | `litellm/qwen2.5-coder-7b-q4-32k`   |
-| `autocomplete_model` | Inline code completion       | `litellm/qwen2.5-coder-1.5b-q4-32k` |
+| Field                | Purpose                      | Example                        |
+| -------------------- | ---------------------------- | ------------------------------ |
+| `model`              | Default model (fallback)     | `qwen3-coder-30b-a3b:q5`      |
+| `small_model`        | Lightweight tasks, summaries | `qwen2.5-coder:7b`            |
+| `autocomplete_model` | Inline code completion       | `qwen2.5-coder:1.5b`          |
 
 #### Model per Mode (agents)
 
@@ -695,27 +647,27 @@ Each agent has its own permission set:
 
 #### Memory-Based Guidelines
 
-| RAM      | Default Model                  | Write Model               | Summary Model             |
-| -------- | ------------------------------ | ------------------------- | ------------------------- |
-| **64GB** | `qwen3-coder-next-80b-q4-128k` | `qwen3.6-35b-256k`        | `qwen2.5-coder-7b-q4-32k` |
-| **48GB** | `qwen3-coder-30b-q5-128k`      | `qwen3.5-27b-q8-256k`     | `qwen3-4b-q8-256k`        |
-| **32GB** | `qwen3-14b-q8-40k`             | `qwen3.5-27b-q5-256k`     | `qwen3-4b-q4-256k`        |
-| **16GB** | `qwen3-14b-q5-40k`             | `qwen2.5-coder-7b-q4-32k` | `qwen3-4b-q8-256k`        |
+| RAM      | Default Model              | Write Model            | Summary Model        |
+| -------- | -------------------------- | ---------------------- | -------------------- |
+| **64GB** | `qwen3-coder-next-80b:q4`  | `qwen3.6-35b:q4`       | `qwen2.5-coder:7b`   |
+| **48GB** | `qwen3-coder-30b-a3b:q5`   | `qwen3.5-27b:q8`       | `qwen3:4b`           |
+| **32GB** | `qwen3:14b`                | `qwen3.5-27b:q5`       | `qwen3:4b`           |
+| **16GB** | `qwen3:14b`                | `qwen3:14b`            | `qwen3:4b`           |
 
 #### Common Issues to Check
 
 1. **Context size mismatch** — top-level `model` must match agent `model` context (e.g., both `128k`)
 2. **Missing permissions** — all agents need `grep` in permissions
 3. **Wrong model for task** — write agent should not use code model
-4. **Cloud models unavailable** — verify cloud models (e.g., `kimi-k2.6-cloud`) are actually accessible
+4. **Cloud models unavailable** — verify cloud models (e.g., `kimi-k2.6`) are actually accessible
 
 #### Validation
 
 After editing any `kilo.jsonc`:
 
 - Verify JSON is valid (no trailing commas)
-- Ensure all referenced models exist in the `provider.litellm.models` list
-- Check agent models are defined in the profile's LiteLLM config
+- Ensure all referenced models exist in the `provider.ollama.models` list
+- Check agent models are defined in the profile's models.sh
 
 - [kilocode.ai](https://kilocode.ai) · [docs](https://kilocode.ai/docs) · `2-ai/kilocode.sh`
 
