@@ -57,8 +57,8 @@ OLLAMA_MODELS=(
     # PRIMARY MODELS (local — pull with ollama)
     # ═══════════════════════════════════════════════════════════════════════════════════════
 
-    # --- GPT-OSS ---
-    "gpt-oss"                       # ~14 GB  | General purpose/Reasoning/Coding (32k)
+     # --- GPT-OSS ---
+     "gpt-oss"                       # ~14GB  | General purpose/Reasoning/Coding (32k)
 
     # --- Qwen 3.6 (35B) ---
     "fredrezones55/Qwen3.6-35B-A3B-APEX:Compact|qwen3.6-35b:q4-256k" # ~35 GB | HF base (256k)

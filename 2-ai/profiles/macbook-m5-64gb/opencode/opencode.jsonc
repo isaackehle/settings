@@ -19,7 +19,7 @@
       "temperature": 0.2
     },
     "local": {
-      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
+      "description": "Fully local coding agent — no cloud calls, no webfetch.",
       "maxTokens": 8000,
       "mode": "primary",
       "model": "litellm/qwen3-coder-30b-q6-32k",
@@ -102,7 +102,7 @@
     }
   },
   "default_agent": "code",
-  "model": "litellm/qwen3.5-27b-q8-256k",
+  "model": "litellm/qwen3-coder-next-80b-q4", // global default = main coder
   "permission": {
     "bash": "ask",
     "edit": "ask",
@@ -115,46 +115,16 @@
   "provider": {
     "litellm": {
       "models": {
-        "qwen3-coder-next-80b-q4": {
-          "name": "Qwen3 Coder Next 80B Q4"
-        },
-        "qwen3-coder-30b-q6-32k": {
-          "name": "Qwen3 Coder 30B Q6 (32k)"
-        },
-        "qwen3-4b-q8-256k": {
-          "name": "Qwen3 4B Q8 (256k)"
-        },
-        "qwen3-32b-q5-32k": {
-          "name": "Qwen3 32B Q5 (32k)"
-        },
-        "qwen3.5-27b-q8-32k": {
-          "name": "Qwen3.5 27B Q8 (32k)"
-        },
-        "qwen3.5-27b-q8-256k": {
-          "name": "Qwen3.5 27B Q8 (256k)"
-        },
-        "glm-4.7-flash-latest": {
-          "name": "GLM 4.7 Flash (q4-198k)"
-        },
-        "glm-4.7-flash-q8-198k": {
-          "name": "GLM 4.7 Flash (q8-198k)"
-        },
-        "glm-4.7-flash-q4-198k": {
-          "name": "GLM 4.7 Flash (q4-198k)"
-        },
-        "glm-4.7-flash-q8-198k-litellm": {
-          "name": "GLM 4.7 Flash (q8-198k)"
-        },
-        "glm-4.7-flash-latest-litellm": {
-          "name": "GLM 4.7 Flash (latest)"
-        },
-        "glm-4.7-flash-q4-198k-litellm": {
-          "name": "GLM 4.7 Flash (q4-198k)"
-        }
+        "qwen3-coder-next-80b-q4": { "name": "Qwen3 Coder Next 80B Q4" },
+        "qwen3-coder-30b-q6-32k": { "name": "Qwen3 Coder 30B Q6 (32k)" },
+        "qwen3-4b-q8-256k": { "name": "Qwen3 4B Q8 (256k)" },
+        "qwen3-32b-q5-32k": { "name": "Qwen3 32B Q5 (32k)" },
+        "qwen3.5-27b-q8-32k": { "name": "Qwen3.5 27B Q8 (32k)" },
+        "qwen3.5-27b-q8-256k": { "name": "Qwen3.5 27B Q8 (256k)" },
+        "glm-4.7-flash-q4-198k": { "name": "GLM 4.7 Flash (q4-198k)" },
+        "glm-4.7-flash-q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" }
       },
       "name": "LiteLLM (Proxy)",
-      // LiteLLM proxy — provides access to ollama server models (port 11434) via litellm.
-      // Start litellm proxy first; see litellm.sh for setup.
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "apiKey": "sk-local",
@@ -163,138 +133,38 @@
     },
     "ollama": {
       "models": {
-        "codestral-22b:q8-32k": {
-          "name": "Codestral 22b (q8-32k)"
-        },
-        "deepseek-r1-14b:q8-128k": {
-          "name": "DeepSeek R1 14b (q8-128k)"
-        },
-        "deepseek-r1-tools:14b-128k": {
-          "name": "DeepSeek R1 Tools (14b-128k)"
-        },
-        "deepseek-r1-tools:32b-128k": {
-          "name": "DeepSeek R1 Tools (32b-128k)"
-        },
-        "deepseek-r1:8b": {
-          "name": "DeepSeek R1 8B"
-        },
-        "deepseek-r1:14b": {
-          "name": "DeepSeek R1 14B"
-        },
-        "deepseek-r1-14b:q8-128k": {
-          "name": "DeepSeek R1 8B (q8 128k)"
-        },
-        "gemma3:12b": {
-          "name": "Gemma3 12b"
-        },
-        "gemma4:26b": {
-          "name": "Gemma4 26b"
-        },
-        "glm-4.7-flash:latest": {
-          "name": "GLM 4.7 Flash (q4-198k)"
-        },
-        "glm-4.7-flash:q8-198k": {
-          "name": "GLM 4.7 Flash (q8-198k)"
-        },
-        "gpt-oss:latest": {
-          "name": "GPT-OSS (14b)"
-        },
-        "llama3.2:latest": {
-          "name": "Llama3.2"
-        },
-        "llama3.3:70b": {
-          "name": "Llama3.3 70b"
-        },
-        "nomic-embed-text:latest": {
-          "name": "Nomic Embed Text"
-        },
-        "phi4-14b:q8-16k": {
-          "name": "Phi4 14b (q8-16k)"
-        },
-        "phi4:latest": {
-          "name": "Phi4 14b (q4-16k)"
-        },
-        "qwen2.5-coder-7b:q8-32k": {
-          "name": "Qwen2.5 Coder 7b (q8-32k)"
-        },
-        "qwen2.5-coder:1.5b": {
-          "name": "Qwen2.5 Coder 1.5b (q4-32k)"
-        },
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7b (q4-32k)"
-        },
-        "qwen3-14b:q5-40k": {
-          "name": "Qwen3 14b (q5-40k)"
-        },
-        "qwen3-14b:q8-40k": {
-          "name": "Qwen3 14b (q8-40k)"
-        },
-        "qwen3-32b:q5-32k": {
-          "name": "Qwen3 32b (q5-32k)"
-        },
-        "qwen3-4b:q8-256k": {
-          "name": "Qwen3 4b (q8-256k, fast)"
-        },
-        "qwen3-coder-30b-a3b:q6-128k": {
-          "name": "Qwen3 Coder 30b A3B (q6-128k)"
-        },
-        "qwen3-coder-30b-a3b:q6-256k": {
-          "name": "Qwen3 Coder 30b A3B (q6-256k)"
-        },
-        "qwen3-coder-30b-a3b:q6-32k": {
-          "name": "Qwen3 Coder 30b A3B (q6-32k)"
-        },
-        "qwen3-coder-30b-a3b:q6-8k": {
-          "name": "Qwen3 Coder 30b A3B (q6-8k)"
-        },
-        "qwen3-coder-next-80b:q4-128k": {
-          "name": "Qwen3 Coder Next 80b (q4-128k)"
-        },
-        "qwen3-coder-next-80b:q4-16k": {
-          "name": "Qwen3 Coder Next 80b (q4-16k)"
-        },
-        "qwen3-coder-next-80b:q4-256k": {
-          "name": "Qwen3 Coder Next 80b (q4-256k)"
-        },
-        "qwen3-coder-next-80b:q4-64k": {
-          "name": "Qwen3 Coder Next 80b (q4-64k)"
-        },
-        "qwen3.5-27b:q5-128k": {
-          "name": "Qwen3.5 27b (q5-128k)"
-        },
-        "qwen3.5-27b:q5-256k": {
-          "name": "Qwen3.5 27b (q5-256k)"
-        },
-        "qwen3.5-27b:q5-32k": {
-          "name": "Qwen3.5 27b (q5-32k)"
-        },
-        "qwen3.5-27b:q5-8k": {
-          "name": "Qwen3.5 27b (q5-8k)"
-        },
-        "qwen3.5-27b:q8-128k": {
-          "name": "Qwen3.5 27b (q8-128k)"
-        },
-        "qwen3.5-27b:q8-256k": {
-          "name": "Qwen3.5 27b (q8-256k)"
-        },
-        "qwen3.5-27b:q8-32k": {
-          "name": "Qwen3.5 27b (q8-32k)"
-        },
-        "qwen3.5-27b:q8-8k": {
-          "name": "Qwen3.5 27b (q8-8k)"
-        },
-        "qwen3.6-35b:q4-128k": {
-          "name": "Qwen3.6 35b (q4-128k)"
-        },
-        "qwen3.6-35b:q4-256k": {
-          "name": "Qwen3.6 35b (q4-256k)"
-        },
-        "qwen3.6-35b:q4-32k": {
-          "name": "Qwen3.6 35b (q4-32k)"
-        },
-        "qwen3.6-35b:q4-8k": {
-          "name": "Qwen3.6 35b (q4-8k)"
-        }
+        "codestral-22b:q8-32k": { "name": "Codestral 22B (q8-32k)" },
+        "deepseek-r1:14b": { "name": "DeepSeek R1 14B" },
+        "deepseek-r1-14b:q8-128k": { "name": "DeepSeek R1 14B (q8-128k)" },
+        "gemma3:12b": { "name": "Gemma3 12B" },
+        "gemma4:26b": { "name": "Gemma4 26B" },
+        "gemma4:31b": { "name": "Gemma4 31B" },
+        "glm-4.7-flash:q4-198k": { "name": "GLM 4.7 Flash (q4-198k)" },
+        "glm-4.7-flash:q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" },
+        "gpt-oss:20b": { "name": "GPT-OSS 20B" },
+        "llama3.2:latest": { "name": "Llama 3.2" },
+        "llama3.3:70b": { "name": "Llama 3.3 70B" },
+        "nomic-embed-text:latest": { "name": "Nomic Embed Text" },
+        "phi4-14b:q8-16k": { "name": "Phi4 14B (q8-16k)" },
+        "phi4:latest": { "name": "Phi4 14B (q4-16k)" },
+        "qwen2.5-coder-7b:q8-32k": { "name": "Qwen2.5 Coder 7B (q8-32k)" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5B (q4-32k)" },
+        "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7B (q4-32k)" },
+        "qwen3-14b:q5-40k": { "name": "Qwen3 14B (q5-40k)" },
+        "qwen3-14b:q8-40k": { "name": "Qwen3 14B (q8-40k)" },
+        "qwen3-32b:q5-32k": { "name": "Qwen3 32B (q5-32k)" },
+        "qwen3-4b:q8-256k": { "name": "Qwen3 4B (q8-256k)" },
+        "qwen3-coder-30b-a3b:q6-32k": { "name": "Qwen3 Coder 30B A3B (q6-32k)" },
+        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B (q6-128k)" },
+        "qwen3-coder-next-80b:q4-16k": { "name": "Qwen3 Coder Next 80B (q4-16k)" },
+        "qwen3-coder-next-80b:q4-64k": { "name": "Qwen3 Coder Next 80B (q4-64k)" },
+        "qwen3-coder-next-80b:q4-256k": { "name": "Qwen3 Coder Next 80B (q4-256k)" },
+        "qwen3.5-27b:q5-32k": { "name": "Qwen3.5 27B (q5-32k)" },
+        "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27B (q5-128k)" },
+        "qwen3.5-27b:q8-32k": { "name": "Qwen3.5 27B (q8-32k)" },
+        "qwen3.5-27b:q8-128k": { "name": "Qwen3.5 27B (q8-128k)" },
+        "qwen3.6-35b:q4-32k": { "name": "Qwen3.6 35B (q4-32k)" },
+        "qwen3.6-35b:q4-128k": { "name": "Qwen3.6 35B (q4-128k)" }
       },
       "name": "Ollama (Local)",
       "npm": "@ai-sdk/ollama",
@@ -304,57 +174,23 @@
     },
     "openrouter": {
       "models": {
-        "anthropic/claude-haiku-4-5": {
-          "name": "Claude Haiku 4.5"
-        },
-        "anthropic/claude-opus-4-6": {
-          "name": "Claude Opus 4.6"
-        },
-        "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
-        },
-        "deepseek/deepseek-r1-tool-calling-32b": {
-          "name": "DeepSeek R1 Tool Calling 32B (reasoning)"
-        },
-        "google/gemini-2.5-flash": {
-          "name": "Gemini 2.5 Flash"
-        },
-        "google/gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro"
-        },
-        "mistralai/codestral": {
-          "name": "Codestral (code)"
-        },
-        "mistralai/mistral-large": {
-          "name": "Mistral Large"
-        },
-        "moonshot/kimi-k2.6": {
-          "name": "Kimi k2.6 (reasoning)"
-        },
-        "openai/gpt-4o": {
-          "name": "GPT-4o"
-        },
-        "openai/o3": {
-          "name": "OpenAI o3"
-        },
-        "perplexity/sonar-pro": {
-          "name": "Perplexity Sonar Pro"
-        },
-        "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (fast, planning)"
-        },
-        "qwen/qwen3-coder-next-80b": {
-          "name": "Qwen3 Coder Next 80B (code)"
-        },
-        "thudm/glm-5.1": {
-          "name": "GLM 5.1"
-        },
-        "x-ai/grok-3": {
-          "name": "Grok 3"
-        },
-        "x-ai/grok-3-mini": {
-          "name": "Grok 3 Mini"
-        }
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
+        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 Tool Calling 32B" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro" },
+        "mistralai/codestral": { "name": "Codestral (code)" },
+        "mistralai/mistral-large": { "name": "Mistral Large" },
+        "moonshot/kimi-k2.6": { "name": "Kimi k2.6" },
+        "openai/gpt-4o": { "name": "GPT-4o" },
+        "openai/o3": { "name": "OpenAI o3" },
+        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B" },
+        "qwen/qwen3-coder-next-80b": { "name": "Qwen3 Coder Next 80B (cloud)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1" },
+        "x-ai/grok-3": { "name": "Grok 3" },
+        "x-ai/grok-3-mini": { "name": "Grok 3 Mini" }
       },
       "name": "OpenRouter",
       "npm": "@ai-sdk/openai-compatible",

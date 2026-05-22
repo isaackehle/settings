@@ -1,6 +1,5 @@
 model_list:
-  # --- Cloud Models (via OpenRouter) ---
-  # Best-in-class models for 64GB
+  # --- Cloud via OpenRouter ---
   - model_name: claude-opus-4-6-cloud
     litellm_params:
       model: openrouter/anthropic/claude-opus-4-20250514
@@ -57,7 +56,7 @@ model_list:
       max_tokens: 4096
       num_ctx: 32768
 
-  - model_name: qwen3-4b-cloud
+  - model_name: qwen3-8b-cloud
     litellm_params:
       model: openrouter/qwen/qwen3-8b
       api_base: https://openrouter.ai/api/v1
@@ -65,7 +64,7 @@ model_list:
       max_tokens: 4096
       num_ctx: 32768
 
-  # --- Coding ---
+  # --- Local via LiteLLM (coding) ---
   - model_name: qwen3.6-35b-8k
     litellm_params:
       model: ollama_chat/qwen3.6-35b:q4-8k
@@ -227,23 +226,19 @@ model_list:
       api_base: http://localhost:11434
 
   # --- llama.cpp server (optional) ---
-  # Compile llama.cpp and start with:
-  #   llama-server -m <model>.gguf --ctx-size 32768 --n-gpu-layers 999 --flash-attn \
-  #     --cache-type-k q8_0 --alias qwen3-coder-30b-q6 --port 8080
-  # Models below are only reachable when llama-server is running on port 8080.
-  - model_name: qwen3-coder-30b-q6-32k
+  - model_name: qwen3-coder-30b-q6-32k-llamacpp
     litellm_params:
       model: openai/qwen3-coder-30b-q6
       api_base: http://localhost:8080/v1
       api_key: none
 
-  - model_name: qwen3-coder-30b-q6-128k
+  - model_name: qwen3-coder-30b-q6-128k-llamacpp
     litellm_params:
       model: openai/qwen3-coder-30b-q6
       api_base: http://localhost:8080/v1
       api_key: none
 
-  - model_name: qwen3.6-35b-q5-32k
+  - model_name: qwen3.6-35b-q5-32k-llamacpp
     litellm_params:
       model: openai/qwen3.6-35b-q5
       api_base: http://localhost:8080/v1
@@ -262,16 +257,15 @@ litellm_settings:
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-  # database_url: os.environ/DATABASE_URL  # Uncomment to enable DB (requires Postgres)
 
 router_settings:
   model_group_alias:
-    'gemini-2.5-pro': 'qwen3.5-27b-q5-32k'
-    'gemini-2.5-flash': 'qwen3.5-27b-q5-8k'
-    'gemini-2.5-flash-lite': 'qwen3-4b-q8-256k'
-    'gemini-3-flash-preview': 'qwen3.5-27b-q8-256k'
-    'gemini-3-flash-preview-customtools': 'qwen3.5-27b-q8-32k'
-    'gemini-3-pro': 'qwen3-coder-30b-q6-32k'
-    'gemini-3-pro-customtools': 'qwen3-coder-30b-q6-32k'
-    'gemini-3.1-pro-preview': 'qwen3.6-35b-32k'
-    'gemini-3.1-pro-preview-customtools': 'qwen3.6-35b-32k'
+    gemini-2.5-pro: qwen3.5-27b-q5-32k
+    gemini-2.5-flash: qwen3.5-27b-q5-8k
+    gemini-2.5-flash-lite: qwen3-4b-q8-256k
+    gemini-3-flash-preview: qwen3.5-27b-q8-256k
+    gemini-3-flash-preview-customtools: qwen3.5-27b-q8-32k
+    gemini-3-pro: qwen3-coder-30b-q6-32k
+    gemini-3-pro-customtools: qwen3-coder-30b-q6-32k
+    gemini-3.1-pro-preview: qwen3.6-35b-32k
+    gemini-3.1-pro-preview-customtools: qwen3.6-35b-32k

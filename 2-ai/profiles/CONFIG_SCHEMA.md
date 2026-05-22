@@ -12,26 +12,26 @@ Every profile has one `models.sh` that defines all model assignments.
 
 ### Variable Reference
 
-| Variable                  | Type        | Format                                                    | Used By                                                         |
-| ------------------------- | ----------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `OPENROUTER_MODELS`       | array       | `org/model:cloud`                                         | continue, grok, litellm, opencode                               |
-| `OLLAMA_MODELS`           | array       | `model:quant-context` or `hf/source\|alias:quant-context` | ollama/config, continue, crush, gemini, grok, litellm, opencode |
-| `OPENCODE_AGENTS`         | assoc array | key → `model:quant-context`                               | opencode                                                        |
-| `CONTINUE_ROLES`          | assoc array | key → `model:quant-context`                               | continue                                                        |
-| `CLAUDE_CODE`             | assoc array | key → `model:quant-context`                               | claude/settings.json, ollama/config.json                        |
-| `CLINE_MODEL`             | scalar      | `model:quant-context`                                     | cline/settings.jsonc (reference only)                           |
-| `CLINE_MODEL_CLOUD`       | scalar      | `model:cloud`                                             | cline/settings.jsonc (reference only)                           |
-| `ROOCODE_MODEL`           | scalar      | `model:quant-context`                                     | roocode/settings.jsonc (reference only)                         |
-| `ROOCODE_MODEL_CLOUD`     | scalar      | `model:cloud`                                             | roocode/settings.jsonc (reference only)                         |
-| `ROOCODE_MODE_*`          | scalar      | `model:quant-context`                                     | roocode/settings.jsonc per-mode config                          |
-| `KILOCODE_MODEL`          | scalar      | `model:quant-context`                                     | kilocode/settings.jsonc (reference only)                        |
-| `KILOCODE_MODEL_CLOUD`    | scalar      | `model:cloud`                                             | kilocode/settings.jsonc (reference only)                        |
-| `AIDER_MODEL`             | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
-| `AIDER_WEAK_MODEL`        | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
-| `AIDER_EDITOR_MODEL`      | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
-| `ZED_MODEL`               | scalar      | `model:quant-context`                                     | zed/settings.json                                               |
-| `CURSOR_MODEL`            | scalar      | `model:quant-context`                                     | cursor/settings.jsonc (reference only)                          |
-| `CURSOR_MODEL_CLOUD`      | scalar      | `model:cloud`                                             | cursor/settings.jsonc (reference only)                          |
+| Variable               | Type        | Format                                                    | Used By                                                         |
+| ---------------------- | ----------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `OPENROUTER_MODELS`    | array       | `org/model:cloud`                                         | continue, grok, litellm, opencode                               |
+| `OLLAMA_MODELS`        | array       | `model:quant-context` or `hf/source\|alias:quant-context` | ollama/config, continue, crush, gemini, grok, litellm, opencode |
+| `OPENCODE_AGENTS`      | assoc array | key → `model:quant-context`                               | opencode                                                        |
+| `CONTINUE_ROLES`       | assoc array | key → `model:quant-context`                               | continue                                                        |
+| `CLAUDE_CODE`          | assoc array | key → `model:quant-context`                               | claude/settings.json, ollama/config.json                        |
+| `CLINE_MODEL`          | scalar      | `model:quant-context`                                     | cline/settings.jsonc (reference only)                           |
+| `CLINE_MODEL_CLOUD`    | scalar      | `model:cloud`                                             | cline/settings.jsonc (reference only)                           |
+| `ROOCODE_MODEL`        | scalar      | `model:quant-context`                                     | roocode/settings.jsonc (reference only)                         |
+| `ROOCODE_MODEL_CLOUD`  | scalar      | `model:cloud`                                             | roocode/settings.jsonc (reference only)                         |
+| `ROOCODE_MODE_*`       | scalar      | `model:quant-context`                                     | roocode/settings.jsonc per-mode config                          |
+| `KILOCODE_MODEL`       | scalar      | `model:quant-context`                                     | kilocode/settings.jsonc (reference only)                        |
+| `KILOCODE_MODEL_CLOUD` | scalar      | `model:cloud`                                             | kilocode/settings.jsonc (reference only)                        |
+| `AIDER_MODEL`          | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
+| `AIDER_WEAK_MODEL`     | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
+| `AIDER_EDITOR_MODEL`   | scalar      | `model:quant-context`                                     | aider/aider.conf.yml                                            |
+| `ZED_MODEL`            | scalar      | `model:quant-context`                                     | zed/settings.json                                               |
+| `CURSOR_MODEL`         | scalar      | `model:quant-context`                                     | cursor/settings.jsonc (reference only)                          |
+| `CURSOR_MODEL_CLOUD`   | scalar      | `model:cloud`                                             | cursor/settings.jsonc (reference only)                          |
 
 ### Naming Convention
 
@@ -268,10 +268,10 @@ gemini/settings.json:
 
 **Source mapping:**
 
-| Field       | Source                    | Format                                    |
-| ----------- | ------------------------- | ----------------------------------------- |
-| Model keys  | subset of `OLLAMA_MODELS` | LiteLLM format (`:` → `-`, no `:latest`)  |
-| Model names | manual display names      | free text                                 |
+| Field       | Source                    | Format                                   |
+| ----------- | ------------------------- | ---------------------------------------- |
+| Model keys  | subset of `OLLAMA_MODELS` | LiteLLM format (`:` → `-`, no `:latest`) |
+| Model names | manual display names      | free text                                |
 
 **Typical model subset:**
 
@@ -476,6 +476,7 @@ Cline (VS Code extension) — reference config + mergeable VS Code settings snip
 **Deploy:** Merge into `~/Library/Application Support/Code/User/settings.json`
 
 **API config:** Set via Cline sidebar (cannot be set in settings.json). Use:
+
 - Provider: OpenAI Compatible
 - Base URL: `http://localhost:4000/v1`
 - API Key: `sk-local`
@@ -483,10 +484,10 @@ Cline (VS Code extension) — reference config + mergeable VS Code settings snip
 
 **Source mapping:**
 
-| Field          | Source        | Format        |
-| -------------- | ------------- | ------------- |
-| Primary model  | `CLINE_MODEL` | Ollama → LiteLLM (`:` → `-`) |
-| Cloud model    | `CLINE_MODEL_CLOUD` | strip `:cloud`, use in sidebar |
+| Field         | Source              | Format                         |
+| ------------- | ------------------- | ------------------------------ |
+| Primary model | `CLINE_MODEL`       | Ollama → LiteLLM (`:` → `-`)   |
+| Cloud model   | `CLINE_MODEL_CLOUD` | strip `:cloud`, use in sidebar |
 
 ---
 
@@ -498,12 +499,12 @@ Roo Code (VS Code extension) — reference config + VS Code settings snippet.
 
 **API config:** Set via Roo Code sidebar. Supports per-mode model selection:
 
-| Mode      | Source variable          | LiteLLM model              |
-| --------- | ------------------------ | -------------------------- |
+| Mode      | Source variable          | LiteLLM model                 |
+| --------- | ------------------------ | ----------------------------- |
 | Code      | `ROOCODE_MODE_CODE`      | `qwen3-coder-next-80b-q4-16k` |
-| Architect | `ROOCODE_MODE_ARCHITECT` | `qwen3.6-35b-128k`         |
-| Ask       | `ROOCODE_MODE_ASK`       | `qwen3-32b-q5-32k`         |
-| Debug     | `ROOCODE_MODE_DEBUG`     | `deepseek-r1-tools-32b-128k` |
+| Architect | `ROOCODE_MODE_ARCHITECT` | `qwen3.6-35b-128k`            |
+| Ask       | `ROOCODE_MODE_ASK`       | `qwen3-32b-q5-32k`            |
+| Debug     | `ROOCODE_MODE_DEBUG`     | `deepseek-r1-tools-32b-128k`  |
 
 **Gotchas:**
 
@@ -522,10 +523,10 @@ Same Cline-based architecture as Roo Code. API config set via sidebar using Lite
 
 **Source mapping:**
 
-| Field       | Source           | Format                       |
-| ----------- | ---------------- | ---------------------------- |
-| Model       | `KILOCODE_MODEL` | Ollama → LiteLLM (`:` → `-`) |
-| Cloud model | `KILOCODE_MODEL_CLOUD` | strip `:cloud`         |
+| Field       | Source                 | Format                       |
+| ----------- | ---------------------- | ---------------------------- |
+| Model       | `KILOCODE_MODEL`       | Ollama → LiteLLM (`:` → `-`) |
+| Cloud model | `KILOCODE_MODEL_CLOUD` | strip `:cloud`               |
 
 ---
 
@@ -536,20 +537,20 @@ Aider CLI coding assistant — standard YAML config.
 **Deploy:** `~/.aider.conf.yml` (global) or `.aider.conf.yml` (per-project override)
 
 ```yaml
-model: openai/<litellm-model>          # AIDER_MODEL → LiteLLM format with openai/ prefix
-weak-model: openai/<litellm-model>     # AIDER_WEAK_MODEL
-editor-model: openai/<litellm-model>   # AIDER_EDITOR_MODEL
+model: openai/<litellm-model> # AIDER_MODEL → LiteLLM format with openai/ prefix
+weak-model: openai/<litellm-model> # AIDER_WEAK_MODEL
+editor-model: openai/<litellm-model> # AIDER_EDITOR_MODEL
 openai-api-base: http://localhost:4000/v1
 openai-api-key: sk-local
 ```
 
 **Source mapping:**
 
-| Field          | Source               | Transform                            |
-| -------------- | -------------------- | ------------------------------------ |
+| Field          | Source               | Transform                                |
+| -------------- | -------------------- | ---------------------------------------- |
 | `model`        | `AIDER_MODEL`        | `openai/` + Ollama → LiteLLM (`:` → `-`) |
-| `weak-model`   | `AIDER_WEAK_MODEL`   | same                                 |
-| `editor-model` | `AIDER_EDITOR_MODEL` | same                                 |
+| `weak-model`   | `AIDER_WEAK_MODEL`   | same                                     |
+| `editor-model` | `AIDER_EDITOR_MODEL` | same                                     |
 
 **Gotchas:**
 
@@ -582,10 +583,10 @@ Zed editor — OpenAI-compatible assistant config.
 
 **Source mapping:**
 
-| Field           | Source      | Transform                    |
-| --------------- | ----------- | ---------------------------- |
-| `default_model` | `ZED_MODEL` | Ollama → LiteLLM (`:` → `-`) |
-| `available_models` | subset of `OLLAMA_MODELS` | LiteLLM format |
+| Field              | Source                    | Transform                    |
+| ------------------ | ------------------------- | ---------------------------- |
+| `default_model`    | `ZED_MODEL`               | Ollama → LiteLLM (`:` → `-`) |
+| `available_models` | subset of `OLLAMA_MODELS` | LiteLLM format               |
 
 **Gotchas:**
 
@@ -601,16 +602,17 @@ Cursor IDE — VS Code-compatible settings + configuration notes.
 **Deploy:** Merge into `~/Library/Application Support/Cursor/User/settings.json`
 
 **API config:** Done via Cursor Settings (Cmd+Shift+J) → Models UI:
+
 1. Set OpenAI API Key: `sk-local`
 2. Enable "Override OpenAI Base URL": `http://localhost:4000/v1`
 3. Add custom model names (LiteLLM format)
 
 **Source mapping:**
 
-| Field       | Source          | Transform                    |
-| ----------- | --------------- | ---------------------------- |
-| Model name  | `CURSOR_MODEL`  | Ollama → LiteLLM (`:` → `-`) |
-| Cloud model | `CURSOR_MODEL_CLOUD` | strip `:cloud`          |
+| Field       | Source               | Transform                    |
+| ----------- | -------------------- | ---------------------------- |
+| Model name  | `CURSOR_MODEL`       | Ollama → LiteLLM (`:` → `-`) |
+| Cloud model | `CURSOR_MODEL_CLOUD` | strip `:cloud`               |
 
 **Gotchas:**
 

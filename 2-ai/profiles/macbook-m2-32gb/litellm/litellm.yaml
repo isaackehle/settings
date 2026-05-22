@@ -65,12 +65,7 @@ model_list:
 
   - model_name: gpt-oss-20b
     litellm_params:
-      model: ollama_chat/gpt-oss:latest
-      api_base: http://localhost:11434
-
-  - model_name: gpt-oss-latest
-    litellm_params:
-      model: ollama_chat/gpt-oss:latest
+      model: ollama_chat/gpt-oss:20b
       api_base: http://localhost:11434
 
   # --- Research ---
