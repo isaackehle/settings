@@ -111,7 +111,7 @@
     "read": "allow",
     "webfetch": "allow"
   },
-    "provider": {
+  "provider": {
     "litellm": {
       "models": {
         "qwen3.5-27b-q8-256k": {
@@ -135,8 +135,7 @@
         "apiKey": "sk-local",
         "baseURL": "http://localhost:4000/v1"
       }
-    }
-  },
+    },
     "ollama": {
       "models": {
         "codestral-22b:q6-32k": {
@@ -160,8 +159,8 @@
         "glm-4.7-flash:q8-198k": {
           "name": "GLM 4.7 Flash (q8-198k)"
         },
-        "gpt-oss:latest": {
-          "name": "GPT-OSS (14b)"
+        "gpt-oss": {
+          "name": "GPT-OSS 20b"
         },
         "llama3.2:latest": {
           "name": "Llama3.2 (latest)"

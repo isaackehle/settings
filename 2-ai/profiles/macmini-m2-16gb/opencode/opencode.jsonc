@@ -6,93 +6,122 @@
       "name": "OpenRouter",
       "options": {
         "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY",
+        "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
         "anthropic/claude-opus-4-6": {
-          "name": "Claude Opus 4.6",
+          "name": "Claude Opus 4.6"
         },
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6",
+          "name": "Claude Sonnet 4.6"
         },
         "anthropic/claude-haiku-4-5": {
-          "name": "Claude Haiku 4.5",
+          "name": "Claude Haiku 4.5"
         },
         "openai/gpt-4o": {
-          "name": "GPT-4o",
+          "name": "GPT-4o"
         },
         "openai/o3": {
-          "name": "OpenAI o3",
+          "name": "OpenAI o3"
         },
         "google/gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro",
+          "name": "Gemini 2.5 Pro"
         },
         "google/gemini-2.5-flash": {
-          "name": "Gemini 2.5 Flash",
+          "name": "Gemini 2.5 Flash"
         },
         "mistralai/mistral-large": {
-          "name": "Mistral Large",
+          "name": "Mistral Large"
         },
         "perplexity/sonar-pro": {
-          "name": "Perplexity Sonar Pro",
+          "name": "Perplexity Sonar Pro"
         },
         "moonshot/kimi-k2.6": {
-          "name": "Kimi k2.6 (reasoning)",
+          "name": "Kimi k2.6 (reasoning)"
         },
         "thudm/glm-5.1": {
-          "name": "GLM 5.1",
+          "name": "GLM 5.1"
         },
         "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (fast, planning)",
-        },
-      },
+          "name": "Qwen3 8B (fast, planning)"
+        }
+      }
     },
     "ollama": {
       "npm": "@ai-sdk/ollama",
       "name": "Ollama (Local)",
       "options": {
-        "baseURL": "http://localhost:11434",
+        "baseURL": "http://localhost:11434"
       },
       "models": {
-        "codestral:22b": { "name": "Codestral 22b" },
-        "deepseek-r1:8b": { "name": "Deepseek R1 8b (q4-128k)" },
-        "deepseek-r1-tools-8b:q4-128k": { "name": "Deepseek R1 Tools 8b (q4-128k)" },
-        "gpt-oss": { "name": "GPT-OSS 20b" },
-        "gpt-oss": { "name": "GPT-OSS (latest)" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (latest)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5b (q4-32k)" },
-        "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7b (q4-32k)" },
-        "qwen3-14b:q5-40k": { "name": "Qwen3 14b (q5-40k)" },
-        "qwen3-14b:q8-40k": { "name": "Qwen3 14b (q8-40k)" },
-        "qwen3-4b:q8-256k": { "name": "Qwen3 4b (q8-256k)" },
-        "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27b (q5-128k)" },
-        "qwen3.5-27b:q5-256k": { "name": "Qwen3.5 27b (q5-256k)" },
-        "qwen3.5-27b:q5-32k": { "name": "Qwen3.5 27b (q5-32k)" },
-        "qwen3.5-27b:q5-8k": { "name": "Qwen3.5 27b (q5-8k)" },
-        "deepseek-r1:14b": { "name": "Deepseek R1 14b (q4-128k)" },
-        "deepseek-r1-14b:q8-128k": { "name": "Deepseek R1 14b (q8-128k)" },
-        "deepseek-r1-8b:q8-128k": { "name": "Deepseek R1 8b (q8-128k)" },
-        "deepseek-r1-tools-8b:q8-128k": { "name": "Deepseek R1 Tools 8b (q8-128k)" },
-      },
+        "codestral:22b": {
+          "name": "Codestral 22b"
+        },
+        "deepseek-r1:8b": {
+          "name": "Deepseek R1 8b (q4-128k)"
+        },
+        "deepseek-r1-tools-8b:q4-128k": {
+          "name": "Deepseek R1 Tools 8b (q4-128k)"
+        },
+        "gpt-oss": {
+          "name": "GPT-OSS 20b"
+        },
+        "nomic-embed-text": {
+          "name": "Nomic Embed Text (latest)"
+        },
+        "qwen2.5-coder:1.5b": {
+          "name": "Qwen2.5 Coder 1.5b (q4-32k)"
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7b (q4-32k)"
+        },
+        "qwen3-14b:q5-40k": {
+          "name": "Qwen3 14b (q5-40k)"
+        },
+        "qwen3-14b:q8-40k": {
+          "name": "Qwen3 14b (q8-40k)"
+        },
+        "qwen3-4b:q8-256k": {
+          "name": "Qwen3 4b (q8-256k)"
+        },
+        "qwen3.5-27b:q5-128k": {
+          "name": "Qwen3.5 27b (q5-128k)"
+        },
+        "qwen3.5-27b:q5-256k": {
+          "name": "Qwen3.5 27b (q5-256k)"
+        },
+        "qwen3.5-27b:q5-32k": {
+          "name": "Qwen3.5 27b (q5-32k)"
+        },
+        "qwen3.5-27b:q5-8k": {
+          "name": "Qwen3.5 27b (q5-8k)"
+        },
+        "deepseek-r1:14b": {
+          "name": "Deepseek R1 14b (q4-128k)"
+        },
+        "deepseek-r1-14b:q8-128k": {
+          "name": "Deepseek R1 14b (q8-128k)"
+        },
+        "deepseek-r1-8b:q8-128k": {
+          "name": "Deepseek R1 8b (q8-128k)"
+        },
+        "deepseek-r1-tools-8b:q8-128k": {
+          "name": "Deepseek R1 Tools 8b (q8-128k)"
+        }
+      }
     },
     "litellm": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "LiteLLM (Local)",
       "options": {
         "baseURL": "http://localhost:4000/v1",
-        "apiKey": "sk-local",
+        "apiKey": "sk-local"
       },
       "models": {
         // LiteLLM model names use hyphens, e.g. qwen3-coder-30b-q5-32k
         // Add model IDs matching model_name entries in litellm.yaml
-      },
-    },
-      "models": {
-        "ggml-gpt4all-j-v1.3-groovy": {
-          "name": "GPT4All J (groovy)",
-        },
-      },
-    },
+      }
+    }
   },
   "default_agent": "code",
   "model": "ollama/qwen3-14b:q5-40k",
@@ -104,7 +133,7 @@
     "list": "allow",
     "webfetch": "allow",
     "edit": "ask",
-    "bash": "ask",
+    "bash": "ask"
   },
   "agent": {
     "code": {
@@ -119,9 +148,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "ask",
+        "bash": "ask"
       },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
+      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly."
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
@@ -135,9 +164,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "bash": "deny",
+        "bash": "deny"
       },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands.",
+      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands."
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
@@ -151,9 +180,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "deny",
+        "bash": "deny"
       },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials.",
+      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials."
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
@@ -167,9 +196,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "ask",
-        "bash": "deny",
+        "bash": "deny"
       },
-      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.",
+      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`."
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
@@ -183,9 +212,9 @@
         "list": "allow",
         "webfetch": "allow",
         "edit": "deny",
-        "bash": "deny",
+        "bash": "deny"
       },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
-    },
-  },
+      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
+    }
+  }
 }

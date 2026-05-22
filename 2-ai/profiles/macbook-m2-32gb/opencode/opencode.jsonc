@@ -152,7 +152,6 @@
         "deepseek-r1-tools-8b:q4-128k": { "name": "Deepseek R1 Tools 8b (q4-128k)" },
         "deepseek-r1:8b": { "name": "Deepseek R1 (8b-128k)" },
         "gpt-oss": { "name": "GPT-OSS 20b" },
-        "gpt-oss": { "name": "GPT-OSS (latest)" },
         "nomic-embed-text": { "name": "Nomic Embed Text (latest)" },
         "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5b (q4-32k)" },
         "qwen2.5-coder:7b": { "name": "Qwen2.5 Coder 7b (q4-32k)" },

@@ -115,6 +115,7 @@ OLLAMA_MODELS=(
 
     # --- Gemma 4 (26B) ---
     "gemma4:26b"                                     # ~18 GB | Reasoning (128k)
+    "gemma4:31b"                                     # ~22 GB | Reasoning (128k)
 
     # --- Gemma 3 (12B) ---
     "gemma3:12b"                                     # ~7 GB | General purpose (128k)

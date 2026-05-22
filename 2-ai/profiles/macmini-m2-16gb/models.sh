@@ -86,7 +86,7 @@ OLLAMA_MODELS=(
     "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q8_0|deepseek-r1-tools-8b:q8-128k"        # 9 GB  | HF base 14B (128k)
 
     # --- GPT-OSS ---
-    "gpt-oss"                       # ~14 GB  | General purpose/Reasoning/Coding (32k)
+    "gpt-oss:20b"                       # ~20 GB  | General purpose/Reasoning/Coding (32k)
 
     # --- Embeddings ---
     "nomic-embed-text"                            # ~0.3 GB| Embeddings (Continue/RAG) (8k)
