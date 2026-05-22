@@ -61,19 +61,12 @@ register_model() {
     local model_str="$1"
     local reason="$2"
 
-    # Handle aliases (split by |)
-    IFS='|' read -ra ADDR <<< "$model_str"
-    for model in "${ADDR[@]}"; do
-        model=$(echo "$model" | xargs) # trim whitespace
-        if [[ -n "$model" ]]; then
-            # Skip cloud-only models (not installable via ollama)
-            if [[ "$model" == *":cloud"* || "$model" == *"-cloud" ]]; then
-                continue
-            fi
-            echo "$model" >> "$REQUIRED_MODELS_FILE"
-            echo "$model|$reason" >> "$REASON_MAP_FILE"
-        fi
-    done
+    # Trim whitespace
+    model_str=$(echo "$model_str" | xargs)
+    if [[ -n "$model_str" ]]; then
+        echo "$model_str" >> "$REQUIRED_MODELS_FILE"
+        echo "$model_str|$reason" >> "$REASON_MAP_FILE"
+    fi
 }
 
 echo "Analyzing requirements from $MODELS_SH..."

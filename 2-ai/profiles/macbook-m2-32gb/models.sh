@@ -1,187 +1,173 @@
-#!/opt/homebrew/bin/bash
+# ==============================================
+# MODEL DEFINITIONS - M2 Max 32GB (medium)
+# ==============================================
+# DATA FILE — sourced by install/deploy scripts, never executed directly.
+#
+# May 2026 refresh — no LiteLLM proxy. All tools connect to Ollama
+# directly via http://localhost:11434/v1 (OpenAI-compatible endpoint).
+# Context-window variants are created as Ollama aliases via Modelfiles
+# with PARAMETER num_ctx.
+#
+# Concurrency budget: ~26 GB usable (32 GB - 6 GB macOS overhead).
+#   Resident:     14B-q5 (11 GB) + r1-tools-8B (5 GB) + 4B (3 GB) + 1.5B (1 GB) + embed (0.3 GB) = 20.3 GB ✓
+#   Heavy AC:     + qwen2.5-coder:7b (5 GB) = 25.3 GB ✓
+#   Writing:      27B-q5 (19 GB) solo only
+#   Codestral:    22B (14 GB) on-demand solo
 
 # ==============================================
-# MODEL LISTS - M2 Max 32GB
+# CLOUD MODELS (via OpenRouter — tools connect directly)
 # ==============================================
-#
-# NAMING CONVENTION (Jan 2026):
-#   Ollama:    model:quantization-context   (e.g., qwen3-coder:q5-32k)
-#   LiteLLM:  model-quantization-context (e.g., qwen3-coder-q5-32k)
-#
-# The context size comes AFTER the quantization level.
-#   OLD: qwen3-coder-32k:q5  →  NEW: qwen3-coder:q5-32k
-#
-# Example: qwen3-coder:q5-32k = Q5 quantization, 32K context window
-#
-# When adding, removing, or renaming models here, also update:
-#   config/profile.d/_computer_profile   vault alias — per-machine model selection
-
-# ==============================================
-# MODEL REFERENCE
-# ==============================================
-#
-# CLOUD MODELS (via OpenRouter):
-#   Claude Opus 4.6     → anthropic/claude-opus-4-6
-#   Claude Sonnet 4.6   → anthropic/claude-sonnet-4-6
-#   Claude Haiku 4.5    → anthropic/claude-haiku-4-5
-#   GPT-4o              → openai/gpt-4o
-#   o3                  → openai/o3
-#   Gemini 2.5 Pro      → google/gemini-2.5-pro
-#   Mistral Large       → mistralai/mistral-large
-#   Perplexity Sonar    → perplexity/sonar-pro
-#   Kimi k2.6          → moonshot/kimi-k2.6
-#   GLM 5.1            → thudm/glm-5.1
-#
-# EMBEDDINGS:
-#   Nomic Embed         → nomic-embed-text
-#
-# OPENROUTER VARIANTS (append to model ID):
-#   :free     → Free tier (rate-limited)
-#   :nitro    → Fastest provider
-#   :online   → Web search grounding
-#   :extended → Longer context
-
-# Cloud models (via OpenRouter — requires API key)
 OPENROUTER_MODELS=(
-    "claude-opus-4-6:cloud"
-    "claude-sonnet-4-6:cloud"
-    "claude-haiku-4-5:cloud"
-    "gpt-4o:cloud"
-    "o3:cloud"
-    "sonar-pro:cloud"
+    "claude-opus-4-6"
+    "claude-sonnet-4-6"
+    "claude-haiku-4-5"
+    "gpt-4o"
+    "o3"
+    "sonar-pro"
+    "deepseek-v4-pro"
+    "gemini-3-flash-preview"
+    "glm-5.1"
+    "gpt-oss:120b"
+    "gpt-oss:20b"
+    "kimi-k2.6"
+    "mistral-large-3"
 )
 
-# M2 Max 32GB - Standard configuration (local — pull with ollama)
+# ==============================================
+# LOCAL MODELS (pull with ollama)
+# ==============================================
 OLLAMA_MODELS=(
-    # ═══════════════════════════════════════════════════════════════════════════════════════
-    # PRIMARY MODELS (local — pull with ollama)
-    # ═══════════════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════
+    # CODING / GENERAL (resident)
+    # ═══════════════════════════════════════════════════════════════
+    "qwen3:14b"                   # ~11 GB | Primary coding + general (q5, 40k)
+    "qwen3:14b"                   # ~16 GB | Max-quality solo mode (q8, 40k) — on-demand
 
-    # --- Qwen 3.5 (27B) Claude 4.6 Opus ---
-    "sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M|qwen3.5-27b:q5-256k" # ~19 GB | Writing, docs, cover letters / Image
-    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-8k|8192"
-    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-32k|32768"
-    "qwen3.5-27b:q5-256k|qwen3.5-27b:q5-128k|131072"
+    # ═══════════════════════════════════════════════════════════════
+    # WRITING / ARCHITECT — solo only
+    # ═══════════════════════════════════════════════════════════════
+    "qwen3.5-27b:q5"              # ~19 GB | Writing, docs, architect (256k, 201 languages)
 
-    # --- Qwen 3 (14B) ---
-    "richardyoung/qwen3-14b-abliterated:q8_0|qwen3-14b:q8-40k"         # base Q8 (16 GB) Research (40k)
-    "richardyoung/qwen3-14b-abliterated:Q5_K_M|qwen3-14b:q5-40k"       # base Q5 (11 GB) Research (40k)
+    # ═══════════════════════════════════════════════════════════════
+    # REASONING (with tool calling)
+    # ═══════════════════════════════════════════════════════════════
+    "deepseek-r1-tools:8b"        # ~5 GB  | Reasoning + function calling (q4_K_M, 128k)
 
-    # --- Qwen 3 (4B) ---
-    "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:UD-Q4_K_XL|qwen3-4b:q4-256k" # ~3 GB | HF base/Planning fast (32k)
+    # ═══════════════════════════════════════════════════════════════
+    # PLANNING / FAST
+    # ═══════════════════════════════════════════════════════════════
+    "qwen3:4b"                    # ~3 GB  | Planning, routing, task breakdown (q4, 256k)
 
-    # --- Qwen 2.5 Coder ---
-    "qwen2.5-coder:7b"              # ~5 GB  | Fast code tasks (32k)
-    "qwen2.5-coder:1.5b"            # ~1 GB  | Autocomplete (32k)
+    # ═══════════════════════════════════════════════════════════════
+    # CODE APPLY / INSERT (on-demand)
+    # ═══════════════════════════════════════════════════════════════
+    "codestral:22b"               # ~14 GB | Diff application (q4 default, on-demand, 32k)
 
-    # --- Codestral ---
-    "codestral:22b"                 # ~14 GB | Code apply/insert, light coding (32k)
+    # ═══════════════════════════════════════════════════════════════
+    # AUTOCOMPLETE
+    # ═══════════════════════════════════════════════════════════════
+    "qwen2.5-coder:1.5b"          # ~1 GB  | FIM inline completions (32k)
+    "qwen2.5-coder:7b"            # ~5 GB  | Complex file completions (on-demand, 32k)
 
-    # --- DeepSeek R1 ---
-    "deepseek-r1:8b"                                                                            # 5.2 GB  | Reasoning, chat-only (no tools) (128k)
-    "deepseek-r1:8b-llama-distill-q8_0|deepseek-r1-8b:q8-128k"                                  # 8.5 GB
-    "deepseek-r1:14b"                               # 9 GB
-    "deepseek-r1:14b-qwen-distill-q8_0|deepseek-r1-14b:q8-128k"                                 # 16 GB  | Reasoning stock (128k)
-    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q4_K_M|deepseek-r1-tools-8b:q4-128k"      # ~5 GB | HF base tool calling / Tool calling alias (128k)
-    "MFDoom/deepseek-r1-tool-calling:8b-llama-distill-q8_0|deepseek-r1-tools-8b:q8-128k"        # 9 GB  | HF base 14B (128k)
+    # ═══════════════════════════════════════════════════════════════
+    # EMBEDDINGS
+    # ═══════════════════════════════════════════════════════════════
+    "nomic-embed-text"            # ~0.3 GB | Semantic search / RAG (8k)
 
-    # --- GPT-OSS ---
-    "gpt-oss"                       # ~14GB  | General purpose/Reasoning/Coding (32k)
-
-    # --- Embeddings ---
-    "nomic-embed-text"                     # ~0.3 GB| Embeddings (Continue/RAG) (8k)
-
-    # ═══════════════════════════════════════════════════════════════════════════════════════
-    # CLOUD MODELS
-    # ═══════════════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════
+    # CLOUD MODELS (documented here for completeness; skipped during install)
+    # ═══════════════════════════════════════════════════════════════
     "deepseek-v4-pro:cloud"
     "gemini-3-flash-preview:cloud"
     "glm-5.1:cloud"
     "gpt-oss:120b-cloud"
     "gpt-oss:20b-cloud"
     "kimi-k2.6:cloud"
-    "mistral-large-3:675b-cloud"
+    "mistral-large-3:cloud"
 )
 
-# ----------------------------------------------
-# opencode
-# ----------------------------------------------
+# ==============================================
+# ALTERNATIVE QUANTS — on-demand only
+# ==============================================
+declare -A MODEL_QUANTS=(
+    ["qwen3:14b"]="q8:16 GB (solo max quality)"
+    ["qwen3.5-27b"]="q8:29 GB (solo prose)"
+)
+
+# ==============================================
+# CONTEXT WINDOW VARIANTS — auto-created during install
+# ==============================================
+declare -A MODEL_CONTEXTS=(
+    ["qwen3:14b"]="40k"
+    ["qwen3.5-27b:q5"]="8k 32k 128k"
+    ["deepseek-r1-tools:8b"]="128k"
+    ["codestral:22b"]="32k"
+)
+
+# ==============================================
+# TOOL ASSIGNMENTS — consumed by deploy scripts to generate configs
+# ==============================================
+# ==============================================
+
+# --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-14b:q5-40k"                                          # OpenCode #1 (IndexNow benchmark)
-    [think]="deepseek-r1-tools-8b:q4-128k"                                # tradeoff analysis, debugging strategy, scoring
-    [write]="qwen3-14b:q5-40k"                                         # resumes, cover letters, docs, polished prose
-    [research]="qwen3-14b:q5-40k"                                      # codebase/web investigation — saves to Obsidian Research/
-    [plan]="qwen3-4b:q4-256k"                                          # next steps, task breakdown, routing
+    [code]="qwen3:14b"                       # primary coding agent
+    [think]="deepseek-r1-tools:8b"           # tradeoff analysis, debugging strategy
+    [write]="qwen3.5-27b:q5"                 # resumes, cover letters, polished prose
+    [research]="qwen3:14b"                   # codebase/web investigation
+    [plan]="qwen3:4b"                        # next steps, task breakdown, routing
 )
 
-# ----------------------------------------------
-# Continue (VS Code)
-# ----------------------------------------------
+# --- Continue (VS Code) ---
 declare -A CONTINUE_ROLES=(
-    [chat]="qwen3-14b:q5-40k"                                 # chat panel + inline edit (Ctrl+I)
-    [chat_alt]="codestral:22b"                         # manual model switch in chat
-    [apply]="codestral:22b"                          # applying suggested code to file
-    [autocomplete]="qwen2.5-coder:1.5b"              # inline completions (default)
-    [autocomplete_heavy]="qwen2.5-coder:7b"          # switch manually for complex files
-    [embed]="nomic-embed-text"                       # @codebase semantic search
+    [chat]="qwen3:14b"                       # chat panel + inline edit (Ctrl+I)
+    [chat_alt]="codestral:22b"               # manual model switch in chat
+    [apply]="codestral:22b"                  # applying suggested code to file
+    [autocomplete]="qwen2.5-coder:1.5b"       # inline completions (default)
+    [autocomplete_heavy]="qwen2.5-coder:7b"   # switch manually for complex files
+    [embed]="nomic-embed-text"               # @codebase semantic search
 )
 
-# ----------------------------------------------
-# Claude Code
-# ----------------------------------------------
+# --- Claude Code ---
 declare -A CLAUDE_CODE=(
-    [primary]="qwen3-14b:q5-40k"
-    [fast]="qwen3-4b:q4-256k"
-    [reasoning]="deepseek-r1-tools-8b:q4-128k"
-    [opus]="codestral:22b"
+    [primary]="qwen3:14b"
+    [fast]="qwen3:4b"
+    [reasoning]="deepseek-r1-tools:8b"
+    [opus]="qwen3.5-27b:q5"
 )
 
-# ----------------------------------------------
-# Ollama direct
-# ----------------------------------------------
-#   ollama list                                 all installed models
-#   ollama ps                                   currently loaded + memory usage
-#   ollama run <model>                          interactive shell with model
-#   ollama stop <model>                         force-unload to free memory
-#   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins
-# ----------------------------------------------
+# --- Cline / Roo Code / Kilo Code (VS Code) ---
+CLINE_MODEL="qwen3:14b"
+CLINE_MODEL_CLOUD="kimi-k2.6"
 
-# ----------------------------------------------
-# Cline (VS Code)
-# ----------------------------------------------
-CLINE_MODEL="qwen3-14b:q8-40k"
-CLINE_MODEL_CLOUD="kimi-k2.6:cloud"
+ROOCODE_MODEL="qwen3:14b"
+ROOCODE_MODEL_CLOUD="kimi-k2.6"
+ROOCODE_MODE_CODE="qwen3:14b"
+ROOCODE_MODE_ARCHITECT="qwen3.5-27b:q5"
+ROOCODE_MODE_ASK="qwen3:14b"
+ROOCODE_MODE_DEBUG="deepseek-r1-tools:8b"
 
-# ----------------------------------------------
-# Roo Code (VS Code)
-# ----------------------------------------------
-ROOCODE_MODEL="qwen3-14b:q8-40k"
-ROOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
-ROOCODE_MODE_CODE="qwen3-14b:q8-40k"
-ROOCODE_MODE_ARCHITECT="qwen3.5-27b:q5-32k"
-ROOCODE_MODE_ASK="qwen3-14b:q8-40k"
-ROOCODE_MODE_DEBUG="deepseek-r1-tools-8b:q4-128k"
+KILOCODE_MODEL="qwen3:14b"
+KILOCODE_MODEL_CLOUD="kimi-k2.6"
 
-# ----------------------------------------------
-# Kilo Code (VS Code)
-# ----------------------------------------------
-KILOCODE_MODEL="qwen3-14b:q8-40k"
-KILOCODE_MODEL_CLOUD="kimi-k2.6:cloud"
-
-# ----------------------------------------------
-# Aider
-# ----------------------------------------------
-AIDER_MODEL="qwen3-14b:q8-40k"
-AIDER_WEAK_MODEL="qwen3-4b:q4-256k"
+# --- Aider (CLI) ---
+AIDER_MODEL="qwen3:14b"
+AIDER_WEAK_MODEL="qwen3:4b"
 AIDER_EDITOR_MODEL="codestral:22b"
 
-# ----------------------------------------------
-# Zed
-# ----------------------------------------------
-ZED_MODEL="qwen3.5-27b:q5-32k"
+# --- Zed ---
+ZED_MODEL="qwen3.5-27b:q5"
 
-# ----------------------------------------------
-# Cursor
-# ----------------------------------------------
-CURSOR_MODEL="qwen3-14b:q8-40k"
-CURSOR_MODEL_CLOUD="kimi-k2.6:cloud"
+# --- Cursor ---
+CURSOR_MODEL="qwen3:14b"
+CURSOR_MODEL_CLOUD="kimi-k2.6"
+
+# ==============================================
+# OLlama direct usage
+# ==============================================
+#   ollama list                                 all installed models
+#   ollama ps                                   currently loaded + memory usage
+#   ollama run qwen3:14b                         interactive shell
+#   ollama run qwen3.5-27b:q5                    interactive shell (writing)
+#   ollama stop <model>                         force-unload to free memory
+#   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins

@@ -103,12 +103,21 @@ deploy_configs() {
   # --- AI tool configs ---
   print_step "Copying AI tool configs"
 
-  # Resolve per-profile config directory once
+  # Resolve per-profile config directory and source models.sh
   local _profile _profdir
   _profile="${MACHINE_PROFILE}"
   _profdir="${SETTINGS_BASE}/2-ai/profiles/${_profile}"
   [ -n "$_profile" ] && log_info "Profile: ${_profile}" ||
     log_warning "Profile not detected — per-profile configs will be skipped"
+
+  # Source the single source of truth for all model assignments
+  local _models_sh="${_profdir}/models.sh"
+  if [ -f "$_models_sh" ]; then
+    source "$_models_sh"
+    log_info "  Loaded model config from $_models_sh"
+  else
+    log_warning "  models.sh not found at $_models_sh — configs may use stale values"
+  fi
 
   [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
   mkdir -p "$HOME/.groq"

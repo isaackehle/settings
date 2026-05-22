@@ -6,16 +6,10 @@ fi
 . "${SETTINGS_BASE}/helpers.sh"
 . "${SETTINGS_BASE}/2-ai/exo.sh"
 
-# Ollama Model Management Library
-# This library provides functions to manage Ollama models by purpose
-# Model configurations are loaded dynamically from profile folders
-
 # ==============================================
 # PROFILE CONFIGURATION
 # ==============================================
 
-# Load model configuration for a specific profile folder
-# $1 = profile folder name (e.g., macbook-m5-64gb)
 load_profile_models() {
     local profile="$1"
     local profile_file="${SETTINGS_BASE}/2-ai/profiles/${profile}/models.sh"
@@ -26,19 +20,72 @@ load_profile_models() {
     return 1
 }
 
+# ==============================================
+# CONTEXT WINDOW VARIANTS
+# Reads MODEL_CONTEXTS from the sourced models.sh and creates
+# aliases via ollama create with PARAMETER num_ctx.
+# Share underlying weights — zero additional disk space.
+# ==============================================
+
+create_context_variants() {
+    if ! declare -p MODEL_CONTEXTS &>/dev/null; then
+        echo "No MODEL_CONTEXTS defined — skipping context variants."
+        return 0
+    fi
+
+    echo "Creating context window variants..."
+    echo "===================================="
+    echo ""
+
+    local created=0 skipped=0
+    for base_model in "${!MODEL_CONTEXTS[@]}"; do
+        # Check that the base model is actually installed
+        if ! ollama list 2>/dev/null | grep -q "^${base_model%%:*}"; then
+            echo "⚠ Base model not installed yet: $base_model — skipping context variants"
+            continue
+        fi
+
+        local contexts="${MODEL_CONTEXTS[$base_model]}"
+        for ctx in $contexts; do
+            local alias="${base_model}-${ctx}"
+            if ollama list 2>/dev/null | grep -q "^${alias}"; then
+                echo "✅ Already exists: $alias"
+                ((skipped++))
+                continue
+            fi
+
+            # Parse num_ctx from suffix (e.g., "128k" → 131072, "32k" → 32768, "40k" → 40960)
+            local num_ctx
+            if [[ "$ctx" == *"k" ]]; then
+                num_ctx=$((${ctx%k} * 1024))
+            else
+                num_ctx=$ctx
+            fi
+
+            echo "▶ Creating $alias (context=$num_ctx)"
+            local tmp_mf
+            tmp_mf=$(mktemp /tmp/ollama_ctx_XXXXXX)
+            printf 'FROM %s\nPARAMETER num_ctx %s\n' "$base_model" "$num_ctx" > "$tmp_mf"
+            if ollama create "$alias" -f "$tmp_mf" 2>/dev/null; then
+                ((created++))
+            else
+                echo "⚠ Failed to create $alias"
+            fi
+            rm -f "$tmp_mf"
+        done
+    done
+
+    echo ""
+    echo "Context variants: $created created, $skipped already present"
+    echo ""
+}
 
 # ==============================================
-# INSTALL FUNCTIONS
+# MODEL INSTALLATION
+# Pulls Ollama models. Entry format: plain Ollama name (e.g., "qwen3:14b").
+# Skips :cloud entries (documentation only).
 # ==============================================
 
-# Pulls Ollama models and creates custom aliases for a profile.
-#
-# Entry formats:
-#   "model"                       -> Direct pull
-#   "source|alias"                -> Pull source, create alias
-#   "source|alias|num_ctx"         -> Pull source, create alias with context override
-#
-# $1 = profile label  $2 = array name (passed by name, bash 3.2 compat)
 install_ollama_models() {
     local profile_name="$1"
     local arr_name="$2"
@@ -51,107 +98,80 @@ install_ollama_models() {
 
     local -a passed=()
     local -a failed=()
-    local -a pulled_sources=()
-    local -a created_aliases=()
+    local -a skipped_cloud=()
     local entry
 
     for entry in "${_models[@]}"; do
-        # Skip cloud models
+        # Skip cloud entries (documentation only)
         if [[ "$entry" == *":cloud" ]]; then
-            echo "☁ Skipping cloud model: $entry"
+            skipped_cloud+=("${entry%:cloud}")
             continue
         fi
 
-        if [[ "$entry" == *"|"* ]]; then
-            # --- Custom Model / Alias Logic ---
-            IFS='|' read -r source alias_name num_ctx <<< "$entry"
-
-            # Determine if source is a local alias we already created this run
-            local is_local=0
-            local a
-            for a in "${created_aliases[@]}"; do
-                [[ "$a" == "$source" ]] && is_local=1 && break
-            done
-
-            # Pull remote source once (skip if local alias or already pulled)
-            local pull_success=1
-            if (( !is_local )); then
-                local already_pulled=0
-                local s
-                for s in "${pulled_sources[@]}"; do
-                    [[ "$s" == "$source" ]] && already_pulled=1 && break
-                done
-                if (( !already_pulled )); then
-                    echo "▶ Pulling source: $source"
-                    if ollama pull "$source"; then
-                        pulled_sources+=("$source")
-                        pull_success=0
-                    else
-                        pull_success=1
-                    fi
-                    echo ""
-                else
-                    pull_success=0
-                fi
-            else
-                pull_success=0
-            fi
-
-            # Write temp Modelfile, create alias, clean up
-            local create_success=1
-            if (( pull_success == 0 )); then
-                local tmp_mf
-                tmp_mf=$(mktemp /tmp/ollama_modelfile_XXXXXX)
-                printf 'FROM %s\n' "$source" > "$tmp_mf"
-                [[ -n "$num_ctx" ]] && printf 'PARAMETER num_ctx %s\n' "$num_ctx" >> "$tmp_mf"
-
-                echo "▶ Creating alias: $alias_name"
-                if ollama create "$alias_name" -f "$tmp_mf"; then
-                    create_success=0
-                fi
-                rm -f "$tmp_mf"
-            else
-                echo "⚠ Skipping alias creation for $alias_name due to pull failure of $source"
-            fi
-
-            if (( create_success == 0 )); then
-                passed+=("$alias_name")
-                created_aliases+=("$alias_name")
-            else
-                failed+=("$alias_name")
-            fi
+        # Skip if already installed
+        if ollama list "$entry" 2>/dev/null | grep -q "$entry"; then
+            echo "✅ Already installed: $entry"
+            passed+=("$entry")
             echo ""
-        else
-            # --- Direct Model Logic ---
-            if ollama list "$entry" 2>/dev/null | grep -q "$entry"; then
-                echo "✅ Already installed: $entry"
-                passed+=("$entry")
-                echo ""
-                continue
-            fi
-
-            echo "▶ Installing: $entry"
-            if ollama pull "$entry"; then
-                passed+=("$entry")
-            else
-                failed+=("$entry")
-            fi
-            echo ""
+            continue
         fi
+
+        echo "▶ Installing: $entry"
+        if ollama pull "$entry"; then
+            passed+=("$entry")
+        else
+            failed+=("$entry")
+        fi
+        echo ""
     done
 
+    # Summary
     echo "===================================================="
     echo "Installation Summary for $profile_name:"
-    echo "✅ Passed:"
+    echo "✅ Installed:"
     [[ ${#passed[@]} -eq 0 ]] && echo "  none" || printf '  - %s\n' "${passed[@]}"
     if [[ ${#failed[@]} -gt 0 ]]; then
         echo "❌ Failed:"
         printf '  - %s\n' "${failed[@]}"
     fi
+    if [[ ${#skipped_cloud[@]} -gt 0 ]]; then
+        echo "☁ Skipped cloud models:"
+        printf '  - %s\n' "${skipped_cloud[@]}"
+    fi
     echo "===================================================="
+    echo ""
+
+    # Offer to pull alternative quants
+    if declare -p MODEL_QUANTS &>/dev/null && [[ ${#MODEL_QUANTS[@]} -gt 0 ]]; then
+        echo "Alternative (higher-quality) quants available:"
+        local q_index=1
+        local -a q_names=()
+        for model_name in "${!MODEL_QUANTS[@]}"; do
+            local info="${MODEL_QUANTS[$model_name]}"
+            local quant="${info%%:*}"
+            local desc="${info#*:}"
+            q_names+=("$model_name:$quant")
+            echo "  $q_index) $model_name:$quant — $desc"
+            ((q_index++))
+        done
+        if [[ ${#q_names[@]} -gt 0 ]]; then
+            read -p "Pull any? Enter numbers (space-separated) or Enter to skip: " quant_choices
+            if [[ -n "$quant_choices" ]]; then
+                echo ""
+                for choice in $quant_choices; do
+                    local q_model="${q_names[$((choice-1))]}"
+                    if [[ -n "$q_model" ]]; then
+                        echo "▶ Pulling alternative quant: $q_model"
+                        ollama pull "$q_model" && echo "✅ $q_model pulled" || echo "⚠ Failed to pull $q_model"
+                        echo ""
+                    fi
+                done
+            fi
+        fi
+    fi
+
     echo "✅ Installation process complete for $profile_name"
 }
-
 
 # ==============================================
 # MAIN INSTALLER MENU
@@ -159,8 +179,7 @@ install_ollama_models() {
 
 install_coding_assistants() {
     print_step "Detecting hardware profile"
-    local detected
-    detected="${MACHINE_PROFILE}"
+    local detected="${MACHINE_PROFILE}"
 
     echo ""
     echo "Ollama Model Installer"
@@ -169,7 +188,6 @@ install_coding_assistants() {
     print_profile_menu "$detected"
     echo ""
 
-    # Calculate total options for the prompt: profiles + exo + cancel
     local num_profiles
     num_profiles=$(ls -d "${SETTINGS_BASE}/2-ai/profiles"/*/ 2>/dev/null | wc -l | tr -d ' ')
     local total_options=$((num_profiles + 2))
@@ -179,7 +197,6 @@ install_coding_assistants() {
 
     print_step "Resolving profile for choice: $choice"
 
-    # Handle exo option
     local exo_choice=$((num_profiles + 1))
     local cancel_choice=$((num_profiles + 2))
 
@@ -194,7 +211,6 @@ install_coding_assistants() {
         return
     fi
 
-    # Get profile folder from choice
     local profile
     profile=$(get_profile_for_choice "$choice") || {
         echo "Invalid selection: '$choice'"
@@ -202,7 +218,6 @@ install_coding_assistants() {
     }
     print_step "Profile resolved: $profile"
 
-    # Load the profile's models
     print_step "Loading model list for profile: $profile"
     load_profile_models "$profile" || {
         echo "Error: Could not load models for profile $profile"
@@ -213,7 +228,7 @@ install_coding_assistants() {
 
     echo ""
     echo "What would you like to do?"
-    echo "  1) Install / update models   — pull missing, re-create aliases"
+    echo "  1) Install / update models   — pull missing, create context variants"
     echo "  2) Prune orphan models       — remove models not in the $profile_name stack"
     echo "  3) Both                      — install then prune"
     echo ""
@@ -224,6 +239,7 @@ install_coding_assistants() {
         1)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
+            create_context_variants
             ;;
         2)
             print_step "Pruning orphan models for $profile_name"
@@ -232,6 +248,7 @@ install_coding_assistants() {
         3)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
+            create_context_variants
             echo ""
             print_step "Pruning orphan models for $profile_name"
             bash "${SETTINGS_BASE}/2-ai/profiles/prune_models.sh" "$profile"
