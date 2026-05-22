@@ -76,7 +76,88 @@ These share underlying weights — zero additional disk space.
 
 ---
 
-## How to Replicate
+## Recent Updates (post-commit)
+
+### 8. Added MODEL_QUANTS and MODEL_CONTEXTS
+
+All 5 profiles now declare:
+- **`MODEL_QUANTS`** — alternative (higher-quality) quants available for hardware that supports them. Install script offers these interactively.
+- **`MODEL_CONTEXTS`** — context window variants for each model. Install script auto-creates them via `ollama create` with `PARAMETER num_ctx`. Share weights — zero extra disk.
+
+### 9. Data Layer Cleanup
+
+All `models.sh` files are now pure declarative data — no shebangs, no executable logic. They are **sourced** by scripts, never executed. Install and deploy scripts read these variables to do the actual work.
+
+---
+
+## What Still Needs Work
+
+This commit completes the **data layer** (what models to use). The **execution layer** (how configs get deployed) still needs attention.
+
+### Priority 1: Fix `setup_ai.sh` infrastructure
+
+`setup_ai.sh` still references LiteLLM throughout — infrastructure menu, verification, deployment. Need to:
+
+1. Remove `litellm.sh` sourcing at the top
+2. Remove LiteLLM from `TOOL_GROUPS`, `GROUP_SETUP_FUNCS`, `GROUP_VERIFY_FUNCS`
+3. Remove `litellm` from `get_recommended_infrastructure()` — replace with `ollama` only
+4. Update `select_infrastructure()` menu — option 1 "Ollama only" should be the recommendation
+5. Remove `uninstall_infrastructure_component` litellm case
+6. Remove `copy_file` of litellm config in `deploy_configs()` (lines 172-174)
+
+### Priority 2: Regenerate pre-built config files
+
+The config files in `profiles/<machine>/<tool>/` still have LiteLLM references and stale model names. These were copied verbatim by `deploy_configs` but need to be updated:
+
+| File | Issue |
+|------|-------|
+| `opencode/opencode.jsonc` | May reference LiteLLM provider, stale model names |
+| `continue/config.yaml` | LiteLLM base URL, stale model IDs |
+| `claude/settings.json` | LiteLLM proxy URL |
+| `ollama/config.json` | Stale model lists, LiteLLM references |
+| `crush/crush.json` | LiteLLM base URL |
+| `gemini/settings.json` | LiteLLM base URL |
+| `grok/grok.json` | LiteLLM base URL |
+| `aider/aider.conf.yml` | `openai/<model>` prefix (was LiteLLM format) |
+| `zed/settings.json` | LiteLLM base URL |
+| `cline/settings.jsonc` | LiteLLM comments |
+| `roocode/settings.jsonc` | LiteLLM comments, stale models |
+| `kilocode/kilo.jsonc` | LiteLLM comments |
+| `cursor/settings.jsonc` | LiteLLM comments |
+
+All need `provider: ollama`, base URL `http://localhost:11434/v1`, and model names matching the current `models.sh`.
+
+### Priority 3: Add missing deployments
+
+`deploy_configs()` in `setup_ai.sh` deploys most tools but misses:
+
+- `roocode/settings.jsonc` → merge into VS Code settings.json (like cline)
+- `cursor/settings.jsonc` → deploy to Cursor settings
+- `claude/settings.json` → deploy to `~/.claude/settings.json`
+
+### Priority 4: Tool setup scripts don't read models.sh
+
+The 12 individual tool scripts (`cline.sh`, `roocode.sh`, `kilocode.sh`, etc.) define `setup_*()` functions. Most of them never source `models.sh` — they either:
+- Copy pre-built configs blindly (no validation)
+- Only log instructions for manual configuration
+
+After config files are regenerated, each `setup_*()` should source `models.sh` and validate that the config file's model references match the source of truth.
+
+### Priority 5: Remove LiteLLM from tool scripts
+
+7 tool scripts still reference LiteLLM in their info/log text: `cline.sh`, `roocode.sh`, `kilocode.sh`, `zed.sh`, `cursor.sh`, `gemini.sh`, `grok.sh`. These should point users at Ollama's `:11434/v1` instead.
+
+---
+
+## Model Refresh Cadence
+
+Run this workstream every 3-6 months:
+1. Research new model releases (check Ollama library, HuggingFace trending)
+2. Evaluate against current profile models — same analysis pattern:
+   - Does a new model supersede an existing one?
+   - Is each model actually referenced by at least one tool?
+   - Can it physically co-exist with the resident set?
+3. Update `models.sh`, regenerate config files, prune orphans
 
 ### From Scratch (New Machine)
 
