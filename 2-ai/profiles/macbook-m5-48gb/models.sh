@@ -155,12 +155,6 @@ declare -A CLAUDE_CODE=(
 CLINE_MODEL="qwen3-coder-30b-a3b:q5"
 CLINE_MODEL_CLOUD="kimi-k2.6"
 
-ROOCODE_MODEL="qwen3-coder-30b-a3b:q5"
-ROOCODE_MODEL_CLOUD="kimi-k2.6"
-ROOCODE_MODE_CODE="qwen3-coder-30b-a3b:q5"
-ROOCODE_MODE_ARCHITECT="qwen3.5-27b:q5"
-ROOCODE_MODE_ASK="qwen3:14b"
-ROOCODE_MODE_DEBUG="deepseek-r1-tools:14b"
 
 KILOCODE_MODEL="qwen3-coder-30b-a3b:q5"
 KILOCODE_MODEL_CLOUD="kimi-k2.6"
