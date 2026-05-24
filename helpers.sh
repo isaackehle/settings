@@ -712,13 +712,7 @@ update_claude_settings() {
 
     log_info "Updating $(basename "$machine_dir")/claude/settings.json..."
 
-    if [[ "$mode" == "litellm" ]]; then
-        local old_dash=$(colon_to_dash "$old_val")
-        local new_dash=$(colon_to_dash "$new_val")
-        sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$claude_file"
-    else
-        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$claude_file"
-    fi
+    sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$claude_file"
 
     log_success "  $(basename "$machine_dir")/claude/settings.json"
 }
@@ -737,7 +731,7 @@ update_opencode_config() {
     # Model list keys + agent values
     sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$opencode_file"
 
-    if [[ "$mode" == "ollama" || "$mode" == "litellm" ]]; then
+    if [[ "$mode" == "ollama" ]]; then
         sed -i '' "s|ollama/${old_val}|ollama/${new_val}|g" "$opencode_file"
     fi
 
@@ -755,13 +749,7 @@ update_grok_config() {
 
     log_info "Updating $(basename "$machine_dir")/grok/grok.json..."
 
-    if [[ "$mode" == "litellm" ]]; then
-        local old_dash=$(colon_to_dash "$old_val")
-        local new_dash=$(colon_to_dash "$new_val")
-        sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$grok_file"
-    else
-        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$grok_file"
-    fi
+    sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$grok_file"
 
     log_success "  $(basename "$machine_dir")/grok/grok.json"
 }
@@ -883,7 +871,6 @@ main() {
     echo ""
     echo "  Files that will be updated:"
     echo "    scripts/models.sh"
-    echo "    scripts/${MACHINE_DIRS[$mem_class]}/litellm/litellm.yaml"
     echo "    scripts/${MACHINE_DIRS[$mem_class]}/continue/config.yaml"
     echo "    scripts/${MACHINE_DIRS[$mem_class]}/claude/settings.json"
     echo "    scripts/${MACHINE_DIRS[$mem_class]}/opencode/opencode.jsonc"
@@ -942,7 +929,7 @@ main() {
     echo ""
 
     # Only offer to pull if using Ollama
-    if [[ "$deploy_mode" == "ollama" || "$deploy_mode" == "litellm" ]]; then
+    if [[ "$deploy_mode" == "ollama" ]]; then
         echo ""
         read -r -p "Pull new model via install_coding_assistants? (y/n): " install_choice
         if [[ "$install_choice" == "y" || "$install_choice" == "Y" ]]; then

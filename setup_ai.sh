@@ -460,6 +460,19 @@ PYEOF
     bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
 
+  # --- Offer to suggest new models ---
+  echo ""
+  echo "  New Model Suggestions"
+  echo "  ---------------------"
+  read -p "  Check OpenRouter for new models worth trying? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local _suggester="${SETTINGS_BASE}/2-ai/profiles/suggest-models.sh"
+    if [ -f "$_suggester" ]; then
+      bash "$_suggester" "${_profile}" 2>/dev/null || true
+    fi
+  fi
+
   # --- Offer to install missing models ---
   echo ""
   echo "  Ollama Model Management"
