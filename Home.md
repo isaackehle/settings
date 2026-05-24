@@ -30,6 +30,7 @@ Personal macOS development environment setup guide and reference.
 ## 1-dev
 
 ### Install
+
 - [[install/Editors]] — VS Code, Vim, and other editors
 - [[install/Git]] — Git setup, gh CLI, aliases
 - [[install/Xcode]] — Xcode Command Line Tools
@@ -88,6 +89,7 @@ Personal macOS development environment setup guide and reference.
 - [[install/Databases/Apache]] — Apache server configuration
 
 ### Best Practices
+
 - [[best-practices/Web Dev]] — Web development overview
 - [[best-practices/APIs]] — API development tools
 - [[best-practices/CSS]] — CSS overview and styling tools
