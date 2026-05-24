@@ -29,13 +29,8 @@
           "max_tokens": 32768
         },
         {
-          "name": "qwen3.5-27b:q8-32k",
-          "display_name": "Qwen3.5 27B Q8 (writing)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "qwen3-32b:q5-32k",
-          "display_name": "Qwen3 32B Q5 (research)",
+          "name": "qwen3.5-27b:q5-32k",
+          "display_name": "Qwen3.5 27B (writing)",
           "max_tokens": 32768
         },
         {
@@ -44,9 +39,9 @@
           "max_tokens": 32768
         },
         {
-          "name": "qwen3-4b:q8-256k",
-          "display_name": "Qwen3 4B (fast)",
-          "max_tokens": 32768
+          "name": "qwen3:4b",
+          "display_name": "Qwen3 4B (planning, fast)",
+          "max_tokens": 8192
         },
         {
           "name": "kimi-k2.6-cloud",
