@@ -94,58 +94,79 @@ All `models.sh` files are now pure declarative data — no shebangs, no executab
 
 This commit completes the **data layer** (what models to use). The **execution layer** (how configs get deployed) still needs attention.
 
-### Priority 1: Fix `setup_ai.sh` infrastructure
+### ✅ Priority 1: Fix `setup_ai.sh` infrastructure — DONE
 
-`setup_ai.sh` still references LiteLLM throughout — infrastructure menu, verification, deployment. Need to:
+OpenRouter is now recommended for **all** profile classes (was limited to 32GB+). Lightweight/16GB machines also get OpenRouter as part of their recommended infrastructure, since it's just an API key with zero overhead.
 
-1. Remove `litellm.sh` sourcing at the top
-2. Remove LiteLLM from `TOOL_GROUPS`, `GROUP_SETUP_FUNCS`, `GROUP_VERIFY_FUNCS`
-3. Remove `litellm` from `get_recommended_infrastructure()` — replace with `ollama` only
-4. Update `select_infrastructure()` menu — option 1 "Ollama only" should be the recommendation
-5. Remove `uninstall_infrastructure_component` litellm case
-6. Remove `copy_file` of litellm config in `deploy_configs()` (lines 172-174)
+`setup_ai.sh` has been scrubbed of all LiteLLM references:
 
-### Priority 2: Regenerate pre-built config files
+1. ✅ `litellm.sh` sourcing — already removed
+2. ✅ LiteLLM removed from `TOOL_GROUPS`, `GROUP_SETUP_FUNCS`, `GROUP_VERIFY_FUNCS` — already done
+3. ✅ `litellm` removed from `get_recommended_infrastructure()` — already done
+4. ✅ `select_infrastructure()` menu updated — removed vestigial "Local Proxy" option (was LiteLLM), renumbered, changed default from 4→1
+5. ✅ `uninstall_infrastructure_component` litellm case — already removed
+6. ✅ `copy_file` of litellm config — already removed
+7. ✅ Display name updated: `Infrastructure (Ollama + OpenRouter + OpenWebUI)`
+8. ✅ Help text for `install:infrastructure` updated to match new architecture
+9. ✅ `AGENTS.md` class descriptions updated (LiteLLM → Ollama only)
 
-The config files in `profiles/<machine>/<tool>/` still have LiteLLM references and stale model names. These were copied verbatim by `deploy_configs` but need to be updated:
+### ✅ Priority 2: Regenerate pre-built config files — DONE
 
-| File | Issue |
-|------|-------|
-| `opencode/opencode.jsonc` | May reference LiteLLM provider, stale model names |
-| `continue/config.yaml` | LiteLLM base URL, stale model IDs |
-| `claude/settings.json` | LiteLLM proxy URL |
-| `ollama/config.json` | Stale model lists, LiteLLM references |
-| `crush/crush.json` | LiteLLM base URL |
-| `gemini/settings.json` | LiteLLM base URL |
-| `grok/grok.json` | LiteLLM base URL |
-| `aider/aider.conf.yml` | `openai/<model>` prefix (was LiteLLM format) |
-| `zed/settings.json` | LiteLLM base URL |
-| `cline/settings.jsonc` | LiteLLM comments |
-| `roocode/settings.jsonc` | LiteLLM comments, stale models |
-| `kilocode/kilo.jsonc` | LiteLLM comments |
-| `cursor/settings.jsonc` | LiteLLM comments |
+All 13 tool config file types across all 5 profiles have been scrubbed of LiteLLM references and updated with correct Ollama model names (colon format matching `models.sh`):
 
-All need `provider: ollama`, base URL `http://localhost:11434/v1`, and model names matching the current `models.sh`.
+| File | Status |
+|------|--------|
+| `opencode/opencode.jsonc` | ✅ Removed `litellm` provider block, fixed all agent model refs to colon format |
+| `continue/config.yaml` | ✅ Removed LiteLLM comments, fixed all model names to colon format, pruned stale entries |
+| `claude/settings.json` | ✅ Fixed all model names to colon format matching `models.sh` |
+| `ollama/config.json` | ✅ Pruned stale model lists, added context variants from `MODEL_CONTEXTS` |
+| `crush/crush.json` | ✅ Fixed model names to colon format, removed stale models |
+| `gemini/settings.json` | ✅ Removed `litellm` provider block (3 profiles), fixed model names to colon format |
+| `grok/grok.json` | ✅ Fixed base URL to `:11434/v1`, model names to colon format |
+| `aider/aider.conf.yml` | ✅ Removed LiteLLM comments, fixed model names to colon format |
+| `zed/settings.json` | ✅ Already clean model format, no LiteLLM references found |
+| `cline/settings.jsonc` | ✅ Already clean, no changes needed |
+| `zoocode/settings.jsonc` | ✅ Fixed model names to colon format |
+| `kilocode/kilo.jsonc` | ✅ Removed `litellm` provider, fixed agent model refs |
+| `cursor/settings.jsonc` | ✅ Replaced LiteLLM instructions with Ollama instructions |
+| `litellm/` directories | ✅ **Deleted** from all 5 profiles |
+| Model naming | ✅ All model names use colon format matching Ollama (e.g., `qwen3.5-27b:q5` not `qwen3.5-27b-q5`) |
+| Base URLs | ✅ All point to `http://localhost:11434/v1` (Ollama direct, no proxy) |
 
-### Priority 3: Add missing deployments
+### ✅ Priority 3: Add missing deployments — DONE
 
-`deploy_configs()` in `setup_ai.sh` deploys most tools but misses:
+All three missing deployments added to `deploy_configs()` in `setup_ai.sh`:
 
-- `roocode/settings.jsonc` → merge into VS Code settings.json (like cline)
-- `cursor/settings.jsonc` → deploy to Cursor settings
-- `claude/settings.json` → deploy to `~/.claude/settings.json`
+| Deployment | Status |
+|------------|--------|
+| `claude/settings.json` → `~/.claude/settings.json` | ✅ Added — simple copy |
+| `zoocode/settings.jsonc` → VS Code settings merge | ✅ Added — reusable `_merge_vscode_extension()` helper |
+| `roocode/settings.jsonc` → VS Code settings merge | ✅ Added — uses same helper, silently skipped if file missing |
+| `cursor/settings.jsonc` → Cursor settings | ✅ Added — stripped of comments, merged into `~/Library/Application Support/Cursor/User/settings.json` |
 
-### Priority 4: Tool setup scripts don't read models.sh
+Also fixed two pre-existing syntax errors in `setup_ai.sh` (stray bare `;;` tokens in the main case block).
 
-The 12 individual tool scripts (`cline.sh`, `roocode.sh`, `kilocode.sh`, etc.) define `setup_*()` functions. Most of them never source `models.sh` — they either:
-- Copy pre-built configs blindly (no validation)
-- Only log instructions for manual configuration
+### ✅ Priority 4: Tool setup scripts validate against models.sh — DONE
 
-After config files are regenerated, each `setup_*()` should source `models.sh` and validate that the config file's model references match the source of truth.
+`deploy_configs()` in `setup_ai.sh` now:
+- Sources `models.sh` at the start and builds a `_known_models` list from all tool model variables (OPENCODE_AGENTS, CONTINUE_ROLES, CLAUDE_CODE, CLINE_MODEL, etc.)
+- Calls `_validate_config_models()` after each config file copy to check that all model references match the source of truth
+- Logs warnings for any model name in a config that doesn't appear in `models.sh`, catching drift before it reaches the user
 
-### Priority 5: Remove LiteLLM from tool scripts
+This covers: Continue, OpenCode, Ollama, Crush, Grok, Claude Code, Gemini, Zed, Aider, Kilo Code (all profiles).
 
-7 tool scripts still reference LiteLLM in their info/log text: `cline.sh`, `roocode.sh`, `kilocode.sh`, `zed.sh`, `cursor.sh`, `gemini.sh`, `grok.sh`. These should point users at Ollama's `:11434/v1` instead.
+### ✅ Priority 5: Remove LiteLLM from tool scripts — DONE
+
+All shell scripts scrubbed. Zero LiteLLM references remain in `2-ai/*.sh` or `setup_ai.sh`.
+
+| Script | Fix |
+|--------|-----|
+| `gemini.sh` | Removed `litellm --config` command (was pointing at deleted litellm.yaml) |
+| `exo.sh` | `LiteLLM base URL` → `Ollama base URL` |
+| `openwebui.sh` | Removed LiteLLM connection section (only Ollama direct documented) |
+| `open-hands.sh` | `:4000/v1` → `:11434/v1` |
+| `open-interpreter.sh` | `:4000/v1` → `:11434/v1` |
+| `cline.sh`, `kilocode.sh`, `zed.sh`, `cursor.sh`, `grok.sh` | Already clean |
 
 ---
 

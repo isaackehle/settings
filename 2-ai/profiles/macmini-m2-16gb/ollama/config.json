@@ -2,55 +2,39 @@
   "integrations": {
     "claude": {
       "aliases": {
-        "primary": "qwen3-14b:q5-40k",
-        "fast": "qwen3-4b:q8-256k",
-        "reasoning": "deepseek-r1-tools-8b:q4-128k",
+        "primary": "qwen3:14b",
+        "fast": "qwen3:4b",
+        "reasoning": "deepseek-r1-tools:8b",
         "opus": "codestral:22b"
       },
       "models": [
+        "qwen3:14b",
+        "qwen3:14b-40k",
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "qwen3:4b",
         "codestral:22b",
-        "deepseek-r1-14b:q8-128k",
-        "deepseek-r1-8b:q8-128k",
-        "deepseek-r1-tools-8b:q4-128k",
-        "deepseek-r1-tools-8b:q8-128k",
-        "deepseek-r1:14b",
-        "deepseek-r1:8b",
-        "gpt-oss:20b",
-        "nomic-embed-text:latest",
-        "qwen2.5-coder:1.5b",
+        "codestral:22b-32k",
         "qwen2.5-coder:7b",
-        "qwen3-14b:q5-40k",
-        "qwen3-14b:q8-40k",
-        "qwen3-4b:q8-256k",
-        "qwen3.5-27b:q5-128k",
-        "qwen3.5-27b:q5-256k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-8k"
+        "qwen2.5-coder:1.5b",
+        "nomic-embed-text"
       ]
     },
     "opencode": {
       "models": [
+        "qwen3:14b",
+        "qwen3:14b-40k",
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "qwen3:4b",
         "codestral:22b",
-        "deepseek-r1-14b:q8-128k",
-        "deepseek-r1-8b:q8-128k",
-        "deepseek-r1-tools-8b:q4-128k",
-        "deepseek-r1-tools-8b:q8-128k",
-        "deepseek-r1:14b",
-        "deepseek-r1:8b",
-        "gpt-oss:20b",
-        "nomic-embed-text:latest",
-        "qwen2.5-coder:1.5b",
+        "codestral:22b-32k",
         "qwen2.5-coder:7b",
-        "qwen3-14b:q5-40k",
-        "qwen3-14b:q8-40k",
-        "qwen3-4b:q8-256k",
-        "qwen3.5-27b:q5-128k",
-        "qwen3.5-27b:q5-256k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-8k"
+        "qwen2.5-coder:1.5b",
+        "nomic-embed-text"
       ]
     }
   },
-  "last_model": "codestral:22b",
+  "last_model": "qwen3:14b",
   "last_selection": "run"
 }

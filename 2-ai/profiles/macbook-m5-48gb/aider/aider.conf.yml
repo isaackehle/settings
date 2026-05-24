@@ -1,24 +1,21 @@
 # Aider config — M5 Max 48GB profile
 # DEPLOY TO: ~/.aider.conf.yml (global) or .aider.conf.yml (per-project)
 # Docs: https://aider.chat/docs/config/aider_conf.html
-#
-# All models route through LiteLLM proxy (localhost:4000).
-# LiteLLM model names use hyphens: openai/<litellm-model-name>
 
 ## ── Model assignments ──────────────────────────────────────────────────────
 
 # Primary coding model
-model: openai/qwen3-coder-30b-q5-32k
+model: qwen3-coder-30b-a3b:q5
 
 # Weak model — commit messages, simple edits, routing decisions
-weak-model: openai/qwen3-4b-q8-256k
+weak-model: qwen3:4b
 
 # Editor model — applies aider's diffs back to files (Codestral is best for this)
-editor-model: openai/codestral-22b-q6-32k
+editor-model: codestral:22b
 
-## ── LiteLLM proxy endpoint ─────────────────────────────────────────────────
+## ── Ollama endpoint ────────────────────────────────────────────────────────
 
-openai-api-base: http://localhost:4000/v1
+openai-api-base: http://localhost:11434/v1
 openai-api-key: sk-local
 
 ## ── Git ────────────────────────────────────────────────────────────────────

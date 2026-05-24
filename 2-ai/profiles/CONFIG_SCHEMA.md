@@ -40,7 +40,7 @@ Every profile has one `models.sh` that defines all model assignments.
 | `CLAUDE_CODE`          | assoc array | key → `model:tag`                        | claude/settings.json, ollama/config.json                        |
 | `CLINE_MODEL`          | scalar      | `model:tag`                              | cline/settings.jsonc (reference only)                           |
 | `CLINE_MODEL_CLOUD`    | scalar      | `model:cloud`                            | cline/settings.jsonc (reference only)                           |
-| `ROOCODE_MODEL`        | scalar      | `model:tag`                              | roocode/settings.jsonc (reference only)                         |
+| `ZOOCODE_MODEL`        | scalar      | `model:tag`                              | zoocode/settings.jsonc (reference only)                         |
 | `ROOCODE_MODEL_CLOUD`  | scalar      | `model:cloud`                            | roocode/settings.jsonc (reference only)                         |
 | `ROOCODE_MODE_*`       | scalar      | `model:tag`                              | roocode/settings.jsonc per-mode config                          |
 | `KILOCODE_MODEL`       | scalar      | `model:tag`                              | kilocode/settings.jsonc (reference only)                        |

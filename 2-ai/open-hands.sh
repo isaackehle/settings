@@ -50,7 +50,7 @@ setup_openhands() {
     log_info ""
     log_info "Local model config (in web UI Settings):"
     log_info "  Provider: OpenAI"
-    log_info "  Base URL: http://host.docker.internal:4000/v1"
+    log_info "  Base URL: http://host.docker.internal:11434/v1"
     log_info "  API Key:  sk-local"
     log_info ""
     log_info "Or run with current directory mounted:"

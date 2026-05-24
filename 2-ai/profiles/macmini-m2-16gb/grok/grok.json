@@ -21,13 +21,13 @@
     "ollama": {
       "name": "Ollama (Local)",
       "options": {
-        "baseURL": "http://localhost:11434"
+        "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen3-14b:q5-40k": {
+        "qwen3:14b": {
           "name": "Qwen3 14B (primary)"
         },
-        "deepseek-r1-tools-8b:q4-128k": {
+        "deepseek-r1-tools:8b": {
           "name": "DeepSeek R1 8B (reason+tools)"
         }
       }

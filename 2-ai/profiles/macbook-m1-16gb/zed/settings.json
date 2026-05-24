@@ -1,5 +1,5 @@
 {
-  "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from LiteLLM's /v1/models endpoint automatically",
+  "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from Ollama's /v1/models endpoint automatically",
 
   "assistant": {
     "default_model": {
@@ -11,7 +11,7 @@
 
   "language_models": {
     "openai": {
-      "api_url": "http://localhost:4000/v1",
+      "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
           "name": "qwen3-14b-q5-40k",
@@ -41,7 +41,6 @@
       ]
     }
   },
-
   "features": {
     "inline_completion_provider": "none"
   }

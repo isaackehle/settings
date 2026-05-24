@@ -45,9 +45,9 @@ setup_grok() {
 
     local env_file="$HOME/.config/grok/_grok"
     cat > "$env_file" << 'EOF'
-# Grok CLI — route through LiteLLM proxy
+# Grok CLI — route through Ollama proxy
 export GROKCLI_PROVIDER=openai
-export GROKCLI_BASE_URL=http://localhost:4000/v1
+export GROKCLI_BASE_URL=http://localhost:11434/v1
 export GROKCLI_API_KEY=sk-local
 EOF
 
@@ -58,7 +58,7 @@ EOF
     print_info ""
     print_info "=== Grok CLI usage ==="
     print_info "Start:    grok"
-    print_info "Provider: LiteLLM (http://localhost:4000/v1)"
+    print_info "Provider: Ollama (http://localhost:11434/v1)"
     print_info "Repo:     https://github.com/superagent-ai/grok-cli"
     print_info ""
 }

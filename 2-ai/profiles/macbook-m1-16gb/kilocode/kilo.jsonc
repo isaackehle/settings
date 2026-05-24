@@ -1,27 +1,52 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "litellm/qwen3-14b-q5-40k",
-  "small_model": "litellm/qwen2.5-coder-7b-q4-32k",
+  "model": "qwen3:14b",
+  "small_model": "qwen3:4b",
   "disabled_providers": [],
   "provider": {
-    "litellm": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM (Local)",
+    "ollama": {
+      "npm": "@ai-sdk/ollama-compatible",
+      "name": "Ollama (Local)",
       "options": {
-        "baseURL": "http://localhost:4000/v1",
+        "baseURL": "http://localhost:11434/v1",
         "apiKey": "sk-local"
       },
       "models": {
-        "kimi-k2.6-cloud": { "name": "Kimi K2.6 (cloud)" },
-        "glm-5.1-cloud": { "name": "GLM 5.1 (cloud)" },
+        "qwen3.6-35b-8k": { "name": "Qwen3.6 35B (8k)" },
+        "qwen3.6-35b-32k": { "name": "Qwen3.6 35B (32k)" },
+        "qwen3.6-35b-128k": { "name": "Qwen3.6 35B (128k)" },
+        "qwen3.6-35b-256k": { "name": "Qwen3.6 35B (256k)" },
+        "qwen3-coder-30b-q6-32k": { "name": "Qwen3 Coder 30B Q6 (32k)" },
+        "qwen3-coder-30b-q6-128k": { "name": "Qwen3 Coder 30B Q6 (128k)" },
+        "qwen3-coder-next-80b-q4": { "name": "Qwen3 Coder Next 80B Q4" },
+        "qwen3-coder-next-80b-q4-16k": { "name": "Qwen3 Coder Next 80B Q4 (16k)" },
+        "qwen3-coder-next-80b-q4-64k": { "name": "Qwen3 Coder Next 80B Q4 (64k)" },
+        "qwen3-coder-next-80b-q4-128k": { "name": "Qwen3 Coder Next 80B Q4 (128k)" },
+        "codestral-22b-q8-32k": { "name": "Codestral 22B Q8 (32k)" },
+        "qwen2.5-coder-1.5b-q4-32k": { "name": "Qwen2.5 Coder 1.5B Q4 (32k)" },
+        "qwen2.5-coder-7b-q4-32k": { "name": "Qwen2.5 Coder 7B Q4 (32k)" },
+        "qwen2.5-coder-7b-q8-32k": { "name": "Qwen2.5 Coder 7B Q8 (32k)" },
+        "qwen3.5-27b-q8-8k": { "name": "Qwen3.5 27B Q8 (8k)" },
+        "qwen3.5-27b-q8-32k": { "name": "Qwen3.5 27B Q8 (32k)" },
+        "qwen3.5-27b-q8-128k": { "name": "Qwen3.5 27B Q8 (128k)" },
+        "qwen3.5-27b-q8-256k": { "name": "Qwen3.5 27B Q8 (256k)" },
+        "qwen3.5-27b-q5-8k": { "name": "Qwen3.5 27B Q5 (8k)" },
+        "qwen3.5-27b-q5-32k": { "name": "Qwen3.5 27B Q5 (32k)" },
+        "qwen3.5-27b-q5-128k": { "name": "Qwen3.5 27B Q5 (128k)" },
         "qwen3.5-27b-q5-256k": { "name": "Qwen3.5 27B Q5 (256k)" },
         "qwen3-14b-q5-40k": { "name": "Qwen3 14B Q5 (40k)" },
-        "qwen2.5-coder-7b-q4-32k": { "name": "Qwen2.5 Coder 7B Q4 (32k)" },
-        "qwen2.5-coder-1.5b-q4-32k": { "name": "Qwen2.5 Coder 1.5B Q4 (32k)" },
-        "deepseek-r1-tools-8b-q4-128k": { "name": "DeepSeek R1 Tools 8B Q4 (128k)" },
-        "deepseek-r1-8b-q4-128k": { "name": "DeepSeek R1 8B Q4 (128k)" },
-        "codestral-22b": { "name": "Codestral 22B" },
-        "gemma4": { "name": "Gemma 4" }
+        "qwen3-14b-q8-40k": { "name": "Qwen3 14B Q8 (40k)" },
+        "qwen3-32b-q5-32k": { "name": "Qwen3 32B Q5 (32k)" },
+        "deepseek-r1-tools-14b-128k": { "name": "DeepSeek R1 Tools 14B (128k)" },
+        "deepseek-r1-tools-32b-128k": { "name": "DeepSeek R1 Tools 32B (128k)" },
+        "deepseek-r1-q8-128k": { "name": "DeepSeek R1 Q8 (128k)" },
+        "qwen3-4b-q8-256k": { "name": "Qwen3 4B Q8 (256k)" },
+        "llama3.3-70b": { "name": "Llama 3.3 70B" },
+        "gemma4-26b": { "name": "Gemma 4 26B" },
+        "glm-4.7-flash-latest": { "name": "GLM 4.7 Flash (latest)" },
+        "glm-4.7-flash-q4-198k": { "name": "GLM 4.7 Flash (q4-198k)" },
+        "glm-4.7-flash-q8-198k": { "name": "GLM 4.7 Flash (q8-198k)" },
+        "qwen3.6-35b-q5-32k": { "name": "Qwen3.6 35B Q5 (32k)" }
       }
     },
     "openrouter": {
@@ -43,7 +68,7 @@
   "agent": {
     "code": {
       "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "litellm/qwen3-14b-q5-40k",
+      "model": "qwen3:14b",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -59,7 +84,7 @@
     },
     "ask": {
       "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "litellm/qwen3-14b-q5-40k",
+      "model": "qwen3:14b",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -75,7 +100,7 @@
     },
     "debug": {
       "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "litellm/deepseek-r1-tools-8b-q4-128k",
+      "model": "deepseek-r1-tools-8b-q4-128k",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
@@ -91,7 +116,7 @@
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
-      "model": "litellm/qwen2.5-coder-7b-q4-32k",
+      "model": "qwen3:4b",
       "mode": "primary",
       "temperature": 0.25,
       "permission": {
@@ -107,7 +132,7 @@
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "litellm/deepseek-r1-tools-8b-q4-128k",
+      "model": "deepseek-r1-tools-8b-q4-128k",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
@@ -123,7 +148,7 @@
     },
     "write": {
       "description": "Writing agent — docs, summaries, cover letters, polished prose.",
-      "model": "litellm/qwen2.5-coder-7b-q4-32k",
+      "model": "qwen3:4b",
       "mode": "primary",
       "temperature": 0.65,
       "permission": {
@@ -139,7 +164,7 @@
     },
     "summary": {
       "description": "Commit message and session summary agent.",
-      "model": "litellm/qwen3-4b-q8-256k",
+      "model": "qwen3:4b",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -155,7 +180,7 @@
     },
     "description": {
       "description": "MR/PR description agent — longer summaries with context.",
-      "model": "litellm/qwen3-4b-q8-256k",
+      "model": "qwen3:4b",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {

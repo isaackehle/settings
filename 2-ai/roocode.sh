@@ -41,7 +41,7 @@ setup_roocode() {
     log_info "=== RooCode ==="
     log_info "Extension: rooveterinaryinc.roo-cline"
     log_info "Config:    VS Code sidebar → Roo Code → API Provider: OpenAI Compatible"
-    log_info "Base URL:  http://localhost:4000/v1"
+    log_info "Base URL:  http://localhost:11434/v1"
     log_info "API Key:   sk-local"
     log_info "Docs:      https://roocode.com/docs"
     log_info ""

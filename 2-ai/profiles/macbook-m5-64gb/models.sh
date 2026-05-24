@@ -140,13 +140,13 @@ declare -A CLAUDE_CODE=(
 CLINE_MODEL="qwen3-coder-next-80b:q4"
 CLINE_MODEL_CLOUD="kimi-k2.6"
 
-# --- Roo Code (VS Code extension) ---
-ROOCODE_MODEL="qwen3-coder-next-80b:q4"
-ROOCODE_MODEL_CLOUD="kimi-k2.6"
-ROOCODE_MODE_CODE="qwen3-coder-next-80b:q4"
-ROOCODE_MODE_ARCHITECT="qwen3.6-35b:q4"
-ROOCODE_MODE_ASK="qwen3.5-27b:q5"
-ROOCODE_MODE_DEBUG="gemma4:31b"
+# --- Zoo Code (VS Code extension) ---
+ZOOCODE_MODEL="qwen3-coder-next-80b:q4"
+ZOOCODE_MODEL_CLOUD="kimi-k2.6"
+ZOOCODE_MODE_CODE="qwen3-coder-next-80b:q4"
+ZOOCODE_MODE_ARCHITECT="qwen3.6-35b:q4"
+ZOOCODE_MODE_ASK="qwen3.5-27b:q5"
+ZOOCODE_MODE_DEBUG="gemma4:31b"
 
 # --- Kilo Code (VS Code extension) ---
 KILOCODE_MODEL="qwen3-coder-next-80b:q4"

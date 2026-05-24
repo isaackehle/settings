@@ -2,52 +2,35 @@
   "integrations": {
     "claude": {
       "aliases": {
-        "primary": "qwen2.5-coder:7b",
-        "fast": "qwen2.5-coder:1.5b",
-        "reasoning": "deepseek-r1-tools-8b:q4-128k"
+        "primary": "qwen3:14b",
+        "fast": "qwen3:4b",
+        "reasoning": "deepseek-r1-tools:8b",
+        "opus": "qwen3:14b"
       },
       "models": [
-        "codestral:22b",
-        "deepseek-r1-14b:q8-128k",
-        "deepseek-r1-8b:q8-128k",
-        "deepseek-r1-tools-8b:q4-128k",
-        "deepseek-r1-tools-8b:q8-128k",
-        "deepseek-r1:14b",
-        "deepseek-r1:8b",
-        "gpt-oss:20b",
-        "nomic-embed-text:latest",
-        "qwen2.5-coder:1.5b",
+        "qwen3:14b",
+        "qwen3:14b-40k",
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "qwen3:4b",
         "qwen2.5-coder:7b",
-        "qwen3-14b:q5-40k",
-        "qwen3-14b:q8-40k",
-        "qwen3.5-27b:q5-128k",
-        "qwen3.5-27b:q5-256k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-8k"
+        "qwen2.5-coder:1.5b",
+        "nomic-embed-text"
       ]
     },
     "opencode": {
       "models": [
-        "codestral:22b",
-        "deepseek-r1-14b:q8-128k",
-        "deepseek-r1-8b:q8-128k",
-        "deepseek-r1-tools-8b:q4-128k",
-        "deepseek-r1-tools-8b:q8-128k",
-        "deepseek-r1:14b",
-        "deepseek-r1:8b",
-        "gpt-oss:20b",
-        "nomic-embed-text:latest",
-        "qwen2.5-coder:1.5b",
+        "qwen3:14b",
+        "qwen3:14b-40k",
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "qwen3:4b",
         "qwen2.5-coder:7b",
-        "qwen3-14b:q5-40k",
-        "qwen3-14b:q8-40k",
-        "qwen3.5-27b:q5-128k",
-        "qwen3.5-27b:q5-256k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-8k"
+        "qwen2.5-coder:1.5b",
+        "nomic-embed-text"
       ]
     }
   },
-  "last_model": "deepseek-r1:8b",
+  "last_model": "qwen3:14b",
   "last_selection": "run"
 }
