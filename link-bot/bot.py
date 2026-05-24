@@ -68,7 +68,7 @@ except json.JSONDecodeError as e:
 BASE = Path.home() / "code" / "isaackehle" / "settings"
 if not DESTINATIONS:
     DESTINATIONS = {
-        "incoming": str(BASE / "incoming"),
+        "incoming": str(Path.home() / "vault" / "incoming"),
         "links": str(BASE / "saved-links"),
     }
 
