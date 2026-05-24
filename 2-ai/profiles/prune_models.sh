@@ -119,6 +119,17 @@ for var in $(compgen -v); do
     fi
 done
 
+# 5. Register context window variants from MODEL_CONTEXTS
+if declare -p MODEL_CONTEXTS &>/dev/null; then
+    for base_model in "${!MODEL_CONTEXTS[@]}"; do
+        local contexts="${MODEL_CONTEXTS[$base_model]}"
+        for ctx in $contexts; do
+            local variant="${base_model}-${ctx}"
+            register_model "$variant" "Context variant of $base_model ($ctx)"
+        done
+    done
+fi
+
 # Get unique list of required models
 sort -u "$REQUIRED_MODELS_FILE" -o "$REQUIRED_MODELS_FILE"
 
