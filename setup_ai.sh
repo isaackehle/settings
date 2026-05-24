@@ -430,12 +430,15 @@ PYEOF
       fi
     done
 
-    # Scalar model vars
-    for _v in CLINE_MODEL CLINE_MODEL_CLOUD \
-              ZOOCODE_MODEL ZOOCODE_MODEL_CLOUD \
-              KILOCODE_MODEL KILOCODE_MODEL_CLOUD \
+    # Scalar model vars — split by suffix
+    for _v in CLINE_MODEL ZOOCODE_MODEL KILOCODE_MODEL \
               AIDER_MODEL AIDER_WEAK_MODEL AIDER_EDITOR_MODEL \
-              ZED_MODEL CURSOR_MODEL CURSOR_MODEL_CLOUD; do
+              ZED_MODEL CURSOR_MODEL; do
+      local _val="${!_v:-}"
+      [ -n "$_val" ] && _local+=("$_val")
+    done
+    for _v in CLINE_MODEL_CLOUD ZOOCODE_MODEL_CLOUD \
+              KILOCODE_MODEL_CLOUD CURSOR_MODEL_CLOUD; do
       local _val="${!_v:-}"
       [ -n "$_val" ] && _cloud+=("$_val")
     done
@@ -457,10 +460,20 @@ PYEOF
     bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
 
-  # --- Offer to prune old Ollama models ---
+  # --- Offer to install missing models ---
   echo ""
   echo "  Ollama Model Management"
   echo "  -----------------------"
+  read -p "  Install missing Ollama models and context variants? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local _human_name
+    _human_name="$(_profile_name "$_profile")"
+    install_ollama_models "$_human_name" OLLAMA_MODELS
+    create_context_variants
+  fi
+
+  # --- Offer to prune old Ollama models ---
   echo "  Edit ~/.ollama/required-models.txt to add models you want to keep."
   read -p "  Prune obsolete Ollama models? (y/N) " -n 1 -r
   echo

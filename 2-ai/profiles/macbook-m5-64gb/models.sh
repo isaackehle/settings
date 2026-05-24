@@ -31,7 +31,6 @@ OPENROUTER_MODELS=(
 
 # ==============================================
 # LOCAL MODELS — one entry per base model, no duplicate quants
-# :cloud entries are documentation only, skipped during ollama pull
 # ==============================================
 OLLAMA_MODELS=(
     # CODING
@@ -63,15 +62,6 @@ OLLAMA_MODELS=(
 
     # EMBEDDINGS
     "nomic-embed-text"            # ~0.3 GB | Semantic search / RAG (8k)
-
-    # CLOUD (documentation only — skipped during pull)
-    "deepseek-v4-pro:cloud"
-    "gemini-3-flash-preview:cloud"
-    "glm-5.1:cloud"
-    "gpt-oss:120b-cloud"
-    "gpt-oss:20b-cloud"
-    "kimi-k2.6:cloud"
-    "mistral-large-3:cloud"
 )
 
 # ==============================================
