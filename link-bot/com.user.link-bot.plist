@@ -26,7 +26,7 @@
         <key>OLLAMA_MODEL</key>
         <string>qwen3:14b</string>
         <key>DESTINATIONS</key>
-        <string>{"incoming":"/Users/isaac/code/isaackehle/settings/incoming","links":"/Users/isaac/code/isaackehle/settings/saved-links"}</string>
+        <string>{"incoming":"/Users/isaac/vault/incoming","links":"/Users/isaac/code/isaackehle/settings/saved-links"}</string>
     </dict>
 
     <key>RunAtLoad</key>
