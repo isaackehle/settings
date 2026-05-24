@@ -591,8 +591,8 @@ update_models_sh() {
         # Update all agents to the same model (for simplicity)
         sed -i '' "s|^\(CLINE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
         sed -i '' "s|^\(CLINE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
-        sed -i '' "s|^\(ROOCODE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
-        sed -i '' "s|^\(ROOCODE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(ZOOCODE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(ZOOCODE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
         sed -i '' "s|^\(KILOCODE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
         sed -i '' "s|^\(KILOCODE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
         sed -i '' "s|^\(AIDER_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"

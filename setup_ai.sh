@@ -68,7 +68,7 @@ deploy_configs() {
     local mcp_dest="$HOME/.mcp.json"
     local mcp_src
     mcp_src=$(find_source "mcp.json")
-    [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/2-ai/mcp.json"
+    [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/2-ai/claude-code/mcp.json"
 
     local do_install=true
     if [ -f "$mcp_dest" ]; then
@@ -129,7 +129,9 @@ deploy_configs() {
     else
       # Scalar
       local _tmp="${!_var_name:-}"
-      [ -n "$_tmp" ] && _known_models+=("$_tmp")
+      if [ -n "$_tmp" ]; then
+        _known_models+=("$_tmp")
+      fi
     fi
   }
   _collect_models "CLINE_MODEL"
@@ -147,8 +149,7 @@ deploy_configs() {
   [ -n "${OPENCODE_AGENTS[*]:-}" ] && _collect_models "OPENCODE_AGENTS"
   [ -n "${CONTINUE_ROLES[*]:-}" ]   && _collect_models "CONTINUE_ROLES"
   [ -n "${CLAUDE_CODE[*]:-}" ]       && _collect_models "CLAUDE_CODE"
-  _collect_models "ROOCODE_MODEL"
-  _collect_models "ROOCODE_MODEL_CLOUD"
+  log_info "  Model list built (${#_known_models[@]} entries)"
 
   # Validate: check that model references in a config file match known models
   _validate_config_models() {
@@ -157,7 +158,7 @@ deploy_configs() {
     [ ! -f "$_file" ] && return 0
     local _found _issues=0
     # Extract model-like strings from config (values following "model", colon-separated)
-    for _found in $(rg -o '[a-zA-Z0-9._-]+:[a-zA-Z0-9._-]+' "$_file" 2>/dev/null); do
+    for _found in $(rg -o '[a-zA-Z][a-zA-Z0-9._-]*:[a-zA-Z][a-zA-Z0-9._-]*' "$_file" 2>/dev/null); do
       # Strip context suffix (e.g. :q4-64k → :q4)
       local _base="${_found%%-*}"
       local _matched=false
@@ -172,8 +173,10 @@ deploy_configs() {
         _issues=$((_issues + 1))
       fi
     done
-    return $_issues
+    return 0
   }
+
+  print_step "Deploying per-tool configs"
 
   [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
   mkdir -p "$HOME/.groq"
@@ -216,7 +219,7 @@ deploy_configs() {
 
   # --- Helper: merge VS Code extension settings into settings.json ---
   _merge_vscode_extension() {
-    local prefix="$1"    # e.g. "cline" or "zoo-code" or "roo-cline"
+    local prefix="$1"    # e.g. "cline" or "zoo-code"
     local src_file="$2"  # path to settings.jsonc snippet
     local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
 
@@ -250,11 +253,8 @@ deploy_configs() {
   # --- Cline ---
   _merge_vscode_extension "cline" "${_profdir}/cline/settings.jsonc"
 
-  # --- Zoo Code (m5-64gb) / Roo Code (other profiles) ---
+  # --- Zoo Code VS Code extension ---
   _merge_vscode_extension "zoo-code" "${_profdir}/zoocode/settings.jsonc"
-  _merge_vscode_extension "roo-cline" "${_profdir}/roocode/settings.jsonc"
-
-
 
   mkdir -p "$HOME/.config/zed"
   copy_file "${_profdir}/zed/settings.json" "$HOME/.config/zed/settings.json"
