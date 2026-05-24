@@ -451,6 +451,12 @@ PYEOF
   } > "$_reqfile"
   log_info "  Wrote required models list to $_reqfile"
 
+  # --- Generate model map ---
+  local _mapper="${SETTINGS_BASE}/2-ai/profiles/generate-model-map.sh"
+  if [ -f "$_mapper" ]; then
+    bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
+  fi
+
   # --- Offer to prune old Ollama models ---
   echo ""
   echo "  Ollama Model Management"

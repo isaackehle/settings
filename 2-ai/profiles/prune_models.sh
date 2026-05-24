@@ -101,9 +101,10 @@ if [[ -f "$REQFILE" ]]; then
 else
     echo "Analyzing requirements from $MODELS_SH..."
 
-    # 1. Process OLLAMA_MODELS array
+    # 1. Process OLLAMA_MODELS array (skip :cloud entries — they route via OpenRouter)
     if declare -p OLLAMA_MODELS &>/dev/null; then
         for entry in "${OLLAMA_MODELS[@]}"; do
+            [[ "$entry" == *":cloud" ]] && continue
             register_model "$entry" "Defined in OLLAMA_MODELS list"
         done
     fi
@@ -133,6 +134,7 @@ else
             BASH*|COMP*|DIRSTACK|FUNCNAME|GROUPS|PIPESTATUS|SHLVL|_|RANDOM|SECONDS|LINENO|OPTERR) continue ;;
             PROFILE|PROFILES_DIR|SETTINGS_BASE|MODELS_SH|REQUIRED_MODELS_FILE|REASON_MAP_FILE) continue ;;
             DATE|BACKUP_DIR|HW_MODEL|HW_MEM_GB|REPO_ROOT|NC|BLUE|GREEN|PURPLE|RED|YELLOW) continue ;;
+            *_CLOUD) continue ;;  # OpenRouter cloud models, not local
         esac
         if [[ "$val" == *":"* ]] && [[ "$val" != /* ]] && [[ "$val" != *"/"* ]]; then
             register_model "$val" "Used by variable: $var"
