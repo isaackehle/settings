@@ -175,8 +175,10 @@ fi
 
 while read -r installed; do
     [[ -z "$installed" ]] && continue
-    if grep -q "^${installed}$" "$REQUIRED_MODELS_FILE"; then
-        reason=$(grep "^${installed}|" "$REASON_MAP_FILE" | cut -d'|' -f2 | head -n 1)
+    # Treat :latest as equivalent to tagless (e.g. nomic-embed-text:latest ≈ nomic-embed-text)
+    _match="${installed%:latest}"
+    if grep -q "^${_match}$" "$REQUIRED_MODELS_FILE"; then
+        reason=$(grep "^${_match}|" "$REASON_MAP_FILE" | cut -d'|' -f2 | head -n 1 || true)
         REQUIRED_LINES+=("$(printf "%-35s %s" "$installed" "$reason")")
     else
         OBSOLETE_MODELS+=("$installed")
