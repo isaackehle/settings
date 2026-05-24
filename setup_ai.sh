@@ -323,17 +323,36 @@ deploy_configs() {
 
     # --- Ollama Keep Alive Selection ---
     if [ -f "$HOME/.profile.d/_ollama" ]; then
+      # Read current value for default
+      local _current_keep
+      _current_keep=$(grep -o 'OLLAMA_KEEP_ALIVE="[^"]*"' "$HOME/.profile.d/_ollama" | cut -d'"' -f2)
+      _current_keep="${_current_keep:-5m}"
       echo ""
       echo "  Ollama Memory Management"
       echo "  ------------------------"
-      read -p "  Keep models warm in RAM? (0 = immediate unload, 5m = keep for 5 mins) [5m]: " KEEP_ALIVE
-      KEEP_ALIVE="${KEEP_ALIVE:-5m}"
+      read -p "  Keep models warm in RAM? (0 = immediate unload, 5m = keep for 5 mins) [$_current_keep]: " KEEP_ALIVE
+      KEEP_ALIVE="${KEEP_ALIVE:-$_current_keep}"
       sed -i '' "s/export OLLAMA_KEEP_ALIVE=\".*\"/export OLLAMA_KEEP_ALIVE=\"$KEEP_ALIVE\"/" "$HOME/.profile.d/_ollama"
       echo "    Set OLLAMA_KEEP_ALIVE to $KEEP_ALIVE"
     fi
   fi
 
   log_status "AI tool configs deployed."
+
+  # --- Offer to prune old Ollama models ---
+  echo ""
+  echo "  Ollama Model Management"
+  echo "  -----------------------"
+  read -p "  Prune obsolete Ollama models? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local _pruner="${SETTINGS_BASE}/2-ai/profiles/prune_models.sh"
+    if [ -f "$_pruner" ]; then
+      bash "$_pruner" "${_profile}"
+    else
+      echo "  (skip) pruner script not found at $_pruner"
+    fi
+  fi
 }
 
 # Function to backup existing configurations
