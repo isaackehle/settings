@@ -89,6 +89,10 @@ REQFILE="$HOME/.ollama/required-models.txt"
 if [[ -f "$REQFILE" ]]; then
     echo "Using authoritative list: $REQFILE"
     while IFS= read -r line; do
+        # Stop at cloud section — only LOCAL models are pruned
+        if [[ "$line" == *"CLOUD MODELS"* ]]; then
+            break
+        fi
         line="${line%%#*}"          # strip comments
         line="$(echo "$line" | xargs)"  # trim whitespace
         [[ -z "$line" ]] && continue
