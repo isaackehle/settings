@@ -1,0 +1,7 @@
+# Inbox Bot Destinations
+# Deployed from settings repo. Edit DESTINATIONS to add/remove save locations.
+export DESTINATIONS='{
+  "incoming": "~/vault/incoming",
+  "links": "~/code/isaackehle/settings/saved-links",
+  "notes": "~/vault/incoming"
+}'

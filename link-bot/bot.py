@@ -48,6 +48,15 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
+# Auto-load ~/.env.local if present (secrets, not in repo)
+_env_local = Path.home() / ".env.local"
+if _env_local.exists():
+    for line in _env_local.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip())
+
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 ALLOWED_USER_ID = int(os.environ.get("ALLOWED_USER_ID", "0"))
 OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
