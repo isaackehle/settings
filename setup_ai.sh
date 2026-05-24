@@ -62,7 +62,7 @@ deploy_configs() {
 
   # --- MCP config (~/.mcp.json) ---
   print_step "MCP Servers"
-  read -p "Install Claude MCP servers? (y/n) " -n 1 -r
+  read -p "Install Claude MCP servers? (y/N) " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     local mcp_dest="$HOME/.mcp.json"
@@ -72,7 +72,7 @@ deploy_configs() {
 
     local do_install=true
     if [ -f "$mcp_dest" ]; then
-      read -p "  ~/.mcp.json already exists. Overwrite? (y/n) " -n 1 -r
+      read -p "  ~/.mcp.json already exists. Overwrite? (y/N) " -n 1 -r
       echo
       [[ ! $REPLY =~ ^[Yy]$ ]] && do_install=false
     fi
@@ -540,7 +540,7 @@ uninstall_infrastructure_component() {
     ollama)
       print_step "Uninstalling Ollama"
       if brew list ollama &>/dev/null; then
-        read -p "  Uninstall Ollama? (y/n) " -n 1 -r
+        read -p "  Uninstall Ollama? (y/N) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           brew uninstall ollama
@@ -554,7 +554,7 @@ uninstall_infrastructure_component() {
     openwebui)
       print_step "Stopping OpenWebUI"
       if docker ps -a | grep -q open-webui; then
-        read -p "  Stop and remove OpenWebUI container? (y/n) " -n 1 -r
+        read -p "  Stop and remove OpenWebUI container? (y/N) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           docker stop open-webui 2>/dev/null || true
@@ -659,7 +659,7 @@ select_infrastructure() {
   # Handle uninstalls if changing infrastructure
   if [[ -n "$current" && "$current" != "$desired" ]]; then
     echo ""
-    read -p "  Change infrastructure? This may uninstall unused components. Continue? (y/n) " -n 1 -r
+    read -p "  Change infrastructure? This may uninstall unused components. Continue? (y/N) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
       log_info "Cancelled."
