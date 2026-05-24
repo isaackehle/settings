@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Link Bot — Telegram bot for article summarization via local LLM.
+Inbox Bot — Saves anything (links, notes, code) to your configured destinations.
 
 Flow:
-  1. User forwards a message with a URL to the bot
-  2. Bot fetches and extracts article content
-  3. Bot sends content to local Ollama model for summarization
-  4. Bot saves summary as markdown to the settings repo
-  5. Bot replies with a preview
+  1. Forward/send a message to the bot (URL, note, code snippet)
+  2. Bot processes the content (fetches URLs, formats code, etc.)
+  3. Bot asks "Where should this go?" with inline keyboard buttons
+  4. Tap a destination — bot saves the file and confirms
+
+Destinations are configured in config.local.env as a JSON map.
+Default: "incoming" — your catch-all inbox.
 
 Run:
   pip install -r requirements.txt
@@ -19,7 +21,7 @@ As launchd service on Mac mini:
   launchctl load ~/Library/LaunchAgents/com.user.link-bot.plist
 """
 
-import asyncio
+import json
 import logging
 import os
 import re
@@ -30,8 +32,14 @@ from urllib.parse import urlparse
 
 import httpx
 import trafilatura
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    MessageHandler,
+    filters,
+)
 
 # ── Config ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -46,7 +54,25 @@ OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen3:14b")
 OR_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OR_MODEL = os.environ.get("OPENROUTER_MODEL", "openai/gpt-4o-mini")
-OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", str(Path.home() / "code" / "isaackehle" / "settings" / "saved-links")))
+
+# Destinations: JSON map of short_name -> absolute_path
+# Example: {"incoming":"/Users/isaac/inbox","links":"/Users/isaac/code/.../saved-links"}
+DESTINATIONS_RAW = os.environ.get("DESTINATIONS", "")
+try:
+    DESTINATIONS = json.loads(DESTINATIONS_RAW) if DESTINATIONS_RAW else {}
+except json.JSONDecodeError as e:
+    log.error("DESTINATIONS is not valid JSON: %s", e)
+    DESTINATIONS = {}
+
+# Fallback if no destinations configured
+BASE = Path.home() / "code" / "isaackehle" / "settings"
+if not DESTINATIONS:
+    DESTINATIONS = {
+        "incoming": str(BASE / "incoming"),
+        "links": str(BASE / "saved-links"),
+    }
+
+DEST_KEYS = list(DESTINATIONS.keys())
 
 if not BOT_TOKEN or not ALLOWED_USER_ID:
     log.error("BOT_TOKEN and ALLOWED_USER_ID must be set in environment or config.local.env")
@@ -55,12 +81,16 @@ if not BOT_TOKEN or not ALLOWED_USER_ID:
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
 def extract_urls(text: str) -> list[str]:
-    """Extract all URLs from a message."""
     return re.findall(r"https?://[^\s]+", text)
 
 
+def extract_code_blocks(text: str) -> list[tuple[str, str]]:
+    """Extract ```code blocks```. Returns list of (language, code)."""
+    blocks = re.findall(r"```(\w*)\n(.*?)```", text, re.DOTALL)
+    return [(lang.strip() or "text", code.strip()) for lang, code in blocks]
+
+
 def slugify(title: str) -> str:
-    """Create a safe filesystem slug from a title."""
     slug = re.sub(r"[^\w\s-]", "", title.lower())
     slug = re.sub(r"[-\s]+", "-", slug).strip("-")
     return slug[:80]
@@ -81,14 +111,12 @@ async def fetch_article(url: str) -> tuple[str | None, str | None]:
         return None, None
 
     try:
+        meta = trafilatura.bare_extraction(html, include_comments=False)
         extracted = trafilatura.extract(html, include_comments=False, include_tables=False,
-                                         include_images=False, output_format="txt",
-                                         favor_recall=True)
-        title = trafilatura.extract(html, output_format="txt", favor_recall=True)
+                                        include_images=False, output_format="txt",
+                                        favor_recall=True)
         if not extracted:
             return None, None
-        # Get title from metadata or first line
-        meta = trafilatura.bare_extraction(html, include_comments=False)
         doc_title = meta.title if meta and meta.title else (extracted.split("\n")[0] if extracted else "Untitled")
     except Exception as e:
         log.warning("extraction failed for %s: %s", url, e)
@@ -98,7 +126,6 @@ async def fetch_article(url: str) -> tuple[str | None, str | None]:
 
 
 async def summarize_via_ollama(title: str, text: str) -> str:
-    """Send article text to local Ollama model for summarization."""
     prompt = f"""You are a research assistant. Summarize the following article concisely.
 
 Article title: {title}
@@ -114,40 +141,31 @@ Keep the summary under 200 words. Write in plain English.
 Article:
 {text[:8000]}
 """
-
     payload = {
         "model": OLLAMA_MODEL,
         "prompt": prompt,
         "stream": False,
-        "options": {
-            "temperature": 0.3,
-            "num_predict": 500,
-        },
+        "options": {"temperature": 0.3, "num_predict": 500},
     }
-
     try:
         async with httpx.AsyncClient(timeout=120.0) as client:
             resp = await client.post(f"{OLLAMA_HOST}/api/generate", json=payload)
             resp.raise_for_status()
-            data = resp.json()
-            return data.get("response", "").strip()
+            return resp.json().get("response", "").strip()
     except Exception as e:
         log.warning("Ollama summarization failed: %s", e)
         return ""
 
 
 async def summarize_via_openrouter(title: str, text: str) -> str:
-    """Fallback: summarize via OpenRouter API."""
     if not OR_KEY:
         return ""
-
     prompt = f"""Summarize the following article concisely. Focus on: what it's about, why it matters for developers, key tools/models mentioned, and actionable takeaways. Keep it under 200 words.
 
 Title: {title}
 
 Article:
 {text[:8000]}"""
-
     payload = {
         "model": OR_MODEL,
         "messages": [
@@ -157,43 +175,25 @@ Article:
         "temperature": 0.3,
         "max_tokens": 500,
     }
-
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
             resp = await client.post(
                 "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {OR_KEY}",
-                    "Content-Type": "application/json",
-                },
+                headers={"Authorization": f"Bearer {OR_KEY}", "Content-Type": "application/json"},
                 json=payload,
             )
             resp.raise_for_status()
-            data = resp.json()
-            return data["choices"][0]["message"]["content"].strip()
+            return resp.json()["choices"][0]["message"]["content"].strip()
     except Exception as e:
         log.warning("OpenRouter summarization failed: %s", e)
         return ""
 
 
-def one_liner(summary: str) -> str:
-    """Extract the first sentence for a TL;DR."""
-    lines = summary.strip().split("\n")
-    if lines:
-        first = lines[0].strip()
-        if len(first) > 200:
-            first = first[:197] + "..."
-        return first
-    return summary
-
-
-def generate_markdown(url: str, title: str, summary: str, tldr: str) -> str:
-    """Generate a markdown file for the saved link."""
+def generate_link_markdown(url: str, title: str, summary: str, tldr: str) -> str:
+    """Markdown for a saved link/article."""
     date = datetime.now().strftime("%Y-%m-%d")
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     domain = urlparse(url).netloc
-
-    # Extract tags from summary
     tag_keywords = {
         "ai": r"\bai\b|artificial intelligence|llm|language model|transformer",
         "tooling": r"\btool\b|framework|library|cli|terminal|dev tool",
@@ -201,9 +201,6 @@ def generate_markdown(url: str, title: str, summary: str, tldr: str) -> str:
         "reasoning": r"\breasoning?\b|think|chain.of.thought",
         "open-source": r"\bopen.?source\b|github|repository",
         "ml": r"\bmachine learning\b|deep learning|training|fine.?tune",
-        "web": r"\bweb\b|browser|frontend|css|html|javascript",
-        "security": r"\bsecurity\b|privacy|encryption|auth",
-        "devops": r"\bdevops\b|deploy|infrastructure|docker|kubernetes",
         "research": r"\bresearch\b|paper|arxiv|publication|study",
     }
     tags = []
@@ -213,8 +210,6 @@ def generate_markdown(url: str, title: str, summary: str, tldr: str) -> str:
             tags.append(tag)
     if not tags:
         tags = ["link"]
-
-    tag_line = ", ".join(f"#{t}" for t in sorted(tags))
 
     return f"""---
 date: {date}
@@ -236,24 +231,101 @@ _Saved via link-bot on {timestamp}_
 """
 
 
-def save_file(content: str, title: str, url: str) -> Path:
-    """Save markdown to disk. Returns the file path."""
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
+def generate_note_markdown(text: str) -> str:
+    """Markdown for a plain note."""
     date = datetime.now().strftime("%Y-%m-%d")
-    slug = slugify(title) or slugify(url.split("/")[-1]) or "untitled"
-    filename = f"{date}-{slug}.md"
-    filepath = OUTPUT_DIR / filename
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    # First line as title
+    lines = text.strip().split("\n")
+    title = lines[0].strip() if lines else "Note"
+    if len(title) > 80:
+        title = title[:77] + "..."
 
-    # Avoid overwrites by appending a counter if duplicate
+    return f"""---
+date: {date}
+tags: [note]
+---
+
+# {title}
+
+{text}
+
+---
+_Saved via link-bot on {timestamp}_
+"""
+
+
+def generate_code_markdown(code: str, language: str, context: str = "") -> str:
+    """Markdown for a code snippet."""
+    date = datetime.now().strftime("%Y-%m-%d")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    title = f"Code Snippet ({language})"
+    if context:
+        title = context.strip().split("\n")[0][:60]
+
+    return f"""---
+date: {date}
+tags: [code, {language}]
+---
+
+# {title}
+
+```{language}
+{code}
+```
+
+---
+_Saved via link-bot on {timestamp}_
+"""
+
+
+def save_file(content: str, title: str, destination: Path) -> Path:
+    """Save content to destination directory. Returns the file path."""
+    destination.mkdir(parents=True, exist_ok=True)
+    date = datetime.now().strftime("%Y-%m-%d")
+    slug = slugify(title) or "untitled"
+    filename = f"{date}-{slug}.md"
+    filepath = destination / filename
     counter = 1
     while filepath.exists():
-        filepath = OUTPUT_DIR / f"{date}-{slug}-{counter}.md"
+        filepath = destination / f"{date}-{slug}-{counter}.md"
         counter += 1
-
     filepath.write_text(content, encoding="utf-8")
     log.info("saved: %s", filepath)
     return filepath
+
+
+def make_dest_keyboard() -> InlineKeyboardMarkup:
+    """Build inline keyboard with destination buttons."""
+    buttons = []
+    row = []
+    for i, key in enumerate(DEST_KEYS):
+        label = key.capitalize()
+        if key == "incoming":
+            label += " \u2b07"  # down arrow = default
+        row.append(InlineKeyboardButton(label, callback_data=f"dest|{key}"))
+        if len(row) >= 3 or i == len(DEST_KEYS) - 1:
+            buttons.append(row)
+            row = []
+    return InlineKeyboardMarkup(buttons)
+
+
+# ── Content classification ──────────────────────────────────────────────────
+
+def classify_message(text: str) -> dict:
+    """
+    Classify message content and build save payload.
+    Returns dict with keys: type, title, content, preview
+    """
+    code_blocks = extract_code_blocks(text)
+    urls = extract_urls(text)
+
+    if urls:
+        return {"type": "url", "urls": urls, "raw_text": text, "code_blocks": code_blocks}
+    elif code_blocks:
+        return {"type": "code", "code_blocks": code_blocks, "raw_text": text}
+    else:
+        return {"type": "note", "raw_text": text}
 
 
 # ── Bot handlers ────────────────────────────────────────────────────────────
@@ -262,70 +334,134 @@ async def start(update: Update, _context):
     if update.effective_user and update.effective_user.id != ALLOWED_USER_ID:
         await update.message.reply_text("Not authorized.")
         return
+
+    dest_list = "\n".join(f"  /{k}  \u2192  {v}" for k, v in DESTINATIONS.items())
     await update.message.reply_text(
-        "Link Bot active. Forward me a message with a URL and I'll "
-        "fetch, summarize, and save it."
+        f"Inbox Bot active.\n\n"
+        f"Send me anything (link, note, code snippet) and I'll save it.\n"
+        f"I'll ask where to put it — or use /<destination> to skip the prompt.\n\n"
+        f"**Destinations:**\n{dest_list}",
     )
 
 
-async def handle_message(update: Update, _context):
+async def handle_message(update: Update, context):
     user_id = update.effective_user.id if update.effective_user else 0
     if user_id != ALLOWED_USER_ID:
-        return  # silently ignore
+        return
 
     text = update.message.text or update.message.caption or ""
     if not text:
-        await update.message.reply_text("Send me a message with a URL.")
+        await update.message.reply_text("Send me a message with text, a link, or code.")
         return
 
-    urls = extract_urls(text)
-    if not urls:
-        await update.message.reply_text("No URLs found in that message.")
+    msg = await update.message.reply_text("Processing...")
+
+    # Classify and process
+    info = classify_message(text)
+
+    if info["type"] == "url":
+        # Process first URL, summarize
+        url = info["urls"][0]
+        await msg.edit_text(f"Fetching {url}...")
+        title, article_text = await fetch_article(url)
+        if not article_text:
+            await msg.edit_text(f"Could not extract content from {url}. Saving raw link.")
+            content = generate_link_markdown(url, url, "Content could not be extracted.", url)
+            doc_title = url.split("/")[-1].replace("-", " ").title() or "Link"
+        else:
+            word_count = len(article_text.split())
+            await msg.edit_text(f"Extracted ~{word_count} words. Summarizing...")
+            summary = await summarize_via_ollama(title or "Untitled", article_text)
+            if not summary and OR_KEY:
+                summary = await summarize_via_openrouter(title or "Untitled", article_text)
+            if not summary:
+                summary = "Summary unavailable."
+            tldr = (summary.split("\n")[0] if summary else "")[:200]
+            doc_title = title or url.split("/")[-1].replace("-", " ").title()
+            content = generate_link_markdown(url, doc_title, summary, tldr)
+    elif info["type"] == "code":
+        lang, code = info["code_blocks"][0]
+        content = generate_code_markdown(code, lang, info["raw_text"])
+        doc_title = f"Code Snippet ({lang})"
+        await msg.edit_text(f"Code snippet ({lang}) ready.")
+    else:
+        content = generate_note_markdown(info["raw_text"])
+        lines = info["raw_text"].strip().split("\n")
+        doc_title = lines[0][:80] if lines else "Note"
+        await msg.edit_text("Note ready.")
+
+    # Store pending content in user_data for the callback handler
+    context.user_data["pending_save"] = {
+        "content": content,
+        "title": doc_title,
+    }
+
+    await msg.edit_text(
+        f"**{doc_title}**\n\nWhere should I save this?",
+        reply_markup=make_dest_keyboard(),
+    )
+
+
+async def handle_destination(update: Update, context):
+    """Callback handler for destination button taps."""
+    query = update.callback_query
+    await query.answer()
+
+    dest_key = query.data.split("|", 1)[1]
+    dest_path = DESTINATIONS.get(dest_key)
+
+    if not dest_path:
+        await query.edit_message_text(f"Unknown destination: {dest_key}")
         return
 
-    await update.message.reply_text(f"Found {len(urls)} URL{'s' if len(urls) > 1 else ''}. Processing...")
-
-    for url in urls:
-        try:
-            await process_url(update, url)
-        except Exception as e:
-            log.exception("error processing %s", url)
-            await update.message.reply_text(f"Failed to process {url}: {e}")
-
-
-async def process_url(update: Update, url: str):
-    """Fetch, summarize, save, and reply for a single URL."""
-    msg = await update.message.reply_text(f"Fetching {url}...")
-
-    # 1. Fetch article
-    title, text = await fetch_article(url)
-    if not text:
-        await msg.edit_text(f"Could not extract content from {url}")
+    pending = context.user_data.get("pending_save")
+    if not pending:
+        await query.edit_message_text("Nothing to save. Send me something first.")
         return
 
-    word_count = len(text.split())
-    await msg.edit_text(f"Extracted ~{word_count} words. Summarizing...")
+    dest_dir = Path(dest_path).expanduser()
+    filepath = save_file(pending["content"], pending["title"], dest_dir)
+    relpath = str(filepath.relative_to(Path.home())) if filepath.is_relative_to(Path.home()) else str(filepath)
 
-    # 2. Summarize via Ollama (fallback to OpenRouter)
-    summary = await summarize_via_ollama(title or "Untitled", text)
-    if not summary and OR_KEY:
-        summary = await summarize_via_openrouter(title or "Untitled", text)
-    if not summary:
-        summary = "Summary unavailable."
+    await query.edit_message_text(
+        f"Saved \u2192 `~/{relpath}`",
+        disable_web_page_preview=True,
+    )
+    context.user_data.pop("pending_save", None)
 
-    tldr = one_liner(summary)
 
-    # 3. Generate markdown
-    doc_title = title or url.split("/")[-1].replace("-", " ").title()
-    content = generate_markdown(url, doc_title, summary, tldr)
+async def handle_dest_command(update: Update, context):
+    """Handle /<destination> commands to skip the prompt."""
+    user_id = update.effective_user.id if update.effective_user else 0
+    if user_id != ALLOWED_USER_ID:
+        return
 
-    # 4. Save
-    filepath = save_file(content, doc_title, url)
-    relpath = filepath.relative_to(filepath.anchor).as_posix()
+    dest_key = update.message.text.lstrip("/").strip()
+    if dest_key not in DESTINATIONS:
+        available = ", ".join(f"/{k}" for k in DEST_KEYS)
+        await update.message.reply_text(f"Unknown destination. Available: {available}")
+        return
 
-    # 5. Reply
-    preview = f"**{doc_title}**\n\nTL;DR: {tldr}\n\nSaved: `{relpath}`"
-    await msg.edit_text(preview, disable_web_page_preview=True)
+    # Need pending content — if none, ask user to send something first
+    if not context.user_data.get("pending_save"):
+        await update.message.reply_text("Nothing pending. Send me a message with content first, then use the destination command.")
+        return
+
+    # Simulate callback
+    query = update.callback_query
+    # We don't have a real callback query, so create a synthetic one
+    # Actually, let's just handle it directly
+    dest_path = DESTINATIONS.get(dest_key)
+    pending = context.user_data.get("pending_save")
+    dest_dir = Path(dest_path).expanduser()
+    filepath = save_file(pending["content"], pending["title"], dest_dir)
+    relpath = str(filepath.relative_to(Path.home())) if filepath.is_relative_to(Path.home()) else str(filepath)
+
+    await update.message.reply_text(
+        f"Saved to {dest_key} \u2192 `~/{relpath}`",
+        disable_web_page_preview=True,
+    )
+    context.user_data.pop("pending_save", None)
 
 
 # ── Main ────────────────────────────────────────────────────────────────────
@@ -335,8 +471,13 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(CallbackQueryHandler(handle_destination, pattern=r"^dest\|"))
 
-    log.info("starting link-bot polling...")
+    # Add command handlers for each destination
+    for key in DEST_KEYS:
+        app.add_handler(CommandHandler(key, handle_dest_command))
+
+    log.info("starting inbox bot with destinations: %s", DEST_KEYS)
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 

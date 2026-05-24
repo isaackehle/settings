@@ -25,8 +25,8 @@
         <string>http://localhost:11434</string>
         <key>OLLAMA_MODEL</key>
         <string>qwen3:14b</string>
-        <key>OUTPUT_DIR</key>
-        <string>/Users/isaac/code/isaackehle/settings/saved-links</string>
+        <key>DESTINATIONS</key>
+        <string>{"incoming":"/Users/isaac/code/isaackehle/settings/incoming","links":"/Users/isaac/code/isaackehle/settings/saved-links"}</string>
     </dict>
 
     <key>RunAtLoad</key>
