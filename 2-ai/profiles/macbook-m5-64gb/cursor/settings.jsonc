@@ -2,21 +2,20 @@
   // Cursor (cursor.sh) — VS Code-compatible settings snippet
   // MERGE INTO: ~/Library/Application Support/Cursor/User/settings.json
   //
-  // To use LiteLLM proxy in Cursor:
+  // To use Ollama directly in Cursor:
   //   1. Open Cursor Settings (Cmd+Shift+J) → Models
-  //   2. Under "OpenAI API Key", enter: sk-local
-  //   3. Enable "Override OpenAI Base URL" → http://localhost:4000/v1
-  //   4. Add custom models (click + next to model list):
-  //        qwen3-coder-next-80b-q4-16k
-  //        qwen3.6-35b-32k
-  //        qwen3.5-27b-q8-32k
-  //        deepseek-r1-tools-32b-128k
-  //        qwen3-4b-q8-256k
-  //   5. Set default model to: qwen3-coder-next-80b-q4-16k
+  //   2. Under "Ollama", set base URL to http://localhost:11434
+  //   3. Add custom models (click + next to model list):
+  //        qwen3-coder-next-80b:q4
+  //        gemma4:31b
+  //        qwen3.5-27b:q5
+  //        deepseek-r1-tools:32b
+  //        qwen3:4b
+  //   4. Set default model to: qwen3-coder-next-80b:q4
   //
   // Cloud fallback:
-  //   Use Cursor's native claude-sonnet-4-5 or set OpenRouter key
-  //   and model anthropic/claude-sonnet-4-6
+  //   Use Cursor's native claude-sonnet-4-6 or set OpenRouter key
+  //   and model kimi-k2.6
 
   "cursor.general.enableShadowWorkspace": false,
   "cursor.chat.smoothStreaming": true,

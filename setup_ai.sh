@@ -38,7 +38,6 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/groq.sh"
 . "${SETTINGS_BASE}/2-ai/install-models.sh"
 . "${SETTINGS_BASE}/2-ai/kilocode.sh"
-. "${SETTINGS_BASE}/2-ai/litellm.sh"
 . "${SETTINGS_BASE}/2-ai/lmstudio.sh"
 . "${SETTINGS_BASE}/2-ai/ollama.sh"
 . "${SETTINGS_BASE}/2-ai/olol.sh"
@@ -47,7 +46,7 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/opencode.sh"
 . "${SETTINGS_BASE}/2-ai/openwebui.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter.sh"
-. "${SETTINGS_BASE}/2-ai/roocode.sh"
+. "${SETTINGS_BASE}/2-ai/zoocode.sh"
 . "${SETTINGS_BASE}/2-ai/sublime.sh"
 . "${SETTINGS_BASE}/2-ai/tabby.sh"
 . "${SETTINGS_BASE}/2-ai/vscode.sh"
@@ -119,6 +118,63 @@ deploy_configs() {
     log_warning "  models.sh not found at $_models_sh — configs may use stale values"
   fi
 
+  # Build known model list for validation
+  local _known_models=()
+  _collect_models() {
+    local _var_name="$1"
+    local _val
+    if [[ "$(declare -p "$_var_name" 2>/dev/null)" =~ "declare -A" ]]; then
+      # Associative array — iterate values
+      eval "for _val in \"\${$_var_name[@]}\"; do _known_models+=(\"\$_val\"); done"
+    else
+      # Scalar
+      local _tmp="${!_var_name:-}"
+      [ -n "$_tmp" ] && _known_models+=("$_tmp")
+    fi
+  }
+  _collect_models "CLINE_MODEL"
+  _collect_models "CLINE_MODEL_CLOUD"
+  _collect_models "ZOOCODE_MODEL"
+  _collect_models "ZOOCODE_MODEL_CLOUD"
+  _collect_models "KILOCODE_MODEL"
+  _collect_models "KILOCODE_MODEL_CLOUD"
+  _collect_models "AIDER_MODEL"
+  _collect_models "AIDER_WEAK_MODEL"
+  _collect_models "AIDER_EDITOR_MODEL"
+  _collect_models "ZED_MODEL"
+  _collect_models "CURSOR_MODEL"
+  _collect_models "CURSOR_MODEL_CLOUD"
+  [ -n "${OPENCODE_AGENTS[*]:-}" ] && _collect_models "OPENCODE_AGENTS"
+  [ -n "${CONTINUE_ROLES[*]:-}" ]   && _collect_models "CONTINUE_ROLES"
+  [ -n "${CLAUDE_CODE[*]:-}" ]       && _collect_models "CLAUDE_CODE"
+  _collect_models "ROOCODE_MODEL"
+  _collect_models "ROOCODE_MODEL_CLOUD"
+
+  # Validate: check that model references in a config file match known models
+  _validate_config_models() {
+    local _file="$1"
+    local _label="$2"
+    [ ! -f "$_file" ] && return 0
+    local _found _issues=0
+    # Extract model-like strings from config (values following "model", colon-separated)
+    for _found in $(rg -o '[a-zA-Z0-9._-]+:[a-zA-Z0-9._-]+' "$_file" 2>/dev/null); do
+      # Strip context suffix (e.g. :q4-64k → :q4)
+      local _base="${_found%%-*}"
+      local _matched=false
+      for _known in "${_known_models[@]}"; do
+        if [[ "$_found" == "$_known" || "$_found" == "${_known}"* ]]; then
+          _matched=true
+          break
+        fi
+      done
+      if [ "$_matched" = false ]; then
+        log_warning "  $_label: unstaged model '$_found' not in models.sh"
+        _issues=$((_issues + 1))
+      fi
+    done
+    return $_issues
+  }
+
   [ -L "$HOME/.groq" ] && rm "$HOME/.groq"
   mkdir -p "$HOME/.groq"
   copy_file "${_profdir}/groq/local-settings.json" "$HOME/.groq/local-settings.json"
@@ -126,61 +182,110 @@ deploy_configs() {
   [ -L "$HOME/.gemini" ] && rm "$HOME/.gemini"
   mkdir -p "$HOME/.gemini"
   copy_file "${_profdir}/gemini/settings.json" "$HOME/.gemini/settings.json"
+  _validate_config_models "$HOME/.gemini/settings.json" "Gemini"
   copy_file "${_profdir}/gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
   copy_file "${SETTINGS_BASE}/2-ai/gemini-projects.json" "$HOME/.gemini/projects.json"
 
   [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
   mkdir -p "$HOME/.continue"
   copy_file "${_profdir}/continue/config.yaml" "$HOME/.continue/config.yaml"
+  _validate_config_models "$HOME/.continue/config.yaml" "Continue"
 
   [ -L "$HOME/.config/opencode" ] && rm "$HOME/.config/opencode"
   mkdir -p "$HOME/.config/opencode"
   copy_file "${_profdir}/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
+  _validate_config_models "$HOME/.config/opencode/opencode.jsonc" "OpenCode"
 
   [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
   mkdir -p "$HOME/.ollama"
   copy_file "${_profdir}/ollama/config.json" "$HOME/.ollama/config.json"
+  _validate_config_models "$HOME/.ollama/config.json" "Ollama"
 
   mkdir -p "$HOME/.config/crush"
   copy_file "${_profdir}/crush/crush.json" "$HOME/.config/crush/crush.json"
+  _validate_config_models "$HOME/.config/crush/crush.json" "Crush"
 
   mkdir -p "$HOME/.config/grok"
   copy_file "${_profdir}/grok/grok.json" "$HOME/.config/grok/grok.json"
+  _validate_config_models "$HOME/.config/grok/grok.json" "Grok"
 
-  # --- Cline (VS Code extension) ---
-  local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
-  local cline_src="${_profdir}/cline/settings.jsonc"
-  if [ -f "$cline_src" ]; then
+  # --- Claude Code CLI (~/.claude/settings.json) ---
+  mkdir -p "$HOME/.claude"
+  copy_file "${_profdir}/claude/settings.json" "$HOME/.claude/settings.json"
+  _validate_config_models "$HOME/.claude/settings.json" "Claude Code"
+
+  # --- Helper: merge VS Code extension settings into settings.json ---
+  _merge_vscode_extension() {
+    local prefix="$1"    # e.g. "cline" or "zoo-code" or "roo-cline"
+    local src_file="$2"  # path to settings.jsonc snippet
+    local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
+
+    if [ ! -f "$src_file" ]; then
+      return 0
+    fi
+
+    # Strip comments/empty lines and extract inner block
+    local ext_block
+    ext_block=$(sed '/^\s*\/\//d; /^\s*$/d' "$src_file" | sed '1d;$d' | sed 's/^  //')
+
+    # Remove existing settings with this prefix from VS Code settings
     if [ -f "$vscode_settings" ]; then
       local tmp_settings
-      tmp_settings=$(awk '/"cline\./ {skip=1} skip && /^[[:space:]]*}[[:space:]]*,?$/ {skip=0; next} !skip {print} {skip=0}' "$vscode_settings")
+      tmp_settings=$(awk -v pfx="$prefix" 'index($0, "\"" pfx ".") {skip=1} skip && /^[[:space:]]*}[[:space:]]*,?$/ {skip=0; next} !skip {print} {skip=0}' "$vscode_settings")
       echo "$tmp_settings" > "$vscode_settings"
     fi
-    local cline_block
-    cline_block=$(sed '/^\s*\/\//d; /^\s*$/d' "$cline_src" | sed '1d;$d' | sed 's/^  //')
+
+    # Append extension block
     if [ -f "$vscode_settings" ] && [ -s "$vscode_settings" ]; then
       sed -i '' '$ d' "$vscode_settings"
       echo "," >> "$vscode_settings"
-      echo "$cline_block" >> "$vscode_settings"
+      echo "$ext_block" >> "$vscode_settings"
       echo "}" >> "$vscode_settings"
     else
-      sed 's/\/\/.*$//' "$cline_src" | sed '/^\s*$/d' > "$vscode_settings"
+      sed 's/\/\/.*$//' "$src_file" | sed '/^\s*$/d' > "$vscode_settings"
     fi
-    log_status "Cline settings merged into $vscode_settings"
-  fi
+    log_status "${prefix} settings merged into $vscode_settings"
+  }
 
-  mkdir -p "$HOME/.config/litellm"
-  copy_file "${SETTINGS_BASE}/2-ai/litellm/.env" "$HOME/.config/litellm/.env"
-  copy_file "${_profdir}/litellm/litellm.yaml" "$HOME/.config/litellm/config.yaml"
+  # --- Cline ---
+  _merge_vscode_extension "cline" "${_profdir}/cline/settings.jsonc"
+
+  # --- Zoo Code (m5-64gb) / Roo Code (other profiles) ---
+  _merge_vscode_extension "zoo-code" "${_profdir}/zoocode/settings.jsonc"
+  _merge_vscode_extension "roo-cline" "${_profdir}/roocode/settings.jsonc"
+
+
 
   mkdir -p "$HOME/.config/zed"
   copy_file "${_profdir}/zed/settings.json" "$HOME/.config/zed/settings.json"
+  _validate_config_models "$HOME/.config/zed/settings.json" "Zed"
 
   mkdir -p "$HOME/.aider"
   copy_file "${_profdir}/aider/aider.conf.yml" "$HOME/.aider.conf.yml"
+  _validate_config_models "$HOME/.aider.conf.yml" "Aider"
 
   mkdir -p "$HOME/.kilo"
   copy_file "${_profdir}/kilocode/kilo.jsonc" "$HOME/.kilo/kilo.jsonc"
+  _validate_config_models "$HOME/.kilo/kilo.jsonc" "Kilo Code"
+
+  # --- Cursor (separate IDE from VS Code) ---
+  local cursor_settings="$HOME/Library/Application Support/Cursor/User/settings.json"
+  local cursor_src="${_profdir}/cursor/settings.jsonc"
+  if [ -f "$cursor_src" ]; then
+    mkdir -p "$(dirname "$cursor_settings")"
+    # Strip comments and merge into Cursor's settings.json
+    local cursor_block
+    cursor_block=$(sed '/^\s*\/\//d; /^\s*$/d' "$cursor_src" | sed '1d;$d' | sed 's/^  //')
+    if [ -f "$cursor_settings" ] && [ -s "$cursor_settings" ]; then
+      sed -i '' '$ d' "$cursor_settings"
+      echo "," >> "$cursor_settings"
+      echo "$cursor_block" >> "$cursor_settings"
+      echo "}" >> "$cursor_settings"
+    else
+      sed 's/\/\/.*$//' "$cursor_src" | sed '/^\s*$/d' > "$cursor_settings"
+    fi
+    log_status "Cursor settings merged into $cursor_settings"
+  fi
 
   # --- IDE selection ---
   print_step "IDE Selection"
@@ -240,7 +345,7 @@ backup_existing_configs() {
   backup_claude
   backup_grok
   backup_olol
-  backup_litellm
+
   backup_kilocode
   log_status "All existing configurations backed up successfully"
 }
@@ -254,7 +359,7 @@ restore_configs() {
   restore_claude
   restore_grok
   restore_olol
-  restore_litellm
+
   restore_kilocode
   log_status "All configurations restored successfully"
 }
@@ -263,7 +368,7 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_litellm verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_roocode verify_kilocode verify_zed verify_tabby; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby; do
     local label="${check#verify_}"
     if $check; then
       verification_results="$verification_results ✓ $label - OK\n"
@@ -286,9 +391,9 @@ verify_installations() {
 # ============================================================================
 
 declare -A TOOL_GROUPS=(
-  ["infrastructure"]="ollama openrouter litellm openwebui"
+  ["infrastructure"]="ollama openrouter openwebui"
   ["terminal-agents"]="claude cline opencode crush aider codex gemini grok"
-  ["vscode-extensions"]="continue copilot roocode kilocode"
+  ["vscode-extensions"]="continue copilot kilocode zoocode"
   ["ides"]="windsurf cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
   ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
@@ -298,7 +403,6 @@ declare -A TOOL_GROUPS=(
 declare -A GROUP_SETUP_FUNCS=(
   ["ollama"]="setup_ollama"
   ["openrouter"]="setup_openrouter"
-  ["litellm"]="setup_litellm"
   ["openwebui"]="setup_openwebui"
   ["claude"]="setup_claude"
   ["cline"]="setup_cline"
@@ -310,7 +414,6 @@ declare -A GROUP_SETUP_FUNCS=(
   ["grok"]="setup_grok"
   ["continue"]="setup_continue"
   ["copilot"]="setup_github_copilot"
-  ["roocode"]="setup_roocode"
   ["kilocode"]="setup_kilocode"
   ["windsurf"]="setup_windsurf"
   ["cursor"]="setup_cursor"
@@ -318,13 +421,13 @@ declare -A GROUP_SETUP_FUNCS=(
   ["anythingllm"]="setup_anythingllm"
   ["tabby"]="setup_tabby"
   ["open-hands"]="setup_openhands"
+  ["zoocode"]="setup_zoocode"
 )
 
 # Verify functions map
 declare -A GROUP_VERIFY_FUNCS=(
   ["ollama"]="verify_ollama"
   ["openrouter"]="verify_openrouter"
-  ["litellm"]="verify_litellm"
   ["openwebui"]="verify_openwebui"
   ["claude"]="verify_claude_code"
   ["cline"]="verify_cline_cli"
@@ -336,7 +439,6 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["grok"]="verify_grok"
   ["continue"]="verify_continue"
   ["copilot"]="verify_github_copilot"
-  ["roocode"]="verify_roocode"
   ["kilocode"]="verify_kilocode"
   ["windsurf"]="verify_windsurf"
   ["cursor"]="verify_cursor"
@@ -344,11 +446,12 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["anythingllm"]="verify_anythingllm"
   ["tabby"]="verify_tabby"
   ["open-hands"]="verify_openhands"
+  ["zoocode"]="verify_zoocode"
 )
 
 # Display names for groups/tools
 declare -A DISPLAY_NAMES=(
-  ["infrastructure"]="Infrastructure (Ollama + LiteLLM + OpenWebUI)"
+  ["infrastructure"]="Infrastructure (Ollama + OpenRouter + OpenWebUI)"
   ["terminal-agents"]="Terminal Agents (Claude, OpenCode, Crush, etc.)"
   ["vscode-extensions"]="VS Code Extensions (Cline, Continue, Copilot, etc.)"
   ["ides"]="IDEs (Windsurf, Cursor, Zed)"
@@ -356,7 +459,6 @@ declare -A DISPLAY_NAMES=(
   ["all"]="All Tools"
   ["ollama"]="Ollama"
   ["openrouter"]="OpenRouter"
-  ["litellm"]="LiteLLM"
   ["openwebui"]="OpenWebUI"
   ["claude"]="Claude Code"
   ["cline"]="Cline"
@@ -368,7 +470,6 @@ declare -A DISPLAY_NAMES=(
   ["grok"]="Grok CLI"
   ["continue"]="Continue"
   ["copilot"]="GitHub Copilot"
-  ["roocode"]="Roo Code"
   ["kilocode"]="Kilo Code"
   ["windsurf"]="Windsurf"
   ["cursor"]="Cursor"
@@ -376,50 +477,31 @@ declare -A DISPLAY_NAMES=(
   ["anythingllm"]="AnythingLLM"
   ["tabby"]="Tabby"
   ["open-hands"]="OpenHands"
+  ["zoocode"]="Zoo Code"
 )
 
 # ============================================================================
 # INFRASTRUCTURE RECOMMENDATIONS
 # ============================================================================
 
-# Get recommended infrastructure components based on profile CLASS
+# All profiles get the same infrastructure stack — Ollama + OpenRouter + OpenWebUI.
+# The only difference between profiles is model selection (models.sh).
 get_recommended_infrastructure() {
-  local profile="${MACHINE_PROFILE:-unknown}"
-  local class
-  class=$(_profile_class "$profile")
-
-  case "$class" in
-    lightweight|server)
-      echo "ollama litellm"
-      ;;
-    medium)
-      echo "ollama litellm openrouter"
-      ;;
-    powerful|maximum)
-      echo "ollama litellm openrouter openwebui"
-      ;;
-    *)
-      echo "ollama litellm openrouter"
-      ;;
-  esac
+  echo "ollama openrouter openwebui"
 }
 
-# Get profile description for display
+# Get profile name for display
 get_profile_description() {
   local profile="${MACHINE_PROFILE:-unknown}"
-  local class
-  class=$(_profile_class "$profile")
   local name
   name=$(_profile_name "$profile")
-
-  echo "${name} (${class})"
+  echo "${name}"
 }
 
 # Check which infrastructure components are currently installed/running
 check_current_infrastructure() {
   local current=""
   verify_ollama 2>/dev/null && current="$current ollama"
-  verify_litellm 2>/dev/null && current="$current litellm"
   verify_openrouter 2>/dev/null && current="$current openrouter"
   verify_openwebui 2>/dev/null && current="$current openwebui"
   echo "${current# }"
@@ -443,20 +525,6 @@ uninstall_infrastructure_component() {
         fi
       else
         log_status "Ollama not installed via brew"
-      fi
-      ;;
-    litellm)
-      print_step "Uninstalling LiteLLM"
-      if uv tool list 2>/dev/null | grep -q "litellm"; then
-        read -p "  Uninstall LiteLLM? (y/n) " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          uv tool uninstall litellm
-          removed=true
-          log_status "LiteLLM uninstalled"
-        fi
-      else
-        log_status "LiteLLM not installed via uv"
       fi
       ;;
     openwebui)
@@ -526,36 +594,34 @@ select_infrastructure() {
   echo ""
   echo "  Choose infrastructure stack:"
   echo ""
-  echo "  1) Minimal      - Ollama only (local models)"
-  echo "  2) Local Proxy - Ollama + LiteLLM (unified local API)"
-  echo "  3) Cloud Fallback - Ollama + LiteLLM + OpenRouter"
-  echo "  4) Full Stack  - Ollama + LiteLLM + OpenRouter + OpenWebUI"
-  echo "  5) Custom      - Choose individual components"
+  echo "  1) Minimal         - Ollama only"
+  echo "  2) Cloud Fallback  - Ollama + OpenRouter"
+  echo "  3) Full Stack      - Ollama + OpenRouter + OpenWebUI"
+  echo "  4) Custom          - Choose individual components"
   echo ""
   echo "  Recommendation for your profile: $(echo $recommended | tr ' ' '+')"
   echo ""
 
-  printf "Select option [4]: "
+  printf "Select option [3]: "
   read -r choice
-  choice="${choice:-4}"
+  choice="${choice:-3}"
 
   local desired=""
   case "$choice" in
     1) desired="ollama" ;;
-    2) desired="ollama litellm" ;;
-    3) desired="ollama litellm openrouter" ;;
-    4) desired="ollama litellm openrouter openwebui" ;;
-    5)
+    2) desired="ollama openrouter" ;;
+    3) desired="ollama openrouter openwebui" ;;
+    4)
       echo ""
       echo "Select components (space-separated, enter to confirm):"
       echo "  ollama      - Local LLM server"
-      echo "  litellm    - Unified API proxy (port 4000)"
+
       echo "  openrouter - Cloud model fallback (requires API key)"
       echo "  openwebui  - Web UI (Docker)"
       echo ""
-      printf "Components [ollama litellm openrouter openwebui]: "
+      printf "Components [ollama openrouter openwebui]: "
       read -r desired
-      desired="${desired:-ollama litellm openrouter openwebui}"
+      desired="${desired:-ollama openrouter openwebui}"
       ;;
     *)
       log_error "Invalid option"
@@ -585,7 +651,7 @@ select_infrastructure() {
   for comp in $desired; do
     case "$comp" in
       ollama)     setup_ollama ;;
-      litellm)    setup_litellm ;;
+
       openrouter) setup_openrouter ;;
       openwebui)  setup_openwebui ;;
     esac
@@ -673,11 +739,11 @@ _run_one() {
   setup:olol) setup_olol ;;
   setup:anythingllm) setup_anythingllm ;;
   setup:lmstudio) setup_lmstudio ;;
-  setup:litellm) setup_litellm ;;
+
   setup:open-hands) setup_openhands ;;
   setup:openrouter) setup_openrouter ;;
   setup:opencode) setup_opencode ;;
-  setup:roocode) setup_roocode ;;
+
   setup:tabby) setup_tabby ;;
   setup:copilot) setup_github_copilot ;;
   setup:sublime) setup_sublime ;;
@@ -689,7 +755,7 @@ _run_one() {
   restore:crush) restore_crush ;;
   restore:grok) restore_grok ;;
   restore:groq) restore_groq ;;
-  restore:litellm) restore_litellm ;;
+
   restore:olol) restore_olol ;;
   restore:opencode) restore_opencode ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
@@ -698,7 +764,7 @@ _run_one() {
   backup:crush) backup_crush ;;
   backup:grok) backup_grok ;;
   backup:groq) backup_groq ;;
-  backup:litellm) backup_litellm ;;
+
   backup:olol) backup_olol ;;
   backup:opencode) backup_opencode ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
@@ -727,7 +793,7 @@ interactive_menu() {
 
     "openrouter|cloud provider|Install OpenRouter proxy + deploy config"
     "groq|cloud provider|Deploy Groq config + API key instructions"
-    "litellm|local proxy|Install LiteLLM proxy + deploy config"
+
 
     "claude|tools|Install CLI + deploy config"
     "cline|tools|Install VS Code extension + CLI"
@@ -740,8 +806,8 @@ interactive_menu() {
     "aider|tools|Install Aider coding agent + deploy config"
     "open-hands|tools|Install Open Hands (Docker) + deploy config"
 
-    "cursor|editors|Install Cursor IDE + show LiteLLM config"
-    "roocode|editors|Install RooCode VS Code extension"
+     "cursor|editors|Install Cursor IDE + show Ollama config"
+
     "kilocode|editors|Install Kilo Code VS Code extension"
     "sublime|editors|Install Sublime Text"
     "zed|editors|Install Zed editor + deploy config"
@@ -837,9 +903,6 @@ main() {
   opencode)
     setup_opencode
     ;;
-  roocode)
-    setup_roocode
-    ;;
   tabby)
     setup_tabby
     ;;
@@ -897,9 +960,6 @@ main() {
   gemini)
     setup_gemini
     ;;
-  litellm)
-    setup_litellm
-    ;;
   anythingllm)
     setup_anythingllm
     ;;
@@ -956,22 +1016,20 @@ main() {
     interactive_menu
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|roocode|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|litellm|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
     echo "=== INFRASTRUCTURE (recommended) ==="
     echo "  infrastructure - Interactive menu to select LLM stack (profile-based)"
     echo ""
-    echo "    Profile-based recommendations:"
-    echo "      16GB machines  - Ollama + LiteLLM"
-    echo "      32GB machines - Ollama + LiteLLM + OpenRouter"
-    echo "      48GB+ machines - Full stack with OpenWebUI"
+    echo "    All profiles: Ollama + OpenRouter + OpenWebUI"
+    echo "    (Model selection differs by RAM, not infrastructure)"
     echo ""
     echo "=== GROUPS (recommended) ==="
-    echo "  install:infrastructure   - Ollama + LiteLLM + OpenWebUI"
+    echo "  install:infrastructure   - Ollama + OpenRouter + OpenWebUI"
     echo "  install:terminal-agents    - Claude Code, Cline, OpenCode, Crush, Aider, etc."
-    echo "  install:vscode-extensions  - Continue, Copilot, Roo Code, Kilo Code"
+    echo "  install:vscode-extensions  - Continue, Copilot, Kilocode, ZooCode"
     echo "  install:ides               - Windsurf, Cursor, Zed"
     echo "  install:self-hosted        - AnythingLLM, Tabby, OpenHands"
     echo "  install:all                - Everything"
@@ -980,7 +1038,7 @@ main() {
     echo "=== LEGACY (individual tools) ==="
     echo "  install     - Install all tools (legacy)"
     echo "  ollama      - Install + start Ollama server"
-    echo "  litellm     - Setup LiteLLM proxy"
+
     echo "  openwebui   - Setup OpenWebUI (Docker)"
     echo "  claude      - Install Claude Code CLI"
     echo "  cline       - Install Cline VS Code extension"
@@ -997,7 +1055,7 @@ main() {
     echo "  verify      - Verify all installations"
     echo "  check       - Check system requirements"
     echo "  copilot     - Install gh-copilot extension + VS Code Copilot extensions"
-    echo "  roocode     - Install RooCode VS Code extension + show config"
+
     echo "  kilocode    - Install Kilo Code VS Code extension + show config"
     echo "  tabby       - Install Tabby autocomplete server"
     echo ""

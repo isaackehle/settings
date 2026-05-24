@@ -356,12 +356,6 @@ _profile_description() {
     echo "${_PROFILE_CACHE[p${folder}_DESCRIPTION]:-No description}"
 }
 
-_profile_class() {
-    local folder="$1"
-    _load_profile "$folder"
-    echo "${_PROFILE_CACHE[p${folder}_CLASS]:-medium}"
-}
-
 _does_profile_match_computer() {
     local folder="$1"
     local hw_mem=$2
@@ -548,21 +542,19 @@ prompt_deployment_mode() {
     echo "" >&2
     echo "── SELECT DEPLOYMENT MODE ──────────────────────────────────────────" >&2
     echo "  1) Ollama Only (Direct)" >&2
-    echo "  2) Ollama + LiteLLM (Proxy)" >&2
-    echo "  3) Ollama + OpenRouter (External)" >&2
+    echo "  2) Ollama + OpenRouter (External)" >&2
     echo "" >&2
 
     local choice
-    read -p "Select mode [1-3] (Default: 2): " choice
-    choice="${choice:-2}"
+    read -p "Select mode [1-2] (Default: 1): " choice
+    choice="${choice:-1}"
 
     case "$choice" in
         1) echo "ollama" ;;
-        2) echo "litellm" ;;
-        3) echo "openrouter" ;;
+        2) echo "openrouter" ;;
         *)
-            log_error "Invalid selection. Defaulting to LiteLLM."
-            echo "litellm"
+            log_error "Invalid selection. Defaulting to Ollama."
+            echo "ollama"
             ;;
     esac
 }
@@ -579,85 +571,55 @@ update_models_sh() {
     local new_val="$4"
     local mode="$5"
 
-    local suffix="${mem_class^^}"
-
-    # Map role name → array key
-    local agent_key=""
-    case "$role" in
-        coding)   agent_key="code" ;;
-        reasoning) agent_key="think" ;;
-        research) agent_key="research" ;;
-        writing)  agent_key="write" ;;
-        planning) agent_key="plan" ;;
-        *)        agent_key="" ;;
-    esac
-
-    log_info "Updating models.sh..."
-
-    local machine_dir="$SETTINGS_BASE/${MACHINE_DIRS[$mem_class]:-}"
-
-    # For models.sh, we generally store the identifier used by the app
-    # (Colon for Ollama, ID for OpenRouter)
-    sed -i '' "/declare -A OPENCODE_AGENTS=/,/^)/s|\[${agent_key}\]=\"${old_val}\"|[${agent_key}]=\"${new_val}\"|" \
-    "$machine_dir/models.sh"
-    log_success "  models.sh: OPENCODE_AGENTS[$agent_key]"
-
-    local continue_key=""
-    case "$role" in
-        coding)   continue_key="chat" ;;
-    esac
-    if [[ -n "$continue_key" && ( "$mem_class" == "64gb" || "$mem_class" == "48gb" ) ]]; then
-        local continue_arr="CONTINUE_ROLES_${suffix}"
-        sed -i '' "/declare -A ${continue_arr}=/,/^)/s|\[${continue_key}\]=\"${old_val}\"|[${continue_key}]=\"${new_val}\"|" \
-        "$machine_dir/models.sh"
-        log_success "  models.sh: ${continue_arr}[$continue_key]"
+    local models_file="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_DIRS[$mem_class]}/models.sh"
+    if [[ ! -f "$models_file" ]]; then
+        log_warning "Models file not found: $models_file"
+        return
     fi
 
-    case "$role" in
-        coding)
-            local sonnet_var="CLAUDE_CODE_SONNET_${suffix}"
-            sed -i '' "s|${sonnet_var}=\"${old_val}\"|${sonnet_var}=\"${new_val}\"|" \
-            "$machine_dir/models.sh"
-            log_success "  models.sh: ${sonnet_var}"
-        ;;
-        planning)
-            local haiku_var="CLAUDE_CODE_HAIKU_${suffix}"
-            sed -i '' "s|${haiku_var}=\"${old_val}\"|${haiku_var}=\"${new_val}\"|" \
-            "$machine_dir/models.sh"
-            log_success "  models.sh: ${haiku_var}"
-        ;;
-    esac
+    log_info "Updating $(basename "$machine_dir")/models.sh..."
 
-    if [[ "$role" == "coding" ]]; then
-        log_warning "  models.sh: CUSTOM_MODELS_${suffix} aliases need manual update"
+    # Update agent map for the given role
+    if [[ "$role" != "all" ]]; then
+        # Update the specific agent's model
+        sed -i '' "s|^\(${role^^}_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        # Also update the cloud model if it exists (e.g., CLINE_MODEL_CLOUD)
+        if grep -q "^${role^^}_MODEL_CLOUD\s*=" "$models_file"; then
+            sed -i '' "s|^\(${role^^}_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        fi
+    else
+        # Update all agents to the same model (for simplicity)
+        sed -i '' "s|^\(CLINE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(CLINE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(ROOCODE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(ROOCODE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(KILOCODE_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(KILOCODE_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(AIDER_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(AIDER_WEAK_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(AIDER_EDITOR_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(ZED_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(CURSOR_MODEL\s*=\).*|\1 \"${new_val}\"|" "$models_file"
+        sed -i '' "s|^\(CURSOR_MODEL_CLOUD\s*=\).*|\1 \"${new_val}\"|" "$models_file"
     fi
+
+    # Update CLAUDE_CODE_* variables (if any)
+    if grep -q "^CLAUDE_CODE=" "$models_file"; then
+        # We don't have a direct mapping for Claude Code roles, so we skip for now.
+        # In the future, we might want to update the specific roles in the CLAUDE_CODE associative array.
+        log_info "Claude Code roles are stored in an associative array; manual update may be needed."
+    fi
+
+    # Update CONTINUE_ROLES (if any)
+    if grep -q "^CONTINUE_ROLES=" "$models_file"; then
+        # We don't have a direct mapping for Continue roles, so we skip for now.
+        log_info "Continue roles are stored in an associative array; manual update may be needed."
+    fi
+
+    log_success "  $(basename "$machine_dir")/models.sh"
 }
 
-update_litellm_yaml() {
-    local machine_dir="$1"
-    local old_val="$2"
-    local new_val="$3"
-    local mode="$4"
-
-    local litellm_file="$machine_dir/litellm/litellm.yaml"
-    if [[ ! -f "$litellm_file" ]]; then return; fi
-
-    log_info "Updating $(basename "$machine_dir")/litellm/litellm.yaml..."
-
-    if [[ "$mode" == "litellm" ]]; then
-        local old_dash=$(colon_to_dash "$old_val")
-        local new_dash=$(colon_to_dash "$new_val")
-        sed -i '' "s|model_name: ${old_dash}|model_name: ${new_dash}|g" "$litellm_file"
-        sed -i '' "s|ollama_chat/${old_val}|ollama_chat/${new_val}|g" "$litellm_file"
-        sed -i '' "s|\"${old_dash}\"|\"${new_dash}\"|g" "$litellm_file"
-    elif [[ "$mode" == "openrouter" ]]; then
-        # OpenRouter usually doesn't use ollama_chat/ prefix in litellm.yaml
-        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$litellm_file"
-    fi
-
-    log_success "  $(basename "$machine_dir")/litellm/litellm.yaml"
-}
-
+# Update continue/config.yaml: model name
 update_continue_config() {
     local machine_dir="$1"
     local old_val="$2"
@@ -669,17 +631,75 @@ update_continue_config() {
 
     log_info "Updating $(basename "$machine_dir")/continue/config.yaml..."
 
-    if [[ "$mode" == "litellm" ]]; then
-        local old_dash=$(colon_to_dash "$old_val")
-        local new_dash=$(colon_to_dash "$new_val")
-        sed -i '' "s|model: \"${old_dash}\"|model: \"${new_dash}\"|g" "$continue_file"
-    else
-        # Ollama direct or OpenRouter usually use the raw ID/colon form in quotes
-        sed -i '' "s|model: \"${old_val}\"|model: \"${new_val}\"|g" "$continue_file"
+    if [[ "$mode" == "openrouter" ]]; then
+        # OpenRouter uses the full model ID (e.g., anthropic/claude-3.5-sonnet)
+        sed -i '' "s|model: ${old_val}|model: ${new_val}|g" "$continue_file"
+        sed -i '' "s|small_model: ${old_val}|small_model: ${new_val}|g" "$continue_file"
     fi
 
     log_success "  $(basename "$machine_dir")/continue/config.yaml"
 }
+
+# Update claude/settings.json: model name
+update_claude_settings() {
+    local machine_dir="$1"
+    local old_val="$2"
+    local new_val="$3"
+    local mode="$4"
+
+    local claude_file="$machine_dir/claude/settings.json"
+    if [[ ! -f "$claude_file" ]]; then return; fi
+
+    log_info "Updating $(basename "$machine_dir")/claude/settings.json..."
+
+    if [[ "$mode" == "openrouter" ]]; then
+        # OpenRouter uses the full model ID (e.g., anthropic/claude-3.5-sonnet)
+        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$claude_file"
+    fi
+
+    log_success "  $(basename "$machine_dir")/claude/settings.json"
+}
+
+# Update opencode/opencode.jsonc: model name
+update_opencode_config() {
+    local machine_dir="$1"
+    local old_val="$2"
+    local new_val="$3"
+    local mode="$4"
+
+    local opencode_file="$machine_dir/opencode/opencode.jsonc"
+    if [[ ! -f "$opencode_file" ]]; then return; fi
+
+    log_info "Updating $(basename "$machine_dir")/opencode/opencode.jsonc..."
+
+    if [[ "$mode" == "openrouter" ]]; then
+        # OpenRouter uses the full model ID (e.g., anthropic/claude-3.5-sonnet)
+        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$opencode_file"
+    fi
+
+    log_success "  $(basename "$machine_dir")/opencode/opencode.jsonc"
+}
+
+# Update grok config: model name
+update_grok_config() {
+    local machine_dir="$1"
+    local old_val="$2"
+    local new_val="$3"
+    local mode="$4"
+
+    local grok_file="$machine_dir/grok/grok.json"
+    if [[ ! -f "$grok_file" ]]; then return; fi
+
+    log_info "Updating $(basename "$machine_dir")/grok/grok.json..."
+
+    if [[ "$mode" == "openrouter" ]]; then
+        # OpenRouter uses the full model ID (e.g., anthropic/claude-3.5-sonnet)
+        sed -i '' "s|\"${old_val}\"|\"${new_val}\"|g" "$grok_file"
+    fi
+
+    log_success "  $(basename "$machine_dir")/grok/grok.json"
+}
+
 
 update_claude_settings() {
     local machine_dir="$1"
@@ -847,8 +867,7 @@ main() {
         die "Model alias cannot be empty."
     fi
 
-    local display_new="$new_alias"
-    [[ "$deploy_mode" == "litellm" ]] && display_new="$(colon_to_dash "$new_alias")"
+     local display_new="$new_alias"
 
     # Confirm
     echo ""
@@ -898,7 +917,6 @@ main() {
 
             log_info "Applying update to role: $r (Old: $old)"
             update_models_sh    "$r" "$mem_class" "$old" "$new_alias" "$deploy_mode"
-            update_litellm_yaml "$machine_dir" "$old" "$new_alias" "$deploy_mode"
             update_continue_config "$machine_dir" "$old" "$new_alias" "$deploy_mode"
             update_claude_settings "$machine_dir" "$old" "$new_alias" "$deploy_mode"
             update_opencode_config "$machine_dir" "$old" "$new_alias" "$deploy_mode"
@@ -909,7 +927,6 @@ main() {
         done
     else
         update_models_sh    "$role" "$mem_class" "$current_model" "$new_alias" "$deploy_mode"
-        update_litellm_yaml "$machine_dir" "$current_model" "$new_alias" "$deploy_mode"
         update_continue_config "$machine_dir" "$current_model" "$new_alias" "$deploy_mode"
         update_claude_settings "$machine_dir" "$current_model" "$new_alias" "$deploy_mode"
         update_opencode_config "$machine_dir" "$current_model" "$new_alias" "$deploy_mode"

@@ -70,7 +70,7 @@ setup_exo() {
     log_info "Run the same command on every Mac — peers auto-discover via mDNS."
     log_info "Wired (Thunderbolt/Ethernet) strongly preferred over WiFi."
     log_info ""
-    log_info "Tool integration (replace LiteLLM base URL with exo when running distributed):"
+    log_info "Tool integration (replace Ollama base URL with exo when running distributed):"
     log_info "  Claude Code:  ANTHROPIC_BASE_URL=http://localhost:52415"
     log_info "  Continue:     provider: openai, apiBase: http://localhost:52415/v1"
     log_info "  OpenCode:     baseURL: http://localhost:52415/v1"
@@ -117,7 +117,7 @@ teardown_exo() {
         fi
     fi
 
-    log_status "exo removed. LiteLLM/Ollama configs unchanged."
+    log_status "exo removed. Ollama configs unchanged."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

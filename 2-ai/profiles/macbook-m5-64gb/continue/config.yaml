@@ -44,84 +44,68 @@ models:
     roles:
       - chat
 
-  # ── Local Models via LiteLLM proxy (chat / edit / apply / summarize) ───────
-  # Primary coding model — 80B, bumped to 64k for chat context depth
-  - name: 'Qwen3 Coder Next 80B (64k)'
+  # ── Local Models via Ollama (chat / edit / apply / summarize) ──────────────
+  - name: 'Qwen3 Coder Next 80B (Q4)'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3-coder-next-80b-q4-64k'
+    model: 'qwen3-coder-next-80b:q4'
+    roles:
+      - chat
+      - edit
+
+  - name: 'Qwen3 Coder Next 80B (Q4, 64k)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'qwen3-coder-next-80b:q4-64k'
     roles:
       - chat
       - edit
       - summarize
 
-  # Qwen3.6 35B — general / large context
-  - name: 'Qwen3.6 35B'
+  - name: 'Qwen3.6 35B (Q4)'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3.6-35b-8k'
+    model: 'qwen3.6-35b:q4'
     roles:
       - chat
       - edit
 
-  # Qwen3.5 27B — writing / general chat alt
-  - name: 'Qwen3.5 27B Q8'
+  - name: 'Qwen3.5 27B (Q8)'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3.5-27b-q8-32k'
+    model: 'qwen3.5-27b:q8'
     roles:
       - chat
 
-  # Apply/insert — best code insertion
-  - name: 'Codestral 22B (Q8)'
+  - name: 'Codestral 22B'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'codestral-22b-q8-32k'
+    model: 'codestral:22b'
     roles:
       - apply
 
-  # Reasoning with tool calls — 32B
   - name: 'DeepSeek R1 Tool-Calling 32B'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'deepseek-r1-tools-32b-128k'
+    model: 'deepseek-r1-tools:32b'
     roles:
       - chat
 
-  # Reasoning with tool calls — 14B fallback
-  - name: 'DeepSeek R1 Tool-Calling 14B'
+  - name: 'Qwen3 4B (Fast)'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'deepseek-r1-tools-14b-128k'
+    model: 'qwen3:4b'
     roles:
       - chat
 
-  # Large general model (solo use)
-  - name: 'Llama 3.3 70B'
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: 'sk-local'
-    model: 'llama3.3-70b'
-    roles:
-      - chat
-
-  # llama.cpp server models (available when llama-server is running on :8080)
-  - name: 'Qwen3 Coder 30B Q6 (llama.cpp)'
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: 'sk-local'
-    model: 'qwen3-coder-30b-q6-32k'
-    roles:
-      - chat
-      - edit
-
-  # ── Autocomplete — Ollama direct (latency-critical, keep off proxy) ─────────
+  # ── Autocomplete — Ollama direct (latency-critical) ────────────────────────
   - name: 'Qwen2.5 Coder 1.5B (autocomplete)'
     provider: ollama
     apiBase: http://localhost:11434
@@ -147,23 +131,6 @@ models:
     model: 'nomic-embed-text'
     roles:
       - embed
-
-  # ── Reranking — Ollama direct ──────────────────────────────────────────────
-  - name: 'Qwen3 Reranker 0.6B'
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: 'dengcao/Qwen3-Reranker-0.6B:Q8_0'
-    roles:
-      - rerank
-
-  # ── Fast planning — via LiteLLM ────────────────────────────────────────────
-  - name: 'Qwen3 4B (fast)'
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: 'sk-local'
-    model: 'qwen3-4b-q8-256k'
-    roles:
-      - chat
 
 tabAutocompleteOptions:
   debounceDelay: 500

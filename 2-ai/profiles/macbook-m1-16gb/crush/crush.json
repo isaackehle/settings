@@ -1,39 +1,49 @@
 {
   "$schema": "https://charm.land/crush.json",
   "providers": {
-    "litellm": {
-      "name": "LiteLLM (local)",
+    "ollama": {
+      "name": "Ollama (local)",
       "type": "openai-compat",
-      "base_url": "http://localhost:4000/v1",
+      "base_url": "http://localhost:11434/v1",
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3.5-27b-q5-256k",
+          "id": "qwen3.5-27b:q5",
           "name": "Qwen3.5 27B",
           "context_window": 32768,
-          "default_max_tokens": 8192
+          "default_max_tokens": 8192,
+          "cost_per_1m_in": 0.0,
+          "cost_per_1m_out": 0.0,
+          "cost_per_1m_in_cached": 0.0,
+          "cost_per_1m_out_cached": 0.0,
+          "can_reason": false,
+          "supports_attachments": false
         },
         {
-          "id": "qwen3-14b-q5-40k",
+          "id": "qwen3:14b",
           "name": "Qwen3 14B",
           "context_window": 32768,
-          "default_max_tokens": 8192
+          "default_max_tokens": 8192,
+          "cost_per_1m_in": 0.0,
+          "cost_per_1m_out": 0.0,
+          "cost_per_1m_in_cached": 0.0,
+          "cost_per_1m_out_cached": 0.0,
+          "can_reason": false,
+          "supports_attachments": false
         },
         {
-          "id": "deepseek-r1-tools-8b-q4-128k",
+          "id": "deepseek-r1-tools:8b",
           "name": "DeepSeek R1 Tools 8B",
           "context_window": 32768,
-          "default_max_tokens": 8192
-        },
-        {
-          "id": "deepseek-r1-8b-q4-128k",
-          "name": "DeepSeek R1 8B Reasoning (q4-128k)",
-          "context_window": 32768,
-          "default_max_tokens": 8192
+          "default_max_tokens": 8192,
+          "cost_per_1m_in": 0.0,
+          "cost_per_1m_out": 0.0,
+          "cost_per_1m_in_cached": 0.0,
+          "cost_per_1m_out_cached": 0.0,
+          "can_reason": false,
+          "supports_attachments": false
         }
       ]
     }
-  },
-  "default_provider": "litellm",
-  "default_model": "qwen3.5-27b-q5-256k"
+  }
 }

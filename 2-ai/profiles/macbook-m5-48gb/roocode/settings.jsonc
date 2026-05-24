@@ -3,14 +3,14 @@
   // MERGE INTO: ~/Library/Application Support/Code/User/settings.json
   //
   // API config is set via the Roo Code sidebar → API Provider: OpenAI Compatible
-  //   Base URL  → http://localhost:4000/v1
+  //   Base URL  → http://localhost:11434/v1
   //   API Key   → sk-local
   //
   // Roo Code supports per-mode model selection. Recommended assignments:
-  //   Code mode      → qwen3-coder-30b-a3b:q5-32k
-  //   Architect mode → qwen3.6-35b:q4-32k
-  //   Ask mode       → qwen3-14b:q5-40k
-  //   Debug mode     → deepseek-r1-tools:14b-128k
+  //   Code mode      → qwen3-coder-30b-a3b:q5
+  //   Architect mode → qwen3.5-27b:q5
+  //   Ask mode       → qwen3:14b
+  //   Debug mode     → deepseek-r1-tools:14b
   //
   // Cloud fallback (any mode):
   //   Provider  → OpenRouter
@@ -28,27 +28,27 @@
   "roo-cline.modeApiConfigs": {
     "code": {
       "apiProvider": "openai",
-      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiBaseUrl": "http://localhost:11434/v1",
       "openAiApiKey": "sk-local",
-      "openAiModelId": "qwen3-coder-30b-q5-32k"
+      "openAiModelId": "qwen3-coder-30b-a3b:q5"
     },
     "architect": {
       "apiProvider": "openai",
-      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiBaseUrl": "http://localhost:11434/v1",
       "openAiApiKey": "sk-local",
-      "openAiModelId": "qwen3.6-35b-q4-32k"
+      "openAiModelId": "qwen3.5-27b:q5"
     },
     "ask": {
       "apiProvider": "openai",
-      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiBaseUrl": "http://localhost:11434/v1",
       "openAiApiKey": "sk-local",
-      "openAiModelId": "qwen3-14b-q5-40k"
+      "openAiModelId": "qwen3:14b"
     },
     "debug": {
       "apiProvider": "openai",
-      "openAiBaseUrl": "http://localhost:4000/v1",
+      "openAiBaseUrl": "http://localhost:11434/v1",
       "openAiApiKey": "sk-local",
-      "openAiModelId": "deepseek-r1-tools-14b-128k"
+      "openAiModelId": "deepseek-r1-tools:14b"
     }
   }
 }

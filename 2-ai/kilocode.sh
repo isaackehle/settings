@@ -52,14 +52,14 @@ setup_kilocode() {
         log_info "Merge into: ~/Library/Application Support/Code/User/settings.json"
     fi
 
-    log_info ""
-    log_info "=== Kilo Code ==="
-    log_info "Extension: kilohealth.kilo-code"
-    log_info "Config:    $_kilo_cfg"
-    log_info "Base URL:  http://localhost:4000/v1  (via LiteLLM)"
-    log_info "API Key:   sk-local"
-    log_info "Docs:      https://kilocode.ai/docs"
-    log_info ""
+     log_info ""
+     log_info "=== Kilo Code ==="
+     log_info "Extension: kilohealth.kilo-code"
+     log_info "Config:    $_kilo_cfg"
+     log_info "Base URL:  http://localhost:11434/v1  (via Ollama)"
+     log_info "API Key:   sk-local"
+     log_info "Docs:      https://kilocode.ai/docs"
+     log_info ""
 }
 
 backup_kilocode() {

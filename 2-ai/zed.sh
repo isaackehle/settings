@@ -40,7 +40,7 @@ setup_zed() {
     log_info "=== Zed ==="
     log_info "Start:    zed"
     log_info "Config:   $config_dest"
-    log_info "LiteLLM:  Zed discovers models automatically via http://localhost:4000/v1/models"
+    log_info "Ollama:   Zed discovers models automatically via http://localhost:11434/v1/models"
     log_info "Docs:     https://zed.dev/docs/ai"
     log_info ""
 }

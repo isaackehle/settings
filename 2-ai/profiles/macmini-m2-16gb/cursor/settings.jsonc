@@ -2,27 +2,25 @@
   // Cursor (cursor.sh) — VS Code-compatible settings snippet
   // MERGE INTO: ~/Library/Application Support/Cursor/User/settings.json
   //
-  // To use LiteLLM proxy in Cursor:
+  // To use Ollama directly in Cursor:
   //   1. Open Cursor Settings (Cmd+Shift+J) → Models
-  //   2. Under "OpenAI API Key", enter: sk-local
-  //   3. Enable "Override OpenAI Base URL" → http://localhost:4000/v1
-  //   4. Add custom models (click + next to model list):
-  //        qwen3-14b-q5-40k
-  //        qwen3.5-27b-q5-256k
-  //        deepseek-r1-tools-8b-q4-128k
-  //        qwen3-4b-q8-256k
-  //   5. Set default model to: qwen3-14b-q5-40k
+  //   2. Under "Ollama", set base URL to http://localhost:11434
+  //   3. Add custom models (click + next to model list):
+  //        qwen3:14b
+  //        deepseek-r1-tools:8b
+  //        qwen3:4b
+  //   4. Set default model to: qwen3:14b
   //
   // Cloud fallback:
   //   Use Cursor's native claude-sonnet-4-6 or set OpenRouter key
-  //   and model moonshot/kimi-k2.6
+  //   and model kimi-k2.6
 
   "cursor.general.enableShadowWorkspace": false,
   "cursor.chat.smoothStreaming": true,
   "cursor.cpp.disabledLanguages": [],
 
   // Privacy: disable telemetry of prompts to Cursor servers
-  "cursor.privacy.telemetryLevel": "off",
+  "cursor.privacy.telemetryLevel": "off"
 
   // Cursor Rules (equivalent of CLAUDE.md) — set per-project in .cursor/rules/
   // Global rules can be set in Settings → Rules for AI

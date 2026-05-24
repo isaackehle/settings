@@ -36,63 +36,52 @@ models:
     roles:
       - chat
 
-  # ── Local Models via LiteLLM proxy (chat / edit / apply / summarize) ───────
-  - name: 'Primary (M2 Max 32GB)'
+  # ── Local Models via Ollama (chat / apply) ─────────────────────────────────
+  - name: 'Qwen3.5 27B (Q5)'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3-14b-q8-40k'
-    roles:
-      - chat
-      - edit
-      - summarize
-
-  - name: 'Writing / General'
-    provider: openai
-    apiBase: http://localhost:4000/v1
-    apiKey: 'sk-local'
-    model: 'qwen3.5-27b-q5-256k'
+    model: 'qwen3.5-27b:q5'
     roles:
       - chat
 
-  - name: 'Apply / Insert'
+  - name: 'Codestral 22B'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'codestral-22b'
+    model: 'codestral:22b'
     roles:
       - apply
 
-  - name: 'Reasoning + Tools'
+  - name: 'DeepSeek R1 Tool-Calling 8B'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'deepseek-r1-tools-8b-q4-128k'
+    model: 'deepseek-r1-tools:8b'
     roles:
       - chat
 
-  - name: 'Fast Planning'
+  - name: 'Qwen3 14B'
     provider: openai
-    apiBase: http://localhost:4000/v1
+    apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3-4b-q4-256k'
+    model: 'qwen3:14b'
+    roles:
+      - chat
+
+  - name: 'Qwen3 4B (Fast)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'qwen3:4b'
     roles:
       - chat
 
   # ── Autocomplete — Ollama direct (latency-critical) ────────────────────────
-  - name: 'Autocomplete (default)'
+  - name: 'Qwen2.5 Coder 1.5B (autocomplete)'
     provider: ollama
     apiBase: http://localhost:11434
     model: 'qwen2.5-coder:1.5b'
-    roles:
-      - autocomplete
-    requestOptions:
-      timeout: 8000
-
-  - name: 'Autocomplete (quality)'
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: 'qwen2.5-coder:7b'
     roles:
       - autocomplete
     requestOptions:

@@ -1,24 +1,21 @@
 # Aider config — M1 16GB profile
 # DEPLOY TO: ~/.aider.conf.yml (global) or .aider.conf.yml (per-project)
 # Docs: https://aider.chat/docs/config/aider_conf.html
-#
-# All models route through LiteLLM proxy (localhost:4000).
-# LiteLLM model names use hyphens: openai/<litellm-model-name>
 
 ## ── Model assignments ──────────────────────────────────────────────────────
 
 # Primary coding model
-model: openai/qwen3-14b-q5-40k
+model: qwen3:14b
 
 # Weak model — commit messages, simple edits, routing decisions
-weak-model: openai/qwen2.5-coder-1.5b-q4-32k
+weak-model: qwen3:4b
 
 # Editor model — applies aider's diffs back to files (Codestral is best for this)
-editor-model: openai/codestral-22b
+editor-model: qwen3:14b
 
-## ── LiteLLM proxy endpoint ─────────────────────────────────────────────────
+## ── Ollama endpoint ────────────────────────────────────────────────────────
 
-openai-api-base: http://localhost:4000/v1
+openai-api-base: http://localhost:11434/v1
 openai-api-key: sk-local
 
 ## ── Git ────────────────────────────────────────────────────────────────────
@@ -28,7 +25,7 @@ dirty-commits: true
 # Don't add "Aider" to git author/committer (keeps history clean)
 attribute-author: false
 attribute-committer: false
-commit-prompt: "Write a conventional commit message for these changes."
+commit-prompt: 'Write a conventional commit message for these changes.'
 
 ## ── Output ─────────────────────────────────────────────────────────────────
 

@@ -39,7 +39,7 @@ setup_cursor() {
     log_info "=== Cursor ==="
     log_info "Start:    open -a Cursor  (or: cursor <path>)"
     log_info "Config:   $config_dest"
-    log_info "LiteLLM:  Settings (Cmd+Shift+J) → Models → Override OpenAI Base URL → http://localhost:4000/v1"
+    log_info "Ollama:   Settings (Cmd+Shift+J) → Models → Override OpenAI Base URL → http://localhost:11434/v1"
     log_info "API Key:  sk-local"
     log_info "Docs:     https://docs.cursor.com/"
     log_info ""

@@ -34,7 +34,7 @@ setup_open_interpreter() {
     log_info ""
     log_info "=== Open Interpreter ==="
     log_info "Start:        interpreter"
-    log_info "Local model:  interpreter --api_base http://localhost:4000/v1 --api_key sk-local --model openai/<model>"
+    log_info "Local model:  interpreter --api_base http://localhost:11434/v1 --api_key sk-local --model <model>"
     log_info "One-shot:     interpreter -y \"<task>\""
     log_info "Safe mode:    interpreter --safe_mode ask"
     log_info "Docs:         https://docs.openinterpreter.com/"

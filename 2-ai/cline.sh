@@ -87,13 +87,11 @@ setup_cline() {
     print_info "=== Cline VS Code Extension setup ==="
     print_info "Extension:  saoudrizwan.claude-dev"
     print_info "Configure:  Cline panel → Settings → API Provider"
-    print_info "LiteLLM:    API Provider = OpenAI Compatible, Base URL = http://localhost:4000/v1"
+    print_info "Ollama:     API Provider = OpenAI Compatible, Base URL = http://localhost:11434/v1"
 
-    # Show the model name in LiteLLM format (hyphens, not colons)
+    # Show the model name (no conversion needed for Ollama)
     if [ -n "${CLINE_MODEL:-}" ]; then
-        local litellm_model
-        litellm_model=$(colon_to_dash "$CLINE_MODEL")
-        print_info "Model:      $litellm_model"
+        print_info "Model:      $CLINE_MODEL"
     else
         print_info "Model:      (not configured - check profiles/${MACHINE_PROFILE:-unknown}/models.sh)"
     fi

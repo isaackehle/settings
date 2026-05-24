@@ -3,7 +3,7 @@
   // MERGE INTO: ~/Library/Application Support/Code/User/settings.json
   //
   // API config is set via the Kilo Code sidebar → API Provider: OpenAI Compatible
-  //   Base URL  → http://localhost:4000/v1
+  //   Base URL  → http://localhost:11434/v1
   //   API Key   → sk-local
   //   Model     → qwen3-14b-q5-40k
   //
