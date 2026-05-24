@@ -23,9 +23,24 @@ fi
 # ------------------------------------------------------------------------------
 # Resolve profile
 # ------------------------------------------------------------------------------
-if [[ $# -ge 1 ]]; then
-    PROFILE="$1"
-else
+# Parse arguments: profile [keep...]
+PROFILE=""
+declare -a KEEP_MODELS=()
+for arg in "$@"; do
+    if [[ -z "$PROFILE" ]]; then
+        PROFILE="$arg"
+    else
+        KEEP_MODELS+=("$arg")
+    fi
+done
+# Also support PRUNE_KEEP env var (space-separated or comma-separated)
+if [[ -n "${PRUNE_KEEP:-}" ]]; then
+    IFS=', ' read -ra extra <<< "$PRUNE_KEEP"
+    KEEP_MODELS+=("${extra[@]}")
+fi
+unset extra
+
+if [[ -z "$PROFILE" ]]; then
     PROFILE="${MACHINE_PROFILE}"
 fi
 
@@ -50,6 +65,13 @@ echo "Config:  $MODELS_SH"
 
 # Source the models configuration
 source "$MODELS_SH"
+
+# Register any user-specified models to keep
+if [[ ${#KEEP_MODELS[@]} -gt 0 ]]; then
+    for km in "${KEEP_MODELS[@]}"; do
+        register_model "$km" "User-requested keep"
+    done
+fi
 
 # Temporary files for tracking
 REQUIRED_MODELS_FILE=$(mktemp)

@@ -348,12 +348,13 @@ deploy_configs() {
   echo ""
   echo "  Ollama Model Management"
   echo "  -----------------------"
+  echo "  Set PRUNE_KEEP=\"model1 model2\" to protect models not in your profile."
   read -p "  Prune obsolete Ollama models? (y/N) " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     local _pruner="${SETTINGS_BASE}/2-ai/profiles/prune_models.sh"
     if [ -f "$_pruner" ]; then
-      bash "$_pruner" "${_profile}"
+      PRUNE_KEEP="${PRUNE_KEEP:-}" bash "$_pruner" "${_profile}"
     else
       echo "  (skip) pruner script not found at $_pruner"
     fi
