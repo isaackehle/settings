@@ -164,10 +164,7 @@ sort -u "$REQUIRED_MODELS_FILE" -o "$REQUIRED_MODELS_FILE"
 # Get currently installed models from Ollama
 INSTALLED_MODELS=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}')
 
-echo -e "\n=== REQUIRED MODELS (INSTALLED) ==="
-printf "%-35s %s\n" "MODEL" "REASON"
-echo "--------------------------------------------------------------------------------"
-
+declare -a REQUIRED_LINES=()
 OBSOLETE_MODELS=()
 
 if [[ -z "$INSTALLED_MODELS" ]]; then
@@ -176,19 +173,27 @@ fi
 
 while read -r installed; do
     [[ -z "$installed" ]] && continue
-    # Check if installed model is in required list
     if grep -q "^${installed}$" "$REQUIRED_MODELS_FILE"; then
         reason=$(grep "^${installed}|" "$REASON_MAP_FILE" | cut -d'|' -f2 | head -n 1)
-        printf "%-35s %s\n" "$installed" "$reason"
+        REQUIRED_LINES+=("$(printf "%-35s %s" "$installed" "$reason")")
     else
         OBSOLETE_MODELS+=("$installed")
     fi
 done <<< "$INSTALLED_MODELS"
 
+echo -e "\n=== REQUIRED MODELS (INSTALLED) ==="
+printf "%-35s %s\n" "MODEL" "REASON"
+echo "--------------------------------------------------------------------------------"
+printf "%s\n" "${REQUIRED_LINES[@]}" | sort -f
+
 if [ ${#OBSOLETE_MODELS[@]} -eq 0 ]; then
     echo -e "\nNo obsolete models found. Your installation is clean!"
     exit 0
 fi
+
+# Sort obsolete models alphabetically
+IFS=$'\n' OBSOLETE_MODELS=($(sort -f <<<"${OBSOLETE_MODELS[*]}"))
+unset IFS
 
 echo -e "\n=== OBSOLETE MODELS (NOT IN CONFIG) ==="
 echo "The following models are installed but not required by profile: $PROFILE"
@@ -196,7 +201,6 @@ echo "Use SPACE to select models for removal, ENTER to confirm."
 
 # Check for fzf
 if command -v fzf >/dev/null 2>&1; then
-     # Use fzf for interactive multi-selection
      SELECTED_MODELS=$(printf "%s\n" "${OBSOLETE_MODELS[@]}" | fzf --multi --header "Select models to DELETE (Space=Select, Enter=Confirm)" --bind 'space:toggle')
 
     if [[ -n "$SELECTED_MODELS" ]]; then
