@@ -316,6 +316,15 @@ deploy_configs() {
   print_step "Copying profile.d files"
   local profiled_src="${_profdir}/profile.d"
   [ ! -d "$profiled_src" ] && profiled_src="$SETTINGS_BASE/config/profile.d"
+
+  # Capture existing keep-alive value BEFORE profile.d copy overwrites it
+  local _current_keep="5m"
+  if [ -f "$HOME/.profile.d/_ollama" ]; then
+    local _read_keep
+    _read_keep=$(grep -o 'OLLAMA_KEEP_ALIVE="[^"]*"' "$HOME/.profile.d/_ollama" | cut -d'"' -f2)
+    [ -n "$_read_keep" ] && _current_keep="$_read_keep"
+  fi
+
   if [ -d "$profiled_src" ]; then
     mkdir -p "$HOME/.profile.d"
     cp -R "$profiled_src/." "$HOME/.profile.d/"
@@ -323,10 +332,6 @@ deploy_configs() {
 
     # --- Ollama Keep Alive Selection ---
     if [ -f "$HOME/.profile.d/_ollama" ]; then
-      # Read current value for default
-      local _current_keep
-      _current_keep=$(grep -o 'OLLAMA_KEEP_ALIVE="[^"]*"' "$HOME/.profile.d/_ollama" | cut -d'"' -f2)
-      _current_keep="${_current_keep:-5m}"
       echo ""
       echo "  Ollama Memory Management"
       echo "  ------------------------"
@@ -343,7 +348,7 @@ deploy_configs() {
   echo ""
   echo "  Ollama Model Management"
   echo "  -----------------------"
-  read -p "  Prune obsolete Ollama models? (y/n) " -n 1 -r
+  read -p "  Prune obsolete Ollama models? (y/N) " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     local _pruner="${SETTINGS_BASE}/2-ai/profiles/prune_models.sh"
