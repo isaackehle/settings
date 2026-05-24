@@ -73,7 +73,6 @@ for role in "${!UPDATES[@]}"; do
   log_info "Updating $role: $current → $new_model"
 
   update_models_sh       "$role" "$mem_class" "$current" "$new_model" "$deploy_mode"
-  update_litellm_yaml    "$machine_dir" "$current" "$new_model" "$deploy_mode"
   update_continue_config "$machine_dir" "$current" "$new_model" "$deploy_mode"
   update_claude_settings "$machine_dir" "$current" "$new_model" "$deploy_mode"
   update_opencode_config "$machine_dir" "$current" "$new_model" "$deploy_mode"
