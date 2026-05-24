@@ -227,6 +227,19 @@ deploy_configs() {
       return 0
     fi
 
+    # Skip if source hasn't changed since last merge (stamp file)
+    local _stamp_dir="$HOME/.ollama/vscode-merge-stamps"
+    mkdir -p "$_stamp_dir"
+    local _src_mtime
+    _src_mtime=$(stat -f "%m" "$src_file" 2>/dev/null || echo "0")
+    if [ -f "$_stamp_dir/$prefix" ]; then
+      local _stored_mtime
+      _stored_mtime=$(cat "$_stamp_dir/$prefix")
+      if [ "$_src_mtime" = "$_stored_mtime" ]; then
+        return 0
+      fi
+    fi
+
     # Strip comments/empty lines and extract inner block
     local ext_block
     ext_block=$(sed '/^\s*\/\//d; /^\s*$/d' "$src_file" | sed '1d;$d' | sed 's/^  //')
@@ -247,6 +260,7 @@ deploy_configs() {
     else
       sed 's/\/\/.*$//' "$src_file" | sed '/^\s*$/d' > "$vscode_settings"
     fi
+    echo "$_src_mtime" > "$_stamp_dir/$prefix"
     log_status "${prefix} settings merged into $vscode_settings"
   }
 
