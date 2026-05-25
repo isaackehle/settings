@@ -39,7 +39,9 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/goose.sh"
 . "${SETTINGS_BASE}/2-ai/grok.sh"
 . "${SETTINGS_BASE}/2-ai/groq.sh"
+. "${SETTINGS_BASE}/2-ai/hermes.sh"
 . "${SETTINGS_BASE}/2-ai/install-models.sh"
+. "${SETTINGS_BASE}/2-ai/ironclaw.sh"
 . "${SETTINGS_BASE}/2-ai/kilocode.sh"
 . "${SETTINGS_BASE}/2-ai/llm.sh"
 . "${SETTINGS_BASE}/2-ai/lmstudio.sh"
@@ -50,9 +52,12 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/opencode.sh"
 . "${SETTINGS_BASE}/2-ai/openwebui.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter.sh"
+. "${SETTINGS_BASE}/2-ai/openclaw.sh"
+. "${SETTINGS_BASE}/2-ai/picoclaw.sh"
 . "${SETTINGS_BASE}/2-ai/plandex.sh"
-. "${SETTINGS_BASE}/2-ai/zoocode.sh"
 . "${SETTINGS_BASE}/2-ai/sublime.sh"
+. "${SETTINGS_BASE}/2-ai/zeroclaw.sh"
+. "${SETTINGS_BASE}/2-ai/zoocode.sh"
 . "${SETTINGS_BASE}/2-ai/tabby.sh"
 . "${SETTINGS_BASE}/2-ai/vscode.sh"
 . "${SETTINGS_BASE}/2-ai/windsurf.sh"
@@ -297,9 +302,6 @@ PYEOF
   # --- Cline ---
   _merge_vscode_extension "cline" "${_profdir}/cline/settings.jsonc"
 
-  # --- Zoo Code VS Code extension ---
-  _merge_vscode_extension "zoo-code" "${_profdir}/zoocode/settings.jsonc"
-
   mkdir -p "$HOME/.config/zed"
   copy_file "${_profdir}/zed/settings.json" "$HOME/.config/zed/settings.json"
   _validate_config_models "$HOME/.config/zed/settings.json" "Zed"
@@ -533,6 +535,12 @@ backup_existing_configs() {
   backup_fabric
   backup_goose
   backup_plandex
+  backup_openclaw
+  backup_ironclaw
+  backup_hermes
+  backup_picoclaw
+  backup_zeroclaw
+  backup_zoocode
   log_status "All existing configurations backed up successfully"
 }
 
@@ -551,6 +559,12 @@ restore_configs() {
   restore_fabric
   restore_goose
   restore_plandex
+  restore_openclaw
+  restore_ironclaw
+  restore_hermes
+  restore_picoclaw
+  restore_zeroclaw
+  restore_zoocode
   log_status "All configurations restored successfully"
 }
 
@@ -558,7 +572,7 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_zoocode; do
     local label="${check#verify_}"
     [[ "$label" == "claude_code" ]] && label="claude"
     [[ "$label" == "cline_cli" ]] && label="cline"
@@ -584,8 +598,8 @@ verify_installations() {
 
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui"
-  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex"
-  ["vscode-extensions"]="continue copilot kilocode"
+  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex openclaw ironclaw hermes picoclaw zeroclaw"
+  ["vscode-extensions"]="continue copilot kilocode zoocode"
   ["ides"]="windsurf cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
   ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
@@ -618,6 +632,12 @@ declare -A GROUP_SETUP_FUNCS=(
   ["aichat"]="setup_aichat"
   ["goose"]="setup_goose"
   ["plandex"]="setup_plandex"
+  ["openclaw"]="setup_openclaw"
+  ["ironclaw"]="setup_ironclaw"
+  ["hermes"]="setup_hermes"
+  ["picoclaw"]="setup_picoclaw"
+  ["zeroclaw"]="setup_zeroclaw"
+  ["zoocode"]="setup_zoocode"
 )
 
 # Verify functions map
@@ -647,6 +667,12 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["aichat"]="verify_aichat"
   ["goose"]="verify_goose"
   ["plandex"]="verify_plandex"
+  ["openclaw"]="verify_openclaw"
+  ["ironclaw"]="verify_ironclaw"
+  ["hermes"]="verify_hermes"
+  ["picoclaw"]="verify_picoclaw"
+  ["zeroclaw"]="verify_zeroclaw"
+  ["zoocode"]="verify_zoocode"
 )
 
 # Display names for groups/tools
@@ -682,6 +708,12 @@ declare -A DISPLAY_NAMES=(
   ["aichat"]="AIChat"
   ["goose"]="Goose"
   ["plandex"]="Plandex"
+  ["openclaw"]="OpenClaw"
+  ["ironclaw"]="IronClaw"
+  ["hermes"]="Hermes"
+  ["picoclaw"]="PicoClaw"
+  ["zeroclaw"]="ZeroClaw"
+  ["zoocode"]="Zoo Code"
 )
 
 # ============================================================================
@@ -952,6 +984,12 @@ _run_one() {
   setup:aichat) setup_aichat ;;
   setup:goose) setup_goose ;;
   setup:plandex) setup_plandex ;;
+  setup:openclaw) setup_openclaw ;;
+  setup:ironclaw) setup_ironclaw ;;
+  setup:hermes) setup_hermes ;;
+  setup:picoclaw) setup_picoclaw ;;
+  setup:zeroclaw) setup_zeroclaw ;;
+  setup:zoocode) setup_zoocode ;;
 
   setup:tabby) setup_tabby ;;
   setup:copilot) setup_github_copilot ;;
@@ -972,6 +1010,12 @@ _run_one() {
   restore:aichat) restore_aichat ;;
   restore:goose) restore_goose ;;
   restore:plandex) restore_plandex ;;
+  restore:openclaw) restore_openclaw ;;
+  restore:ironclaw) restore_ironclaw ;;
+  restore:hermes) restore_hermes ;;
+  restore:picoclaw) restore_picoclaw ;;
+  restore:zeroclaw) restore_zeroclaw ;;
+  restore:zoocode) restore_zoocode ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
   backup:claude) backup_claude ;;
   backup:continue) backup_continue ;;
@@ -986,6 +1030,12 @@ _run_one() {
   backup:aichat) backup_aichat ;;
   backup:goose) backup_goose ;;
   backup:plandex) backup_plandex ;;
+  backup:openclaw) backup_openclaw ;;
+  backup:ironclaw) backup_ironclaw ;;
+  backup:hermes) backup_hermes ;;
+  backup:picoclaw) backup_picoclaw ;;
+  backup:zeroclaw) backup_zeroclaw ;;
+  backup:zoocode) backup_zoocode ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
   esac
 }
@@ -1028,6 +1078,11 @@ interactive_menu() {
     "aichat|tools|Rust CLI with shell assistant, RAG, MCP tools, agents"
     "goose|tools|Block's open-source agent (desktop + CLI + API) with MCP"
     "plandex|tools|Terminal AI planner for multi-file coding tasks"
+    "openclaw|tools|Personal AI assistant with 25+ messaging channels"
+    "ironclaw|tools|Privacy-first Agent OS with 13 security layers (Rust)"
+    "hermes|tools|Self-improving AI agent from Nous Research"
+    "zeroclaw|tools|Fast Rust AI assistant (OpenClaw successor)"
+    "picoclaw|tools|Tiny AI for embedded devices (optional dev toolchain)"
     "open-hands|tools|Install Open Hands (Docker) + deploy config"
 
      "cursor|editors|Install Cursor IDE + show Ollama config"
@@ -1040,6 +1095,7 @@ interactive_menu() {
 
     "continue|extensions|Deploy Continue.dev config"
     "copilot|extensions|Install gh-copilot extension + VS Code extensions"
+    "zoocode|extensions|Deploy Zoo Code VS Code config merge"
   )
 
   local max_name=0 max_group=0
