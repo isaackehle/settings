@@ -1,0 +1,19 @@
+[core]
+provider = "openrouter"
+model = "qwen3.2-coder:7b"
+base_url = "https://openrouter.ai/api/v1"
+timeout = 120
+
+[ollama]
+base_url = "http://localhost:11434/v1"
+local_model = "qwen3.2-coder:7b"
+
+[ui]
+streaming = true
+colors = true
+history_file = "~/.hermes/history.json"
+
+[keybindings]
+submit = "ctrl+d"
+quit = "ctrl+c"
+new_chat = "ctrl+n"

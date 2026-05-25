@@ -1,0 +1,18 @@
+{
+  "api_provider": "openrouter",
+  "default_model": "qwen3.2-coder:7b",
+  "ollama_base_url": "http://localhost:11434",
+  "openrouter_base_url": "https://openrouter.ai/api/v1",
+  "roles": {
+    "code": "qwen3.2-coder:7b",
+    "think": "qwen3:14b",
+    "research": "llama3.2",
+    "write": "qwen3.2-coder:7b",
+    "plan": "qwen3:14b"
+  },
+  "features": {
+    "auto_complete": true,
+    "streaming": true,
+    "tool_use": true
+  }
+}
