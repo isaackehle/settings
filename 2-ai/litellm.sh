@@ -31,9 +31,9 @@ teardown_litellm() {
         log_status "Uninstalled litellm via uv"
     fi
 
-    # 4. Remove symlinks in ~/.local/bin
+    # 4. Remove binaries and symlinks in ~/.local/bin
     for _link in litellm litellm-proxy litellm-proxy-endpoint litellm-start; do
-        [ -L "$HOME/.local/bin/$_link" ] && rm -f "$HOME/.local/bin/$_link"
+        [ -e "$HOME/.local/bin/$_link" ] && rm -f "$HOME/.local/bin/$_link"
     done
 
     # 5. Remove config directory
@@ -42,7 +42,15 @@ teardown_litellm() {
         log_status "Removed ~/.config/litellm"
     fi
 
-    # 6. Remind user to redeploy profile.d
+    # 6. Remove .env sourcing from ~/.env.local
+    if [ -f "$HOME/.env.local" ]; then
+        if grep -q '\. ~/.config/litellm/.env' "$HOME/.env.local"; then
+            sed -i '' '\|\. ~/.config/litellm/.env|d' "$HOME/.env.local"
+            log_status "Removed litellm .env source from ~/.env.local"
+        fi
+    fi
+
+    # 7. Remind user to redeploy profile.d
     log_info ""
     log_info "Next steps:"
     log_info "  1. Run: bash setup_ai.sh deploy"
