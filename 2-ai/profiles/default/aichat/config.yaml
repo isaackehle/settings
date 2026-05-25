@@ -1,0 +1,3 @@
+model: ollama:qwen3.2-coder:7b
+ollama:
+  api_base: http://localhost:11434/v1
