@@ -138,7 +138,14 @@ Personal macOS development environment setup guide and reference.
 - [[Google Gemini CLI]] — Google's Gemini AI assistant for command-line.
 - [[OpenCode]] — Terminal-based AI coding assistant by Charm.
 - [[OpenShell]] — NVIDIA's sandboxed runtime for running AI coding agents safely.
-- [[VS Code AI Extensions]] — VS Code extensions for AI coding assistance.
+- [[VS Code: AI Extensions]] — VS Code: extensions for AI coding assistance.
+- [[OpenClaw]] — Terminal AI agent via custom Homebrew tap.
+- [[IronClaw]] — Lightweight pip-based terminal AI assistant.
+- [[PicoClaw]] — Minimal AI assistant via curl installer.
+- [[Hermes]] — Terminal AI assistant via Homebrew.
+- [[Aider]] — AI pair programming assistant.
+- [[Crush]] — Terminal AI assistant by Charm.
+- [[Grok CLI]] — CLI backed by xAI's Grok models.
 
 ### APIs & Services
 
