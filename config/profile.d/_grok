@@ -1,5 +1,5 @@
-# Grok CLI — route through LiteLLM proxy
+# Grok CLI — route through Ollama
 command -v grok >/dev/null 2>&1 || return 0
 export GROKCLI_PROVIDER=openai
-export GROKCLI_BASE_URL=http://localhost:4000/v1
+export GROKCLI_BASE_URL=http://localhost:11434/v1
 export GROKCLI_API_KEY=sk-local
