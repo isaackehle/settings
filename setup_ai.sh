@@ -23,6 +23,7 @@ REPO_ROOT="$SETTINGS_BASE"
 
 . "${SETTINGS_BASE}/helpers.sh"
 # Source AI tool setup scripts
+. "${SETTINGS_BASE}/2-ai/aichat.sh"
 . "${SETTINGS_BASE}/2-ai/aider.sh"
 . "${SETTINGS_BASE}/2-ai/anythingllm.sh"
 . "${SETTINGS_BASE}/2-ai/claude.sh"
@@ -32,24 +33,24 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/crush.sh"
 . "${SETTINGS_BASE}/2-ai/cursor.sh"
 . "${SETTINGS_BASE}/2-ai/exo.sh"
+. "${SETTINGS_BASE}/2-ai/fabric.sh"
 . "${SETTINGS_BASE}/2-ai/gemini.sh"
 . "${SETTINGS_BASE}/2-ai/github-copilot.sh"
+. "${SETTINGS_BASE}/2-ai/goose.sh"
 . "${SETTINGS_BASE}/2-ai/grok.sh"
 . "${SETTINGS_BASE}/2-ai/groq.sh"
-. "${SETTINGS_BASE}/2-ai/hermes.sh"
 . "${SETTINGS_BASE}/2-ai/install-models.sh"
-. "${SETTINGS_BASE}/2-ai/ironclaw.sh"
 . "${SETTINGS_BASE}/2-ai/kilocode.sh"
+. "${SETTINGS_BASE}/2-ai/llm.sh"
 . "${SETTINGS_BASE}/2-ai/lmstudio.sh"
 . "${SETTINGS_BASE}/2-ai/ollama.sh"
 . "${SETTINGS_BASE}/2-ai/olol.sh"
-. "${SETTINGS_BASE}/2-ai/openclaw.sh"
 . "${SETTINGS_BASE}/2-ai/open-hands.sh"
 . "${SETTINGS_BASE}/2-ai/open-interpreter.sh"
 . "${SETTINGS_BASE}/2-ai/opencode.sh"
 . "${SETTINGS_BASE}/2-ai/openwebui.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter.sh"
-. "${SETTINGS_BASE}/2-ai/picoclaw.sh"
+. "${SETTINGS_BASE}/2-ai/plandex.sh"
 . "${SETTINGS_BASE}/2-ai/zoocode.sh"
 . "${SETTINGS_BASE}/2-ai/sublime.sh"
 . "${SETTINGS_BASE}/2-ai/tabby.sh"
@@ -527,10 +528,11 @@ backup_existing_configs() {
   backup_grok
   backup_olol
   backup_kilocode
-  backup_openclaw
-  backup_ironclaw
-  backup_picoclaw
-  backup_hermes
+  backup_llm
+  backup_aichat
+  backup_fabric
+  backup_goose
+  backup_plandex
   log_status "All existing configurations backed up successfully"
 }
 
@@ -544,10 +546,11 @@ restore_configs() {
   restore_grok
   restore_olol
   restore_kilocode
-  restore_openclaw
-  restore_ironclaw
-  restore_picoclaw
-  restore_hermes
+  restore_llm
+  restore_aichat
+  restore_fabric
+  restore_goose
+  restore_plandex
   log_status "All configurations restored successfully"
 }
 
@@ -555,8 +558,10 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_openclaw verify_ironclaw verify_picoclaw verify_hermes; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex; do
     local label="${check#verify_}"
+    [[ "$label" == "claude_code" ]] && label="claude"
+    [[ "$label" == "cline_cli" ]] && label="cline"
     if $check; then
       verification_results="$verification_results ✓ $label - OK\n"
     else
@@ -579,8 +584,8 @@ verify_installations() {
 
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui"
-  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok openclaw ironclaw picoclaw hermes"
-  ["vscode-extensions"]="continue copilot kilocode zoocode"
+  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex"
+  ["vscode-extensions"]="continue copilot kilocode"
   ["ides"]="windsurf cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
   ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
@@ -608,11 +613,11 @@ declare -A GROUP_SETUP_FUNCS=(
   ["anythingllm"]="setup_anythingllm"
   ["tabby"]="setup_tabby"
   ["open-hands"]="setup_openhands"
-  ["zoocode"]="setup_zoocode"
-  ["openclaw"]="setup_openclaw"
-  ["ironclaw"]="setup_ironclaw"
-  ["picoclaw"]="setup_picoclaw"
-  ["hermes"]="setup_hermes"
+  ["llm"]="setup_llm"
+  ["fabric"]="setup_fabric"
+  ["aichat"]="setup_aichat"
+  ["goose"]="setup_goose"
+  ["plandex"]="setup_plandex"
 )
 
 # Verify functions map
@@ -637,11 +642,11 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["anythingllm"]="verify_anythingllm"
   ["tabby"]="verify_tabby"
   ["open-hands"]="verify_openhands"
-  ["zoocode"]="verify_zoocode"
-  ["openclaw"]="verify_openclaw"
-  ["ironclaw"]="verify_ironclaw"
-  ["picoclaw"]="verify_picoclaw"
-  ["hermes"]="verify_hermes"
+  ["llm"]="verify_llm"
+  ["fabric"]="verify_fabric"
+  ["aichat"]="verify_aichat"
+  ["goose"]="verify_goose"
+  ["plandex"]="verify_plandex"
 )
 
 # Display names for groups/tools
@@ -672,11 +677,11 @@ declare -A DISPLAY_NAMES=(
   ["anythingllm"]="AnythingLLM"
   ["tabby"]="Tabby"
   ["open-hands"]="OpenHands"
-  ["zoocode"]="Zoo Code"
-  ["openclaw"]="OpenClaw"
-  ["ironclaw"]="IronClaw"
-  ["picoclaw"]="PicoClaw"
-  ["hermes"]="Hermes"
+  ["llm"]="LLM"
+  ["fabric"]="Fabric"
+  ["aichat"]="AIChat"
+  ["goose"]="Goose"
+  ["plandex"]="Plandex"
 )
 
 # ============================================================================
@@ -942,10 +947,11 @@ _run_one() {
   setup:open-hands) setup_openhands ;;
   setup:openrouter) setup_openrouter ;;
   setup:opencode) setup_opencode ;;
-  setup:openclaw) setup_openclaw ;;
-  setup:ironclaw) setup_ironclaw ;;
-  setup:picoclaw) setup_picoclaw ;;
-  setup:hermes) setup_hermes ;;
+  setup:llm) setup_llm ;;
+  setup:fabric) setup_fabric ;;
+  setup:aichat) setup_aichat ;;
+  setup:goose) setup_goose ;;
+  setup:plandex) setup_plandex ;;
 
   setup:tabby) setup_tabby ;;
   setup:copilot) setup_github_copilot ;;
@@ -961,10 +967,11 @@ _run_one() {
 
   restore:olol) restore_olol ;;
   restore:opencode) restore_opencode ;;
-  restore:openclaw) restore_openclaw ;;
-  restore:ironclaw) restore_ironclaw ;;
-  restore:picoclaw) restore_picoclaw ;;
-  restore:hermes) restore_hermes ;;
+  restore:llm) restore_llm ;;
+  restore:fabric) restore_fabric ;;
+  restore:aichat) restore_aichat ;;
+  restore:goose) restore_goose ;;
+  restore:plandex) restore_plandex ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
   backup:claude) backup_claude ;;
   backup:continue) backup_continue ;;
@@ -974,10 +981,11 @@ _run_one() {
 
   backup:olol) backup_olol ;;
   backup:opencode) backup_opencode ;;
-  backup:openclaw) backup_openclaw ;;
-  backup:ironclaw) backup_ironclaw ;;
-  backup:picoclaw) backup_picoclaw ;;
-  backup:hermes) backup_hermes ;;
+  backup:llm) backup_llm ;;
+  backup:fabric) backup_fabric ;;
+  backup:aichat) backup_aichat ;;
+  backup:goose) backup_goose ;;
+  backup:plandex) backup_plandex ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
   esac
 }
@@ -1015,10 +1023,11 @@ interactive_menu() {
     "opencode|tools|Install + deploy opencode config"
     "anythingllm|tools|Install + configure Ollama provider"
     "aider|tools|Install Aider coding agent + deploy config"
-    "openclaw|tools|Install + deploy OpenClaw config"
-    "ironclaw|tools|Install + deploy IronClaw config"
-    "picoclaw|tools|Install + deploy PicoClaw config"
-    "hermes|tools|Install + deploy Hermes config"
+    "llm|tools|Simon Willison's swiss-army-knife CLI for LLMs (Ollama plugins)"
+    "fabric|tools|Prompt framework with 100+ patterns, YouTube scraping, custom roles"
+    "aichat|tools|Rust CLI with shell assistant, RAG, MCP tools, agents"
+    "goose|tools|Block's open-source agent (desktop + CLI + API) with MCP"
+    "plandex|tools|Terminal AI planner for multi-file coding tasks"
     "open-hands|tools|Install Open Hands (Docker) + deploy config"
 
      "cursor|editors|Install Cursor IDE + show Ollama config"
@@ -1175,17 +1184,20 @@ main() {
   gemini)
     setup_gemini
     ;;
-  openclaw)
-    setup_openclaw
+  llm)
+    setup_llm
     ;;
-  ironclaw)
-    setup_ironclaw
+  fabric)
+    setup_fabric
     ;;
-  picoclaw)
-    setup_picoclaw
+  aichat)
+    setup_aichat
     ;;
-  hermes)
-    setup_hermes
+  goose)
+    setup_goose
+    ;;
+  plandex)
+    setup_plandex
     ;;
   anythingllm)
     setup_anythingllm
@@ -1243,7 +1255,7 @@ main() {
     interactive_menu
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|openclaw|ironclaw|picoclaw|hermes|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -1256,7 +1268,7 @@ main() {
     echo "=== GROUPS (recommended) ==="
     echo "  install:infrastructure   - Ollama + OpenRouter + OpenWebUI"
     echo "  install:terminal-agents    - Claude Code, Cline, OpenCode, Crush, Aider, etc."
-    echo "  install:vscode-extensions  - Continue, Copilot, Kilocode, ZooCode"
+    echo "  install:vscode-extensions  - Continue, Copilot, Kilocode"
     echo "  install:ides               - Windsurf, Cursor, Zed"
     echo "  install:self-hosted        - AnythingLLM, Tabby, OpenHands"
     echo "  install:all                - Everything"
@@ -1270,10 +1282,11 @@ main() {
     echo "  claude      - Install Claude Code CLI"
     echo "  cline       - Install Cline VS Code extension"
     echo "  opencode    - Setup OpenCode"
-    echo "  openclaw    - Setup OpenClaw"
-    echo "  ironclaw    - Setup IronClaw"
-    echo "  picoclaw    - Setup PicoClaw"
-    echo "  hermes      - Setup Hermes"
+    echo "  llm         - Setup LLM CLI"
+    echo "  fabric      - Setup Fabric"
+    echo "  aichat      - Setup AIChat"
+    echo "  goose       - Setup Goose"
+    echo "  plandex     - Setup Plandex"
     echo "  windsurf    - Install Windsurf IDE"
     echo "  cursor      - Install Cursor IDE"
     echo "  zed         - Install Zed editor"

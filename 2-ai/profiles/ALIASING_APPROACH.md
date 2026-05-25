@@ -148,20 +148,20 @@ When `setup_ai.sh deploy` runs, it should:
 
 ## Files That Need Changes
 
-| File | What |
-|------|------|
+| File                | What                                                  |
+| ------------------- | ----------------------------------------------------- |
 | `install-models.sh` | Add `create_context_variants()`, quant selection menu |
-| `setup_ai.sh` | Remove LiteLLM from infrastructure, fix tool groups |
-| `cline.sh` | Source models.sh, read CLINE_MODEL_CLOUD |
-| `roocode.sh` | Source models.sh, read all 6 ROOCODE vars |
-| `kilocode.sh` | Source models.sh |
-| `aider.sh` | Source models.sh |
-| `zed.sh` | Source models.sh |
-| `cursor.sh` | Source models.sh |
-| `opencode.sh` | Source models.sh |
-| `continue.sh` | Source models.sh |
-| `claude.sh` | Source models.sh, deploy config |
-| `gemini.sh` | Remove LiteLLM env vars |
-| `grok.sh` | Remove LiteLLM env vars |
-| `crush.sh` | Remove LiteLLM references |
-| All `models.sh` | Add `MODEL_QUANTS` + `MODEL_CONTEXTS` |
+| `setup_ai.sh`       | Remove LiteLLM from infrastructure, fix tool groups   |
+| `cline.sh`          | Source models.sh, read CLINE_MODEL_CLOUD              |
+| `roocode.sh`        | Source models.sh, read all 6 ROOCODE vars             |
+| `kilocode.sh`       | Source models.sh                                      |
+| `aider.sh`          | Source models.sh                                      |
+| `zed.sh`            | Source models.sh                                      |
+| `cursor.sh`         | Source models.sh                                      |
+| `opencode.sh`       | Source models.sh                                      |
+| `continue.sh`       | Source models.sh                                      |
+| `claude.sh`         | Source models.sh, deploy config                       |
+| `gemini.sh`         | Remove LiteLLM env vars                               |
+| `grok.sh`           | Remove LiteLLM env vars                               |
+| `crush.sh`          | Remove LiteLLM references                             |
+| All `models.sh`     | Add `MODEL_QUANTS` + `MODEL_CONTEXTS`                 |
