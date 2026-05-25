@@ -36,16 +36,20 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/github-copilot.sh"
 . "${SETTINGS_BASE}/2-ai/grok.sh"
 . "${SETTINGS_BASE}/2-ai/groq.sh"
+. "${SETTINGS_BASE}/2-ai/hermes.sh"
 . "${SETTINGS_BASE}/2-ai/install-models.sh"
+. "${SETTINGS_BASE}/2-ai/ironclaw.sh"
 . "${SETTINGS_BASE}/2-ai/kilocode.sh"
 . "${SETTINGS_BASE}/2-ai/lmstudio.sh"
 . "${SETTINGS_BASE}/2-ai/ollama.sh"
 . "${SETTINGS_BASE}/2-ai/olol.sh"
+. "${SETTINGS_BASE}/2-ai/openclaw.sh"
 . "${SETTINGS_BASE}/2-ai/open-hands.sh"
 . "${SETTINGS_BASE}/2-ai/open-interpreter.sh"
 . "${SETTINGS_BASE}/2-ai/opencode.sh"
 . "${SETTINGS_BASE}/2-ai/openwebui.sh"
 . "${SETTINGS_BASE}/2-ai/openrouter.sh"
+. "${SETTINGS_BASE}/2-ai/picoclaw.sh"
 . "${SETTINGS_BASE}/2-ai/zoocode.sh"
 . "${SETTINGS_BASE}/2-ai/sublime.sh"
 . "${SETTINGS_BASE}/2-ai/tabby.sh"
@@ -460,6 +464,19 @@ PYEOF
     bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
 
+  # --- Offer to scout for new agents ---
+  echo ""
+  echo "  Agent Scanner"
+  echo "  -------------"
+  read -p "  Check for new terminal AI agents worth adding? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local _agent_scout="${SETTINGS_BASE}/agent-scout.sh"
+    if [ -f "$_agent_scout" ]; then
+      bash "$_agent_scout" 2>/dev/null || true
+    fi
+  fi
+
   # --- Offer to suggest new models ---
   echo ""
   echo "  New Model Suggestions"
@@ -509,8 +526,11 @@ backup_existing_configs() {
   backup_claude
   backup_grok
   backup_olol
-
   backup_kilocode
+  backup_openclaw
+  backup_ironclaw
+  backup_picoclaw
+  backup_hermes
   log_status "All existing configurations backed up successfully"
 }
 
@@ -523,8 +543,11 @@ restore_configs() {
   restore_claude
   restore_grok
   restore_olol
-
   restore_kilocode
+  restore_openclaw
+  restore_ironclaw
+  restore_picoclaw
+  restore_hermes
   log_status "All configurations restored successfully"
 }
 
@@ -532,7 +555,7 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_openclaw verify_ironclaw verify_picoclaw verify_hermes; do
     local label="${check#verify_}"
     if $check; then
       verification_results="$verification_results ✓ $label - OK\n"
@@ -556,7 +579,7 @@ verify_installations() {
 
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui"
-  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok"
+  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok openclaw ironclaw picoclaw hermes"
   ["vscode-extensions"]="continue copilot kilocode zoocode"
   ["ides"]="windsurf cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
@@ -586,6 +609,10 @@ declare -A GROUP_SETUP_FUNCS=(
   ["tabby"]="setup_tabby"
   ["open-hands"]="setup_openhands"
   ["zoocode"]="setup_zoocode"
+  ["openclaw"]="setup_openclaw"
+  ["ironclaw"]="setup_ironclaw"
+  ["picoclaw"]="setup_picoclaw"
+  ["hermes"]="setup_hermes"
 )
 
 # Verify functions map
@@ -611,6 +638,10 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["tabby"]="verify_tabby"
   ["open-hands"]="verify_openhands"
   ["zoocode"]="verify_zoocode"
+  ["openclaw"]="verify_openclaw"
+  ["ironclaw"]="verify_ironclaw"
+  ["picoclaw"]="verify_picoclaw"
+  ["hermes"]="verify_hermes"
 )
 
 # Display names for groups/tools
@@ -642,6 +673,10 @@ declare -A DISPLAY_NAMES=(
   ["tabby"]="Tabby"
   ["open-hands"]="OpenHands"
   ["zoocode"]="Zoo Code"
+  ["openclaw"]="OpenClaw"
+  ["ironclaw"]="IronClaw"
+  ["picoclaw"]="PicoClaw"
+  ["hermes"]="Hermes"
 )
 
 # ============================================================================
@@ -907,6 +942,10 @@ _run_one() {
   setup:open-hands) setup_openhands ;;
   setup:openrouter) setup_openrouter ;;
   setup:opencode) setup_opencode ;;
+  setup:openclaw) setup_openclaw ;;
+  setup:ironclaw) setup_ironclaw ;;
+  setup:picoclaw) setup_picoclaw ;;
+  setup:hermes) setup_hermes ;;
 
   setup:tabby) setup_tabby ;;
   setup:copilot) setup_github_copilot ;;
@@ -922,6 +961,10 @@ _run_one() {
 
   restore:olol) restore_olol ;;
   restore:opencode) restore_opencode ;;
+  restore:openclaw) restore_openclaw ;;
+  restore:ironclaw) restore_ironclaw ;;
+  restore:picoclaw) restore_picoclaw ;;
+  restore:hermes) restore_hermes ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
   backup:claude) backup_claude ;;
   backup:continue) backup_continue ;;
@@ -931,6 +974,10 @@ _run_one() {
 
   backup:olol) backup_olol ;;
   backup:opencode) backup_opencode ;;
+  backup:openclaw) backup_openclaw ;;
+  backup:ironclaw) backup_ironclaw ;;
+  backup:picoclaw) backup_picoclaw ;;
+  backup:hermes) backup_hermes ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
   esac
 }
@@ -968,6 +1015,10 @@ interactive_menu() {
     "opencode|tools|Install + deploy opencode config"
     "anythingllm|tools|Install + configure Ollama provider"
     "aider|tools|Install Aider coding agent + deploy config"
+    "openclaw|tools|Install + deploy OpenClaw config"
+    "ironclaw|tools|Install + deploy IronClaw config"
+    "picoclaw|tools|Install + deploy PicoClaw config"
+    "hermes|tools|Install + deploy Hermes config"
     "open-hands|tools|Install Open Hands (Docker) + deploy config"
 
      "cursor|editors|Install Cursor IDE + show Ollama config"
@@ -1124,6 +1175,18 @@ main() {
   gemini)
     setup_gemini
     ;;
+  openclaw)
+    setup_openclaw
+    ;;
+  ironclaw)
+    setup_ironclaw
+    ;;
+  picoclaw)
+    setup_picoclaw
+    ;;
+  hermes)
+    setup_hermes
+    ;;
   anythingllm)
     setup_anythingllm
     ;;
@@ -1180,7 +1243,7 @@ main() {
     interactive_menu
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|openclaw|ironclaw|picoclaw|hermes|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -1207,6 +1270,10 @@ main() {
     echo "  claude      - Install Claude Code CLI"
     echo "  cline       - Install Cline VS Code extension"
     echo "  opencode    - Setup OpenCode"
+    echo "  openclaw    - Setup OpenClaw"
+    echo "  ironclaw    - Setup IronClaw"
+    echo "  picoclaw    - Setup PicoClaw"
+    echo "  hermes      - Setup Hermes"
     echo "  windsurf    - Install Windsurf IDE"
     echo "  cursor      - Install Cursor IDE"
     echo "  zed         - Install Zed editor"

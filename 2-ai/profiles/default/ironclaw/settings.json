@@ -1,0 +1,15 @@
+{
+  "api_provider": "ollama",
+  "default_model": "qwen3.2-coder:7b",
+  "base_url": "http://localhost:11434/v1",
+  "timeout_seconds": 120,
+  "max_retries": 3,
+  "streaming": true,
+  "system_prompt": "You are IronClaw, a fast terminal coding assistant. Prioritize concise, correct code.",
+  "keybindings": {
+    "accept": "tab",
+    "reject": "esc",
+    "next_suggestion": "ctrl+n",
+    "prev_suggestion": "ctrl+p"
+  }
+}
