@@ -71,7 +71,7 @@ declare -A MODEL_REMOTES=(
 # ALTERNATIVE QUANTS — on-demand only
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen2.5-coder:7b"]="qwen2.5-coder:7b-q8_0:8 GB (solo max quality)"
+    ["qwen2.5-coder:7b"]="qwen2.5-coder:7b-q8_0|qwen2.5-coder:7b-q8|8 GB (solo coding)"
 )
 
 # ==============================================
