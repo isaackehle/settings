@@ -75,13 +75,13 @@ declare -A MODEL_REMOTES=(
 )
 # ==============================================
 # ALTERNATIVE QUANTS — higher quality for hardware that supports them
-# Pull on-demand: ollama pull <name>:<quant>
+# Pull on-demand: ollama pull <full-tag>
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen3-coder-30b-a3b"]="q8:32 GB (solo only)"
-    ["gemma4:31b"]="q8:28 GB (solo deep reasoning)"
-    ["qwen3.6-35b"]="q8:35 GB (solo only)"
-    ["qwen3.5-27b"]="q8:29 GB (solo prose only)"
+    ["qwen3-coder-30b-a3b"]="qwen3-coder:30b-a3b-q8_0:32 GB (solo only)"
+    ["gemma4:31b"]="gemma4:31b-it-q8_0:28 GB (solo deep reasoning)"
+    ["qwen3.6-35b"]="qwen3.6:35b-a3b-q8_0:35 GB (solo only)"
+    ["qwen3.5-27b"]="qwen3.5:27b-q8_0:29 GB (solo prose only)"
 )
 
 # ==============================================

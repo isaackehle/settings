@@ -204,21 +204,23 @@ install_ollama_models() {
     if declare -p MODEL_QUANTS &>/dev/null && [[ ${#MODEL_QUANTS[@]} -gt 0 ]]; then
         echo "Alternative (higher-quality) quants available:"
         local q_index=1
-        local -a q_names=()
+        local -a q_tags=()
         for model_name in "${!MODEL_QUANTS[@]}"; do
             local info="${MODEL_QUANTS[$model_name]}"
-            local quant="${info%%:*}"
+            # Format: "pull-tag:size description" (e.g., "qwen3.5:27b-q8_0:29 GB (solo prose)")
+            # Split on first colon to get the full Ollama pull tag, rest is description
+            local pull_tag="${info%%:*}"
             local desc="${info#*:}"
-            q_names+=("$model_name:$quant")
-            echo "  $q_index) $model_name:$quant — $desc"
+            q_tags+=("$pull_tag")
+            echo "  $q_index) $pull_tag — $desc"
             ((q_index++))
         done
-        if [[ ${#q_names[@]} -gt 0 ]]; then
+        if [[ ${#q_tags[@]} -gt 0 ]]; then
             read -p "Pull any? Enter numbers (space-separated) or Enter to skip: " quant_choices
             if [[ -n "$quant_choices" ]]; then
                 echo ""
                 for choice in $quant_choices; do
-                    local q_model="${q_names[$((choice-1))]}"
+                    local q_model="${q_tags[$((choice-1))]}"
                     if [[ -n "$q_model" ]]; then
                         echo "▶ Pulling alternative quant: $q_model"
                         ollama pull "$q_model" && echo "✅ $q_model pulled" || echo "⚠ Failed to pull $q_model"

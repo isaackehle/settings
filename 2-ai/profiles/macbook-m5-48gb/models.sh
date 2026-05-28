@@ -77,11 +77,11 @@ declare -A MODEL_REMOTES=(
 )
 # ==============================================
 # ALTERNATIVE QUANTS
-# Pull on-demand: ollama pull <model-tag>
+# Pull on-demand: ollama pull <full-tag>
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen3-coder-30b-a3b"]="q8:32 GB (solo only)"
-    ["qwen3.5-27b"]="q8:29 GB (solo prose)"
+    ["qwen3-coder-30b-a3b"]="qwen3-coder:30b-a3b-q8_0:32 GB (solo only)"
+    ["qwen3.5-27b"]="qwen3.5:27b-q8_0:29 GB (solo prose)"
 )
 
 # ==============================================

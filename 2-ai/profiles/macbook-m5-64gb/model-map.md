@@ -14,7 +14,7 @@ each model plays in each tool.  `-` = not assigned.
 | **Zed** | default | — | — | — | — | — | — | — | — | — | — | — | — |
 | **Cursor** | default | — | — | — | — | — | — | — | — | — | — | — | cloud |
 | **OpenCode** | code | — | — | think | research | write | — | plan | — | — | — | — | — |
-| **Continue** | chat | — | — | — | — | chat_alt | — | — | apply | autocomplete | autocomplete_heavy | embed | kimi |
+| **Continue** | chat | — | — | — | — | chat_alt | — | — | apply | autocomplete | autocomplete_heavy | embed | — |
 | **ClaudeCode** | primary | coding | opus | — | research | — | reasoning | fast | — | — | — | — | — |
 
 ---
