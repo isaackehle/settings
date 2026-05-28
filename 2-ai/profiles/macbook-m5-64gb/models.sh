@@ -72,16 +72,22 @@ OLLAMA_MODELS=(
 # ==============================================
 declare -A MODEL_REMOTES=(
     ["deepseek-r1-tools:32b"]="MFDoom/deepseek-r1-tool-calling:32b"
+    ["qwen3-coder-next-80b:q4"]="bazobehram/qwen3-coder-next:latest"
+    ["qwen3-coder-30b-a3b:q6"]="hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q6_K_XL"
+    ["qwen3.6-35b:q4"]="fredrezones55/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive:Q4"
+    ["qwen3.5-27b:q5"]="sinhang/qwen3.5-claude-4.6-opus:27b-q5_K_M"
 )
 # ==============================================
 # ALTERNATIVE QUANTS — higher quality for hardware that supports them
 # Pull on-demand: ollama pull <full-tag>
+# Note: deepseek-r1-tools:32b is already q8_0 (max quality).
+# Note: qwen3-coder-next-80b:q4 has no q8 option (≈96 GB, exceeds 64 GB).
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen3-coder-30b-a3b"]="qwen3-coder:30b-a3b-q8_0:32 GB (solo only)"
-    ["gemma4:31b"]="gemma4:31b-it-q8_0:28 GB (solo deep reasoning)"
-    ["qwen3.6-35b"]="qwen3.6:35b-a3b-q8_0:35 GB (solo only)"
-    ["qwen3.5-27b"]="qwen3.5:27b-q8_0:29 GB (solo prose only)"
+    ["qwen3-coder-30b-a3b"]="qwen3-coder:30b-a3b-q8_0|qwen3-coder-30b-a3b:q8|32 GB (solo coding)"
+    ["gemma4:31b"]="gemma4:31b-it-q8_0||28 GB (thinking / vision / debug)"
+    ["qwen3.6-35b"]="qwen3.6:35b-a3b-q8_0|qwen3.6-35b:q8|35 GB (solo architect)"
+    ["qwen3.5-27b"]="qwen3.5:27b-q8_0|qwen3.5-27b:q8|29 GB (writing / research)"
 )
 
 # ==============================================
