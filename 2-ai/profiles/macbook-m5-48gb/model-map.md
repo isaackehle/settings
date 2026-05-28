@@ -3,34 +3,34 @@
 ## Model Assignment Matrix
 
 Tools across the rows, models across the columns. Cells show the role(s)
-each model plays in each tool.  `-` = not assigned.
+each model plays in each tool. `-` = not assigned.
 
-| Tool | qwen3-coder-30b-a3b:q5 | qwen3.5-27b:q5 | qwen3.5-27b:q8 | deepseek-r1-tools:14b | qwen3:4b | codestral:22b | qwen2.5-coder:1.5b | qwen2.5-coder:7b | nomic-embed-text | kimi-k2.6 | qwen3:14b |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Cline** | default | — | — | — | — | — | — | — | — | cloud | — |
-| **ZooCode** | — | — | — | — | — | — | — | — | — | — | — |
-| **KiloCode** | default | — | — | — | — | — | — | — | — | cloud | — |
-| **Aider** | default | — | — | — | weak | editor | — | — | — | — | — |
-| **Zed** | default | — | — | — | — | — | — | — | — | — | — |
-| **Cursor** | default | — | — | — | — | — | — | — | — | cloud | — |
-| **OpenCode** | code | — | write | think | plan | — | — | — | — | — | research |
-| **Continue** | chat | — | chat_alt | — | — | apply | autocomplete | autocomplete_heavy | embed | — | — |
-| **ClaudeCode** | primary | opus | — | reasoning | fast | — | — | — | — | — | research |
+| Tool           | qwen3-coder-30b-a3b:q5 | gemma4:31b | qwen3.5-27b:q5 | qwen3.5-27b:q8 | deepseek-r1-tools:32b | qwen3:4b | codestral:22b | qwen2.5-coder:1.5b |  qwen2.5-coder:7b  | nomic-embed-text | kimi-k2.6 |
+| -------------- | :--------------------: | :--------: | :------------: | :------------: | :-------------------: | :------: | :-----------: | :----------------: | :----------------: | :--------------: | :-------: |
+| **Cline**      |        default         |     —      |       —        |       —        |           —           |    —     |       —       |         —          |         —          |        —         |   cloud   |
+| **KiloCode**   |        default         |     —      |       —        |       —        |           —           |    —     |       —       |         —          |         —          |        —         |   cloud   |
+| **Aider**      |        default         |     —      |       —        |       —        |           —           |   weak   |    editor     |         —          |         —          |        —         |     —     |
+| **Zed**        |        default         |     —      |       —        |       —        |           —           |    —     |       —       |         —          |         —          |        —         |     —     |
+| **Cursor**     |        default         |     —      |       —        |       —        |           —           |    —     |       —       |         —          |         —          |        —         |   cloud   |
+| **OpenCode**   |     code, research     |     —      |       —        |     write      |         think         |   plan   |       —       |         —          |         —          |        —         |     —     |
+| **Continue**   |          chat          |     —      |       —        |    chat_alt    |           —           |    —     |     apply     |    autocomplete    | autocomplete_heavy |      embed       |     —     |
+| **ClaudeCode** |   primary, research    |     —      |      opus      |       —        |       reasoning       |   fast   |       —       |         —          |         —          |        —         |     —     |
 
 ---
 
 ## Model Categories
 
-| Category | # | Models |
-| --- | ---:| --- |
-| **Co-resident** | 1 | `qwen3-coder-30b-a3b:q5` (21 GB) |
-| **Writing** | 2 | `qwen3.5-27b:q5` (19 GB), `qwen3.5-27b:q8` (19 GB) |
-| **Reasoning** | 1 | `deepseek-r1-tools:14b` (9 GB) |
-| **Planning** | 1 | `qwen3:4b` (5 GB) |
-| **Apply / Insert** | 1 | `codestral:22b` (14 GB) |
-| **Autocomplete** | 2 | `qwen2.5-coder:1.5b` (1 GB), `qwen2.5-coder:7b` (5 GB) |
-| **Embeddings** | 1 | `nomic-embed-text` (0.3 GB) |
-| **Cloud** | 1 | `kimi-k2.6` |
+| Category           |   # | Models                                                 |
+| ------------------ | --: | ------------------------------------------------------ |
+| **Co-resident**    |   1 | `qwen3-coder-30b-a3b:q5` (21 GB)                       |
+| **Dense / Vision** |   1 | `gemma4:31b` (20 GB)                                   |
+| **Writing**        |   2 | `qwen3.5-27b:q5` (19 GB), `qwen3.5-27b:q8` (29 GB)     |
+| **Reasoning**      |   1 | `deepseek-r1-tools:32b` (20 GB)                        |
+| **Planning**       |   1 | `qwen3:4b` (5 GB)                                      |
+| **Apply / Insert** |   1 | `codestral:22b` (14 GB)                                |
+| **Autocomplete**   |   2 | `qwen2.5-coder:1.5b` (1 GB), `qwen2.5-coder:7b` (5 GB) |
+| **Embeddings**     |   1 | `nomic-embed-text` (0.3 GB)                            |
+| **Cloud**          |   1 | `kimi-k2.6`                                            |
 
 ## OpenRouter (cloud models)
 
@@ -51,4 +51,5 @@ These models are available via OpenRouter — no local storage needed:
 - mistral-large-3
 
 ---
+
 Generated by `generate-model-map.sh` for profile `macbook-m5-48gb`. Edit `models.sh` and re-run to regenerate.

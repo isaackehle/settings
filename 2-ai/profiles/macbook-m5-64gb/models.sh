@@ -65,6 +65,15 @@ OLLAMA_MODELS=(
 )
 
 # ==============================================
+# REMOTE MODELS — pull from community namespace, alias locally
+# Some models are not in the official Ollama library and must be
+# pulled from a community namespace (e.g., MFDoom/). After pulling,
+# a local alias is created so all tool configs use the short name.
+# ==============================================
+declare -A MODEL_REMOTES=(
+    ["deepseek-r1-tools:32b"]="MFDoom/deepseek-r1-tool-calling:32b"
+)
+# ==============================================
 # ALTERNATIVE QUANTS — higher quality for hardware that supports them
 # Pull on-demand: ollama pull <name>:<quant>
 # ==============================================
@@ -87,7 +96,10 @@ declare -A MODEL_CONTEXTS=(
     ["gemma4:31b"]="8k 32k 128k 256k"
     ["qwen3.6-35b:q4"]="8k 128k 256k"
     ["qwen3.5-27b:q5"]="8k 32k 128k 256k"
+    ["qwen3.5-27b:q8"]="8k 32k 128k 256k"
+    ["qwen3:4b"]="8k 128k"
     ["deepseek-r1-tools:32b"]="128k"
+    ["qwen2.5-coder:7b"]="8k 32k"
     ["codestral:22b"]="32k"
 )
 
@@ -108,7 +120,6 @@ declare -A OPENCODE_AGENTS=(
 # --- Continue (→ config.yaml) ---
 declare -A CONTINUE_ROLES=(
     [chat]="qwen3-coder-next-80b:q4"
-    [kimi]="kimi-k2.6"
     [chat_alt]="qwen3.5-27b:q8"
     [apply]="codestral:22b"
     [autocomplete]="qwen2.5-coder:1.5b"

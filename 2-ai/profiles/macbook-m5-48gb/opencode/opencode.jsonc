@@ -54,7 +54,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3:14b",
+      "model": "ollama/qwen3-coder-30b-a3b:q5",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -70,7 +70,7 @@
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/deepseek-r1-tools:14b",
+      "model": "ollama/deepseek-r1-tools:32b",
       "permission": {
         "bash": "deny",
         "edit": "deny",
@@ -122,11 +122,7 @@
         "qwen3.5-27b:q5-128k": { "name": "Qwen3.5 27B (q5-128k)" },
         "qwen3.5-27b:q5-256k": { "name": "Qwen3.5 27B (q5-256k)" },
         "qwen3.5-27b:q8": { "name": "Qwen3.5 27B (q8)" },
-        "deepseek-r1-tools:14b-128k": { "name": "DeepSeek R1 Tools 14B (128k)" },
-        "qwen3:14b-8k": { "name": "Qwen3 14B (8k)" },
-        "qwen3:14b-32k": { "name": "Qwen3 14B (32k)" },
-        "qwen3:14b-128k": { "name": "Qwen3 14B (128k)" },
-        "qwen3:14b-256k": { "name": "Qwen3 14B (256k)" },
+        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 Tools 32B (128k)" },
         "qwen3:4b-8k": { "name": "Qwen3 4B (8k)" },
         "qwen3:4b-32k": { "name": "Qwen3 4B (32k)" },
         "qwen3:4b-128k": { "name": "Qwen3 4B (128k)" },

@@ -1,7 +1,7 @@
 provider: ollama
 base_url: http://localhost:11434/v1
 api_key: sk-local
-default_model: qwen3.2-coder:7b
+default_model: qwen3-coder-30b-a3b:q5
 max_tokens: 4096
 temperature: 0.2
 features:

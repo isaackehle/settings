@@ -9,8 +9,8 @@
       "models": {
         "qwen3-coder-30b-a3b:q5": { "name": "Primary (M5 Max 48GB)" },
         "qwen3.5-27b:q5": { "name": "Writing / General" },
-        "deepseek-r1-tools:14b": { "name": "Reasoning + Tools" },
-        "qwen3:14b": { "name": "Qwen3 14B (backup)" },
+        "deepseek-r1-tools:32b": { "name": "Reasoning + Tools" },
+        
         "qwen3:4b": { "name": "Fast / Planning" }
       }
     }

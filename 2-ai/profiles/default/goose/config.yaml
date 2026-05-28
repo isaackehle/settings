@@ -1,4 +1,4 @@
 provider: ollama
 ollama:
   host: http://localhost:11434
-model: qwen3.2-coder:7b
+model: qwen3.5:4b

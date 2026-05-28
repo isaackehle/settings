@@ -56,7 +56,7 @@ _setup_goose_provider() {
 provider: ollama
 ollama:
   host: http://localhost:11434
-model: qwen3.2-coder:7b
+model: qwen3-coder-30b-a3b:q5
 EOF
     cp "$tmp" "$_goose_cfg"
     chmod 600 "$_goose_cfg"

@@ -1,41 +1,44 @@
 {
   "provider": {
-    "openrouter": {
-      "name": "OpenRouter (Cloud)",
-      "options": {
-        "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY"
-      },
+    "ollama": {
       "models": {
+        "deepseek-r1-tools:14b": {
+          "name": "DeepSeek R1 Tool-Calling 14B (local)"
+        },
+        "deepseek-r1-tools:32b": {
+          "name": "DeepSeek R1 Tool-Calling 32B (local)"
+        },
+        "qwen3-coder-30b-a3b:q5": {
+          "name": "Qwen3-Coder 30B A3B (code)"
+        },
+        "qwen3.5-27b:q8": {
+          "name": "Qwen3.5 27B (general)"
+        },
+        "qwen3.6-35b:q4": {
+          "name": "Qwen3.6 35B (agentic coding)"
+        }
+      },
+      "name": "Ollama (Local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      }
+    },
+    "openrouter": {
+      "models": {
+        "anthropic/claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6"
+        },
         "deepseek/deepseek-r1-tool-calling-32b": {
           "name": "DeepSeek R1 Tool-Calling 32B"
         },
         "qwen/qwen3-8b": {
           "name": "Qwen3 8B (fast, planning)"
-        },
-        "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
         }
-      }
-    },
-    "ollama": {
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
       },
-      "models": {
-        "qwen3.5-27b:q8": {
-          "name": "Qwen3.5 27B (general)"
-        },
-        "qwen3.6-35b:q4": {
-          "name": "Qwen3.6 35B (general)"
-        },
-        "qwen3-coder-30b-a3b:q5": {
-          "name": "Qwen3-Coder 30B A3B (code)"
-        },
-        "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (local)"
-        }
+      "name": "OpenRouter (Cloud)",
+      "options": {
+        "apiKey": "env.OPENROUTER_API_KEY",
+        "baseURL": "https://openrouter.ai/api/v1"
       }
     }
   }

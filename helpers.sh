@@ -449,10 +449,10 @@ show_model_suggestions() {
         echo "    - meta-llama/llama-3.1-405b" >&2
         echo "    - deepseek/deepseek-chat" >&2
     else
-        echo "    - llama3.2:latest" >&2
-        echo "    - qwen2.5-coder:7b" >&2
-        echo "    - mistral-nemo" >&2
-        echo "    - phi4:latest" >&2
+        echo "    - qwen3.5:4b (planning / fast)" >&2
+        echo "    - qwen2.5-coder:1.5b (autocomplete)" >&2
+        echo "    - codestral:22b (apply / insert)" >&2
+        echo "    - qwen3-coder-30b-a3b:q5 (coding)" >&2
     fi
     echo "" >&2
 }

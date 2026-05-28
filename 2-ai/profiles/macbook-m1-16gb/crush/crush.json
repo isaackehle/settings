@@ -8,18 +8,6 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3.5-27b:q5",
-          "name": "Qwen3.5 27B",
-          "context_window": 32768,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
-        },
-        {
           "id": "qwen3:14b",
           "name": "Qwen3 14B",
           "context_window": 32768,
