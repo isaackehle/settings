@@ -47,7 +47,7 @@ _setup_aichat_api_keys() {
     tmp=$(mktemp)
     cat > "$tmp" << 'EOF'
 # Default model
-model: ollama:qwen3.2-coder:7b
+model: ollama:qwen3.5:4b
 
 # Ollama provider
 ollama:

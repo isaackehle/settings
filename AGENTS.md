@@ -234,17 +234,22 @@ against the current installation.
 - Update `docs/04 - AI/Ollama.md` models table when new models are commonly used
 - Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
 
-**Currently recommended models:**
+**Currently recommended models (May 2026):**
 
-| Model          | Pull Command                      |
-| -------------- | --------------------------------- |
-| Llama 3.2      | `ollama pull llama3.2`            |
-| Qwen 3 Coder   | `ollama pull qwen3.2-coder:7b`    |
-| DeepSeek Coder | `ollama pull deepseek-coder:6.7b` |
-| Phi-4          | `ollama pull phi4`                |
-| Gemma 3        | `ollama pull gemma3:12b`          |
-| GLM-4 Flash    | `ollama pull glm-4-flash`         |
-| Codestral      | `ollama pull codestral:22b`       |
+| Model                  | Pull Command                              | Role            |
+| ---------------------- | ----------------------------------------- | --------------- |
+| Qwen3 Coder Next 80B   | `ollama pull qwen3-coder-next-80b`        | Coding (max)    |
+| Qwen3 Coder 30B A3B    | `ollama pull qwen3-coder-30b-a3b`         | Coding          |
+| Qwen3.6 35B            | `ollama pull qwen3.6-35b`                 | Agentic coding  |
+| Qwen3.5 27B            | `ollama pull qwen3.5-27b`                 | Writing         |
+| DeepSeek R1 Tools 32B  | `ollama pull deepseek-r1-tools:32b`       | Reasoning       |
+| Qwen3.5 4B             | `ollama pull qwen3.5:4b`                  | Planning/fast   |
+| Qwen2.5 Coder 1.5B     | `ollama pull qwen2.5-coder:1.5b`          | Autocomplete    |
+| Codestral 22B          | `ollama pull codestral:22b`               | Apply/insert    |
+| Gemma 4 31B            | `ollama pull gemma4:31b`                  | General         |
+| Nomic Embed Text       | `ollama pull nomic-embed-text`            | Embeddings      |
+
+See `2-ai/profiles/WORKSTREAM_2026-05.md` for per-profile model budgets and quantization choices.
 
 ---
 

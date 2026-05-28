@@ -44,8 +44,8 @@
           "supports_attachments": false
         },
         {
-          "id": "deepseek-r1-tools:14b",
-          "name": "DeepSeek R1 Tools 14B (reasoning)",
+          "id": "deepseek-r1-tools:32b",
+          "name": "DeepSeek R1 Tools 32B (reasoning)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,

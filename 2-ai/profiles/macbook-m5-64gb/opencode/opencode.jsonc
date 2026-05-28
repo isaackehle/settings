@@ -5,7 +5,7 @@
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "maxTokens": 16000,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-next-80b:q4",
+      "model": "ollama/qwen3-coder-next-80b:q4-16k",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -87,7 +87,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q8-32k",
+      "model": "ollama/qwen3.5-27b:q8",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -102,7 +102,7 @@
     }
   },
   "default_agent": "code",
-  "model": "ollama/qwen3-coder-next-80b:q4",
+  "model": "ollama/qwen3-coder-next-80b:q4-16k",
   "permission": {
     "bash": "ask",
     "edit": "ask",

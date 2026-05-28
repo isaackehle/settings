@@ -60,8 +60,8 @@ setup_llm() {
         read -p "  Set a default Ollama model for LLM now? (y/N) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            echo "llama3.2" > "$_llm_cfg"
-            log_status "Default model set to llama3.2"
+            echo "qwen3.5:4b" > "$_llm_cfg"
+            log_status "Default model set to qwen3.5:4b (planning / fast)"
         fi
     fi
 
@@ -73,7 +73,7 @@ setup_llm() {
     log_info "  OPENAI_API_KEY=sk-..."
     log_info "  ANTHROPIC_API_KEY=sk-ant-..."
     log_info "Usage:   llm 'prompt'"
-    log_info "         llm -m qwen3.2-coder:7b 'write a python function'"
+    log_info "         llm -m qwen3-coder-30b-a3b:q5 'write a Python function'"
     log_info "         llm chat"
     log_info "Plugins: llm install llm-ollama  (for Ollama)"
     log_info "Docs:    https://llm.datasette.io"

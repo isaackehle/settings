@@ -1,12 +1,12 @@
 [core]
 provider = "openrouter"
-model = "qwen3.2-coder:7b"
+model = "qwen3-coder-30b-a3b:q5"
 base_url = "https://openrouter.ai/api/v1"
 timeout = 120
 
 [ollama]
 base_url = "http://localhost:11434/v1"
-local_model = "qwen3.2-coder:7b"
+local_model = "qwen3-coder-30b-a3b:q5"
 
 [ui]
 streaming = true

@@ -63,19 +63,19 @@ models:
     roles:
       - apply
 
-  - name: 'DeepSeek R1 Tool-Calling 14B'
+  - name: 'DeepSeek R1 Tool-Calling 32B'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'deepseek-r1-tools:14b'
+    model: 'deepseek-r1-tools:32b'
     roles:
       - chat
 
-  - name: 'Qwen3 14B'
+  - name: 'Qwen3 Coder 30B A3B (Q5)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3:14b'
+    model: 'qwen3-coder-30b-a3b:q5'
     roles:
       - chat
 

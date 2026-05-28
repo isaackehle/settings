@@ -81,6 +81,65 @@ create_context_variants() {
 }
 
 # ==============================================
+# REMOTE MODEL ALIASING
+# Some models are not in the official Ollama library and must be
+# pulled from a community namespace (e.g., MFDoom/). After pulling,
+# a local alias is created so all tool configs use the short name.
+# ==============================================
+
+install_remote_models() {
+    if ! declare -p MODEL_REMOTES &>/dev/null || [[ ${#MODEL_REMOTES[@]} -eq 0 ]]; then
+        echo "No MODEL_REMOTES defined — skipping remote model aliases."
+        return 0
+    fi
+
+    echo "Installing remote model aliases..."
+    echo "===================================="
+    echo ""
+
+    local -a passed=()
+    local -a failed=()
+
+    for local_name in "${!MODEL_REMOTES[@]}"; do
+        local remote_name="${MODEL_REMOTES[$local_name]}"
+
+        # Skip if local alias already exists
+        if ollama list 2>/dev/null | grep -q "^${local_name%%:*}"; then
+            echo "✅ Already installed: $local_name"
+            passed+=("$local_name")
+            echo ""
+            continue
+        fi
+
+        echo "▶ Pulling remote: $remote_name → $local_name"
+        if ollama pull "$remote_name"; then
+            # Create local alias from remote model
+            local tmp_mf
+            tmp_mf=$(mktemp /tmp/ollama_alias_XXXXXX)
+            printf 'FROM %s\n' "$remote_name" > "$tmp_mf"
+            if ollama create "$local_name" -f "$tmp_mf" 2>/dev/null; then
+                echo "✅ Created alias: $local_name → $remote_name"
+                passed+=("$local_name")
+            else
+                echo "⚠ Pulled $remote_name but failed to create alias $local_name"
+                echo "  Using remote name directly — tool configs may need updating."
+                failed+=("$local_name")
+            fi
+            rm -f "$tmp_mf"
+        else
+            echo "⚠ Failed to pull: $remote_name"
+            failed+=("$local_name")
+        fi
+        echo ""
+    done
+
+    echo "===================================="
+    echo "Remote aliases: ${#passed[@]} installed, ${#failed[@]} failed"
+    echo "===================================="
+    echo ""
+}
+
+# ==============================================
 # MODEL INSTALLATION
 # Pulls Ollama models. Entry format: plain Ollama name (e.g., "qwen3:14b").
 # Skips :cloud entries (documentation only).
@@ -239,6 +298,7 @@ install_coding_assistants() {
         1)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
+            install_remote_models
             create_context_variants
             ;;
         2)
@@ -248,6 +308,7 @@ install_coding_assistants() {
         3)
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
+            install_remote_models
             create_context_variants
             echo ""
             print_step "Pruning orphan models for $profile_name"

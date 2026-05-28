@@ -3,19 +3,18 @@
 tool-scout.py — Unified catalog and repo manager for AI tools, agents, MCPs,
 VS Code extensions, and CLI devtools.
 
-Commands:
-  list [--category <cat>]          Show catalog entries not yet in repo
-  search <query> [--category <cat>]  Search catalog by name/description
-  add <name>                       Generate stub + config + register in setup_ai.sh
-  update <name>                    Re-generate stub from catalog (preserves custom edits)
-  remove <name>                    Delete stub + config dir + unregister from setup_ai.sh
-  sync                             Check existing scripts against catalog for drift
-  find-brew <query>                Search Homebrew for AI/dev tools
-  find-npm <query>                 Search npm for CLI tools / MCP servers
-  find-vscode <query>              Search VS Code marketplace (best-effort)
+Reads catalog from scripts/tool-catalog.json (human-editable, PR-friendly).
 
-Catalog covers:
-  terminal-agents, vscode-extensions, mcp-servers, cli-devtools, ollama-models
+Commands:
+  list [--category <cat>]        Show catalog entries not yet in repo
+  search <query> [--category]     Search catalog by name/description
+  add <name>                      Generate stub + config dir (manual register)
+  remove <name>                   Delete stub + config dir
+  sync                            Check repo against catalog for drift
+  catalog-show                    Print full catalog (JSON)
+  find-brew <query>               Search Homebrew for AI/dev tools
+  find-npm <query>                Search npm for CLI tools
+  find-vscode <query>             Search VS Code marketplace (best effort)
 """
 
 import argparse
@@ -27,176 +26,55 @@ import subprocess
 import sys
 from pathlib import Path
 
-# ── Inline catalog ──────────────────────────────────────────────────────────
-CATALOG = {
-    "terminal-agents": [
-        {
-            "name": "openclaw",
-            "display_name": "OpenClaw",
-            "description": "Personal AI assistant with 25+ messaging channels",
-            "github": "openclaw/openclaw",
-            "install_methods": [
-                {"method": "npm", "command": "npm install -g openclaw@latest"},
-                {"method": "pnpm", "command": "pnpm add -g openclaw@latest"},
-            ],
-            "binary": "openclaw",
-            "setup_command": "openclaw onboard --install-daemon",
-            "config_dir": "~/.openclaw",
-            "config_file": "openclaw.json",
-            "config_ext": "json",
-        },
-        {
-            "name": "zeroclaw",
-            "display_name": "ZeroClaw",
-            "description": "Fast Rust AI assistant — OpenClaw successor",
-            "github": "zeroclaw-labs/zeroclaw",
-            "install_methods": [
-                {"method": "curl", "command": "curl -fsSL https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/install.sh | bash"},
-            ],
-            "binary": "zeroclaw",
-            "setup_command": "zeroclaw onboard",
-            "config_dir": "~/.zeroclaw",
-            "config_file": "config.toml",
-            "config_ext": "toml",
-        },
-        {
-            "name": "ironclaw",
-            "display_name": "IronClaw",
-            "description": "Privacy-first Agent OS with 13 security layers",
-            "github": "nearai/ironclaw",
-            "install_methods": [
-                {"method": "brew", "command": "brew install ironclaw"},
-                {"method": "cargo", "command": "cargo install ironclaw"},
-            ],
-            "binary": "ironclaw",
-            "setup_command": "ironclaw onboard",
-            "config_dir": "~/.ironclaw",
-            "config_file": ".env",
-            "config_ext": "env",
-        },
-        {
-            "name": "hermes",
-            "display_name": "Hermes",
-            "description": "Self-improving AI agent from Nous Research",
-            "github": "NousResearch/hermes-agent",
-            "install_methods": [
-                {"method": "curl", "command": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash"},
-            ],
-            "binary": "hermes",
-            "setup_command": "hermes setup",
-            "config_dir": "~/.hermes",
-            "config_file": "config.yaml",
-            "config_ext": "yaml",
-        },
-        {
-            "name": "picoclaw",
-            "display_name": "PicoClaw",
-            "description": "Tiny AI for embedded/edge devices",
-            "github": "picoclaw-labs/picoclaw",
-            "install_methods": [
-                {"method": "go", "command": "go install github.com/picoclaw-labs/picoclaw@latest"},
-            ],
-            "binary": "picoclaw",
-            "setup_command": None,
-            "config_dir": "~/.config/picoclaw",
-            "config_file": "config.toml",
-            "config_ext": "toml",
-        },
-        {
-            "name": "llm",
-            "display_name": "LLM",
-            "description": "Simon Willison's swiss-army-knife CLI for LLMs",
-            "github": "simonw/llm",
-            "install_methods": [{"method": "brew", "command": "brew install llm"}],
-            "binary": "llm",
-            "setup_command": None,
-            "config_dir": "~/.config/io.datasette.llm",
-            "config_file": "default_model.txt",
-            "config_ext": "txt",
-        },
-        {
-            "name": "fabric",
-            "display_name": "Fabric",
-            "description": "AI CLI workflow toolkit with 100+ patterns",
-            "github": "danielmiessler/fabric",
-            "install_methods": [{"method": "brew", "command": "brew install fabric-ai"}],
-            "binary": "fabric-ai",
-            "setup_command": "fabric --setup",
-            "config_dir": "~/.config/fabric",
-            "config_file": "",
-            "config_ext": "",
-        },
-        {
-            "name": "aichat",
-            "display_name": "AIChat",
-            "description": "All-in-one LLM CLI with local and remote support",
-            "github": "sigoden/aichat",
-            "install_methods": [{"method": "brew", "command": "brew install aichat"}],
-            "binary": "aichat",
-            "setup_command": None,
-            "config_dir": "~/.config/aichat",
-            "config_file": "config.yaml",
-            "config_ext": "yaml",
-        },
-        {
-            "name": "goose",
-            "display_name": "Goose",
-            "description": "Block's open-source AI coding agent",
-            "github": "block/goose",
-            "install_methods": [{"method": "brew", "command": "brew install block/tap/goose"}],
-            "binary": "goose",
-            "setup_command": "goose --setup",
-            "config_dir": "~/.config/goose",
-            "config_file": "config.yaml",
-            "config_ext": "yaml",
-        },
-        {
-            "name": "plandex",
-            "display_name": "Plandex",
-            "description": "Terminal AI planner for multi-file coding tasks",
-            "github": "plandex-ai/plandex",
-            "install_methods": [{"method": "curl", "command": "curl -sL https://plandex.ai/install.sh | bash"}],
-            "binary": "plandex",
-            "setup_command": None,
-            "config_dir": "~/.config/plandex",
-            "config_file": "config.env",
-            "config_ext": "env",
-        },
-    ],
-    "vscode-extensions": [
-        {"name": "continue", "display_name": "Continue", "description": "Open-source AI code assistant", "marketplace_id": "Continue.continue", "install_command": "code --install-extension Continue.continue"},
-        {"name": "copilot", "display_name": "GitHub Copilot", "description": "GitHub Copilot extension", "marketplace_id": "GitHub.copilot", "install_command": "code --install-extension GitHub.copilot"},
-        {"name": "kilocode", "display_name": "Kilo Code", "description": "Fast AI coding assistant", "marketplace_id": "KiloCode.kilocode", "install_command": "code --install-extension KiloCode.kilocode"},
-        {"name": "cline", "display_name": "Cline", "description": "Autonomous coding agent for VS Code", "marketplace_id": "saoudrizwan.claude-dev", "install_command": "code --install-extension saoudrizwan.claude-dev"},
-        {"name": "zoocode", "display_name": "Zoo Code", "description": "VS Code settings merge for Zoo Code config", "marketplace_id": None, "install_command": None},
-    ],
-    "mcp-servers": [
-        {"name": "mcp-playwright", "display_name": "MCP Playwright", "description": "Browser automation MCP server", "install_command": "npx @anthropic-ai/mcp-playwright"},
-        {"name": "mcp-filesystem", "display_name": "MCP Filesystem", "description": "Secure file access MCP server", "install_command": "npx @modelcontextprotocol/server-filesystem"},
-    ],
-}
-
-# Flatten catalog for lookup
-ALL_ENTRIES = []
-for cat, items in CATALOG.items():
-    for item in items:
-        item["category"] = cat
-        ALL_ENTRIES.append(item)
+CATALOG_PATH = Path(__file__).parent / "tool-catalog.json"
 
 
-# ── Template (raw string, no f-string) ──────────────────────────────────
-# Tokens: __NAME__, __NAME_US__, __DISPLAY__, __BINARY__, __CFG_DIR__,
-#         __CFG_FILE__, __CFG_EXT__, __INSTALL_BLOCK__, __CONFIG_DEPLOY__,
-#         __SETUP_HINT__, __BACKUP_RESTORE__, __DOCS__, __DESCRIPTION__
+def _load_catalog() -> dict:
+    if not CATALOG_PATH.exists():
+        print(f"Catalog not found: {CATALOG_PATH}", file=sys.stderr)
+        sys.exit(1)
+    with open(CATALOG_PATH) as f:
+        return json.load(f)
 
-STUB_TEMPLATE = r'''if [ -z "${SETTINGS_BASE:-}" ]; then
+
+def _repo_root() -> Path:
+    cwd = Path.cwd()
+    if (cwd / "setup_ai.sh").exists():
+        return cwd
+    if (cwd.parent / "setup_ai.sh").exists():
+        return cwd.parent
+    script_dir = Path(__file__).parent
+    if (script_dir.parent / "setup_ai.sh").exists():
+        return script_dir.parent
+    if (script_dir / "setup_ai.sh").exists():
+        return script_dir
+    return cwd
+
+
+def _existing_names(repo_root: Path) -> set:
+    names = set()
+    ai_dir = repo_root / "2-ai"
+    if ai_dir.exists():
+        for p in ai_dir.iterdir():
+            if p.is_file() and p.suffix == ".sh":
+                names.add(p.stem)
+    return names
+
+
+def _flatten(catalog: dict) -> list:
+    return catalog.get("tools", [])
+
+
+# ── Stub generation ─────────────────────────────────────────────────────────
+
+STUB_HEADER = r'''if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
 fi
 . "${SETTINGS_BASE}/helpers.sh"
 
 # ---------------------------------------------------------------------------
 # __DISPLAY__ — __DESCRIPTION__
-# Repo:     __DOCS__
+# Repo:     https://github.com/__GITHUB__
 # ---------------------------------------------------------------------------
 
 __NAME_US___cfg_dir="__CFG_DIR__"
@@ -224,7 +102,7 @@ __CONFIG_DEPLOY____SETUP_HINT__
     log_info "=== __DISPLAY__ ==="
     log_info "Binary:   __BINARY__"
     log_info "Config:   __CFG_DIR__"
-    log_info "Docs:     __DOCS__"
+    log_info "Docs:     https://github.com/__GITHUB__"
     log_info ""
 }
 __BACKUP_RESTORE__
@@ -235,38 +113,6 @@ fi
 '''
 
 
-def _repo_root() -> Path:
-    cwd = Path.cwd()
-    if (cwd / "setup_ai.sh").exists():
-        return cwd
-    if (cwd.parent / "setup_ai.sh").exists():
-        return cwd.parent
-    script_dir = Path(__file__).parent
-    if (script_dir.parent / "setup_ai.sh").exists():
-        return script_dir.parent
-    if (script_dir / "setup_ai.sh").exists():
-        return script_dir
-    return cwd
-
-
-def _existing_names(repo_root: Path) -> set:
-    names = set()
-    ai_dir = repo_root / "2-ai"
-    if ai_dir.exists():
-        for p in ai_dir.iterdir():
-            if p.is_file() and p.suffix == ".sh":
-                names.add(p.stem)
-    setup = repo_root / "setup_ai.sh"
-    if setup.exists():
-        text = setup.read_text()
-        for line in text.splitlines():
-            if "setup:" in line and ")" in line:
-                m = re.search(r"setup:([a-z0-9_-]+)\)", line)
-                if m:
-                    names.add(m.group(1))
-    return names
-
-
 def _build_install_block(entry: dict) -> str:
     methods = entry.get("install_methods", [])
     if not methods:
@@ -275,70 +121,54 @@ def _build_install_block(entry: dict) -> str:
     display = entry.get("display_name", entry["name"])
     lines = []
     for im in methods:
-        method = im["method"]
-        cmd = im["command"]
-        if method in ("brew", "npm", "pip", "go", "cargo"):
+        method = im.get("method", "")
+        cmd = im.get("command", "")
+        if method in ("brew", "npm", "pip", "go", "cargo", "uv"):
             lines.append(
-                f'''    if {cmd}; then
-        log_status "{display} installed via {method}"
-        return 0
-    else
-        log_warning "{method} install failed — trying next method"
-    fi'''
+                f'''    if {cmd}; then\n        log_status "{display} installed via {method}"\n        return 0\n    else\n        log_warning "{method} install failed — trying next method"\n    fi'''
+            )
+        elif method == "docker":
+            lines.append(
+                f'''    if {cmd}; then\n        log_status "{display} image pulled via Docker"\n        return 0\n    else\n        log_warning "Docker pull failed"\n    fi'''
             )
         else:
             lines.append(
-                f'''    read -p "  Run the {display} installer? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        log_warning "Skipped {display} installer"
-        return 1
-    fi
-    if {cmd}; then
-        log_status "{display} installed"
-        return 0
-    else
-        log_warning "Installer failed — trying next method"
-    fi'''
+                f'''    read -p "  Run the {display} installer? (y/N) " -n 1 -r\n    echo\n    if [[ ! $REPLY =~ ^[Yy]$ ]]; then\n        log_warning "Skipped {display} installer"\n        return 1\n    fi\n    if {cmd}; then\n        log_status "{display} installed"\n        return 0\n    else\n        log_warning "Installer failed — trying next method"\n    fi'''
             )
-    return "\n".join(lines) + '\n    log_error "Failed to install {display}"\n    return 1'
+    return "\n".join(lines) + f'\n    log_error "Failed to install {display}"\n    return 1'
 
 
 def _build_config_deploy(entry: dict) -> str:
     cfg_file = entry.get("config_file", "")
-    name = entry["name"]
-    display = entry.get("display_name", name)
     if not cfg_file:
         return ""
     return f'''    # Deploy config (profile-specific → default)
-    mkdir -p "{name}_cfg_dir"
+    mkdir -p "{entry['name']}_cfg_dir"
     local src_cfg
-    src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/${{MACHINE_PROFILE}}/{name}/{cfg_file}"
+    src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/${{MACHINE_PROFILE}}/{entry['name']}/{cfg_file}"
     if [ ! -f "$src_cfg" ]; then
-        src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/default/{name}/{cfg_file}"
+        src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/default/{entry['name']}/{cfg_file}"
     fi
     if [ -f "$src_cfg" ]; then
-        copy_file "$src_cfg" "{name}_cfg"
-        chmod 600 "{name}_cfg"
-        log_status "Config deployed to {name}_cfg"
+        copy_file "$src_cfg" "{entry['name']}_cfg"
+        chmod 600 "{entry['name']}_cfg"
+        log_status "Config deployed to {entry['name']}_cfg"
     else
-        log_warning "No {display} config found"
+        log_warning "No {entry.get('display_name', entry['name'])} config found"
     fi'''
 
 
 def _build_setup_hint(entry: dict) -> str:
     cmd = entry.get("setup_command")
-    name = entry["name"]
-    display = entry.get("display_name", name)
     if not cmd:
         return ""
     return f'''\n    # Offer to run setup wizard
-    if [ ! -f "{name}_cfg" ]; then
+    if [ ! -f "{entry['name']}_cfg" ]; then
         echo ""
         read -p "  Run '{cmd}' now? (y/N) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            {cmd} || log_warning "{display} setup may need manual re-run"
+            {cmd} || log_warning "{entry.get('display_name', entry['name'])} setup may need manual re-run"
         fi
     fi'''
 
@@ -376,8 +206,7 @@ restore_{name_us}() {{
         log_warning "No {display} backup found in ${{BACKUP_DIR}}"
     fi
 }}'''
-    else:
-        return f'''\nbackup_{name_us}() {{
+    return f'''\nbackup_{name_us}() {{
     if [ -d "{cfg_dir}" ]; then
         cp -r "{cfg_dir}" "${{BACKUP_DIR}}/{name}_backup_${{DATE}}"
         log_status "Backed up {display} config"
@@ -397,95 +226,43 @@ restore_{name_us}() {{
 }}'''
 
 
-# ── Stub generation using template replacement ────────────────────────────────
-
-def _generate_bash_stub(entry: dict) -> str:
+def _generate_stub(entry: dict) -> str:
     name = entry["name"]
     display = entry.get("display_name", name)
-    binary = entry.get("binary", name)
+    binary = entry.get("binary", name) or name
     cfg_dir = entry.get("config_dir", f"~/.config/{name}").replace("~/", "$HOME/")
     cfg_file = entry.get("config_file", "")
-    docs = f"https://github.com/{entry.get('github', '')}"
+    github = entry.get("github", "")
     name_us = name.replace("-", "_")
 
-    install_block = _build_install_block(entry)
-    config_deploy = _build_config_deploy(entry)
-    setup_hint = _build_setup_hint(entry)
-    backup_restore = _build_backup_restore(entry)
-
-    stub = STUB_TEMPLATE
+    stub = STUB_HEADER
     stub = stub.replace("__NAME__", name)
     stub = stub.replace("__NAME_US__", name_us)
     stub = stub.replace("__DISPLAY__", display)
     stub = stub.replace("__BINARY__", binary)
     stub = stub.replace("__CFG_DIR__", cfg_dir)
     stub = stub.replace("__CFG_FILE__", cfg_file)
-    stub = stub.replace("__DOCS__", docs)
+    stub = stub.replace("__GITHUB__", github)
     stub = stub.replace("__DESCRIPTION__", entry.get("description", ""))
-    stub = stub.replace("__INSTALL_BLOCK__", install_block)
-    stub = stub.replace("__CONFIG_DEPLOY__", config_deploy)
-    stub = stub.replace("__SETUP_HINT__", setup_hint)
-    stub = stub.replace("__BACKUP_RESTORE__", backup_restore)
+    stub = stub.replace("__INSTALL_BLOCK__", _build_install_block(entry))
+    stub = stub.replace("__CONFIG_DEPLOY__", _build_config_deploy(entry))
+    stub = stub.replace("__SETUP_HINT__", _build_setup_hint(entry))
+    stub = stub.replace("__BACKUP_RESTORE__", _build_backup_restore(entry))
     return stub
 
 
-# ── setup_ai.sh patching ────────────────────────────────────────────────────
-
-def _patch_setup_ai(repo_root: Path, name: str, mode: str = "add") -> None:
-    setup_path = repo_root / "setup_ai.sh"
-    text = setup_path.read_text()
-
-    source_line = f'. "${{SETTINGS_BASE}}/2-ai/{name}.sh"'
-    setup_case = f'  setup:{name}) setup_{name.replace("-", "_")} ;;'
-    restore_case = f'  restore:{name}) restore_{name.replace("-", "_")} ;;'
-    backup_case = f'  backup:{name}) backup_{name.replace("-", "_")} ;;'
-
-    if mode == "add":
-        # Source line
-        if source_line not in text:
-            lines = text.splitlines()
-            last_idx = max((i for i, line in enumerate(lines) if "2-ai/" in line and line.strip().startswith(".")), default=-1)
-            if last_idx >= 0:
-                lines.insert(last_idx + 1, source_line)
-                text = "\n".join(lines) + "\n"
-
-        # TOOL_GROUPS
-        group = None
-        for cat, items in CATALOG.items():
-            if any(i["name"] == name for i in items):
-                group = cat.replace("-", "_")
-                break
-
-        if group == "terminal_agents":
-            pat = r'(\["terminal-agents"\]="[^"]+)"'
-            if re.search(pat, text):
-                text = re.sub(pat, rf'\1 {name}"', text)
-
-        # case blocks — append after plandex as anchor
-        for case in (setup_case, restore_case, backup_case):
-            if case not in text:
-                marker = "  setup:plandex) setup_plandex ;;"
-                if marker in text:
-                    text = text.replace(marker, f"{marker}\n{case}")
-
-    elif mode == "remove":
-        text = re.sub(rf'^{re.escape(source_line)}\n', "", text, flags=re.MULTILINE)
-        text = re.sub(rf'^\s+{re.escape(setup_case)}\n', "", text, flags=re.MULTILINE)
-        text = re.sub(rf'^\s+{re.escape(restore_case)}\n', "", text, flags=re.MULTILINE)
-        text = re.sub(rf'^\s+{re.escape(backup_case)}\n', "", text, flags=re.MULTILINE)
-        text = re.sub(rf'\b{name}\b\s*', "", text)
-
-    setup_path.write_text(text)
-
-
-# ── Commands ────────────────────────────────────────────────────────────────
+# ── Commands ──────────────────────────────────────────────────────────────
 
 def cmd_list(args):
+    catalog = _load_catalog()
     repo = _repo_root()
     existing = _existing_names(repo)
     cat_filter = args.category
 
-    results = [e for e in ALL_ENTRIES if e["name"] not in existing and (not cat_filter or e.get("category") == cat_filter)]
+    results = [
+        e for e in _flatten(catalog)
+        if e["name"] not in existing and (not cat_filter or e.get("category") == cat_filter)
+    ]
 
     if not results:
         print("No new tools found — your catalog is current.")
@@ -504,13 +281,14 @@ def cmd_list(args):
 
 
 def cmd_search(args):
+    catalog = _load_catalog()
     query = args.query.lower()
     cat_filter = args.category
-    results = []
-    for e in ALL_ENTRIES:
-        hay = f"{e['name']} {e.get('display_name','')} {e['description']}".lower()
-        if query in hay and (not cat_filter or e.get("category") == cat_filter):
-            results.append(e)
+    results = [
+        e for e in _flatten(catalog)
+        if query in f"{e['name']} {e.get('display_name','')} {e['description']}" .lower()
+        and (not cat_filter or e.get("category") == cat_filter)
+    ]
 
     if not results:
         print(f"No catalog entries match '{args.query}'")
@@ -520,10 +298,10 @@ def cmd_search(args):
 
 
 def cmd_add(args):
-    entry = next((e for e in ALL_ENTRIES if e["name"] == args.name), None)
+    catalog = _load_catalog()
+    entry = next((e for e in _flatten(catalog) if e["name"] == args.name), None)
     if not entry:
         print(f"Error: '{args.name}' not found in catalog.", file=sys.stderr)
-        print(f"Run 'tool-scout search {args.name}' or 'tool-scout list' to find it.", file=sys.stderr)
         sys.exit(1)
 
     repo = _repo_root()
@@ -532,7 +310,7 @@ def cmd_add(args):
         print(f"Error: {dest} already exists. Use --force to overwrite.", file=sys.stderr)
         sys.exit(1)
 
-    stub = _generate_bash_stub(entry)
+    stub = _generate_stub(entry)
     dest.write_text(stub)
     dest.chmod(0o755)
     print(f"Created {dest}")
@@ -542,13 +320,14 @@ def cmd_add(args):
     (cfg_dir / ".gitkeep").touch()
     print(f"Prepared config dir: {cfg_dir}")
 
-    _patch_setup_ai(repo, args.name, mode="add")
-    print(f"Registered {args.name} in setup_ai.sh")
-    print("\nNext steps:")
-    print(f"  1. Review {dest}")
-    print(f"  2. Add profile-specific configs under 2-ai/profiles/<machine>/{args.name}/")
-    print(f"  3. Run syntax check: bash -n 2-ai/{args.name}.sh")
-    print("  4. Commit the changes")
+    print(f"\nRegistered {args.name}")
+    print("Next steps:")
+    print(f"  1. Source the script in setup_ai.sh:")
+    print(f'     . "${{SETTINGS_BASE}}/2-ai/{args.name}.sh"')
+    print(f"  2. Add to TOOL_GROUPS in setup_ai.sh")
+    print(f"  3. Add setup/restore/backup case entries in setup_ai.sh")
+    print(f"  4. Run syntax check: bash -n 2-ai/{args.name}.sh")
+    print("  5. Commit the changes")
 
 
 def cmd_remove(args):
@@ -559,7 +338,7 @@ def cmd_remove(args):
         sys.exit(1)
 
     if not args.yes:
-        ans = input(f"Remove {args.name}? This deletes {dest} and unregisters from setup_ai.sh [y/N]: ")
+        ans = input(f"Remove {args.name}? This deletes {dest} [y/N]: ")
         if ans.lower() != "y":
             print("Aborted.")
             return
@@ -572,14 +351,12 @@ def cmd_remove(args):
         shutil.rmtree(cfg_dir)
         print(f"Removed {cfg_dir}")
 
-    _patch_setup_ai(repo, args.name, mode="remove")
-    print(f"Unregistered {args.name} from setup_ai.sh")
-
 
 def cmd_sync(args):
+    catalog = _load_catalog()
     repo = _repo_root()
     existing = _existing_names(repo)
-    catalog_names = {e["name"] for e in ALL_ENTRIES}
+    catalog_names = {e["name"] for e in _flatten(catalog)}
 
     orphan = existing - catalog_names
     missing = catalog_names - existing
@@ -595,6 +372,15 @@ def cmd_sync(args):
         print("Catalog entries missing repo scripts:")
         for n in sorted(missing):
             print(f"  {n}")
+
+
+def cmd_catalog_show(args):
+    catalog = _load_catalog()
+    if args.category:
+        tools = [e for e in _flatten(catalog) if e.get("category") == args.category]
+        print(json.dumps({"tools": tools}, indent=2))
+    else:
+        print(json.dumps(catalog, indent=2))
 
 
 def _subcommand(cmd_list, args):
@@ -641,15 +427,18 @@ def main():
     p.add_argument("query", help="Search term")
     p.add_argument("--category", help="Filter by category")
 
-    p = sub.add_parser("add", help="Generate stub and register in setup_ai.sh")
+    p = sub.add_parser("add", help="Generate stub (manual register in setup_ai.sh)")
     p.add_argument("name", help="Tool name from catalog")
     p.add_argument("--force", action="store_true", help="Overwrite existing stub")
 
-    p = sub.add_parser("remove", help="Delete stub and unregister")
+    p = sub.add_parser("remove", help="Delete stub and config dir")
     p.add_argument("name", help="Tool name")
     p.add_argument("--yes", "-y", action="store_true", help="Skip confirmation")
 
     p = sub.add_parser("sync", help="Check repo against catalog for drift")
+
+    p = sub.add_parser("catalog-show", help="Print full catalog JSON")
+    p.add_argument("--category", help="Filter by category")
 
     p = sub.add_parser("find-brew", help="Search Homebrew")
     p.add_argument("query", help="Search term")
@@ -657,7 +446,7 @@ def main():
     p = sub.add_parser("find-npm", help="Search npm")
     p.add_argument("query", help="Search term")
 
-    p = sub.add_parser("find-vscode", help="Search VS Code marketplace (best effort)")
+    p = sub.add_parser("find-vscode", help="Search VS Code marketplace")
     p.add_argument("query", help="Search term")
 
     args = parser.parse_args()
@@ -672,6 +461,8 @@ def main():
         cmd_remove(args)
     elif args.cmd == "sync":
         cmd_sync(args)
+    elif args.cmd == "catalog-show":
+        cmd_catalog_show(args)
     elif args.cmd == "find-brew":
         cmd_find_brew(args)
     elif args.cmd == "find-npm":

@@ -272,18 +272,13 @@ def _generate_config(entry: dict) -> str:
     """Generate a minimal default config template for the agent."""
     ext = entry.get("config_ext", "")
     if ext == "yaml":
-        return (
-            "provider: ollama\n"
-            "base_url: http://localhost:11434/v1\n"
-            "api_key: sk-local\n"
-            "model: qwen3.2-coder:7b\n"
-        )
+        return "provider: ollama\nbase_url: http://localhost:11434/v1\napi_key: sk-local\nmodel: qwen3.5:4b\n"
     elif ext == "json":
-        return json.dumps({"provider": "openrouter", "model": "qwen3.2-coder:7b"}, indent=2) + "\n"
+        return json.dumps({"provider": "openrouter", "model": "qwen3.5:4b"}, indent=2) + "\n"
     elif ext == "toml":
-        return '[core]\nprovider = "openrouter"\nmodel = "qwen3.2-coder:7b"\n'
+        return '[core]\nprovider = "openrouter"\nmodel = "qwen3.5:4b"\n'
     elif ext == "txt":
-        return "qwen3.2-coder:7b\n"
+        return "qwen3.5:4b\n"
     return ""
 
 

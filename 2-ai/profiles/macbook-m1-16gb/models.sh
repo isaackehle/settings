@@ -35,106 +35,118 @@ OPENROUTER_MODELS=(
 # LOCAL MODELS (pull with ollama)
 # ==============================================
 OLLAMA_MODELS=(
-    # ═══════════════════════════════════════════════════════════════
     # CODING / GENERAL (solo mode)
-    # ═══════════════════════════════════════════════════════════════
-    "qwen3:14b"                   # ~11 GB | Primary coding + general (q5, 40k)
-    "qwen3:14b"                   # ~16 GB | Max-quality solo mode (q8, 40k) — on-demand
 
-    # ═══════════════════════════════════════════════════════════════
-    # REASONING (with tool calling)
-    # ═══════════════════════════════════════════════════════════════
-    "deepseek-r1-tools:8b"        # ~5 GB  | Reasoning + function calling (q4_K_M, 128k)
+    "qwen2.5-coder:7b"            # ~5 GB  | Primary coding + general (q4_K_M, 32k)
 
-    # ═══════════════════════════════════════════════════════════════
+    # CODE APPLY / INSERT (on-demand)
+    "codestral:22b"               # ~14 GB | Diff application (q4 default, on-demand, 32k)
+
+    # CODING (solo / swap-in)
+    "qwen3:14b"                    # ~11 GB | Solo coding when 7B is insufficient (256k)
+
+    # REASONING (swap-in)
+    "deepseek-r1-tools:8b"         # ~5 GB  | Reasoning + function calling (128k)
+
     # PLANNING / FAST
-    # ═══════════════════════════════════════════════════════════════
-    "qwen3:4b"                    # ~3 GB  | Planning, routing, task breakdown (q4, 256k)
+    "qwen3:4b"                    # ~5 GB  | Planning, routing, task breakdown (256k)
 
-    # ═══════════════════════════════════════════════════════════════
     # CODE (fast/on-demand)
-    # ═══════════════════════════════════════════════════════════════
-    "qwen2.5-coder:7b"            # ~5 GB  | Fast code tasks (on-demand, 32k)
+    "qwen2.5-coder:1.5b"          # ~1 GB  | FIM inline completions + light chat (32k)
 
-    # ═══════════════════════════════════════════════════════════════
-    # AUTOCOMPLETE
-    # ═══════════════════════════════════════════════════════════════
-    "qwen2.5-coder:1.5b"          # ~1 GB  | FIM inline completions (32k)
-
-    # ═══════════════════════════════════════════════════════════════
     # EMBEDDINGS
-    # ═══════════════════════════════════════════════════════════════
     "nomic-embed-text"            # ~0.3 GB | Semantic search / RAG (8k)
 )
 
 # ==============================================
+# REMOTE MODELS — pull from community namespace, alias locally
+# Some models are not in the official Ollama library and must be
+# pulled from a community namespace (e.g., MFDoom/). After pulling,
+# a local alias is created so all tool configs use the short name.
+# ==============================================
+declare -A MODEL_REMOTES=(
+    ["deepseek-r1-tools:8b"]="MFDoom/deepseek-r1-tool-calling:8b"
+)
+# ==============================================
 # ALTERNATIVE QUANTS — on-demand only
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen3:14b"]="q8:16 GB (solo max quality)"
+    ["qwen2.5-coder:7b"]="q8:8 GB (solo max quality)"
 )
 
 # ==============================================
 # CONTEXT WINDOW VARIANTS — auto-created during install
 # ==============================================
 declare -A MODEL_CONTEXTS=(
-    ["qwen3:14b"]="40k"
+    ["qwen2.5-coder:7b"]="8k 32k"
+    ["qwen3:14b"]="8k 40k 128k 256k"
+    ["qwen3:4b"]="8k 128k"
     ["deepseek-r1-tools:8b"]="128k"
+    ["codestral:22b"]="32k"
 )
 
 # ==============================================
 # TOOL ASSIGNMENTS — consumed by deploy scripts to generate configs
 # ==============================================
-# ==============================================
 
 # --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3:14b"                       # primary coding agent
-    [think]="deepseek-r1-tools:8b"           # tradeoff analysis, debugging strategy
-    [write]="qwen3:14b"                      # resumes, cover letters, docs
-    [research]="qwen3:14b"                   # codebase/web investigation
-    [plan]="qwen3:4b"                        # next steps, task breakdown, routing
+    [code]="qwen2.5-coder:7b"                  # primary coding agent
+    [think]="deepseek-r1-tools:8b"             # tradeoff analysis, debugging strategy
+    [write]="qwen2.5-coder:7b"                 # resumes, cover letters, docs
+    [research]="qwen2.5-coder:7b"              # codebase/web investigation
+    [plan]="qwen3:4b"                          # next steps, task breakdown, routing
 )
 
 # --- Continue (VS Code) ---
 declare -A CONTINUE_ROLES=(
-    [chat]="qwen3:14b"                       # chat panel + inline edit (Ctrl+I)
-    [chat_alt]="qwen3:14b"                   # manual model switch in chat
-    [apply]="qwen3:14b"                      # applying suggested code to file
-    [autocomplete]="qwen2.5-coder:1.5b"       # inline completions (default)
-    [embed]="nomic-embed-text"               # @codebase semantic search
+    [chat]="qwen2.5-coder:7b"                  # chat panel + inline edit (Ctrl+I)
+    [chat_alt]="qwen2.5-coder:7b"              # manual model switch in chat
+    [apply]="qwen2.5-coder:7b"                 # applying suggested code to file
+    [autocomplete]="qwen2.5-coder:1.5b"        # inline completions (default)
+    [autocomplete_heavy]="qwen2.5-coder:7b"    # switch manually for complex files
+    [embed]="nomic-embed-text"                 # @codebase semantic search
 )
 
 # --- Claude Code ---
 declare -A CLAUDE_CODE=(
-    [primary]="qwen3:14b"
+    [primary]="qwen2.5-coder:7b"
     [fast]="qwen3:4b"
     [reasoning]="deepseek-r1-tools:8b"
-    [opus]="qwen3:14b"
+    [research]="qwen2.5-coder:7b"
+    [coding]="qwen2.5-coder:7b"
+    [opus]="qwen2.5-coder:7b"
 )
 
 # --- Cline / Roo Code / Kilo Code (VS Code) ---
-CLINE_MODEL="qwen3:14b"
+CLINE_MODEL="qwen2.5-coder:7b"
 CLINE_MODEL_CLOUD="kimi-k2.6"
 
-
-KILOCODE_MODEL="qwen3:14b"
+KILOCODE_MODEL="qwen2.5-coder:7b"
 KILOCODE_MODEL_CLOUD="kimi-k2.6"
 
+# --- Zoo Code (VS Code extension) ---
+ZOOCODE_MODEL="qwen2.5-coder:7b"
+ZOOCODE_MODEL_CLOUD="kimi-k2.6"
+ZOOCODE_MODE_CODE="qwen2.5-coder:7b"
+ZOOCODE_MODE_ARCHITECT="qwen2.5-coder:7b"
+ZOOCODE_MODE_ASK="qwen2.5-coder:7b"
+ZOOCODE_MODE_DEBUG="deepseek-r1-tools:8b"
+
 # --- Aider (CLI) ---
-AIDER_MODEL="qwen3:14b"
+AIDER_MODEL="qwen2.5-coder:7b"
 AIDER_WEAK_MODEL="qwen3:4b"
-AIDER_EDITOR_MODEL="qwen3:14b"
+AIDER_EDITOR_MODEL="qwen2.5-coder:7b"
 
 # --- Zed ---
-ZED_MODEL="qwen3:14b"
+ZED_MODEL="qwen2.5-coder:7b"
 
 # --- Cursor ---
-CURSOR_MODEL="qwen3:14b"
+CURSOR_MODEL="qwen2.5-coder:7b"
 CURSOR_MODEL_CLOUD="kimi-k2.6"
 
 # ==============================================
-# OLlama direct usage
+# Ollama direct usage
 # ==============================================
 #   ollama list                                 all installed models
 #   ollama ps                                   currently loaded + memory usage

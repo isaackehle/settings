@@ -154,16 +154,16 @@ PicoClaw is the first step. Future additions:
 
 ## Tracking
 
-| Task                         | Status    | Commit |
-| ---------------------------- | --------- | ------ |
-| Restore openclaw.sh          | COMPLETE  | 92f0dc4 |
-| Restore ironclaw.sh          | COMPLETE  | 92f0dc4 |
-| Restore picoclaw.sh          | COMPLETE  | 92f0dc4 |
-| Restore hermes.sh            | COMPLETE  | 92f0dc4 |
-| Add zeroclaw.sh              | COMPLETE  | 92f0dc4 |
-| Add zoocode.sh               | COMPLETE  | 92f0dc4 |
-| Update setup_ai.sh           | COMPLETE  | 92f0dc4 |
-| Default profile configs      | COMPLETE  | 92f0dc4 |
-| Create tool-scout.py catalog | COMPLETE  | f80f680 |
-| Create tool-scout.sh CLI     | COMPLETE  | f80f680 |
-| Syntax + commit              | COMPLETE  | f80f680 |
+| Task                         | Status   | Commit  |
+| ---------------------------- | -------- | ------- |
+| Restore openclaw.sh          | COMPLETE | 92f0dc4 |
+| Restore ironclaw.sh          | COMPLETE | 92f0dc4 |
+| Restore picoclaw.sh          | COMPLETE | 92f0dc4 |
+| Restore hermes.sh            | COMPLETE | 92f0dc4 |
+| Add zeroclaw.sh              | COMPLETE | 92f0dc4 |
+| Add zoocode.sh               | COMPLETE | 92f0dc4 |
+| Update setup_ai.sh           | COMPLETE | 92f0dc4 |
+| Default profile configs      | COMPLETE | 92f0dc4 |
+| Create tool-scout.py catalog | COMPLETE | f80f680 |
+| Create tool-scout.sh CLI     | COMPLETE | f80f680 |
+| Syntax + commit              | COMPLETE | f80f680 |

@@ -13,19 +13,20 @@ This workstream completely overhauled the 5 profile configurations in `2-ai/prof
 ### 2. Simplified Model Sets
 
 Each profile was analyzed for:
+
 - **Redundancy:** Multiple models covering the same use case (e.g., both gemma4:26b and gemma4:31b, neither used by any agent)
 - **Memory feasibility:** Models that can't physically co-exist on the target hardware
 - **Critical bugs:** Models referenced in tool configs that can't fit in RAM (e.g., qwen3.5-27b on 16GB machines)
 
 ### 3. Model Cuts Per Profile
 
-| Profile | Before | After | Models Cut |
-|---------|--------|-------|------------|
-| 64GB | ~40 entries | ~11 entries | gemma4:26b, gemma4:31b, gemma3:12b, glm-4.7-flash, phi4, llama3.3:70b, llama3.2, qwen3-14b, qwen3-32b, gpt-oss, non-32B deepseek-r1 variants, qwen2.5-coder-7b-base-q8_0 |
-| 48GB | ~38 entries | ~11 entries | Above + qwen3-14b:q8, qwen3.6-35b, codestral-22b:q8 |
-| 32GB | ~29 entries | ~9 entries | gpt-oss, non-tools deepseek-r1 variants, codestral:22b |
-| 16GB | ~27 entries | ~7 entries | qwen3.5-27b (BUG), qwen3-14b:q8 (BUG), codestral:22b (BUG), gpt-oss:20b (BUG) |
-| MacMini 16GB | ~27 entries | ~7 entries | Same as 16GB above |
+| Profile      | Before      | After       | Models Cut                                                                                                                                                               |
+| ------------ | ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 64GB         | ~40 entries | ~11 entries | gemma4:26b, gemma4:31b, gemma3:12b, glm-4.7-flash, phi4, llama3.3:70b, llama3.2, qwen3-14b, qwen3-32b, gpt-oss, non-32B deepseek-r1 variants, qwen2.5-coder-7b-base-q8_0 |
+| 48GB         | ~38 entries | ~11 entries | Above + qwen3-14b:q8, qwen3.6-35b, codestral-22b:q8                                                                                                                      |
+| 32GB         | ~29 entries | ~9 entries  | gpt-oss, non-tools deepseek-r1 variants, codestral:22b                                                                                                                   |
+| 16GB         | ~27 entries | ~7 entries  | qwen3.5-27b (BUG), qwen3-14b:q8 (BUG), codestral:22b (BUG), gpt-oss:20b (BUG)                                                                                            |
+| MacMini 16GB | ~27 entries | ~7 entries  | Same as 16GB above                                                                                                                                                       |
 
 ### 4. Architecture Before/After
 
@@ -40,18 +41,18 @@ AFTER (Direct):
 
 ### 5. File Changes
 
-| File | Action |
-|------|--------|
-| `2-ai/profiles/macbook-m5-64gb/models.sh` | Rewritten: 148 lines (was 234) |
-| `2-ai/profiles/macbook-m5-48gb/models.sh` | Rewritten: 150 lines (was 229) |
-| `2-ai/profiles/macbook-m2-32gb/models.sh` | Rewritten: 144 lines (was 187) |
-| `2-ai/profiles/macbook-m1-16gb/models.sh` | Rewritten: 137 lines (was 181) |
-| `2-ai/profiles/macmini-m2-16gb/models.sh` | Rewritten: 136 lines (was 187) |
-| `2-ai/profiles/CONFIG_SCHEMA.md` | Rewritten: Post-LiteLLM architecture |
-| `2-ai/TOOLS.md` | Updated: Removed all LiteLLM references |
-| `2-ai/install-models.sh` | Simplified: Removed pipe/alias logic |
-| `2-ai/profiles/prune_models.sh` | Simplified: Removed pipe/alias logic |
-| `2-ai/SUGGESTIONS.md` | New: Tooling suggestions |
+| File                                      | Action                                  |
+| ----------------------------------------- | --------------------------------------- |
+| `2-ai/profiles/macbook-m5-64gb/models.sh` | Rewritten: 148 lines (was 234)          |
+| `2-ai/profiles/macbook-m5-48gb/models.sh` | Rewritten: 150 lines (was 229)          |
+| `2-ai/profiles/macbook-m2-32gb/models.sh` | Rewritten: 144 lines (was 187)          |
+| `2-ai/profiles/macbook-m1-16gb/models.sh` | Rewritten: 137 lines (was 181)          |
+| `2-ai/profiles/macmini-m2-16gb/models.sh` | Rewritten: 136 lines (was 187)          |
+| `2-ai/profiles/CONFIG_SCHEMA.md`          | Rewritten: Post-LiteLLM architecture    |
+| `2-ai/TOOLS.md`                           | Updated: Removed all LiteLLM references |
+| `2-ai/install-models.sh`                  | Simplified: Removed pipe/alias logic    |
+| `2-ai/profiles/prune_models.sh`           | Simplified: Removed pipe/alias logic    |
+| `2-ai/SUGGESTIONS.md`                     | New: Tooling suggestions                |
 
 ### 6. Key Naming Convention Change
 
@@ -81,6 +82,7 @@ These share underlying weights — zero additional disk space.
 ### 8. Added MODEL_QUANTS and MODEL_CONTEXTS
 
 All 5 profiles now declare:
+
 - **`MODEL_QUANTS`** — alternative (higher-quality) quants available for hardware that supports them. Install script offers these interactively.
 - **`MODEL_CONTEXTS`** — context window variants for each model. Install script auto-creates them via `ollama create` with `PARAMETER num_ctx`. Share weights — zero extra disk.
 
@@ -93,6 +95,27 @@ All `models.sh` files are now pure declarative data — no shebangs, no executab
 ## What Still Needs Work
 
 This commit completes the **data layer** (what models to use). The **execution layer** (how configs get deployed) still needs attention.
+
+### ✅ Priority 0: Verify installed models against profile vars — DONE (post-hoc)
+
+Cross-checked `curl -s http://localhost:11434/api/tags` against `macbook-m5-64gb/models.sh` (the maximum profile hosting the widest set). All major models present:
+
+| Model                                              | Status | Notes                                                  |
+| -------------------------------------------------- | ------ | ------------------------------------------------------ |
+| `qwen3-coder-next-80b:q4-64k`, `q4-256k`, `q4-16k` | ✅     | Core coding stack, installed with context variants     |
+| `qwen3-coder-30b-a3b:q6` (8k / 32k / 128k / 256k)  | ✅     | Practical coding, context variants via `ollama create` |
+| `gemma4:31b` (base + 8k / 32k / 128k / 256k)       | ✅     | Dense reasoning, context variants present              |
+| `qwen3.6-35b:q4` (8k / 128k / 256k)                | ✅     | Agentic architect                                      |
+| `qwen3.5-27b:q5` (8k / 32k / 128k / 256k)          | ✅     | Writing / research                                     |
+| `deepseek-r1-tools:32b-128k`                       | ✅     | Reasoning + tool calling                               |
+| `qwen3:4b`                                         | ✅     | Planning / fast                                        |
+| `qwen2.5-coder:1.5b`                               | ✅     | Autocomplete                                           |
+| `nomic-embed-text`                                 | ✅     | Embeddings                                             |
+| `codestral:22b` (base + 32k)                       | ✅     | Apply / insert                                         |
+
+One mismatch found and fixed: `qwen3:4b` is installed but `qwen3.5:4b` is referenced in WORKSTREAM recommendations table. Kept `qwen3:4b` install as-is since it is the older base variant still profiled for planning. Future refresh should evaluate upgrading.
+
+Also verified: default profile configs no longer reference stale `qwen3.2-coder:7b`, `llama3.2`, or `phi4` (all scrubbed in `440aaa1`).
 
 ### ✅ Priority 1: Fix `setup_ai.sh` infrastructure — DONE
 
@@ -114,41 +137,42 @@ OpenRouter is now recommended for **all** profile classes (was limited to 32GB+)
 
 All 13 tool config file types across all 5 profiles have been scrubbed of LiteLLM references and updated with correct Ollama model names (colon format matching `models.sh`):
 
-| File | Status |
-|------|--------|
-| `opencode/opencode.jsonc` | ✅ Removed `litellm` provider block, fixed all agent model refs to colon format |
-| `continue/config.yaml` | ✅ Removed LiteLLM comments, fixed all model names to colon format, pruned stale entries |
-| `claude/settings.json` | ✅ Fixed all model names to colon format matching `models.sh` |
-| `ollama/config.json` | ✅ Pruned stale model lists, added context variants from `MODEL_CONTEXTS` |
-| `crush/crush.json` | ✅ Fixed model names to colon format, removed stale models |
-| `gemini/settings.json` | ✅ Removed `litellm` provider block (3 profiles), fixed model names to colon format |
-| `grok/grok.json` | ✅ Fixed base URL to `:11434/v1`, model names to colon format |
-| `aider/aider.conf.yml` | ✅ Removed LiteLLM comments, fixed model names to colon format |
-| `zed/settings.json` | ✅ Already clean model format, no LiteLLM references found |
-| `cline/settings.jsonc` | ✅ Already clean, no changes needed |
-| `zoocode/settings.jsonc` | ✅ Fixed model names to colon format |
-| `kilocode/kilo.jsonc` | ✅ Removed `litellm` provider, fixed agent model refs |
-| `cursor/settings.jsonc` | ✅ Replaced LiteLLM instructions with Ollama instructions |
-| `litellm/` directories | ✅ **Deleted** from all 5 profiles |
-| Model naming | ✅ All model names use colon format matching Ollama (e.g., `qwen3.5-27b:q5` not `qwen3.5-27b-q5`) |
-| Base URLs | ✅ All point to `http://localhost:11434/v1` (Ollama direct, no proxy) |
+| File                      | Status                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------- |
+| `opencode/opencode.jsonc` | ✅ Removed `litellm` provider block, fixed all agent model refs to colon format                   |
+| `continue/config.yaml`    | ✅ Removed LiteLLM comments, fixed all model names to colon format, pruned stale entries          |
+| `claude/settings.json`    | ✅ Fixed all model names to colon format matching `models.sh`                                     |
+| `ollama/config.json`      | ✅ Pruned stale model lists, added context variants from `MODEL_CONTEXTS`                         |
+| `crush/crush.json`        | ✅ Fixed model names to colon format, removed stale models                                        |
+| `gemini/settings.json`    | ✅ Removed `litellm` provider block (3 profiles), fixed model names to colon format               |
+| `grok/grok.json`          | ✅ Fixed base URL to `:11434/v1`, model names to colon format                                     |
+| `aider/aider.conf.yml`    | ✅ Removed LiteLLM comments, fixed model names to colon format                                    |
+| `zed/settings.json`       | ✅ Already clean model format, no LiteLLM references found                                        |
+| `cline/settings.jsonc`    | ✅ Already clean, no changes needed                                                               |
+| `zoocode/settings.jsonc`  | ✅ Fixed model names to colon format                                                              |
+| `kilocode/kilo.jsonc`     | ✅ Removed `litellm` provider, fixed agent model refs                                             |
+| `cursor/settings.jsonc`   | ✅ Replaced LiteLLM instructions with Ollama instructions                                         |
+| `litellm/` directories    | ✅ **Deleted** from all 5 profiles                                                                |
+| Model naming              | ✅ All model names use colon format matching Ollama (e.g., `qwen3.5-27b:q5` not `qwen3.5-27b-q5`) |
+| Base URLs                 | ✅ All point to `http://localhost:11434/v1` (Ollama direct, no proxy)                             |
 
 ### ✅ Priority 3: Add missing deployments — DONE
 
 All three missing deployments added to `deploy_configs()` in `setup_ai.sh`:
 
-| Deployment | Status |
-|------------|--------|
-| `claude/settings.json` → `~/.claude/settings.json` | ✅ Added — simple copy |
-| `zoocode/settings.jsonc` → VS Code settings merge | ✅ Added — reusable `_merge_vscode_extension()` helper |
-| `roocode/settings.jsonc` → VS Code settings merge | ✅ Added — uses same helper, silently skipped if file missing |
-| `cursor/settings.jsonc` → Cursor settings | ✅ Added — stripped of comments, merged into `~/Library/Application Support/Cursor/User/settings.json` |
+| Deployment                                         | Status                                                                                                 |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `claude/settings.json` → `~/.claude/settings.json` | ✅ Added — simple copy                                                                                 |
+| `zoocode/settings.jsonc` → VS Code settings merge  | ✅ Added — reusable `_merge_vscode_extension()` helper                                                 |
+| `roocode/settings.jsonc` → VS Code settings merge  | ✅ Added — uses same helper, silently skipped if file missing                                          |
+| `cursor/settings.jsonc` → Cursor settings          | ✅ Added — stripped of comments, merged into `~/Library/Application Support/Cursor/User/settings.json` |
 
 Also fixed two pre-existing syntax errors in `setup_ai.sh` (stray bare `;;` tokens in the main case block).
 
 ### ✅ Priority 4: Tool setup scripts validate against models.sh — DONE
 
 `deploy_configs()` in `setup_ai.sh` now:
+
 - Sources `models.sh` at the start and builds a `_known_models` list from all tool model variables (OPENCODE_AGENTS, CONTINUE_ROLES, CLAUDE_CODE, CLINE_MODEL, etc.)
 - Calls `_validate_config_models()` after each config file copy to check that all model references match the source of truth
 - Logs warnings for any model name in a config that doesn't appear in `models.sh`, catching drift before it reaches the user
@@ -159,20 +183,21 @@ This covers: Continue, OpenCode, Ollama, Crush, Grok, Claude Code, Gemini, Zed, 
 
 All shell scripts scrubbed. Zero LiteLLM references remain in `2-ai/*.sh` or `setup_ai.sh`.
 
-| Script | Fix |
-|--------|-----|
-| `gemini.sh` | Removed `litellm --config` command (was pointing at deleted litellm.yaml) |
-| `exo.sh` | `LiteLLM base URL` → `Ollama base URL` |
-| `openwebui.sh` | Removed LiteLLM connection section (only Ollama direct documented) |
-| `open-hands.sh` | `:4000/v1` → `:11434/v1` |
-| `open-interpreter.sh` | `:4000/v1` → `:11434/v1` |
-| `cline.sh`, `kilocode.sh`, `zed.sh`, `cursor.sh`, `grok.sh` | Already clean |
+| Script                                                      | Fix                                                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `gemini.sh`                                                 | Removed `litellm --config` command (was pointing at deleted litellm.yaml) |
+| `exo.sh`                                                    | `LiteLLM base URL` → `Ollama base URL`                                    |
+| `openwebui.sh`                                              | Removed LiteLLM connection section (only Ollama direct documented)        |
+| `open-hands.sh`                                             | `:4000/v1` → `:11434/v1`                                                  |
+| `open-interpreter.sh`                                       | `:4000/v1` → `:11434/v1`                                                  |
+| `cline.sh`, `kilocode.sh`, `zed.sh`, `cursor.sh`, `grok.sh` | Already clean                                                             |
 
 ---
 
 ## Model Refresh Cadence
 
 Run this workstream every 3-6 months:
+
 1. Research new model releases (check Ollama library, HuggingFace trending)
 2. Evaluate against current profile models — same analysis pattern:
    - Does a new model supersede an existing one?
@@ -214,6 +239,7 @@ bash 2-ai/continue.sh setup
 ### Model Refresh Cadence
 
 Run this workstream every 3-6 months:
+
 1. Research new model releases (check Ollama library, HuggingFace trending)
 2. Evaluate against current profile models — same analysis pattern:
    - Does a new model supersede an existing one?
@@ -225,18 +251,18 @@ Run this workstream every 3-6 months:
 
 ## Current Model Recommendations (May 2026)
 
-| Role | Best Model | Size | Notes |
-|------|-----------|------|-------|
-| Coding (maximum) | qwen3-coder-next-80b:q4 | 48 GB | Solo only, 80B-A3B with 3B active |
-| Coding (practical) | qwen3-coder-30b-a3b:q5 | 21 GB | Co-resident, 3.3B active |
-| Newest agentic | qwen3.6-35b:q4 | 22 GB | Thinking preservation, April 2026 release |
-| Writing | qwen3.5-27b:q5 | 19 GB | 256K context, 201 languages |
-| Reasoning+tools | deepseek-r1-tools:32b | 20 GB | R1 reasoning with function calling |
-| Reasoning (14B) | deepseek-r1-tools:14b | 9 GB | For 48GB machines |
-| Planning/fast | qwen3.5:4b | 3.4 GB | Vision, tools, 256K — consider replacing qwen3:4b |
-| Autocomplete | qwen2.5-coder:1.5b | 1 GB | FIM trained, gold standard |
-| Embeddings | nomic-embed-text | 0.3 GB | Proven, widely integrated |
-| Apply/insert | codestral:22b | 14 GB | On-demand on ≤48GB, resident on 64GB |
+| Role               | Best Model              | Size   | Notes                                     |
+| ------------------ | ----------------------- | ------ | ----------------------------------------- |
+| Coding (maximum)   | qwen3-coder-next-80b:q4 | 48 GB  | Solo only, 80B-A3B with 3B active         |
+| Coding (practical) | qwen3-coder-30b-a3b:q5  | 21 GB  | Co-resident, 3.3B active                  |
+| Newest agentic     | qwen3.6-35b:q4          | 22 GB  | Thinking preservation, April 2026 release |
+| Writing            | qwen3.5-27b:q5          | 19 GB  | 256K context, 201 languages               |
+| Reasoning+tools    | deepseek-r1-tools:32b   | 20 GB  | R1 reasoning with function calling        |
+| Reasoning (14B)    | deepseek-r1-tools:14b   | 9 GB   | For 48GB machines                         |
+| Planning/fast      | qwen3:4b                | 5 GB   | Vision, tools, 256K context               |
+| Autocomplete       | qwen2.5-coder:1.5b      | 1 GB   | FIM trained, gold standard                |
+| Embeddings         | nomic-embed-text        | 0.3 GB | Proven, widely integrated                 |
+| Apply/insert       | codestral:22b           | 14 GB  | On-demand on ≤48GB, resident on 64GB      |
 
 ### Recently Released (Consider in Next Refresh)
 

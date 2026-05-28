@@ -5,7 +5,7 @@
         "primary": "qwen3:14b",
         "fast": "qwen3:4b",
         "reasoning": "deepseek-r1-tools:8b",
-        "opus": "codestral:22b"
+        "opus": "qwen3:14b"
       },
       "models": [
         "qwen3:14b",
