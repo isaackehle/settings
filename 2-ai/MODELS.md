@@ -163,14 +163,40 @@ context is sufficient and expanding it wastes KV-cache memory.
 
 ## Quantization Reference
 
-| Suffix    | Description        | Quality vs Size          |
-| --------- | ------------------ | ------------------------ |
-| `:q4`     | 4-bit quantization | Smallest, lowest quality |
-| `:q5`     | 5-bit quantization | Good balance             |
-| `:q6`     | 6-bit quantization | High quality             |
-| `:q8`     | 8-bit quantization | Near-original quality    |
-| `:q4_K_M` | 4-bit K-medium     | Better than plain q4     |
-| `:q8_0`   | 8-bit quantized    | Same as q8               |
+Ollama model tags use specific naming conventions. The shorthand in
+`MODEL_QUANTS` values must use the **full pullable tag**, not a suffix.
+
+| Shorthand | Full Ollama Tag | Model |
+| --------- | --------------- | ----- |
+| `:q4` | `:q4` or `:q4_K_M` | Varies by model |
+| `:q5` | `:q5` or `:q5_K_M` | Varies by model |
+| `:q6` | `:q6` or `:q6_K_M` | Rare; check library page |
+| `:q8` | `:q8_0` | Most models use `-q8_0` suffix |
+| `:q4_K_M` | `:q4_K_M` | 4-bit K-medium |
+| `:q8_0` | `:q8_0` | Same as q8 |
+
+### MODEL_QUANTS Tag Format
+
+The `MODEL_QUANTS` associative array maps a base model name to its alternative
+quant pull tag plus a description, separated by a colon:
+
+```bash
+["qwen3.5-27b"]="qwen3.5:27b-q8_0:29 GB (solo prose only)"
+#                ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+#                full ollama tag     description
+```
+
+The install script splits on the first colon to extract the pull tag and passes
+it directly to `ollama pull`. Always verify tags exist at
+`https://ollama.com/library/<model>/tags` before adding entries.
+
+| Base Model | Alternative Tag | Notes |
+| ---------- | --------------- | ----- |
+| `qwen3.5-27b` | `qwen3.5:27b-q8_0` | Tag includes size prefix |
+| `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs |
+| `gemma4:31b` | `gemma4:31b-it-q8_0` | Requires `-it-` in tag |
+| `qwen3.6-35b` | `qwen3.6:35b-a3b-q8_0` | MoE, `-a3b` suffix |
+| `qwen2.5-coder:7b` | `qwen2.5-coder:7b-q8_0` | Dash separator |
 
 ## May 2026 Refresh — Change Justification
 
