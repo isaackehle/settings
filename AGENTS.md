@@ -87,9 +87,11 @@ tags: [<folder-tag>, <subtopic>]
 ---
 
 # Category Name
+
 One-line description of what this category covers.
 
 ## <img src="https://github.com/<org>.png" width="24" style="vertical-align: middle; border-radius: 4px;" /> Tool One
+
 [Tool One](https://example.com/) brief description.
 
 ```shell
@@ -236,18 +238,18 @@ against the current installation.
 
 **Currently recommended models (May 2026):**
 
-| Model                  | Pull Command                              | Role            |
-| ---------------------- | ----------------------------------------- | --------------- |
-| Qwen3 Coder Next 80B   | `ollama pull qwen3-coder-next-80b`        | Coding (max)    |
-| Qwen3 Coder 30B A3B    | `ollama pull qwen3-coder-30b-a3b`         | Coding          |
-| Qwen3.6 35B            | `ollama pull qwen3.6-35b`                 | Agentic coding  |
-| Qwen3.5 27B            | `ollama pull qwen3.5-27b`                 | Writing         |
-| DeepSeek R1 Tools 32B  | `ollama pull deepseek-r1-tools:32b`       | Reasoning       |
-| Qwen3.5 4B             | `ollama pull qwen3.5:4b`                  | Planning/fast   |
-| Qwen2.5 Coder 1.5B     | `ollama pull qwen2.5-coder:1.5b`          | Autocomplete    |
-| Codestral 22B          | `ollama pull codestral:22b`               | Apply/insert    |
-| Gemma 4 31B            | `ollama pull gemma4:31b`                  | General         |
-| Nomic Embed Text       | `ollama pull nomic-embed-text`            | Embeddings      |
+| Model                 | Pull Command                        | Role           |
+| --------------------- | ----------------------------------- | -------------- |
+| Qwen3 Coder Next 80B  | `ollama pull qwen3-coder-next-80b`  | Coding (max)   |
+| Qwen3 Coder 30B A3B   | `ollama pull qwen3-coder-30b-a3b`   | Coding         |
+| Qwen3.6 35B           | `ollama pull qwen3.6-35b`           | Agentic coding |
+| Qwen3.5 27B           | `ollama pull qwen3.5-27b`           | Writing        |
+| DeepSeek R1 Tools 32B | `ollama pull deepseek-r1-tools:32b` | Reasoning      |
+| Qwen3.5 4B            | `ollama pull qwen3.5:4b`            | Planning/fast  |
+| Qwen2.5 Coder 1.5B    | `ollama pull qwen2.5-coder:1.5b`    | Autocomplete   |
+| Codestral 22B         | `ollama pull codestral:22b`         | Apply/insert   |
+| Gemma 4 31B           | `ollama pull gemma4:31b`            | General        |
+| Nomic Embed Text      | `ollama pull nomic-embed-text`      | Embeddings     |
 
 See `2-ai/profiles/WORKSTREAM_2026-05.md` for per-profile model budgets and quantization choices.
 
@@ -280,5 +282,24 @@ All profiles get the **same infrastructure stack** (Ollama + OpenRouter + OpenWe
 - `powerful` — 48GB Q5 larger models + 8B reasoning
 - `maximum` — 64GB+ Q6 full stack + 32B reasoning
 - `server` — Mac mini / server machines
+
+---
+
+## Repo Memory
+
+### WORKSTREAM Files
+
+`WORKSTREAM_*.md` files at the repository root contain **TODO work items** for the repository. These are work-in-progress documents that track:
+
+- Model refresh cadences and decisions
+- Infrastructure changes pending implementation
+- Documentation consolidation tasks
+
+**TODO items tracked in WORKSTREAM files:**
+
+- Include two sets of models: one for Ollama, one for oMLX
+- Merge helpful files (`TOOLS.md`, `SUGGESTIONS.md`, `SOURCES.md`, `MODELS.md`) into a root-level `docs/` folder
+
+**Note:** WORKSTREAM files are moved to the root of the repository during consolidation. See `docs/WORKSTREAM_2026-05-*.md` after merge.
 
 <!-- markdownlint-enable MD013 -->
