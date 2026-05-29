@@ -104,6 +104,49 @@ create_context_variants() {
 }
 
 # ==============================================
+# OLLAMA CLOUD MODELS
+# Zero-disk manifests that route inference to remote servers.
+# Each pull downloads only a tiny JSON manifest (~400 bytes).
+# ==============================================
+
+install_cloud_models() {
+    if ! declare -p OLLAMA_CLOUD_MODELS &>/dev/null || [[ ${#OLLAMA_CLOUD_MODELS[@]} -eq 0 ]]; then
+        echo "No OLLAMA_CLOUD_MODELS defined — skipping cloud models."
+        return 0
+    fi
+
+    echo "Installing Ollama cloud model manifests..."
+    echo "============================================"
+    echo ""
+
+    local -a passed=()
+    local -a failed=()
+
+    for entry in "${OLLAMA_CLOUD_MODELS[@]}"; do
+        if ollama_model_exists "$entry"; then
+            echo "✅ Already installed: $entry"
+            passed+=("$entry")
+        else
+            echo "▶ Pulling cloud manifest: $entry"
+            if ollama pull "$entry" 2>&1; then
+                echo "✅ Cloud manifest installed: $entry"
+                _ollama_list_invalidate
+                passed+=("$entry")
+            else
+                echo "⚠ Failed to pull cloud manifest: $entry"
+                failed+=("$entry")
+            fi
+        fi
+        echo ""
+    done
+
+    echo "============================================"
+    echo "Cloud models: ${#passed[@]} installed, ${#failed[@]} failed"
+    echo "============================================"
+    echo ""
+}
+
+# ==============================================
 # REMOTE MODEL ALIASING
 # Some models are not in the official Ollama library and must be
 # pulled from a community namespace (e.g., MFDoom/). After pulling,
@@ -500,6 +543,7 @@ install_coding_assistants() {
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
             install_remote_models
+            install_cloud_models
             create_context_variants
             ;;
         2)
@@ -510,6 +554,7 @@ install_coding_assistants() {
             print_step "Installing models for $profile_name"
             install_ollama_models "$profile_name" OLLAMA_MODELS
             install_remote_models
+            install_cloud_models
             create_context_variants
             echo ""
             print_step "Pruning orphan models for $profile_name"
