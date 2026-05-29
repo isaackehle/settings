@@ -22,7 +22,7 @@
   "cursor.cpp.disabledLanguages": [],
 
   // Privacy: disable telemetry of prompts to Cursor servers
-  "cursor.privacy.telemetryLevel": "off",
+  "cursor.privacy.telemetryLevel": "off"
 
   // Cursor Rules (equivalent of CLAUDE.md) — set per-project in .cursor/rules/
   // Global rules can be set in Settings → Rules for AI

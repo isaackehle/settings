@@ -6,7 +6,7 @@
   //   Provider  → OpenAI Compatible
   //   Base URL  → http://localhost:11434/v1
   //   API Key   → sk-local
-  //   Model     → qwen3-coder-30b-q5-32k
+  //   Model     → qwen3-coder-30b-a3b:q5
   //
   // Cloud fallback (switch via sidebar):
   //   Provider  → OpenRouter

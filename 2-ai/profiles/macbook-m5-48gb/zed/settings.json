@@ -4,7 +4,7 @@
   "assistant": {
     "default_model": {
       "provider": "openai",
-      "model": "qwen3-coder-30b-q5-32k"
+      "model": "qwen3-coder-30b-a3b:q5"
     },
     "version": "2"
   },
@@ -14,22 +14,22 @@
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
-          "name": "deepseek-r1-tools-32b-128k",
+          "name": "deepseek-r1-tools:32b-128k",
           "display_name": "DeepSeek R1 32B (REAS, TOOL, 128K)",
           "max_tokens": 32768
         },
         {
-          "name": "qwen3-4b-q8-256k",
-          "display_name": "Qwen 3 4B (PLAN, Q8 256K)",
+          "name": "qwen3:4b-128k",
+          "display_name": "Qwen 3 4B (PLAN, 128K)",
           "max_tokens": 8192
         },
         {
-          "name": "qwen3-coder-30b-q5-32k",
+          "name": "qwen3-coder-30b-a3b:q5-32k",
           "display_name": "Qwen3 Coder 30B A3B (CODE, Q5 32K)",
           "max_tokens": 32768
         },
         {
-          "name": "qwen3.5-27b-q8-256k",
+          "name": "qwen3.5-27b:q8-256k",
           "display_name": "Qwen 3.5 27B (WRIT, Q8 256K)",
           "max_tokens": 32768
         },
