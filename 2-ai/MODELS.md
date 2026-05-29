@@ -553,3 +553,43 @@ Cloud models (e.g., `kimi-k2.6`) are not roles in `CONTINUE_ROLES` — they are
 separate entries in `continue/config.yaml` with `roles: [chat]`. The
 `CONTINUE_ROLES` dict only maps local-Ollama roles (`chat`, `chat_alt`,
 `apply`, `autocomplete`, `autocomplete_heavy`, `embed`).
+
+### 2026-05-29: Model Naming Standardization
+
+All config files updated to use Ollama's colon-format model names instead of
+dash-format. This aligns with `models.sh` which is the single source of truth.
+
+| Old Format (dash)            | New Format (colon)           |
+| ---------------------------- | ---------------------------- |
+| `qwen3-14b-q5-40k`           | `qwen3:14b-40k`              |
+| `qwen3-4b-q8-256k`           | `qwen3:4b-128k`              |
+| `qwen3.5-27b-q5-256k`        | `qwen3.5-27b:q5-256k`        |
+| `qwen3-coder-30b-q6-32k`     | `qwen3-coder-30b-a3b:q5-32k` |
+| `qwen3-coder-next-80b-q4`    | `qwen3-coder-next-80b:q4`    |
+| `deepseek-r1-tools-32b-128k` | `deepseek-r1-tools:32b-128k` |
+
+**Key changes:**
+
+- `qwen3.5-27b` variants use colon before quant: `qwen3.5-27b:q5`
+- `qwen3-coder-30b-a3b` uses colon: `qwen3-coder-30b-a3b:q5`
+- `qwen3-coder-next-80b` uses colon: `qwen3-coder-next-80b:q4`
+- Context variants use dash: `qwen3.5-27b:q5-256k`
+
+### 2026-05-29: 16GB Profile Model Constraints
+
+`qwen3.5-27b` (~19GB at Q5) cannot fit in 16GB machines. Replaced with
+`qwen3:4b` for writing/planning roles on 16GB profiles.
+
+| Role      | 16GB Profile Model     | Reason                                       |
+| --------- | ---------------------- | -------------------------------------------- |
+| Writing   | `qwen3:4b`             | `qwen3.5-27b` requires ~19GB, exceeds budget |
+| Planning  | `qwen3:4b`             | Same model, dual-purpose                     |
+| Coding    | `qwen2.5-coder:7b`     | Primary; `qwen3:14b` available as swap-in    |
+| Reasoning | `deepseek-r1-tools:8b` | 8B variant fits; 32B requires swap-out       |
+
+### 2026-05-29: Removed Redundant Models
+
+- `deepseek-r1-tools:14b` removed from all profiles (not in models.sh)
+- `gemma4-26b` removed (31B variant is the correct model)
+- `llama3.3-70b` removed (not used, too large)
+- `qwen3-32b` removed (30B MoE is preferred for coding)
