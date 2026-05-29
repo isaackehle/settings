@@ -22,7 +22,6 @@
   "zoo-code.alwaysAllowReadOnlyOutsideWorkspace": false,
   "zoo-code.alwaysAllowWrite": false,
   "zoo-code.alwaysAllowExecute": false,
-  "zoo-code.alwaysAllowBrowser": false,
 
   // Zoo Code mode-specific model overrides (if supported via settings.json):
   "zoo-code.modeApiConfigs": {
