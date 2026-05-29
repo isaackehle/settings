@@ -159,7 +159,7 @@ done
 # ==============================================
 # OUTPUT
 # ==============================================
-OUTPUT="$PROFILES_DIR/$PROFILE/model-map.md"
+OUTPUT="$PROFILES_DIR/$PROFILE/model-map-ollama.md"
 {
     echo "# Model Map — $PROFILE"
     echo ""
