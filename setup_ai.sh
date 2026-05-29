@@ -464,7 +464,7 @@ PYEOF
   # --- Generate model map ---
   local _mapper="${SETTINGS_BASE}/2-ai/profiles/generate-model-map.sh"
   if [ -f "$_mapper" ]; then
-    bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
+    bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map-ollama.md" || true
   fi
 
   # --- Offer to scout for new agents ---

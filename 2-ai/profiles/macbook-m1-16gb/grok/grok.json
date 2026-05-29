@@ -5,14 +5,11 @@
         "deepseek-r1-tools:8b": {
           "name": "DeepSeek R1 8B (REAS, TOOL)"
         },
-        "deepseek-r1:8b": {
-          "name": "DeepSeek R1 8B (REAS)"
-        },
         "qwen3:14b": {
           "name": "Qwen 3 14B (CODE)"
         },
-        "qwen3.5-27b:q5": {
-          "name": "Qwen 3.5 27B (WRIT, Q5)"
+        "qwen3:4b": {
+          "name": "Qwen 3 4B (PLAN)"
         }
       },
       "name": "Ollama (Local)",
@@ -27,9 +24,6 @@
         },
         "moonshot/kimi-k2.6": {
           "name": "Kimi K2.6 (REAS, CLD)"
-        },
-        "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (PLAN, CLD)"
         }
       },
       "name": "OpenRouter (Cloud)",
