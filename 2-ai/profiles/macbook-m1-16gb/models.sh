@@ -32,6 +32,19 @@ OPENROUTER_MODELS=(
 )
 
 # ==============================================
+# OLLAMA CLOUD MODELS (zero-disk — route to remote servers)
+# Pull the manifest to enable cloud-routed inference through Ollama.
+# No local weights — only a tiny JSON manifest is downloaded.
+# ==============================================
+OLLAMA_CLOUD_MODELS=(
+    "qwen3.5:cloud"              # 397B | Writing, thinking, tools, vision (262K context)
+    "qwen3-coder:480b-cloud"     # 480B | Coding, tools (262K context)
+    "qwen3-coder-next:cloud"     # 80B  | Coding, tools (262K context)
+    "gemma4:31b-cloud"           # 33B  | Thinking, tools, vision (262K context)
+    "gpt-oss:120b-cloud"         # 117B | Tools, thinking (131K context)
+)
+
+# ==============================================
 # LOCAL MODELS (pull with ollama)
 # ==============================================
 OLLAMA_MODELS=(
