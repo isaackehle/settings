@@ -8,13 +8,13 @@
       },
       "models": {
         "deepseek/deepseek-r1-tool-calling-32b": {
-          "name": "DeepSeek R1 Tool-Calling 32B"
+          "name": "DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD)"
         },
         "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (fast, planning)"
+          "name": "Qwen3 8B (PLAN, CLD)"
         },
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
+          "name": "Claude Sonnet 4.6 (CLD)"
         }
       }
     },
@@ -25,16 +25,16 @@
       },
       "models": {
         "qwen3-coder-next-80b:q4": {
-          "name": "Qwen3 Coder Next 80B (primary coding)"
+           "name": "Qwen3 Coder Next 80B (CODE, Q4)"
         },
         "qwen3.6-35b:q4": {
-          "name": "Qwen3.6 35B (general)"
+           "name": "Qwen 3.6 35B A3B (CODE, Q4)"
         },
         "deepseek-r1-tools:32b": {
-          "name": "DeepSeek R1 Tool-Calling 32B (local)"
+           "name": "DeepSeek R1 32B (REAS, TOOL)"
         },
         "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 Tool-Calling 14B (local)"
+           "name": "DeepSeek R1 14B (REAS, TOOL)"
         }
       }
     }

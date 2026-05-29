@@ -8,26 +8,26 @@
         "opus": "qwen3:14b"
       },
       "models": [
-        "qwen3:14b",
-        "qwen3:14b-40k",
         "deepseek-r1-tools:8b",
         "deepseek-r1-tools:8b-128k",
-        "qwen3:4b",
-        "qwen2.5-coder:7b",
+        "nomic-embed-text",
         "qwen2.5-coder:1.5b",
-        "nomic-embed-text"
+        "qwen2.5-coder:7b",
+        "qwen3:4b",
+        "qwen3:14b",
+        "qwen3:14b-40k"
       ]
     },
     "opencode": {
       "models": [
-        "qwen3:14b",
-        "qwen3:14b-40k",
         "deepseek-r1-tools:8b",
         "deepseek-r1-tools:8b-128k",
-        "qwen3:4b",
-        "qwen2.5-coder:7b",
+        "nomic-embed-text",
         "qwen2.5-coder:1.5b",
-        "nomic-embed-text"
+        "qwen2.5-coder:7b",
+        "qwen3:4b",
+        "qwen3:14b",
+        "qwen3:14b-40k"
       ]
     }
   },

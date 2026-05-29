@@ -6,11 +6,11 @@
   //   1. Open Cursor Settings (Cmd+Shift+J) → Models
   //   2. Under "Ollama", set base URL to http://localhost:11434
   //   3. Add custom models (click + next to model list):
-  //        qwen3-coder-next-80b:q4
-  //        gemma4:31b
-  //        qwen3.5-27b:q5
   //        deepseek-r1-tools:32b
+  //        gemma4:31b
   //        qwen3:4b
+  //        qwen3-coder-next-80b:q4
+  //        qwen3.5-27b:q5
   //   4. Set default model to: qwen3-coder-next-80b:q4
   //
   // Cloud fallback:

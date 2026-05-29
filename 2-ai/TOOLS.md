@@ -9,7 +9,7 @@ Comprehensive reference for all AI tools in this setup. Install scripts live in 
 ## Contents
 
 - [Infrastructure](#infrastructure)
-  - [Ollama](#ollama) · [OpenWebUI](#openwebui) · [Olol](#olol) · [Exo](#exo)
+  - [Ollama](#ollama) · [oMLX](#omlx) · [OpenWebUI](#openwebui) · [Olol](#olol) · [Exo](#exo)
 - [Local Runtimes](#local-runtimes)
   - [LM Studio](#lm-studio) · [GPT4All](#gpt4all) · [Llama.cpp](#llamacpp) · [vLLM](#vllm)
 - [Terminal Coding Agents](#terminal-coding-agents)
@@ -54,6 +54,42 @@ All tools route through **Ollama** (`:11434/v1` OpenAI-compatible endpoint) dire
 
 ---
 
+### oMLX
+
+MLX-native LLM inference server with continuous batching and tiered KV caching for Apple Silicon. Managed from the macOS menu bar. Drop-in replacement for Ollama with built-in admin dashboard, model downloader, and a native macOS app.
+
+Requires macOS 15.0+ (Sequoia) and Apple Silicon.
+
+```shell
+brew tap jundot/omlx https://github.com/jundot/omlx
+brew install omlx
+
+# Run as a background service
+brew services start omlx
+```
+
+```shell
+# Start server with a model directory
+omlx serve --model-dir ~/models
+
+# Or download the macOS app from Releases for a GUI experience
+# https://github.com/jundot/omlx/releases
+
+# API at http://localhost:8000/v1 (OpenAI-compatible)
+# Admin dashboard at http://localhost:8000/admin
+```
+
+```shell
+brew update && brew upgrade omlx   # Upgrade to latest
+brew services info omlx             # Check service status
+```
+
+**Key features:** Continuous batching · Tiered KV cache (RAM hot + SSD cold) · Multi-model serving with LRU eviction and pinning · Admin dashboard with real-time monitoring, chat, benchmarking · Built-in HuggingFace model downloader · Vision-language model support · Tool calling & structured output · One-click integrations for OpenCode, Claude Code, Copilot, and more.
+
+- [omlx.ai](https://omlx.ai) · [github.com/jundot/omlx](https://github.com/jundot/omlx) · `2-ai/omlx.sh`
+
+---
+
 ## Local LLM Server Architectures
 
 Choose the architecture that matches your setup. All configurations support hybrid local + cloud via OpenRouter.
@@ -63,6 +99,7 @@ Choose the architecture that matches your setup. All configurations support hybr
 | Architecture                     | Components                                | Best For                              |
 | -------------------------------- | ----------------------------------------- | ------------------------------------- |
 | **Ollama only**                  | Ollama `:11434`                           | Default — direct, no proxy            |
+| **oMLX**                         | oMLX `:8000`                              | MLX-native, menu bar, tiered cache     |
 | **Ollama + OpenWebUI**           | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans                    |
 | **LMStudio**                     | LMStudio `:1234`                          | Prefer GUI over CLI                   |
 | **LMStudio + OpenRouter**        | LMStudio + cloud models                   | GUI-first, cloud fallback             |

@@ -9,18 +9,18 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" },
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5" },
-        "openai/gpt-4o": { "name": "GPT-4o" },
-        "openai/o3": { "name": "OpenAI o3" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash" },
-        "mistralai/mistral-large": { "name": "Mistral Large" },
-        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro" },
-        "moonshot/kimi-k2.6": { "name": "Kimi k2.6 (reasoning)" },
-        "thudm/glm-5.1": { "name": "GLM 5.1" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B (fast, planning)" }
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (CLD)" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (CLD)" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (CLD)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (CLD)" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (REAS, CLD)" },
+        "mistralai/mistral-large": { "name": "Mistral Large (CLD)" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (REAS, CLD)" },
+        "openai/gpt-4o": { "name": "GPT-4o (CLD)" },
+        "openai/o3": { "name": "OpenAI o3 (CLD)" },
+        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro (CLD)" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B (PLAN, CLD)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1 (CLD)" }
       }
     },
     "ollama": {
@@ -30,17 +30,23 @@
         "baseURL": "http://localhost:11434"
       },
       "models": {
-        "deepseek-r1-tools:8b-128k": { "name": "DeepSeek R1 Tools 8B (128k)" },
-        "qwen3:14b-8k": { "name": "Qwen3 14B (8k)" },
-        "qwen3:14b-32k": { "name": "Qwen3 14B (32k)" },
-        "qwen3:14b-128k": { "name": "Qwen3 14B (128k)" },
-        "qwen3:14b-256k": { "name": "Qwen3 14B (256k)" },
-        "qwen3:4b-8k": { "name": "Qwen3 4B (8k)" },
-        "qwen3:4b-32k": { "name": "Qwen3 4B (32k)" },
-        "qwen3:4b-128k": { "name": "Qwen3 4B (128k)" },
-        "qwen3:4b-256k": { "name": "Qwen3 4B (256k)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen2.5 Coder 1.5B" },
-        "nomic-embed-text": { "name": "Nomic Embed Text" }
+        "codestral:22b": { "name": "Codestral 22B (DIFF)" },
+        "codestral:22b-32k": { "name": "Codestral 22B (DIFF, 32K)" },
+        "deepseek-r1-tools:8b": { "name": "DeepSeek R1 8B (REAS, TOOL)" },
+        "deepseek-r1-tools:8b-128k": { "name": "DeepSeek R1 8B (REAS, TOOL, 128K)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (EMBD)" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (FILL)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (FILL)" },
+        "qwen2.5-coder:7b-8k": { "name": "Qwen 2.5 Coder 7B (FILL, 8K)" },
+        "qwen2.5-coder:7b-32k": { "name": "Qwen 2.5 Coder 7B (FILL, 32K)" },
+        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" },
+        "qwen3:4b-8k": { "name": "Qwen 3 4B (PLAN, 8K)" },
+        "qwen3:4b-128k": { "name": "Qwen 3 4B (PLAN, 128K)" },
+        "qwen3:14b": { "name": "Qwen 3 14B (CODE)" },
+        "qwen3:14b-8k": { "name": "Qwen 3 14B (CODE, 8K)" },
+        "qwen3:14b-40k": { "name": "Qwen 3 14B (CODE, 40K)" },
+        "qwen3:14b-128k": { "name": "Qwen 3 14B (CODE, 128K)" },
+        "qwen3:14b-256k": { "name": "Qwen 3 14B (CODE, 256K)" }
       }
     }
   },

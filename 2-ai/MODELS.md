@@ -19,6 +19,126 @@ decision is superseded, log the date and reason.
 | 2026-05-27 | `deepseek-r1:8b`       | Valid Ollama tag. Official 8B distilled reasoning (no tool-calling).                                                                                                            | ollama.com/library/deepseek-r1             |
 | 2026-05-27 | `deepseek-r1-tools:8b` | Valid via `MFDoom/deepseek-r1-tool-calling:8b`. Pulled and aliased by `MODEL_REMOTES`. Use for reasoning+tool-calling on 16/32GB.                                               | ollama.com/MFDoom/deepseek-r1-tool-calling |
 
+## Display Names
+
+Every config file MUST use names from this table. Capability codes go in
+parentheses before quant info, comma-separated: `Qwen 3 4B (PLAN)`,
+`Qwen3 Coder 30B A3B (CODE, Q5 32K)`.
+
+### Capability Codes
+
+| Code   | Meaning      | Use Case                                |
+| ------ | ------------ | --------------------------------------- |
+| `CODE` | Coding       | Code generation, refactoring, debugging |
+| `REAS` | Reasoning    | Chain-of-thought, analysis, tradeoffs   |
+| `TOOL` | Tools        | Function calling / tool use             |
+| `WRIT` | Writing      | Prose, docs, resumes                    |
+| `PLAN` | Planning     | Fast routing, task breakdown            |
+| `FIND` | Research     | Investigation, evidence gathering       |
+| `DIFF` | Apply        | Diff insertion, code patching           |
+| `FILL` | Autocomplete | Fill-in-the-middle, inline completions  |
+| `EMBD` | Embedding    | Semantic search embeddings              |
+| `CHAT` | General chat | Multi-purpose conversation              |
+| `CLD`  | Cloud        | Remote API model (not local)            |
+
+### Naming Rules
+
+1. **Base model names**: Space before version — `Qwen 3 4B`, `Qwen 3.5 27B`
+2. **Product-line names**: No space — `Qwen3 Coder 30B A3B`
+3. **Capability codes**: Before quant — `(CODE, Q5 32K)`, `(PLAN)`, `(REAS, TOOL)`
+4. **Quant variants**: Uppercase Q + space + uppercase K — `(Q4 64K)`, `(Q8)`
+5. **Context-only**: Uppercase K — `(8K)`, `(32K)`, `(128K)`
+6. **Cloud**: Use `CLD` code, drop "Cloud" suffix — `Kimi K2.6 (REAS, CLD)`
+7. **No role words**: No `(reasoning)`, `(fast)`, `(planning)` — use codes instead
+8. **Vendor capitalization**: `K2.6` not `k2.6`
+
+### DeepSeek R1 — Three Distinct Models
+
+There are three different DeepSeek R1 models. The display name `DeepSeek R1` is
+shared, with the capability code distinguishing them:
+
+| Model ID                                | Display Name                                   | Notes                        |
+| --------------------------------------- | ---------------------------------------------- | ---------------------------- |
+| `deepseek-r1:8b`                        | DeepSeek R1 8B (REAS)                          | Official, no tool-calling    |
+| `deepseek-r1-tools:8b`                  | DeepSeek R1 8B (REAS, TOOL)                    | Community, with tool-calling |
+| `deepseek-r1-tools:32b`                 | DeepSeek R1 32B (REAS, TOOL)                   | Community, with tool-calling |
+| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD) | OpenRouter cloud version     |
+
+### Local Models (Ollama)
+
+| Model ID                       | Display Name                         |
+| ------------------------------ | ------------------------------------ |
+| `codestral:22b`                | Codestral 22B (DIFF)                 |
+| `codestral:22b-32k`            | Codestral 22B (DIFF, 32K)            |
+| `deepseek-r1:8b`               | DeepSeek R1 8B (REAS)                |
+| `deepseek-r1-tools:8b`         | DeepSeek R1 8B (REAS, TOOL)          |
+| `deepseek-r1-tools:8b-128k`    | DeepSeek R1 8B (REAS, TOOL, 128K)    |
+| `deepseek-r1-tools:32b`        | DeepSeek R1 32B (REAS, TOOL)         |
+| `deepseek-r1-tools:32b-128k`   | DeepSeek R1 32B (REAS, TOOL, 128K)   |
+| `gemma4:31b`                   | Gemma 4 31B (REAS)                   |
+| `gemma4:31b-8k`                | Gemma 4 31B (REAS, 8K)               |
+| `gemma4:31b-32k`               | Gemma 4 31B (REAS, 32K)              |
+| `gemma4:31b-128k`              | Gemma 4 31B (REAS, 128K)             |
+| `gemma4:31b-256k`              | Gemma 4 31B (REAS, 256K)             |
+| `nomic-embed-text`             | Nomic Embed Text (EMBD)              |
+| `qwen2.5-coder:1.5b`           | Qwen 2.5 Coder 1.5B (FILL)           |
+| `qwen2.5-coder:7b`             | Qwen 2.5 Coder 7B (FILL)             |
+| `qwen2.5-coder:7b-8k`          | Qwen 2.5 Coder 7B (FILL, 8K)         |
+| `qwen2.5-coder:7b-32k`         | Qwen 2.5 Coder 7B (FILL, 32K)        |
+| `qwen3:4b`                     | Qwen 3 4B (PLAN)                     |
+| `qwen3:4b-8k`                  | Qwen 3 4B (PLAN, 8K)                 |
+| `qwen3:4b-128k`                | Qwen 3 4B (PLAN, 128K)               |
+| `qwen3:14b`                    | Qwen 3 14B (CODE)                    |
+| `qwen3:14b-8k`                 | Qwen 3 14B (CODE, 8K)                |
+| `qwen3:14b-40k`                | Qwen 3 14B (CODE, 40K)               |
+| `qwen3:14b-128k`               | Qwen 3 14B (CODE, 128K)              |
+| `qwen3:14b-256k`               | Qwen 3 14B (CODE, 256K)              |
+| `qwen3.5-27b:q5`               | Qwen 3.5 27B (WRIT, Q5)              |
+| `qwen3.5-27b:q5-8k`            | Qwen 3.5 27B (WRIT, Q5 8K)           |
+| `qwen3.5-27b:q5-32k`           | Qwen 3.5 27B (WRIT, Q5 32K)          |
+| `qwen3.5-27b:q5-128k`          | Qwen 3.5 27B (WRIT, Q5 128K)         |
+| `qwen3.5-27b:q5-256k`          | Qwen 3.5 27B (WRIT, Q5 256K)         |
+| `qwen3.5-27b:q8`               | Qwen 3.5 27B (WRIT, Q8)              |
+| `qwen3.6-35b:q4`               | Qwen 3.6 35B A3B (CODE, Q4)          |
+| `qwen3.6-35b:q4-8k`            | Qwen 3.6 35B A3B (CODE, Q4 8K)       |
+| `qwen3.6-35b:q4-128k`          | Qwen 3.6 35B A3B (CODE, Q4 128K)     |
+| `qwen3.6-35b:q4-256k`          | Qwen 3.6 35B A3B (CODE, Q4 256K)     |
+| `qwen3-coder-30b-a3b:q5`       | Qwen3 Coder 30B A3B (CODE, Q5)       |
+| `qwen3-coder-30b-a3b:q5-8k`    | Qwen3 Coder 30B A3B (CODE, Q5 8K)    |
+| `qwen3-coder-30b-a3b:q5-32k`   | Qwen3 Coder 30B A3B (CODE, Q5 32K)   |
+| `qwen3-coder-30b-a3b:q5-128k`  | Qwen3 Coder 30B A3B (CODE, Q5 128K)  |
+| `qwen3-coder-30b-a3b:q6`       | Qwen3 Coder 30B A3B (CODE, Q6)       |
+| `qwen3-coder-30b-a3b:q6-8k`    | Qwen3 Coder 30B A3B (CODE, Q6 8K)    |
+| `qwen3-coder-30b-a3b:q6-32k`   | Qwen3 Coder 30B A3B (CODE, Q6 32K)   |
+| `qwen3-coder-30b-a3b:q6-128k`  | Qwen3 Coder 30B A3B (CODE, Q6 128K)  |
+| `qwen3-coder-30b-a3b:q6-256k`  | Qwen3 Coder 30B A3B (CODE, Q6 256K)  |
+| `qwen3-coder-next-80b:q4`      | Qwen3 Coder Next 80B (CODE, Q4)      |
+| `qwen3-coder-next-80b:q4-16k`  | Qwen3 Coder Next 80B (CODE, Q4 16K)  |
+| `qwen3-coder-next-80b:q4-64k`  | Qwen3 Coder Next 80B (CODE, Q4 64K)  |
+| `qwen3-coder-next-80b:q4-256k` | Qwen3 Coder Next 80B (CODE, Q4 256K) |
+
+### Cloud Models (OpenRouter)
+
+| Model ID                                | Display Name                                   |
+| --------------------------------------- | ---------------------------------------------- |
+| `anthropic/claude-haiku-4-5`            | Claude Haiku 4.5 (CLD)                         |
+| `anthropic/claude-opus-4-6`             | Claude Opus 4.6 (CLD)                          |
+| `anthropic/claude-sonnet-4-6`           | Claude Sonnet 4.6 (CLD)                        |
+| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD) |
+| `google/gemini-2.5-flash`               | Gemini 2.5 Flash (CLD)                         |
+| `google/gemini-2.5-pro`                 | Gemini 2.5 Pro (REAS, CLD)                     |
+| `mistralai/codestral`                   | Codestral (CODE, CLD)                          |
+| `mistralai/mistral-large`               | Mistral Large (CLD)                            |
+| `moonshot/kimi-k2.6`                    | Kimi K2.6 (REAS, CLD)                          |
+| `openai/gpt-4o`                         | GPT-4o (CLD)                                   |
+| `openai/o3`                             | OpenAI o3 (REAS, CLD)                          |
+| `perplexity/sonar-pro`                  | Perplexity Sonar Pro (FIND, CLD)               |
+| `qwen/qwen3-8b`                         | Qwen3 8B (PLAN, CLD)                           |
+| `qwen/qwen3-coder-next-80b`             | Qwen3 Coder Next 80B (CODE, CLD)               |
+| `thudm/glm-5.1`                         | GLM 5.1 (CLD)                                  |
+| `x-ai/grok-3`                           | Grok 3 (REAS, CLD)                             |
+| `x-ai/grok-3-mini`                      | Grok 3 Mini (CLD)                              |
+
 ## Model Identity Notes
 
 ### DeepSeek R1 Family
@@ -62,60 +182,60 @@ decision is superseded, log the date and reason.
 
 ### 64GB (macbook-m5-64gb) — Maximum
 
-| Role           | Model                        | Size    |
-| -------------- | ---------------------------- | ------- |
-| Coding (max)   | `qwen3-coder-next-80b:q4`    | ~48 GB  |
-| Coding         | `qwen3-coder-30b-a3b:q6`     | ~26 GB  |
-| Agentic coding | `qwen3.6-35b:q4`             | ~22 GB  |
-| Writing        | `qwen3.5-27b:q5`             | ~19 GB  |
-| Reasoning      | `deepseek-r1-tools:32b`      | ~20 GB  |
-| General        | `gemma4:31b`                 | ~20 GB  |
-| Planning/fast  | `qwen3:4b`                   | ~5 GB   |
-| Apply/insert   | `codestral:22b`              | ~23 GB  |
-| Autocomplete   | `qwen2.5-coder:7b`           | ~5 GB   |
-| Autocomplete   | `qwen2.5-coder:1.5b`         | ~1 GB   |
-| Embeddings     | `nomic-embed-text`           | ~0.3 GB |
+| Role           | Model                     | Size    |
+| -------------- | ------------------------- | ------- |
+| Coding (max)   | `qwen3-coder-next-80b:q4` | ~48 GB  |
+| Coding         | `qwen3-coder-30b-a3b:q6`  | ~26 GB  |
+| Agentic coding | `qwen3.6-35b:q4`          | ~22 GB  |
+| Writing        | `qwen3.5-27b:q5`          | ~19 GB  |
+| Reasoning      | `deepseek-r1-tools:32b`   | ~20 GB  |
+| General        | `gemma4:31b`              | ~20 GB  |
+| Planning/fast  | `qwen3:4b`                | ~5 GB   |
+| Apply/insert   | `codestral:22b`           | ~23 GB  |
+| Autocomplete   | `qwen2.5-coder:7b`        | ~5 GB   |
+| Autocomplete   | `qwen2.5-coder:1.5b`      | ~1 GB   |
+| Embeddings     | `nomic-embed-text`        | ~0.3 GB |
 
 ### 48GB (macbook-m5-48gb) — Powerful
 
-| Role           | Model                        | Size    |
-| -------------- | ---------------------------- | ------- |
-| Coding         | `qwen3-coder-30b-a3b:q5`     | ~21 GB  |
-| Agentic coding | `qwen3.6-35b:q4`             | ~22 GB  |
-| Writing        | `qwen3.5-27b:q5`             | ~19 GB  |
-| Reasoning      | `deepseek-r1-tools:32b`      | ~20 GB  |
-| General        | `gemma4:31b`                 | ~20 GB  |
-| Planning/fast  | `qwen3:4b`                   | ~5 GB   |
-| Apply/insert   | `codestral:22b`              | ~14 GB  |
-| Autocomplete   | `qwen2.5-coder:7b`           | ~5 GB   |
-| Autocomplete   | `qwen2.5-coder:1.5b`         | ~1 GB   |
-| Embeddings     | `nomic-embed-text`           | ~0.3 GB |
+| Role           | Model                    | Size    |
+| -------------- | ------------------------ | ------- |
+| Coding         | `qwen3-coder-30b-a3b:q5` | ~21 GB  |
+| Agentic coding | `qwen3.6-35b:q4`         | ~22 GB  |
+| Writing        | `qwen3.5-27b:q5`         | ~19 GB  |
+| Reasoning      | `deepseek-r1-tools:32b`  | ~20 GB  |
+| General        | `gemma4:31b`             | ~20 GB  |
+| Planning/fast  | `qwen3:4b`               | ~5 GB   |
+| Apply/insert   | `codestral:22b`          | ~14 GB  |
+| Autocomplete   | `qwen2.5-coder:7b`       | ~5 GB   |
+| Autocomplete   | `qwen2.5-coder:1.5b`     | ~1 GB   |
+| Embeddings     | `nomic-embed-text`       | ~0.3 GB |
 
 ### 32GB (macbook-m2-32gb) — Medium
 
-| Role           | Model                        | Size    |
-| -------------- | ---------------------------- | ------- |
-| Coding         | `qwen3-coder-30b-a3b:q5`     | ~21 GB  |
-| Writing        | `qwen3.5-27b:q5`             | ~19 GB  |
-| Reasoning      | `deepseek-r1-tools:8b`       | ~5 GB   |
-| Solo coding    | `qwen3:14b`                  | ~11 GB  |
-| Planning/fast  | `qwen3:4b`                   | ~5 GB   |
-| Apply/insert   | `codestral:22b`              | ~14 GB  |
-| Autocomplete   | `qwen2.5-coder:7b`           | ~5 GB   |
-| Autocomplete   | `qwen2.5-coder:1.5b`         | ~1 GB   |
-| Embeddings     | `nomic-embed-text`           | ~0.3 GB |
+| Role          | Model                    | Size    |
+| ------------- | ------------------------ | ------- |
+| Coding        | `qwen3-coder-30b-a3b:q5` | ~21 GB  |
+| Writing       | `qwen3.5-27b:q5`         | ~19 GB  |
+| Reasoning     | `deepseek-r1-tools:8b`   | ~5 GB   |
+| Solo coding   | `qwen3:14b`              | ~11 GB  |
+| Planning/fast | `qwen3:4b`               | ~5 GB   |
+| Apply/insert  | `codestral:22b`          | ~14 GB  |
+| Autocomplete  | `qwen2.5-coder:7b`       | ~5 GB   |
+| Autocomplete  | `qwen2.5-coder:1.5b`     | ~1 GB   |
+| Embeddings    | `nomic-embed-text`       | ~0.3 GB |
 
 ### 16GB (macbook-m1-16gb / macmini-m2-16gb) — Lightweight
 
-| Role           | Model                        | Size    |
-| -------------- | ---------------------------- | ------- |
-| Coding/general | `qwen2.5-coder:7b`           | ~5 GB   |
-| Reasoning      | `deepseek-r1-tools:8b`       | ~5 GB   |
-| Solo coding    | `qwen3:14b`                  | ~11 GB  |
-| Planning/fast  | `qwen3:4b`                   | ~5 GB   |
-| Apply/insert   | `codestral:22b`              | ~14 GB  |
-| Autocomplete   | `qwen2.5-coder:1.5b`         | ~1 GB   |
-| Embeddings     | `nomic-embed-text`           | ~0.3 GB |
+| Role           | Model                  | Size    |
+| -------------- | ---------------------- | ------- |
+| Coding/general | `qwen2.5-coder:7b`     | ~5 GB   |
+| Reasoning      | `deepseek-r1-tools:8b` | ~5 GB   |
+| Solo coding    | `qwen3:14b`            | ~11 GB  |
+| Planning/fast  | `qwen3:4b`             | ~5 GB   |
+| Apply/insert   | `codestral:22b`        | ~14 GB  |
+| Autocomplete   | `qwen2.5-coder:1.5b`   | ~1 GB   |
+| Embeddings     | `nomic-embed-text`     | ~0.3 GB |
 
 ## Remote Models (MODEL_REMOTES)
 
@@ -123,10 +243,10 @@ Some models are not in the official Ollama library and must be pulled from a
 community namespace. The `MODEL_REMOTES` associative array in each profile's
 `models.sh` maps local alias names to their pullable remote names.
 
-| Local Alias              | Remote Name (pullable)                  | Profiles   |
-| ------------------------ | --------------------------------------- | ---------- |
-| `deepseek-r1-tools:32b`  | `MFDoom/deepseek-r1-tool-calling:32b`   | 64GB, 48GB |
-| `deepseek-r1-tools:8b`   | `MFDoom/deepseek-r1-tool-calling:8b`    | 32GB, 16GB |
+| Local Alias             | Remote Name (pullable)                | Profiles   |
+| ----------------------- | ------------------------------------- | ---------- |
+| `deepseek-r1-tools:32b` | `MFDoom/deepseek-r1-tool-calling:32b` | 64GB, 48GB |
+| `deepseek-r1-tools:8b`  | `MFDoom/deepseek-r1-tool-calling:8b`  | 32GB, 16GB |
 
 The install script (`2-ai/install-models.sh`) handles this automatically:
 
@@ -166,14 +286,14 @@ context is sufficient and expanding it wastes KV-cache memory.
 Ollama model tags use specific naming conventions. The shorthand in
 `MODEL_QUANTS` values must use the **full pullable tag**, not a suffix.
 
-| Shorthand | Full Ollama Tag | Model |
-| --------- | --------------- | ----- |
-| `:q4` | `:q4` or `:q4_K_M` | Varies by model |
-| `:q5` | `:q5` or `:q5_K_M` | Varies by model |
-| `:q6` | `:q6` or `:q6_K_M` | Rare; check library page |
-| `:q8` | `:q8_0` | Most models use `-q8_0` suffix |
-| `:q4_K_M` | `:q4_K_M` | 4-bit K-medium |
-| `:q8_0` | `:q8_0` | Same as q8 |
+| Shorthand | Full Ollama Tag    | Model                          |
+| --------- | ------------------ | ------------------------------ |
+| `:q4`     | `:q4` or `:q4_K_M` | Varies by model                |
+| `:q5`     | `:q5` or `:q5_K_M` | Varies by model                |
+| `:q6`     | `:q6` or `:q6_K_M` | Rare; check library page       |
+| `:q8`     | `:q8_0`            | Most models use `-q8_0` suffix |
+| `:q4_K_M` | `:q4_K_M`          | 4-bit K-medium                 |
+| `:q8_0`   | `:q8_0`            | Same as q8                     |
 
 ### MODEL_QUANTS Tag Format
 
@@ -190,13 +310,13 @@ The install script splits on the first colon to extract the pull tag and passes
 it directly to `ollama pull`. Always verify tags exist at
 `https://ollama.com/library/<model>/tags` before adding entries.
 
-| Base Model | Alternative Tag | Notes |
-| ---------- | --------------- | ----- |
-| `qwen3.5-27b` | `qwen3.5:27b-q8_0` | Tag includes size prefix |
-| `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs |
-| `gemma4:31b` | `gemma4:31b-it-q8_0` | Requires `-it-` in tag |
-| `qwen3.6-35b` | `qwen3.6:35b-a3b-q8_0` | MoE, `-a3b` suffix |
-| `qwen2.5-coder:7b` | `qwen2.5-coder:7b-q8_0` | Dash separator |
+| Base Model            | Alternative Tag            | Notes                    |
+| --------------------- | -------------------------- | ------------------------ |
+| `qwen3.5-27b`         | `qwen3.5:27b-q8_0`         | Tag includes size prefix |
+| `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs     |
+| `gemma4:31b`          | `gemma4:31b-it-q8_0`       | Requires `-it-` in tag   |
+| `qwen3.6-35b`         | `qwen3.6:35b-a3b-q8_0`     | MoE, `-a3b` suffix       |
+| `qwen2.5-coder:7b`    | `qwen2.5-coder:7b-q8_0`    | Dash separator           |
 
 ## May 2026 Refresh — Change Justification
 
@@ -283,7 +403,7 @@ function calling, and 256K context at just 3.4GB ([Ollama](https://ollama.com/li
 | `qwen3:14b`              | `40k`         | `8k 40k 128k 256k`                               | Qwen3 supports 256K context — exposing all variants allows right-sizing for task complexity |
 | `qwen3-coder-30b-a3b:q5` | (new)         | `8k 32k 128k` (32GB) / `8k 32k 128k 256k` (64GB) | 256K reserved for 64GB only; 32GB uses conservative max                                     |
 | `deepseek-r1-tools:14b`  | `128k`        | removed (14B dropped)                            | Model removed from lineup                                                                   |
-| `deepseek-r1-tools:32b`  | (new)         | `128k`                                           | DeepSeek R1 Tools has native 128K context                                                  |
+| `deepseek-r1-tools:32b`  | (new)         | `128k`                                           | DeepSeek R1 Tools has native 128K context                                                   |
 | `deepseek-r1-tools:8b`   | `128k`        | `128k` (unchanged)                               | N/A                                                                                         |
 | `codestral:22b`          | (not in 16GB) | `32k` (added to 16GB)                            | Added to 16GB profiles for diff/apply support                                               |
 

@@ -14,28 +14,28 @@
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
-          "name": "qwen3-coder-30b-q5-32k",
-          "display_name": "Primary (M5 Max 48GB)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "qwen3.5-27b-q8-256k",
-          "display_name": "Writing / General",
-          "max_tokens": 32768
-        },
-        {
-          "name": "deepseek-r1-tools-14b-128k",
-          "display_name": "Reasoning + Tools",
+          "name": "deepseek-r1-tools-32b-128k",
+          "display_name": "DeepSeek R1 32B (REAS, TOOL, 128K)",
           "max_tokens": 32768
         },
         {
           "name": "qwen3-4b-q8-256k",
-          "display_name": "Fast / Planning",
+          "display_name": "Qwen 3 4B (PLAN, Q8 256K)",
           "max_tokens": 8192
         },
         {
+          "name": "qwen3-coder-30b-q5-32k",
+          "display_name": "Qwen3 Coder 30B A3B (CODE, Q5 32K)",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3.5-27b-q8-256k",
+          "display_name": "Qwen 3.5 27B (WRIT, Q8 256K)",
+          "max_tokens": 32768
+        },
+        {
           "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi k2.6 Cloud",
+          "display_name": "Kimi K2.6 (REAS, CLD)",
           "max_tokens": 131072
         }
       ]

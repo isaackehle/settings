@@ -9,7 +9,7 @@
       "models": [
         {
           "id": "qwen3:14b",
-          "name": "Qwen3 14B (Primary Coding)",
+          "name": "Qwen 3 14B (CODE)",
           "context_window": 40960,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -21,7 +21,7 @@
         },
         {
           "id": "deepseek-r1-tools:8b",
-          "name": "DeepSeek R1 Tools 8B",
+          "name": "DeepSeek R1 8B (REAS, TOOL)",
           "context_window": 131072,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -33,7 +33,7 @@
         },
         {
           "id": "qwen3:4b",
-          "name": "Qwen3 4B (Fast Planning)",
+          "name": "Qwen 3 4B (PLAN)",
           "context_window": 262144,
           "default_max_tokens": 4096,
           "cost_per_1m_in": 0.0,

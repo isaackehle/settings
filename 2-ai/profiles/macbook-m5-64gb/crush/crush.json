@@ -9,7 +9,7 @@
       "models": [
         {
           "id": "qwen3.6-35b:q4",
-          "name": "Qwen3.6 35B (general)",
+          "name": "Qwen 3.6 35B A3B (CODE, Q4)",
           "context_window": 131072,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -21,7 +21,7 @@
         },
         {
           "id": "qwen3.5-27b:q8",
-          "name": "Qwen3.5 27B Q8 (writing/general)",
+          "name": "Qwen 3.5 27B (WRIT, Q8)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -33,7 +33,7 @@
         },
         {
           "id": "deepseek-r1-tools:32b",
-          "name": "DeepSeek R1 Tools 32B (reasoning)",
+          "name": "DeepSeek R1 32B (REAS, TOOL)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -45,7 +45,7 @@
         },
         {
           "id": "deepseek-r1-tools:32b",
-          "name": "DeepSeek R1 Tools 32B (reasoning)",
+          "name": "DeepSeek R1 32B (REAS, TOOL)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -57,7 +57,7 @@
         },
         {
           "id": "qwen3:4b",
-          "name": "Qwen3 4B (fast)",
+          "name": "Qwen 3 4B (PLAN)",
           "context_window": 32768,
           "default_max_tokens": 4096,
           "cost_per_1m_in": 0.0,
