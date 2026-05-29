@@ -2,9 +2,6 @@
   "provider": {
     "ollama": {
       "models": {
-        "deepseek-r1-tools:14b": {
-          "name": "DeepSeek R1 14B (REAS, TOOL)"
-        },
         "deepseek-r1-tools:32b": {
           "name": "DeepSeek R1 32B (REAS, TOOL)"
         },
