@@ -96,8 +96,9 @@ declare -A MODEL_REMOTES=(
 # Pull on-demand: ollama pull <full-tag>
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen3-coder-30b-a3b"]="qwen3-coder:30b-a3b-q8_0|qwen3-coder-30b-a3b:q8|32 GB (solo coding)"
-    ["qwen3.5-27b"]="qwen3.5:27b-q8_0|qwen3.5-27b:q8|29 GB (writing / research)"
+    ["qwen3-coder-30b-a3b"]="qwen3-coder-30b-a3b:q8|qwen3-coder-30b-a3b:q8|32 GB (solo coding)"
+    ["qwen3.5-27b"]="qwen3.5-27b:q8|qwen3.5-27b:q8|29 GB (writing / research)"
+    ["qwen3.6-35b"]="qwen3.6-35b:q8|qwen3.6-35b:q8|36 GB (agentic reasoning)"
 )
 
 # ==============================================
