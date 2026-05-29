@@ -146,9 +146,9 @@
         "qwen3-coder-next-80b:q4-256k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 256K)" }
       },
       "name": "Ollama (Local)",
-      "npm": "@ai-sdk/ollama",
+      "npm": "@ai-sdk/openai-compatible",
       "options": {
-        "baseURL": "http://localhost:11434"
+        "baseURL": "http://localhost:11434/v1"
       }
     },
     "openrouter": {

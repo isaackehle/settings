@@ -89,8 +89,8 @@ models:
 
   # ── Autocomplete — Ollama direct (latency-critical) ────────────────────────
   - name: 'Qwen 2.5 Coder 1.5B (FILL)'
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:11434/v1
     model: 'qwen2.5-coder:1.5b'
     roles:
       - autocomplete
@@ -98,8 +98,8 @@ models:
       timeout: 8000
 
   - name: 'Qwen 2.5 Coder 7B (FILL)'
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:11434/v1
     model: 'qwen2.5-coder:7b'
     roles:
       - autocomplete
@@ -108,8 +108,8 @@ models:
 
   # ── Embeddings — Ollama direct ─────────────────────────────────────────────
   - name: 'Nomic Embed Text (EMBD)'
-    provider: ollama
-    apiBase: http://localhost:11434
+    provider: openai
+    apiBase: http://localhost:11434/v1
     model: 'nomic-embed-text'
     roles:
       - embed

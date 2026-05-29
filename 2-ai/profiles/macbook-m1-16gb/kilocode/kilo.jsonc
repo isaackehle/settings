@@ -5,7 +5,7 @@
   "disabled_providers": [],
   "provider": {
     "ollama": {
-      "npm": "@ai-sdk/ollama-compatible",
+      "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama (Local)",
       "options": {
         "baseURL": "http://localhost:11434/v1",

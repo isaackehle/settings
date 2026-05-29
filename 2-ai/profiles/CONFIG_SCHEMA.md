@@ -31,26 +31,26 @@ Every profile has one `models.sh` that defines all model assignments.
 
 ### Variable Reference
 
-| Variable               | Type        | Format                                   | Used By                                                         |
-| ---------------------- | ----------- | ---------------------------------------- | --------------------------------------------------------------- |
-| `OPENROUTER_MODELS`    | array       | `org/model`                              | continue, grok, opencode (openrouter provider blocks)            |
-| `OLLAMA_MODELS`        | array       | `model:tag`                              | ollama/config, continue, crush, gemini, grok, opencode          |
-| `OPENCODE_AGENTS`      | assoc array | key → `model:tag`                        | opencode                                                        |
-| `CONTINUE_ROLES`       | assoc array | key → `model:tag`                        | continue                                                        |
-| `CLAUDE_CODE`          | assoc array | key → `model:tag`                        | claude/settings.json, ollama/config.json                        |
-| `CLINE_MODEL`          | scalar      | `model:tag`                              | cline/settings.jsonc (reference only)                           |
-| `CLINE_MODEL_CLOUD`    | scalar      | `model:cloud`                            | cline/settings.jsonc (reference only)                           |
-| `ZOOCODE_MODEL`        | scalar      | `model:tag`                              | zoocode/settings.jsonc (reference only)                         |
-| `ROOCODE_MODEL_CLOUD`  | scalar      | `model:cloud`                            | roocode/settings.jsonc (reference only)                         |
-| `ROOCODE_MODE_*`       | scalar      | `model:tag`                              | roocode/settings.jsonc per-mode config                          |
-| `KILOCODE_MODEL`       | scalar      | `model:tag`                              | kilocode/settings.jsonc (reference only)                        |
-| `KILOCODE_MODEL_CLOUD` | scalar      | `model:cloud`                            | kilocode/settings.jsonc (reference only)                        |
-| `AIDER_MODEL`          | scalar      | `model:tag`                              | aider/aider.conf.yml                                            |
-| `AIDER_WEAK_MODEL`     | scalar      | `model:tag`                              | aider/aider.conf.yml                                            |
-| `AIDER_EDITOR_MODEL`   | scalar      | `model:tag`                              | aider/aider.conf.yml                                            |
-| `ZED_MODEL`            | scalar      | `model:tag`                              | zed/settings.json                                               |
-| `CURSOR_MODEL`         | scalar      | `model:tag`                              | cursor/settings.jsonc (reference only)                          |
-| `CURSOR_MODEL_CLOUD`   | scalar      | `model:cloud`                            | cursor/settings.jsonc (reference only)                          |
+| Variable               | Type        | Format            | Used By                                                |
+| ---------------------- | ----------- | ----------------- | ------------------------------------------------------ |
+| `OPENROUTER_MODELS`    | array       | `org/model`       | continue, grok, opencode (openrouter provider blocks)  |
+| `OLLAMA_MODELS`        | array       | `model:tag`       | ollama/config, continue, crush, gemini, grok, opencode |
+| `OPENCODE_AGENTS`      | assoc array | key → `model:tag` | opencode                                               |
+| `CONTINUE_ROLES`       | assoc array | key → `model:tag` | continue                                               |
+| `CLAUDE_CODE`          | assoc array | key → `model:tag` | claude/settings.json, ollama/config.json               |
+| `CLINE_MODEL`          | scalar      | `model:tag`       | cline/settings.jsonc (reference only)                  |
+| `CLINE_MODEL_CLOUD`    | scalar      | `model:cloud`     | cline/settings.jsonc (reference only)                  |
+| `ZOOCODE_MODEL`        | scalar      | `model:tag`       | zoocode/settings.jsonc (reference only)                |
+| `ROOCODE_MODEL_CLOUD`  | scalar      | `model:cloud`     | roocode/settings.jsonc (reference only)                |
+| `ROOCODE_MODE_*`       | scalar      | `model:tag`       | roocode/settings.jsonc per-mode config                 |
+| `KILOCODE_MODEL`       | scalar      | `model:tag`       | kilocode/settings.jsonc (reference only)               |
+| `KILOCODE_MODEL_CLOUD` | scalar      | `model:cloud`     | kilocode/settings.jsonc (reference only)               |
+| `AIDER_MODEL`          | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
+| `AIDER_WEAK_MODEL`     | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
+| `AIDER_EDITOR_MODEL`   | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
+| `ZED_MODEL`            | scalar      | `model:tag`       | zed/settings.json                                      |
+| `CURSOR_MODEL`         | scalar      | `model:tag`       | cursor/settings.jsonc (reference only)                 |
+| `CURSOR_MODEL_CLOUD`   | scalar      | `model:cloud`     | cursor/settings.jsonc (reference only)                 |
 
 ### Naming Convention
 
@@ -58,11 +58,11 @@ All model names in `models.sh` use **plain Ollama format** (`model:tag`).
 No more LiteLLM format (hyphens). No more `:latest` appending in configs —
 bare names like `qwen3:14b` resolve to defaults natively.
 
-| Target          | Format                                   | Example                             |
-| --------------- | ---------------------------------------- | ----------------------------------- |
-| Ollama          | `model:tag`                              | `qwen3-coder-30b-a3b:q5`            |
-| OpenRouter      | `org/model`                              | `anthropic/claude-sonnet-4-6`       |
-| OpenCode prefix | `ollama/model:tag` or `openrouter/org/m` | `ollama/qwen3-coder-30b-a3b:q5`     |
+| Target          | Format                                   | Example                         |
+| --------------- | ---------------------------------------- | ------------------------------- |
+| Ollama          | `model:tag`                              | `qwen3-coder-30b-a3b:q5`        |
+| OpenRouter      | `org/model`                              | `anthropic/claude-sonnet-4-6`   |
+| OpenCode prefix | `ollama/model:tag` or `openrouter/org/m` | `ollama/qwen3-coder-30b-a3b:q5` |
 
 ### Rules
 
@@ -114,6 +114,7 @@ ollama/config.json:
 ```
 
 **Gotchas:**
+
 - No `:latest` appending needed — bare names like `qwen3:14b` resolve natively
 - No duplicate entries
 - Sort alphabetically within each list
@@ -142,6 +143,7 @@ ollama launch claude
 ```
 
 **Gotchas:**
+
 - Base URL is `:11434` (not `:4000`) — Ollama's port
 - API key is `ollama` (any non-empty string works)
 
@@ -156,18 +158,19 @@ models:
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: env.OPENROUTER_API_KEY
-    model: <openrouter-model>       # e.g., moonshot/kimi-k2.6
+    model: <openrouter-model> # e.g., moonshot/kimi-k2.6
     roles: [chat]
 
   # Local (via Ollama)
   - name: <display>
-    provider: ollama
-    apiBase: http://localhost:11434
-    model: <ollama-model>           # e.g., qwen3:14b
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    model: <ollama-model> # e.g., qwen3:14b
     roles: [chat, edit, apply, summarize, autocomplete, embed, rerank]
 ```
 
 **Gotchas:**
+
 - No more `provider: openai` with LiteLLM base URL for chat models
 - All local models use `provider: ollama` directly
 - Autocomplete models need `requestOptions.timeout: 8000`
@@ -193,6 +196,7 @@ Crush terminal AI — connects to Ollama's OpenAI-compatible endpoint.
 ```
 
 **Gotchas:**
+
 - Base URL is `:11434/v1` (Ollama's OpenAI-compatible endpoint)
 - API key can be any string (Ollama doesn't validate it)
 
@@ -237,6 +241,7 @@ Grok CLI — both OpenRouter cloud and Ollama local models.
 ```
 
 **Gotchas:**
+
 - Ollama `baseURL` has NO `/v1` suffix (unlike Gemini)
 
 ### 7. `groq/local-settings.json`
@@ -251,23 +256,24 @@ OpenCode config — both OpenRouter cloud and Ollama local, plus agent assignmen
 {
   "provider": {
     "openrouter": {
-      "models": { "<openrouter-model>": { "name": "<display>" } }
+      "models": { "<openrouter-model>": { "name": "<display>" } },
     },
     "ollama": {
-      "models": { "<ollama-model>": { "name": "<display>" } }
-    }
+      "models": { "<ollama-model>": { "name": "<display>" } },
+    },
   },
-  "model": "ollama/<model>",           // OPENCODE_AGENTS[code]
-  "small_model": "ollama/<model>",     // OPENCODE_AGENTS[plan]
+  "model": "ollama/<model>", // OPENCODE_AGENTS[code]
+  "small_model": "ollama/<model>", // OPENCODE_AGENTS[plan]
   "agent": {
     "<role>": {
-      "model": "ollama/<model>"         // or "openrouter/<model>"
-    }
-  }
+      "model": "ollama/<model>", // or "openrouter/<model>"
+    },
+  },
 }
 ```
 
 **Gotchas:**
+
 - No more `litellm` provider block
 - No more `:latest` appending
 - Agent `model` values need `ollama/` or `openrouter/` prefix
@@ -294,12 +300,13 @@ Kilo Code (VS Code extension). Same as Cline/RooCode — `:11434/v1` endpoint.
 Aider CLI — uses Ollama's native chat API.
 
 ```yaml
-model: ollama_chat/<ollama-model>      # AIDER_MODEL
-weak-model: ollama_chat/<ollama-model>  # AIDER_WEAK_MODEL
+model: ollama_chat/<ollama-model> # AIDER_MODEL
+weak-model: ollama_chat/<ollama-model> # AIDER_WEAK_MODEL
 editor-model: ollama_chat/<ollama-model> # AIDER_EDITOR_MODEL
 ```
 
 **Gotchas:**
+
 - Use `ollama_chat/<model>` prefix, not `openai/`
 - No proxy layer needed
 

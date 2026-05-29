@@ -24,10 +24,10 @@
       }
     },
     "ollama": {
-      "npm": "@ai-sdk/ollama",
+      "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama (Local)",
       "options": {
-        "baseURL": "http://localhost:11434"
+        "baseURL": "http://localhost:11434/v1"
       },
       "models": {
         "codestral:22b": { "name": "Codestral 22B (DIFF)" },
