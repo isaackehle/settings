@@ -29,6 +29,9 @@
         },
         "deepseek-r1-tools:8b": {
           "name": "DeepSeek R1 8B (REAS, TOOL)"
+        },
+        "qwen3:4b": {
+          "name": "Qwen 3 4B (PLAN)"
         }
       }
     }

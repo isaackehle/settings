@@ -12,41 +12,35 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "codestral-22b-q8-32k": { "name": "Codestral 22B (DIFF, Q8 32K)" },
-        "deepseek-r1-q8-128k": { "name": "DeepSeek R1 (REAS, Q8 128K)" },
-        "deepseek-r1-tools-14b-128k": { "name": "DeepSeek R1 14B (REAS, TOOL, 128K)" },
-        "deepseek-r1-tools-32b-128k": { "name": "DeepSeek R1 32B (REAS, TOOL, 128K)" },
-        "gemma4-26b": { "name": "Gemma 4 26B (REAS)" },
-        "glm-4.7-flash-latest": { "name": "GLM 4.7 Flash (latest)" },
-        "glm-4.7-flash-q4-198k": { "name": "GLM 4.7 Flash (Q4 198K)" },
-        "glm-4.7-flash-q8-198k": { "name": "GLM 4.7 Flash (Q8 198K)" },
-        "llama3.3-70b": { "name": "Llama 3.3 70B" },
-        "qwen2.5-coder-1.5b-q4-32k": { "name": "Qwen 2.5 Coder 1.5B (FILL, Q4 32K)" },
-        "qwen2.5-coder-7b-q4-32k": { "name": "Qwen 2.5 Coder 7B (FILL, Q4 32K)" },
-        "qwen2.5-coder-7b-q8-32k": { "name": "Qwen 2.5 Coder 7B (FILL, Q8 32K)" },
-        "qwen3-4b-q8-256k": { "name": "Qwen 3 4B (PLAN, Q8 256K)" },
-        "qwen3-14b-q5-40k": { "name": "Qwen 3 14B (CODE, Q5 40K)" },
-        "qwen3-14b-q8-40k": { "name": "Qwen 3 14B (CODE, Q8 40K)" },
-        "qwen3-32b-q5-32k": { "name": "Qwen 3 32B (CODE, Q5 32K)" },
-        "qwen3-coder-30b-q6-32k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 32K)" },
-        "qwen3-coder-30b-q6-128k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 128K)" },
-        "qwen3-coder-next-80b-q4": { "name": "Qwen3 Coder Next 80B (CODE, Q4)" },
-        "qwen3-coder-next-80b-q4-16k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 16K)" },
-        "qwen3-coder-next-80b-q4-64k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 64K)" },
-        "qwen3-coder-next-80b-q4-128k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 128K)" },
-        "qwen3.5-27b-q5-8k": { "name": "Qwen 3.5 27B (WRIT, Q5 8K)" },
-        "qwen3.5-27b-q5-32k": { "name": "Qwen 3.5 27B (WRIT, Q5 32K)" },
-        "qwen3.5-27b-q5-128k": { "name": "Qwen 3.5 27B (WRIT, Q5 128K)" },
-        "qwen3.5-27b-q5-256k": { "name": "Qwen 3.5 27B (WRIT, Q5 256K)" },
-        "qwen3.5-27b-q8-8k": { "name": "Qwen 3.5 27B (WRIT, Q8 8K)" },
-        "qwen3.5-27b-q8-32k": { "name": "Qwen 3.5 27B (WRIT, Q8 32K)" },
-        "qwen3.5-27b-q8-128k": { "name": "Qwen 3.5 27B (WRIT, Q8 128K)" },
-        "qwen3.5-27b-q8-256k": { "name": "Qwen 3.5 27B (WRIT, Q8 256K)" },
-        "qwen3.6-35b-8k": { "name": "Qwen 3.6 35B A3B (CODE, 8K)" },
-        "qwen3.6-35b-32k": { "name": "Qwen 3.6 35B A3B (CODE, 32K)" },
-        "qwen3.6-35b-128k": { "name": "Qwen 3.6 35B A3B (CODE, 128K)" },
-        "qwen3.6-35b-256k": { "name": "Qwen 3.6 35B A3B (CODE, 256K)" },
-        "qwen3.6-35b-q5-32k": { "name": "Qwen 3.6 35B A3B (CODE, Q5 32K)" }
+        "codestral:22b": { "name": "Codestral 22B (DIFF)" },
+        "codestral:22b-32k": { "name": "Codestral 22B (DIFF, 32K)" },
+        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (REAS, TOOL)" },
+        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 32B (REAS, TOOL, 128K)" },
+        "gemma4:31b": { "name": "Gemma 4 31B (REAS)" },
+        "gemma4:31b-8k": { "name": "Gemma 4 31B (REAS, 8K)" },
+        "gemma4:31b-32k": { "name": "Gemma 4 31B (REAS, 32K)" },
+        "gemma4:31b-128k": { "name": "Gemma 4 31B (REAS, 128K)" },
+        "gemma4:31b-256k": { "name": "Gemma 4 31B (REAS, 256K)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (EMBD)" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (FILL)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (FILL)" },
+        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" },
+        "qwen3:4b-8k": { "name": "Qwen 3 4B (PLAN, 8K)" },
+        "qwen3:4b-128k": { "name": "Qwen 3 4B (PLAN, 128K)" },
+        "qwen3.5-27b:q5": { "name": "Qwen 3.5 27B (WRIT, Q5)" },
+        "qwen3.5-27b:q5-8k": { "name": "Qwen 3.5 27B (WRIT, Q5 8K)" },
+        "qwen3.5-27b:q5-32k": { "name": "Qwen 3.5 27B (WRIT, Q5 32K)" },
+        "qwen3.5-27b:q5-128k": { "name": "Qwen 3.5 27B (WRIT, Q5 128K)" },
+        "qwen3.5-27b:q5-256k": { "name": "Qwen 3.5 27B (WRIT, Q5 256K)" },
+        "qwen3.5-27b:q8": { "name": "Qwen 3.5 27B (WRIT, Q8)" },
+        "qwen3.6-35b:q4": { "name": "Qwen 3.6 35B A3B (CODE, Q4)" },
+        "qwen3.6-35b:q4-8k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 8K)" },
+        "qwen3.6-35b:q4-128k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 128K)" },
+        "qwen3.6-35b:q4-256k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 256K)" },
+        "qwen3-coder-30b-a3b:q5": { "name": "Qwen3 Coder 30B A3B (CODE, Q5)" },
+        "qwen3-coder-30b-a3b:q5-8k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 8K)" },
+        "qwen3-coder-30b-a3b:q5-32k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 32K)" },
+        "qwen3-coder-30b-a3b:q5-128k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 128K)" }
       }
     },
     "openrouter": {
@@ -68,7 +62,7 @@
   "agent": {
     "code": {
       "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "qwen3-coder-30b-a3b:q5",
+      "model": "qwen3-coder-30b-a3b:q5-32k",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -84,7 +78,7 @@
     },
     "ask": {
       "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "qwen3-coder-30b-a3b:q5",
+      "model": "qwen3-coder-30b-a3b:q5-32k",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -100,7 +94,7 @@
     },
     "debug": {
       "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "deepseek-r1-tools-14b-128k",
+      "model": "deepseek-r1-tools:32b-128k",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
@@ -132,7 +126,7 @@
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "deepseek-r1-tools-14b-128k",
+      "model": "deepseek-r1-tools:32b-128k",
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
@@ -148,7 +142,7 @@
     },
     "write": {
       "description": "Writing agent — docs, summaries, cover letters, polished prose.",
-      "model": "qwen3.6-35b-256k",
+      "model": "qwen3.6-35b:q4",
       "mode": "primary",
       "temperature": 0.65,
       "permission": {
