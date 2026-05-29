@@ -8,13 +8,13 @@
       },
       "models": {
         "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (fast, planning)"
+          "name": "Qwen3 8B (PLAN, CLD)"
         },
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6"
+          "name": "Claude Sonnet 4.6 (CLD)"
         },
         "moonshot/kimi-k2.6": {
-          "name": "Kimi k2.6 (reasoning)"
+          "name": "Kimi K2.6 (REAS, CLD)"
         }
       }
     },
@@ -25,13 +25,13 @@
       },
       "models": {
         "qwen3:14b": {
-          "name": "Qwen3 14B (primary)"
+          "name": "Qwen 3 14B (CODE)"
         },
         "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B (reason+tools)"
+          "name": "DeepSeek R1 8B (REAS, TOOL)"
         },
         "qwen3:4b": {
-          "name": "Qwen3 4B (fast, planning)"
+          "name": "Qwen 3 4B (PLAN)"
         }
       }
     }

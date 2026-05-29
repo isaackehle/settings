@@ -118,12 +118,13 @@ Personal macOS development environment setup guide and reference.
 ## 04 - AI
 
 - [[AI Setup Architecture]] — Layered stack design, tool conflict map, machine-type model selection, and VS Code troubleshooting.
-- [[Models]] — Central model reference: IDs for Ollama, OpenRouter, and direct APIs.
+- [[Models]] — Central model reference: IDs, display names, capability codes, and profile assignments for Ollama and OpenRouter.
 
 ### Local Runtimes
 
 - [[Local LLMs]] — Local LLM overview for Ollama, LM Studio, GPT4All, vLLM, and Llama.cpp.
 - [[Ollama]] — Local LLM manager for Apple Silicon.
+- [[oMLX]] — MLX-native LLM server with continuous batching, tiered KV cache, and macOS menu bar.
 - [[LM Studio]] — GUI for discovering and running local LLMs.
 - [[GPT4All]] — Privacy-focused local chatbot app.
 - [[vLLM]] — High-throughput local LLM serving engine.

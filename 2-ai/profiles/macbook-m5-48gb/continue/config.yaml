@@ -4,31 +4,7 @@ schema: 'v1'
 
 models:
   # ── Cloud Models (via OpenRouter — direct, not proxied) ────────────────────
-  - name: 'Kimi k2.6 Cloud'
-    provider: openai
-    apiBase: https://openrouter.ai/api/v1
-    apiKey: 'env.OPENROUTER_API_KEY'
-    model: 'moonshot/kimi-k2.6'
-    roles:
-      - chat
-
-  - name: 'GLM-5.1 Cloud'
-    provider: openai
-    apiBase: https://openrouter.ai/api/v1
-    apiKey: 'env.OPENROUTER_API_KEY'
-    model: 'thudm/glm-5.1'
-    roles:
-      - chat
-
-  - name: 'Claude Sonnet 4.6'
-    provider: openai
-    apiBase: https://openrouter.ai/api/v1
-    apiKey: 'env.OPENROUTER_API_KEY'
-    model: 'anthropic/claude-sonnet-4-6'
-    roles:
-      - chat
-
-  - name: 'Claude Opus 4.6'
+  - name: 'Claude Opus 4.6 (CLD)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
@@ -36,8 +12,64 @@ models:
     roles:
       - chat
 
+  - name: 'Claude Sonnet 4.6 (CLD)'
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'anthropic/claude-sonnet-4-6'
+    roles:
+      - chat
+
+  - name: 'GLM 5.1 (CLD)'
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'thudm/glm-5.1'
+    roles:
+      - chat
+
+  - name: 'Kimi K2.6 (REAS, CLD)'
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'moonshot/kimi-k2.6'
+    roles:
+      - chat
+
   # ── Local Models via Ollama (chat / edit / apply / summarize) ──────────────
-  - name: 'Qwen3 Coder 30B A3B (Q5)'
+  - name: 'Codestral 22B (DIFF)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'codestral:22b'
+    roles:
+      - apply
+
+  - name: 'DeepSeek R1 32B (REAS, TOOL)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'deepseek-r1-tools:32b'
+    roles:
+      - chat
+
+  - name: 'Qwen 3 4B (PLAN)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'qwen3:4b'
+    roles:
+      - chat
+
+  - name: 'Qwen 3.5 27B (WRIT, Q5)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'qwen3.5-27b:q5'
+    roles:
+      - chat
+
+  - name: 'Qwen3 Coder 30B A3B (CODE, Q5)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -47,48 +79,8 @@ models:
       - edit
       - summarize
 
-  - name: 'Qwen3.5 27B (Q5)'
-    provider: openai
-    apiBase: http://localhost:11434/v1
-    apiKey: 'sk-local'
-    model: 'qwen3.5-27b:q5'
-    roles:
-      - chat
-
-  - name: 'Codestral 22B'
-    provider: openai
-    apiBase: http://localhost:11434/v1
-    apiKey: 'sk-local'
-    model: 'codestral:22b'
-    roles:
-      - apply
-
-  - name: 'DeepSeek R1 Tool-Calling 32B'
-    provider: openai
-    apiBase: http://localhost:11434/v1
-    apiKey: 'sk-local'
-    model: 'deepseek-r1-tools:32b'
-    roles:
-      - chat
-
-  - name: 'Qwen3 Coder 30B A3B (Q5)'
-    provider: openai
-    apiBase: http://localhost:11434/v1
-    apiKey: 'sk-local'
-    model: 'qwen3-coder-30b-a3b:q5'
-    roles:
-      - chat
-
-  - name: 'Qwen3 4B (Fast)'
-    provider: openai
-    apiBase: http://localhost:11434/v1
-    apiKey: 'sk-local'
-    model: 'qwen3:4b'
-    roles:
-      - chat
-
   # ── Autocomplete — Ollama direct (latency-critical) ────────────────────────
-  - name: 'Qwen2.5 Coder 1.5B (autocomplete)'
+  - name: 'Qwen 2.5 Coder 1.5B (FILL)'
     provider: ollama
     apiBase: http://localhost:11434
     model: 'qwen2.5-coder:1.5b'
@@ -97,7 +89,7 @@ models:
     requestOptions:
       timeout: 8000
 
-  - name: 'Qwen2.5 Coder 7B (autocomplete quality)'
+  - name: 'Qwen 2.5 Coder 7B (FILL)'
     provider: ollama
     apiBase: http://localhost:11434
     model: 'qwen2.5-coder:7b'
@@ -107,7 +99,7 @@ models:
       timeout: 8000
 
   # ── Embeddings — Ollama direct ─────────────────────────────────────────────
-  - name: 'Nomic Embed Text'
+  - name: 'Nomic Embed Text (EMBD)'
     provider: ollama
     apiBase: http://localhost:11434
     model: 'nomic-embed-text'
