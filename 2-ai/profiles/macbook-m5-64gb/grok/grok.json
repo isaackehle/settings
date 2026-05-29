@@ -25,16 +25,13 @@
       },
       "models": {
         "qwen3-coder-next-80b:q4": {
-           "name": "Qwen3 Coder Next 80B (CODE, Q4)"
+          "name": "Qwen3 Coder Next 80B (CODE, Q4)"
         },
         "qwen3.6-35b:q4": {
-           "name": "Qwen 3.6 35B A3B (CODE, Q4)"
+          "name": "Qwen 3.6 35B A3B (CODE, Q4)"
         },
         "deepseek-r1-tools:32b": {
-           "name": "DeepSeek R1 32B (REAS, TOOL)"
-        },
-        "deepseek-r1-tools:14b": {
-           "name": "DeepSeek R1 14B (REAS, TOOL)"
+          "name": "DeepSeek R1 32B (REAS, TOOL)"
         }
       }
     }
