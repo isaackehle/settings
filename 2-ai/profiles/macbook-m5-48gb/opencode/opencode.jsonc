@@ -13,7 +13,8 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "external_directory": "ask"
       },
       "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
       "temperature": 0.2
@@ -30,7 +31,8 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "deny"
+        "webfetch": "deny",
+        "external_directory": "ask"
       },
       "prompt": "You are a fully local coding agent with no internet access. Work only with files and context provided. Be explicit when you need information you cannot access.",
       "temperature": 0.2
@@ -46,7 +48,8 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "external_directory": "ask"
       },
       "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
       "temperature": 0.25
@@ -62,9 +65,10 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "external_directory": "ask"
       },
-      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.",
+      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n\n## Findings\n<bullet points, organized by sub-topic>\n\n## Open Questions\n<what still needs investigation>\n\n## Next Steps\n<concrete recommended actions>\n\nIf the user explicitly says not to save, skip writing the file.",
       "temperature": 0.25
     },
     "think": {
@@ -78,7 +82,8 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "external_directory": "ask"
       },
       "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands.",
       "temperature": 0.3
@@ -94,7 +99,8 @@
         "grep": "allow",
         "list": "allow",
         "read": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "external_directory": "ask"
       },
       "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials.",
       "temperature": 0.65
@@ -109,7 +115,8 @@
     "grep": "allow",
     "list": "allow",
     "read": "allow",
-    "webfetch": "allow"
+    "webfetch": "allow",
+    "external_directory": "ask"
   },
   "provider": {
     "ollama": {

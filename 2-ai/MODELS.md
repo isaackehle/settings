@@ -327,7 +327,7 @@ it directly to `ollama pull`. Always verify tags exist at
 | --------------------- | -------------------------- | ------------------------ |
 | `qwen3.5-27b`         | `qwen3.5:27b-q8_0`         | Tag includes size prefix |
 | `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs     |
-| `gemma4:31b`          | `gemma4:31b-it-q8_0`       | Requires `-it-` in tag   |
+| `gemma4:31b`          | _(none)_                   | Base model is Q6, ~20GB  |
 | `qwen3.6-35b`         | `qwen3.6:35b-a3b-q8_0`     | MoE, `-a3b` suffix       |
 | `qwen2.5-coder:7b`    | `qwen2.5-coder:7b-q8_0`    | Dash separator           |
 

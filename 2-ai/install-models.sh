@@ -259,7 +259,7 @@ ollama_find_model() {
 # ==============================================
 # HELPER: Try to create a base model alias from an existing context variant.
 # When ollama pull fails (e.g., "qwen3-coder-next-80b:q4" tag doesn't exist
-# in the registry), we look for any installed context variant (e.g., 
+# in the registry), we look for any installed context variant (e.g.,
 # "qwen3-coder-next-80b:q4-16k") and create the base tag as an alias.
 # ==============================================
 create_base_from_context_variant() {
@@ -394,11 +394,21 @@ install_ollama_models() {
             #   local-alias:  the tag to create locally (empty = no alias needed)
             #   description:  human-readable size and role info
             # e.g. "qwen3.5:27b-q8_0|qwen3.5-27b:q8|29 GB (solo prose)"
-            # e.g. "gemma4:31b-it-q8_0||28 GB (solo deep reasoning)"  (no alias needed)
             local pull_tag="${info%%|*}"
             local rest="${info#*|}"
             local local_alias="${rest%%|*}"
             local desc="${rest#*|}"
+            
+            # Skip if already installed (check both the pull tag and the alias)
+            if ollama_model_exists "$pull_tag"; then
+                ((q_index++)) || true
+                continue
+            fi
+            if [[ -n "$local_alias" ]] && ollama_model_exists "$local_alias"; then
+                ((q_index++)) || true
+                continue
+            fi
+            
             q_tags+=("$pull_tag")
             q_aliases+=("$local_alias")
             if [[ -n "$local_alias" ]]; then
