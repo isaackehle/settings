@@ -77,6 +77,18 @@ OLLAMA_MODELS=(
     "nomic-embed-text"            # ~0.3 GB | Semantic search / RAG (8k)
 )
 
+# --- oMLX Models (HuggingFace paths) ---
+# oMLX uses HF repo IDs. Quantization is usually specified in the repo name.
+OMLX_MODELS=(
+    "mlx-community/Qwen2.5-Coder-7B-Instruct-4bit"    # Primary coding (4.28 GB)
+    "mlx-community/Codestral-22B-v0.1-4bit"           # Diff apply (12.5 GB)
+    "Qwen/Qwen3-14B-MLX-4bit"                         # Solo coding (7.75 GB)
+    "mlx-community/DeepSeek-R1-Distill-Qwen-7B-4bit"  # Reasoning (4.28 GB)
+    "Qwen/Qwen3-4B-MLX-4bit"                          # Planning (2.14 GB)
+    "mlx-community/Qwen2.5-Coder-1.5B-Instruct-4bit"  # Autocomplete (0.87 GB)
+    "mlx-community/nomicai-modernbert-embed-base-8bit" # Embeddings (0.16 GB)
+)
+
 # ==============================================
 # REMOTE MODELS — pull from community namespace, alias locally
 # Some models are not in the official Ollama library and must be
