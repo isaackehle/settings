@@ -61,8 +61,8 @@ done
 install_config_file "shellrc" "$HOME/.shellrc"
 
 # profile.d — mirror to ~/.profile.d/ (sourced by shellrc)
-PROFILED_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/profile.d"
-[ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_BASE/config/profile.d"
+PROFILED_SRC="$SETTINGS_BASE/ai/profiles/$MACHINE_PROFILE/profile.d"
+[ ! -d "$PROFILED_SRC" ] && PROFILED_SRC="$SETTINGS_BASE/_config/profile.d"
 if [ -d "$PROFILED_SRC" ]; then
   [ -L "$HOME/.profile.d" ] && rm "$HOME/.profile.d"
   mkdir -p "$HOME/.profile.d"
@@ -94,8 +94,8 @@ if [ -d "$PROFILED_SRC" ]; then
 fi
 
 # zshrc.d — mirror to ~/.zshrc.d/ (sourced by zshrc)
-ZSHRCD_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/zshrc.d"
-[ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_BASE/config/zshrc.d"
+ZSHRCD_SRC="$SETTINGS_BASE/ai/profiles/$MACHINE_PROFILE/zshrc.d"
+[ ! -d "$ZSHRCD_SRC" ] && ZSHRCD_SRC="$SETTINGS_BASE/_config/zshrc.d"
 if [ -d "$ZSHRCD_SRC" ]; then
   [ -L "$HOME/.zshrc.d" ] && rm "$HOME/.zshrc.d"
   mkdir -p "$HOME/.zshrc.d"
@@ -119,7 +119,7 @@ log_info "Copying .env.local..."
 
 ENV_DEST="$HOME/.env.local"
 ENV_SRC=$(find_source "env.local")
-[ -z "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/env.local"
+[ -z "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/ai/profiles/$MACHINE_PROFILE/env.local"
 [ ! -f "$ENV_SRC" ] && ENV_SRC="$SETTINGS_BASE/env.local"
 
 if [ ! -f "$ENV_SRC" ]; then
@@ -244,5 +244,5 @@ echo "  1. Edit ~/.env.local and verify your API keys"
 echo "  2. Reload your shell: source ~/.zshrc"
 echo "  3. Run ./setup_ai.sh deploy to copy AI tool configs (Claude, Gemini, Continue, etc.)"
 echo ""
-echo "Model-specific overrides live in: $SETTINGS_BASE/2-ai/profiles/$MACHINE_PROFILE/"
+echo "Model-specific overrides live in: $SETTINGS_BASE/ai/profiles/$MACHINE_PROFILE/"
 echo ""

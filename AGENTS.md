@@ -18,16 +18,34 @@ This vault is a personal reference for setting up a new Mac from scratch. Pages 
 
 Place new files in the most appropriate existing folder. Do not create new top-level folders without being asked.
 
-| Folder            | Contents                                                        |
-| ----------------- | --------------------------------------------------------------- |
-| `0-core/`         | Setup scripts and reference pages for core macOS tools/apps     |
-| `1-dev/`          | Development tools — each subdirectory has `setup_*.sh` + `*.md` |
-| `2-ai/`           | AI infrastructure: setup scripts, profiles, model configs       |
-| `best-practices/` | Best practices documentation (`.md` files)                      |
-| `config/`         | Configuration files for various tools                           |
-| `docs/`           | AI operational runbooks (model pipeline, router, testing)       |
-| `scripts/`        | Utility scripts                                                 |
-| `skills/`         | Agent skills for Claude/OpenCode/Cline                          |
+| Folder             | Contents                                                        |
+| ------------------ | --------------------------------------------------------------- |
+| `./`               | Setup scripts and reference pages for macOS and dev tools       |
+| `_config/`         | Configuration files for various tools                           |
+| `ai/`              | AI infrastructure: runtimes, agents, editors, profiles, router  |
+| `docs/`            | AI operational runbooks, best practices, and reference docs     |
+| `scripts/`         | Utility scripts                                                 |
+| `.skills/`         | Agent skills for Claude/OpenCode/Cline                          |
+| `browsers/`        | Browser setup scripts                                           |
+| `build-tools/`     | Build tooling setups                                            |
+| `cloud/`           | Cloud service setups                                            |
+| `communication/`   | Communication app setups                                        |
+| `containers/`      | Container tool setups (Docker, Colima, etc.)                    |
+| `databases/`       | Database tool setups                                            |
+| `editors/`         | Editor setups (VS Code, Xcode, AI editor configs)               |
+| `git/`             | Git tool setups                                                 |
+| `languages/`       | Programming language setups                                     |
+| `monitoring/`      | Monitoring tool setups                                          |
+| `node-tools/`      | Node.js tool setups                                             |
+| `productivity/`    | Productivity app setups                                         |
+| `python-tools/`    | Python tool setups                                              |
+| `remote/`          | Remote access tool setups                                       |
+| `sdk/`             | SDK setups                                                      |
+| `security/`        | Security tool setups                                            |
+| `storage-sync/`    | Storage and sync tool setups                                    |
+| `system/`          | System tool setups                                              |
+| `utilities/`       | Utility tool setups                                             |
+| `web/`             | Web development tool setups                                     |
 
 ---
 
@@ -236,7 +254,7 @@ against the current installation.
 **Rules:**
 
 - Use exact model names (e.g., `llama3.2`, `qwen3.2-coder:7b`, not `llama3` or `qwen-coder`)
-- Update `2-ai/ollama.sh` and profile `models.sh` files when new models are commonly used
+- Update `ai/runtimes/ollama.sh` and profile `models.sh` files when new models are commonly used
 - Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
 
 **Currently recommended models (May 2026):**
@@ -254,13 +272,13 @@ against the current installation.
 | Gemma 4 31B           | `ollama pull gemma4:31b`            | General        |
 | Nomic Embed Text      | `ollama pull nomic-embed-text`      | Embeddings     |
 
-See `2-ai/profiles/WORKSTREAM_2026-05.md` for per-profile model budgets and quantization choices.
+See `ai/profiles/WORKSTREAM_2026-05.md` for per-profile model budgets and quantization choices.
 
 ---
 
 ## Profile Configuration
 
-Each machine profile is defined in `2-ai/profiles/<profile-name>/PROFILE`. This file contains all machine-specific metadata:
+Each machine profile is defined in `ai/profiles/<profile-name>/PROFILE`. This file contains all machine-specific metadata:
 
 ```bash
 FOLDER=macbook-m5-64gb

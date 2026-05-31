@@ -2,7 +2,7 @@
 """
 agent-scout.py — Discover terminal-based AI agents not yet in the repo.
 
-Reads a curated catalog, compares against existing 2-ai/*.sh scripts
+Reads a curated catalog, compares against existing ai/agents/*.sh scripts
 and setup_ai.sh references, then outputs suggestions in fzf-friendly format.
 
 Usage:
@@ -103,10 +103,10 @@ CATALOG = [
 def _existing_names(repo_root: str):
     """Collect all tool names already present in the repo."""
     names = set()
-    ai_dir = Path(repo_root) / "2-ai"
+    ai_dir = Path(repo_root) / "ai"
     if ai_dir.exists():
-        for p in ai_dir.iterdir():
-            if p.is_file() and p.suffix == ".sh":
+        for p in ai_dir.rglob("*.sh"):
+            # Already filtered by rglob
                 names.add(p.stem)
     setup = Path(repo_root) / "setup_ai.sh"
     if setup.exists():
@@ -122,7 +122,7 @@ def _existing_names(repo_root: str):
 
 
 def _generate_stub(entry: dict) -> str:
-    """Generate a 2-ai/<name>.sh installation stub from catalog metadata."""
+    """Generate a ai/<name>.sh installation stub from catalog metadata."""
     name = entry["name"]
     display = entry["display_name"]
     binary = entry["binary"]
@@ -171,9 +171,9 @@ def _generate_stub(entry: dict) -> str:
         config_deploy = f"""
     mkdir -p "${name_us}_cfg_dir"
     local src_cfg
-    src_cfg="${{{{SETTINGS_BASE}}}}/2-ai/profiles/${{{{MACHINE_PROFILE}}}}/{name}/{cfg_file}"
+    src_cfg="${{{{SETTINGS_BASE}}}}/ai/profiles/${{{{MACHINE_PROFILE}}}}/{name}/{cfg_file}"
     if [ ! -f "$src_cfg" ]; then
-        src_cfg="${{{{SETTINGS_BASE}}}}/2-ai/profiles/default/{name}/{cfg_file}"
+        src_cfg="${{{{SETTINGS_BASE}}}}/ai/profiles/default/{name}/{cfg_file}"
     fi
     if [ -f "$src_cfg" ]; then
         copy_file "$src_cfg" "${name_us}_cfg"

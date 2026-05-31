@@ -53,11 +53,10 @@ def _repo_root() -> Path:
 
 def _existing_names(repo_root: Path) -> set:
     names = set()
-    ai_dir = repo_root / "2-ai"
+    ai_dir = repo_root / "ai"
     if ai_dir.exists():
-        for p in ai_dir.iterdir():
-            if p.is_file() and p.suffix == ".sh":
-                names.add(p.stem)
+        for p in ai_dir.rglob("*.sh"):
+            names.add(p.stem)
     return names
 
 
@@ -145,9 +144,9 @@ def _build_config_deploy(entry: dict) -> str:
     return f'''    # Deploy config (profile-specific → default)
     mkdir -p "{entry['name']}_cfg_dir"
     local src_cfg
-    src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/${{MACHINE_PROFILE}}/{entry['name']}/{cfg_file}"
+    src_cfg="${{SETTINGS_BASE}}/ai/profiles/${{MACHINE_PROFILE}}/{entry['name']}/{cfg_file}"
     if [ ! -f "$src_cfg" ]; then
-        src_cfg="${{SETTINGS_BASE}}/2-ai/profiles/default/{entry['name']}/{cfg_file}"
+        src_cfg="${{SETTINGS_BASE}}/ai/profiles/default/{entry['name']}/{cfg_file}"
     fi
     if [ -f "$src_cfg" ]; then
         copy_file "$src_cfg" "{entry['name']}_cfg"
@@ -323,10 +322,10 @@ def cmd_add(args):
     print(f"\nRegistered {args.name}")
     print("Next steps:")
     print(f"  1. Source the script in setup_ai.sh:")
-    print(f'     . "${{SETTINGS_BASE}}/2-ai/{args.name}.sh"')
+    print(f'     . "${{SETTINGS_BASE}}/ai/{args.name}.sh"')
     print(f"  2. Add to TOOL_GROUPS in setup_ai.sh")
     print(f"  3. Add setup/restore/backup case entries in setup_ai.sh")
-    print(f"  4. Run syntax check: bash -n 2-ai/{args.name}.sh")
+    print(f"  4. Run syntax check: bash -n ai/{args.name}.sh")
     print("  5. Commit the changes")
 
 

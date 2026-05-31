@@ -12,7 +12,7 @@ in this document grounded in real scripts.
 ## Operating Principles
 
 - `setup_ai.sh` behaves like a wizard. Profile detection, infrastructure choice, local model install, config deployment, optional tools, verification, and summary are visible steps.
-- `2-ai/profiles/<profile>/models.sh` is the source of truth for local model aliases, Hugging Face sources, GGUF filenames, quants, context windows, and tool-role assignments.
+- `ai/profiles/<profile>/models.sh` is the source of truth for local model aliases, Hugging Face sources, GGUF filenames, quants, context windows, and tool-role assignments.
 - Install/update must be non-destructive by default. Removing local models belongs only in explicit prune or sync actions.
 - Pre-built tool configs should remain readable and diffable. Validate them against `models.sh` instead of turning the entire profile into a template engine.
 - Exact remote metadata beats guessing. Hugging Face GGUF downloads should use profile-declared remote filenames whenever available.
@@ -73,21 +73,21 @@ A separate [`llama-server`](https://github.com/ggerganov/llama.cpp) instance run
 | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `setup_ai.sh`                                    | Top-level wizard, command dispatcher, config deploy orchestration, optional tool selection.                      |
 | `helpers.sh`                                     | Shared logging, shell utilities, platform helpers, and status functions.                                         |
-| `2-ai/paths.sh`                                  | Shared model/cache paths and binary defaults such as `HF_CLI_BIN`, `GGUF_DIR`, and Hugging Face cache paths.     |
-| `2-ai/huggingface.sh`                            | Hugging Face CLI installation and auth verification helpers.                                                     |
-| `2-ai/install-models.sh`                         | GGUF materialization, Ollama registration, context alias reconciliation, cloud manifests, pre-flight validation. |
-| `2-ai/validate-profile.sh`                       | Profile metadata validation and drift detection.                                                                 |
-| `2-ai/llama-router/build.sh`                     | Pulls latest llama.cpp, rebuilds llama-server with Metal, deploys to `/usr/local/bin`.                           |
-| `2-ai/llama-router/setup.sh`                     | Verifies llama-server, auto-detects GGUF filenames, patches `models.ini`, installs LaunchAgent.                  |
-| `2-ai/llama-router/models.ini`                   | Router preset definitions (3 named models: reasoning, fast, coding).                                             |
-| `2-ai/llama-router/org.kehle.llama-router.plist` | launchd LaunchAgent — starts llama-server router at login.                                                       |
-| `2-ai/llama-router/README.md`                    | Quick-start, model table, and source references.                                                                 |
-| `2-ai/llama-router/tuning-guide.md`              | M5 Max 64GB performance tuning: GPU offload, KV cache, flash attention, benchmarks.                              |
-| `2-ai/llama-router/open-webui-integration.md`    | Connecting Open WebUI to three backends — router, Ollama, OpenRouter.                                            |
-| `2-ai/profiles/<profile>/models.sh`              | Source of truth for local and cloud model inventories plus per-tool role mappings.                               |
-| `2-ai/profiles/<profile>/model-map.md`           | Generated profile-specific model map with tool matrix, Hugging Face materialization table, and Mermaid graph.    |
-| `2-ai/profiles/generate-model-map.sh`            | Generator for all per-profile model maps.                                                                        |
-| `2-ai/profiles/CONFIG_SCHEMA.md`                 | Canonical schema reference for profile variables and downstream config expectations.                             |
+| `ai/runtimes/paths.sh`                                  | Shared model/cache paths and binary defaults such as `HF_CLI_BIN`, `GGUF_DIR`, and Hugging Face cache paths.     |
+| `ai/cloud/huggingface.sh`                            | Hugging Face CLI installation and auth verification helpers.                                                     |
+| `ai/runtimes/install-models.sh`                         | GGUF materialization, Ollama registration, context alias reconciliation, cloud manifests, pre-flight validation. |
+| `ai/runtimes/validate-profile.sh`                       | Profile metadata validation and drift detection.                                                                 |
+| `ai/router/build.sh`                     | Pulls latest llama.cpp, rebuilds llama-server with Metal, deploys to `/usr/local/bin`.                           |
+| `ai/router/setup.sh`                     | Verifies llama-server, auto-detects GGUF filenames, patches `models.ini`, installs LaunchAgent.                  |
+| `ai/router/models.ini`                   | Router preset definitions (3 named models: reasoning, fast, coding).                                             |
+| `ai/router/org.kehle.llama-router.plist` | launchd LaunchAgent — starts llama-server router at login.                                                       |
+| `ai/router/README.md`                    | Quick-start, model table, and source references.                                                                 |
+| `ai/router/tuning-guide.md`              | M5 Max 64GB performance tuning: GPU offload, KV cache, flash attention, benchmarks.                              |
+| `ai/router/open-webui-integration.md`    | Connecting Open WebUI to three backends — router, Ollama, OpenRouter.                                            |
+| `ai/profiles/<profile>/models.sh`              | Source of truth for local and cloud model inventories plus per-tool role mappings.                               |
+| `ai/profiles/<profile>/model-map.md`           | Generated profile-specific model map with tool matrix, Hugging Face materialization table, and Mermaid graph.    |
+| `ai/profiles/generate-model-map.sh`            | Generator for all per-profile model maps.                                                                        |
+| `ai/profiles/CONFIG_SCHEMA.md`                 | Canonical schema reference for profile variables and downstream config expectations.                             |
 | `docs/llama-router-testing.md`                   | Router health verification: model listing, chat completions, LaunchAgent, restart cycle, smoke test.             |
 
 ## Source-of-Truth Contract
@@ -196,7 +196,7 @@ Preferred resolution order:
 3. Only if remote metadata is missing, guess the remote filename from repo basename plus quant.
 4. When guessing, print a warning because many Hugging Face repos do not follow a predictable naming convention.
 
-Use `HF_CLI_BIN` from `2-ai/paths.sh`. The CLI is now `hf` (not the deprecated `huggingface-cli`). Install via `uv tool install "huggingface_hub[hf_xet,cli]"`. Auth: `hf auth login`.
+Use `HF_CLI_BIN` from `ai/runtimes/paths.sh`. The CLI is now `hf` (not the deprecated `huggingface-cli`). Install via `uv tool install "huggingface_hub[hf_xet,cli]"`. Auth: `hf auth login`.
 
 All GGUF files are downloaded to `GGUF_DIR` (`/usr/local/lib/llama-models`). The directory is
 owned by the user (`isaac:staff`) so no `sudo` is needed for model downloads.
@@ -286,7 +286,7 @@ Rules:
 Each profile has a generated model map:
 
 ```text
-2-ai/profiles/<profile>/model-map.md
+ai/profiles/<profile>/model-map.md
 ```
 
 The map should include:
@@ -303,7 +303,7 @@ Regenerate maps after any model metadata change:
 
 ```bash
 for p in macbook-m1-16gb macbook-m2-32gb macbook-m5-48gb macbook-m5-64gb macmini-m2-16gb; do
-  /opt/homebrew/bin/bash 2-ai/profiles/generate-model-map.sh "$p"
+  /opt/homebrew/bin/bash ai/profiles/generate-model-map.sh "$p"
 done
 ```
 
@@ -530,7 +530,7 @@ git clone <repo-url> ~/code/isaackehle/settings
 cd ~/code/isaackehle/settings
 
 # 1. Build and deploy the llama-server router (if desired)
-cd 2-ai/llama-router
+cd ai/router
 ./build.sh
 ./setup.sh
 cd ../..
@@ -544,9 +544,9 @@ If troubleshooting by component:
 
 ```bash
 source helpers.sh
-/opt/homebrew/bin/bash 2-ai/ollama.sh
-/opt/homebrew/bin/bash 2-ai/huggingface.sh
-/opt/homebrew/bin/bash 2-ai/install-models.sh
+/opt/homebrew/bin/bash ai/runtimes/ollama.sh
+/opt/homebrew/bin/bash ai/cloud/huggingface.sh
+/opt/homebrew/bin/bash ai/runtimes/install-models.sh
 ```
 
 Prefer the wizard path for normal use so profile detection, validation, and user confirmations remain consistent.
@@ -588,10 +588,10 @@ Run syntax checks:
 /opt/homebrew/bin/bash -n \
   setup_ai.sh \
   helpers.sh \
-  2-ai/profiles/generate-model-map.sh \
-  2-ai/install-models.sh \
-  2-ai/validate-profile.sh \
-  2-ai/profiles/*/models.sh
+  ai/profiles/generate-model-map.sh \
+  ai/runtimes/install-models.sh \
+  ai/runtimes/validate-profile.sh \
+  ai/profiles/*/models.sh
 ```
 
 Scan for stale names from this refactor:
@@ -601,14 +601,14 @@ Scan for stale names from this refactor:
   'qwen3\.5-27b:q5|qwen3\.6-35b:q4|model-map-ollama|:4000|litellm|llama-cpp\.sh|:801[1-5]|Models/gguf' \
   setup_ai.sh 2-ai docs \
   -g '!docs/WORKSTREAM_2026-05-23.md' \
-  -g '!2-ai/profiles/CONFIG_SCHEMA.md'
+  -g '!ai/profiles/CONFIG_SCHEMA.md'
 ```
 
 Regenerate model maps:
 
 ```bash
 for p in macbook-m1-16gb macbook-m2-32gb macbook-m5-48gb macbook-m5-64gb macmini-m2-16gb; do
-  /opt/homebrew/bin/bash 2-ai/profiles/generate-model-map.sh "$p"
+  /opt/homebrew/bin/bash ai/profiles/generate-model-map.sh "$p"
 done
 ```
 
@@ -617,7 +617,7 @@ Validate profiles:
 ```bash
 for p in macbook-m1-16gb macbook-m2-32gb macbook-m5-48gb macbook-m5-64gb macmini-m2-16gb; do
   echo "--- $p ---"
-  MACHINE_PROFILE="$p" /opt/homebrew/bin/bash 2-ai/validate-profile.sh
+  MACHINE_PROFILE="$p" /opt/homebrew/bin/bash ai/runtimes/validate-profile.sh
 done
 ```
 
