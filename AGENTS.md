@@ -16,15 +16,18 @@ This vault is a personal reference for setting up a new Mac from scratch. Pages 
 
 ## Repository Structure
 
-Folders are strictly numbered. Always place new files in the most appropriate existing folder. Do not create new top-level folders without being asked.
+Place new files in the most appropriate existing folder. Do not create new top-level folders without being asked.
 
-| Folder                  | Topic                                                                             | Tag           |
-| ----------------------- | --------------------------------------------------------------------------------- | ------------- |
-| `docs/00 - Setup`       | Homebrew, fonts, tweaks, initial installs                                         | `setup`       |
-| `docs/01 - Terminal`    | Zsh, iTerm2, SSH                                                                  | `terminal`    |
-| `docs/02 - Development` | Git, editors, APIs, build tools, Node, containers, infra, languages, DBs, web dev | `development` |
-| `docs/03 - Apps`        | GUI apps — browsers, chat, multimedia, security, system                           | `apps`        |
-| `docs/04 - AI`          | Local LLMs, coding assistants, frameworks                                         | `ai`          |
+| Folder            | Contents                                                        |
+| ----------------- | --------------------------------------------------------------- |
+| `0-core/`         | Setup scripts and reference pages for core macOS tools/apps     |
+| `1-dev/`          | Development tools — each subdirectory has `setup_*.sh` + `*.md` |
+| `2-ai/`           | AI infrastructure: setup scripts, profiles, model configs       |
+| `best-practices/` | Best practices documentation (`.md` files)                      |
+| `config/`         | Configuration files for various tools                           |
+| `docs/`           | AI operational runbooks (model pipeline, router, testing)       |
+| `scripts/`        | Utility scripts                                                 |
+| `skills/`         | Agent skills for Claude/OpenCode/Cline                          |
 
 ---
 
@@ -137,7 +140,7 @@ If any one of these is not applicable, explicitly say so in one short line rathe
 
 ### Frontmatter
 
-Every file starts with YAML frontmatter. Use the tag from the folder table above. Multi-topic files (especially in `04 - AI`) may have multiple tags.
+Every file starts with YAML frontmatter. Multi-topic files may have multiple tags.
 
 ```yaml
 ---
@@ -233,7 +236,7 @@ against the current installation.
 **Rules:**
 
 - Use exact model names (e.g., `llama3.2`, `qwen3.2-coder:7b`, not `llama3` or `qwen-coder`)
-- Update `docs/04 - AI/Ollama.md` models table when new models are commonly used
+- Update `2-ai/ollama.sh` and profile `models.sh` files when new models are commonly used
 - Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
 
 **Currently recommended models (May 2026):**
