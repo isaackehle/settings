@@ -111,6 +111,7 @@ Personal macOS development environment setup guide and reference.
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
+- [[0-core/Tailscale|Tailscale]] — WireGuard-based zero-config VPN for multi-machine networking
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 - [[Synology]] — Synology NAS management tools
