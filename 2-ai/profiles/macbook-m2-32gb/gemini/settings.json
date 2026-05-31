@@ -7,7 +7,7 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "qwen3.5-27b:q5": { "name": "Qwen 3.5 27B (WRIT, Q5)" },
+        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (WRIT, Q4)" },
         "deepseek-r1-tools:8b": { "name": "DeepSeek R1 8B (REAS, TOOL)" },
         "qwen3:14b": { "name": "Qwen 3 14B (CODE)" },
         "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" }

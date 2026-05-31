@@ -271,7 +271,7 @@ copy_file() {
     fi
 
     if [ -z "$src" ] || [ ! -f "$src" ]; then
-        log_warning "  (skip) source not found for $dest [$src]"
+        log_info "  (skip) source not found for $dest [$src]"
         return
     fi
 

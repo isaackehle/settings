@@ -34,8 +34,29 @@ source "$MODELS_SH"
 
 # Collect all known model names from this profile into a grep pattern
 _known_models() {
-    # OLLAMA_MODELS entries
-    for m in "${OLLAMA_MODELS[@]:-}"; do echo "${m%%:*}"; done
+    # Canonical local aliases from GGUF-first profile metadata
+    for m in "${LOCAL_MODEL_NAMES[@]:-}"; do echo "$m"; done
+
+    # Additional concurrent local GGUF variants
+    if declare -p GGUF_VARIANTS &>/dev/null 2>&1; then
+        for alias in "${LOCAL_MODEL_NAMES[@]:-}"; do
+            variants="${GGUF_VARIANTS[$alias]:-}"
+            [[ -z "$variants" ]] && continue
+            IFS=',' read -ra _variant_specs <<< "$variants"
+            for spec in "${_variant_specs[@]}"; do
+                spec="$(echo "$spec" | sed 's/^ *//;s/ *$//')"
+                [[ -z "$spec" ]] && continue
+                IFS='|' read -r extra_quant _extra_filename _extra_source <<< "$spec"
+                [[ -z "$extra_quant" ]] && continue
+                safe_quant="$(echo "$extra_quant" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g; s/--*/-/g; s/^-//; s/-$//')"
+                echo "${alias}-${safe_quant}"
+            done
+        done
+    fi
+
+    # Ollama cloud manifests
+    for m in "${OLLAMA_CLOUD_MODELS[@]:-}"; do echo "${m%:cloud}"; done
+
     # OPENROUTER_MODELS entries
     for m in "${OPENROUTER_MODELS[@]:-}"; do echo "$m"; done
     # Scalar model vars
@@ -48,7 +69,7 @@ _known_models() {
         echo "${!v:-}"
     done
     # Associative array values
-    for arr in OPENCODE_AGENTS CONTINUE_ROLES CLAUDE_CODE; do
+    for arr in AIDER_MODELS OPENCODE_AGENTS CONTINUE_ROLES CLAUDE_CODE; do
         if declare -p "$arr" &>/dev/null 2>&1; then
             declare -n _ref="$arr"
             for val in "${_ref[@]}"; do echo "$val"; done

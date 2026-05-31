@@ -101,11 +101,24 @@ if [[ -f "$REQFILE" ]]; then
 else
     echo "Analyzing requirements from $MODELS_SH..."
 
-    # 1. Process OLLAMA_MODELS array (skip :cloud entries — they route via OpenRouter)
-    if declare -p OLLAMA_MODELS &>/dev/null; then
-        for entry in "${OLLAMA_MODELS[@]}"; do
-            [[ "$entry" == *":cloud" ]] && continue
-            register_model "$entry" "Defined in OLLAMA_MODELS list"
+    # 1. Process canonical local GGUF-backed Ollama models
+    if declare -p LOCAL_MODEL_NAMES &>/dev/null; then
+        for alias in "${LOCAL_MODEL_NAMES[@]}"; do
+            register_model "$alias" "Defined in LOCAL_MODEL_NAMES"
+
+            local variants="${GGUF_VARIANTS[$alias]:-}"
+            if [[ -n "$variants" ]]; then
+                IFS=',' read -ra _variant_specs <<< "$variants"
+                for spec in "${_variant_specs[@]}"; do
+                    spec="$(echo "$spec" | sed 's/^ *//;s/ *$//')"
+                    [[ -z "$spec" ]] && continue
+                    IFS='|' read -r extra_quant _extra_filename _extra_source <<< "$spec"
+                    [[ -z "$extra_quant" ]] && continue
+                    local safe_quant
+                    safe_quant="$(echo "$extra_quant" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g; s/--*/-/g; s/^-//; s/-$//')"
+                    register_model "${alias}-${safe_quant}" "GGUF variant of $alias ($extra_quant)"
+                done
+            fi
         done
     fi
 
@@ -130,24 +143,34 @@ else
         val="${!var:-}"
         [[ -z "$val" ]] && continue
         case "$var" in
-            OLLAMA_MODELS|OPENCODE_AGENTS|CONTINUE_ROLES|OPENROUTER_MODELS) continue ;;
+            LOCAL_MODEL_NAMES|GGUF_SOURCES|GGUF_QUANTS|GGUF_FILENAMES|GGUF_LOCAL_FILENAMES|GGUF_REMOTE_FILENAMES|GGUF_FAMILIES|GGUF_VARIANTS|OLLAMA_CONTEXT_WINDOWS|MODELFILE_PARAMS|OLLAMA_MODELFILE_PARAMS|OLLAMA_MODELFILE_TEMPLATES|OPENCODE_AGENTS|CONTINUE_ROLES|OPENROUTER_MODELS|OLLAMA_CLOUD_MODELS) continue ;;
             BASH*|COMP*|DIRSTACK|FUNCNAME|GROUPS|PIPESTATUS|SHLVL|_|RANDOM|SECONDS|LINENO|OPTERR) continue ;;
             PROFILE|PROFILES_DIR|SETTINGS_BASE|MODELS_SH|REQUIRED_MODELS_FILE|REASON_MAP_FILE) continue ;;
             DATE|BACKUP_DIR|HW_MODEL|HW_MEM_GB|REPO_ROOT|NC|BLUE|GREEN|PURPLE|RED|YELLOW) continue ;;
-            *_CLOUD) continue ;;  # OpenRouter cloud models, not local
+            *_CLOUD) continue ;;
         esac
         if [[ "$val" == *":"* ]] && [[ "$val" != /* ]] && [[ "$val" != *"/"* ]]; then
             register_model "$val" "Used by variable: $var"
         fi
     done
 
-    # 5. Register context window variants from MODEL_CONTEXTS
-    if declare -p MODEL_CONTEXTS &>/dev/null; then
-        for base_model in "${!MODEL_CONTEXTS[@]}"; do
-            local contexts="${MODEL_CONTEXTS[$base_model]}"
-            for ctx in $contexts; do
-                local variant="${base_model}-${ctx}"
-                register_model "$variant" "Context variant of $base_model ($ctx)"
+    # 5. Register explicit local aliases from OLLAMA_CONTEXT_WINDOWS
+    if declare -p OLLAMA_CONTEXT_WINDOWS &>/dev/null; then
+        for base_model in "${!OLLAMA_CONTEXT_WINDOWS[@]}"; do
+            local contexts="${OLLAMA_CONTEXT_WINDOWS[$base_model]}"
+            local ctx_value suffix first_ctx=1
+            for ctx_value in $contexts; do
+                if [[ $first_ctx -eq 1 ]]; then
+                    register_model "$base_model" "Configured local alias (num_ctx=$ctx_value)"
+                    first_ctx=0
+                else
+                    if (( ctx_value % 1024 == 0 )); then
+                        suffix="$((ctx_value / 1024))k"
+                    else
+                        suffix="$ctx_value"
+                    fi
+                    register_model "${base_model}-${suffix}" "Configured context alias of $base_model (num_ctx=$ctx_value)"
+                fi
             done
         done
     fi

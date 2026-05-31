@@ -3,41 +3,39 @@ if [ -z "${SETTINGS_BASE:-}" ]; then
 fi
 . "${SETTINGS_BASE}/helpers.sh"
 
-# Install Codex (try npm first, fallback to manual)
+# Install OpenAI Codex CLI.
 setup_codex() {
     print_info "Installing Codex..."
 
-    # Try npm installation first
-    if command_exists "npm"; then
-        print_info "Attempting npm install..."
-
-        # Try npm installation first
-        if install_via_npm "OpenAI Codex" "@openai/codex"; then
-            return 0
+    if command_exists "codex"; then
+        local version
+        version="$(codex --version 2>/dev/null || true)"
+        if [ -n "$version" ]; then
+            print_status "Codex already installed ($version)"
+        else
+            print_status "Codex already installed ($(command -v codex))"
         fi
-
-        if install_via_npm "AI SDK Codex" "@ai-sdk/codex"; then
-            return 0
-        fi
-
-        # Try alternative package names
-        if install_via_npm "Codex" "codex"; then
-            return 0
-        fi
-
-    else
-        print_warning "npm not available - skipping npm installation"
+        return 0
     fi
 
-    # Try alternative methods or provide instructions
-    print_info "Please manually install Codex from:"
-    print_info "  https://github.com/codex-ai/codex"
-    print_info "  Documentation: https://docs.codex.ai/"
+    if ! command_exists "npm"; then
+        print_warning "npm not available — skipping Codex installation"
+        print_info "Install manually with: npm install -g @openai/codex"
+        return 1
+    fi
+
+    if install_via_npm "OpenAI Codex" "@openai/codex"; then
+        return 0
+    fi
+
+    print_warning "Codex installation failed via npm."
+    print_info "Manual install: npm install -g @openai/codex"
+    print_info "Documentation: https://github.com/openai/codex"
     return 1
 }
 
 verify_codex() {
-    check_tool_with_version "Codex" "codex"
+    command_exists "codex"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

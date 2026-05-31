@@ -1,11 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
+
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
       "maxTokens": 16000,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-next-80b:q4-16k",
+      "model": "ollama/qwen2.5-coder:7b",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -20,10 +21,10 @@
       "temperature": 0.2
     },
     "local": {
-      "description": "Fully local coding agent — no cloud calls, no webfetch.",
+      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
       "maxTokens": 8000,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "ollama/qwen2.5-coder:7b",
       "permission": {
         "bash": "ask",
         "edit": "ask",
@@ -58,7 +59,7 @@
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "ollama/qwen2.5-coder:7b",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -75,7 +76,7 @@
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
-      "model": "ollama/qwen3-coder-next-80b:q4-16k",
+      "model": "ollama/deepseek-r1:7b",
       "permission": {
         "bash": "deny",
         "edit": "deny",
@@ -92,7 +93,7 @@
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
       "mode": "primary",
-      "model": "ollama/qwen3-coder-next-80b:q4-16k",
+      "model": "ollama/qwen3:14b",
       "permission": {
         "bash": "deny",
         "edit": "ask",
@@ -108,9 +109,21 @@
     }
   },
   "default_agent": "code",
-  "model": "ollama/qwen3-coder-next-80b:q4-16k",
+  "model": "ollama/qwen2.5-coder:7b",
+  "small_model": "ollama/qwen3:4b",
+  // 2. Server Configuration (Does NOT store password)
+  "server": {
+    "port": 4096,
+    "mdns": true
+  },
+
+  // 3. Permissions (Critical for avoiding silent hangs)
   "permission": {
-    "bash": "ask",
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "ask", // Granular deny rules
+      "sudo *": "ask"
+    },
     "edit": "ask",
     "glob": "allow",
     "grep": "allow",
@@ -121,70 +134,58 @@
   },
   "provider": {
     "ollama": {
-      "models": {
-        "codestral:22b": { "name": "Codestral 22B (DIFF)" },
-        "codestral:22b-32k": { "name": "Codestral 22B (DIFF, 32K)" },
-        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 32B (REAS, TOOL, 128K)" },
-        "gemma4:31b": { "name": "Gemma 4 31B (REAS)" },
-        "gemma4:31b-8k": { "name": "Gemma 4 31B (REAS, 8K)" },
-        "gemma4:31b-32k": { "name": "Gemma 4 31B (REAS, 32K)" },
-        "gemma4:31b-128k": { "name": "Gemma 4 31B (REAS, 128K)" },
-        "gemma4:31b-256k": { "name": "Gemma 4 31B (REAS, 256K)" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (EMBD)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (FILL)" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (FILL)" },
-        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" },
-        "qwen3:4b-8k": { "name": "Qwen 3 4B (PLAN, 8K)" },
-        "qwen3:4b-128k": { "name": "Qwen 3 4B (PLAN, 128K)" },
-        "qwen3.5-27b:q5-8k": { "name": "Qwen 3.5 27B (WRIT, Q5 8K)" },
-        "qwen3.5-27b:q5-32k": { "name": "Qwen 3.5 27B (WRIT, Q5 32K)" },
-        "qwen3.5-27b:q5-128k": { "name": "Qwen 3.5 27B (WRIT, Q5 128K)" },
-        "qwen3.5-27b:q5-256k": { "name": "Qwen 3.5 27B (WRIT, Q5 256K)" },
-        "qwen3.5-27b:q8": { "name": "Qwen 3.5 27B (WRIT, Q8)" },
-        "qwen3.6-35b:q4-8k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 8K)" },
-        "qwen3.6-35b:q4-128k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 128K)" },
-        "qwen3.6-35b:q4-256k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 256K)" },
-        "qwen3-coder-30b-a3b:q6-8k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 8K)" },
-        "qwen3-coder-30b-a3b:q6-32k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 32K)" },
-        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 128K)" },
-        "qwen3-coder-30b-a3b:q6-256k": { "name": "Qwen3 Coder 30B A3B (CODE, Q6 256K)" },
-        "qwen3-coder-next-80b:q4-16k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 16K)" },
-        "qwen3-coder-next-80b:q4-64k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 64K)" },
-        "qwen3-coder-next-80b:q4-256k": { "name": "Qwen3 Coder Next 80B (CODE, Q4 256K)" }
-      },
       "name": "Ollama (Local)",
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3:14b": { "name": "Heavy / General — 14B" },
+        "qwen3:14b-128k": { "name": "Heavy / General — 14B (+long)" },
+        "qwen2.5-coder:7b": { "name": "Coder — 7B" },
+        "deepseek-r1:7b": { "name": "Reasoning — DeepSeek R1 7B" },
+        "qwen3:4b": { "name": "Fast / Plan — 4B" },
+        "nomic-embed-text": { "name": "Embed" },
+        "qwen3.5:4b": { "name": "Qwen3.5 — 4B" },
+        "qwen3-8b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 8B" },
+        "qwen2.5-7b:multi": { "name": "Multi-distill Claude+Gemini+GPT — 7B" }
       }
     },
     "openrouter": {
-      "models": {
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (CLD)" },
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (CLD)" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (CLD)" },
-        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD)" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (CLD)" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (REAS, CLD)" },
-        "mistralai/codestral": { "name": "Codestral (CODE, CLD)" },
-        "mistralai/mistral-large": { "name": "Mistral Large (CLD)" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (REAS, CLD)" },
-        "openai/gpt-4o": { "name": "GPT-4o (CLD)" },
-        "openai/o3": { "name": "OpenAI o3 (CLD)" },
-        "perplexity/sonar-pro": { "name": "Perplexity Sonar Pro (CLD)" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B (PLAN, CLD)" },
-        "qwen/qwen3-coder-next-80b": { "name": "Qwen3 Coder Next 80B (CODE, CLD)" },
-        "thudm/glm-5.1": { "name": "GLM 5.1 (CLD)" },
-        "x-ai/grok-3": { "name": "Grok 3 (CLD)" },
-        "x-ai/grok-3-mini": { "name": "Grok 3 Mini (CLD)" }
-      },
-      "name": "OpenRouter",
       "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter",
       "options": {
-        "apiKey": "env.OPENROUTER_API_KEY",
-        "baseURL": "https://openrouter.ai/api/v1"
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "{env:OPENROUTER_API_KEY}",
+        // Optional: Required by some OpenRouter features for leaderboards
+        "headers": {
+          "HTTP-Referer": "https://localhost",
+          "X-Title": "OpenCode CLI"
+        }
+      },
+      "models": {
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 — Fast, cheap, lightweight" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 — Heavy reasoning, best quality" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 — Balanced all-rounder" },
+        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools — Reasoning + tool calling" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash — Fast, vision, long context" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro — Deep reasoning, multimodal" },
+        "mistralai/codestral": { "name": "Codestral — Code generation, fill-in-middle" },
+        "mistralai/mistral-large": { "name": "Mistral Large — Strong general purpose" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 — Deep reasoning, long context" },
+        "openai/gpt-4o": { "name": "GPT-4o — General, vision, multimodal" },
+        "openai/o3": { "name": "OpenAI o3 — Heavy reasoning, STEM" },
+        "perplexity/sonar-pro": { "name": "Sonar Pro — Web search + chat" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B — Fast planning, cheap" },
+        "qwen/qwen3-coder-next-80b": { "name": "Qwen3 Coder Next 80B — Heavy coding" },
+        "thudm/glm-5.1": { "name": "GLM 5.1 — General purpose" },
+        "x-ai/grok-3": { "name": "Grok 3 — General, real-time data" },
+        "x-ai/grok-3-mini": { "name": "Grok 3 Mini — Fast, cheap" }
       }
     }
   },
-  "small_model": "ollama/qwen3:4b"
+
+  // 5. Instructions & Plugins
+  "instructions": ["CONTRIBUTING.md", "docs/*.md"],
+  "plugin": ["opencode-openai-codex-auth@latest"]
 }

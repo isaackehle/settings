@@ -12,6 +12,135 @@
 #   Multi mode:   r1-tools-8B (5 GB) + 4B (3 GB) + 1.5B (1 GB) + embed (0.3 GB) = 9.3 GB ✓
 #   Multi+heavy:  + qwen2.5-coder:7b (5 GB) = 14.3 GB (borderline, on-demand only)
 
+# >>> SHARED GGUF-FIRST DEFINITIONS >>>
+# ----------------------------------------------------------------------
+# LLAMA.CPP-FIRST ADDITIONS
+# ----------------------------------------------------------------------
+# The sections below preserve the current multi-backend structure while
+# adding the minimum metadata needed for a GGUF / llama.cpp-first workflow.
+#
+# Design rules:
+# - `LOCAL_MODEL_NAMES` is the role → stable local alias map consumed by
+#   llama.cpp-aware tooling and GGUF-first install/registration scripts.
+# - `GGUF_SOURCES` records the canonical upstream Hugging Face repo for each
+#   local alias.
+# - `GGUF_QUANTS` records the preferred GGUF quant for the alias.
+# - `GGUF_LOCAL_FILENAMES` records the normalized local artifact filename.
+# - `GGUF_FAMILIES` records high-level runtime family/type hints.
+# - `GGUF_VARIANTS` allows additional quant aliases when you want multiple
+#   local registrations for the same upstream model.
+#
+# ==============================================
+# LLAMA.CPP ROLE MAP — minimal runtime contract
+# ==============================================
+declare -A LOCAL_MODEL_NAMES=(
+    ["fast"]="qwen3:4b"
+    ["general"]="qwen2.5-coder:7b"
+    ["coder"]="qwen2.5-coder:7b"
+    ["heavy"]="qwen3:14b"
+    ["reasoning"]="deepseek-r1:7b"
+    ["embedding"]="nomic-embed-text"
+)
+
+declare -A GGUF_SOURCES=(
+    ["qwen3:4b"]="hf.co/Qwen/Qwen3-4B-GGUF"
+    ["qwen2.5-coder:7b"]="hf.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF"
+    ["qwen3:14b"]="hf.co/Qwen/Qwen3-14B-GGUF"
+    ["deepseek-r1:7b"]="hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF"
+    ["qwen2.5-coder:1.5b"]="hf.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF"
+    ["codestral:22b"]="hf.co/bartowski/Codestral-22B-v0.1-GGUF"
+    ["nomic-embed-text"]="hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF"
+    ["qwen3.5:4b"]="hf.co/unsloth/Qwen3.5-4B-GGUF"
+    ["qwen2.5-7b:multi"]="hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF"
+    ["qwen3-8b:sonnet4.5"]="hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF"
+)
+
+declare -A GGUF_QUANTS=(
+    ["qwen3:4b"]="Q4_K_M"
+    ["qwen2.5-coder:7b"]="Q4_K_M"
+    ["qwen3:14b"]="Q4_K_M"
+    ["deepseek-r1:7b"]="Q4_K_M"
+    ["qwen2.5-coder:1.5b"]="Q4_K_M"
+    ["codestral:22b"]="Q4_K_M"
+    ["nomic-embed-text"]="F16"
+    ["qwen3.5:4b"]="Q4_K_M"
+    ["qwen2.5-7b:multi"]="Q4_K_M"
+    ["qwen3-8b:sonnet4.5"]="Q4_K_M"
+)
+
+# Simplified local filenames: {alias-normalized}-{family-tag}-{quant-lower}.gguf
+# Family tags:
+#   -it    instruct/vision
+#   -cd    coder
+#   -ds    distill
+#   -it-ds instruct+distill
+#   -em    embedding
+declare -A GGUF_LOCAL_FILENAMES=(
+    ["qwen3:4b"]="qwen3-4b-it-q4_k_m.gguf"
+    ["qwen2.5-coder:7b"]="qwen2.5-coder-7b-cd-q4_k_m.gguf"
+    ["qwen3:14b"]="qwen3-14b-it-q4_k_m.gguf"
+    ["deepseek-r1:7b"]="deepseek-r1-7b-ds-q4_k_m.gguf"
+    ["qwen2.5-coder:1.5b"]="qwen2.5-coder-1.5b-cd-q4_k_m.gguf"
+    ["codestral:22b"]="codestral-22b-cd-q4_k_m.gguf"
+    ["nomic-embed-text"]="nomic-embed-text-em-f16.gguf"
+    ["qwen3.5:4b"]="qwen3.5-4b-it-q4_k_m.gguf"
+    ["qwen2.5-7b:multi"]="qwen2.5-7b-multi-it-ds-q4_k_m.gguf"
+    ["qwen3-8b:sonnet4.5"]="qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf"
+)
+
+# Verbatim filenames as they appear in the Hugging Face repo.
+# Used by materialize_profile_ggufs for the download request.
+# When a remote filename matches the local filename, the entry can be omitted.
+declare -A GGUF_REMOTE_FILENAMES=(
+    ["qwen3:4b"]="Qwen3-4B-Q4_K_M.gguf"
+    ["qwen2.5-coder:7b"]="qwen2.5-coder-7b-instruct-q4_k_m.gguf"
+    ["qwen3:14b"]="Qwen3-14B-Q4_K_M.gguf"
+    ["deepseek-r1:7b"]="DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf"
+    ["qwen2.5-coder:1.5b"]="qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
+    ["codestral:22b"]="Codestral-22B-v0.1-Q4_K_M.gguf"
+    ["nomic-embed-text"]="nomic-embed-text-v1.5.f16.gguf"
+    ["qwen3.5:4b"]="Qwen3.5-4B-Q4_K_M.gguf"
+    ["qwen2.5-7b:multi"]="Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf"
+    ["qwen3-8b:sonnet4.5"]="Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf"
+)
+
+declare -A GGUF_FAMILIES=(
+    ["qwen3:4b"]="instruct"
+    ["qwen2.5-coder:7b"]="coder"
+    ["qwen3:14b"]="instruct"
+    ["deepseek-r1:7b"]="reasoning-tools"
+    ["qwen2.5-coder:1.5b"]="coder"
+    ["codestral:22b"]="coder"
+    ["nomic-embed-text"]="embedding"
+    ["qwen3.5:4b"]="instruct"
+    ["qwen2.5-7b:multi"]="instruct-distill"
+    ["qwen3-8b:sonnet4.5"]="instruct-distill"
+)
+
+declare -A GGUF_VARIANTS=()
+
+declare -A OLLAMA_CONTEXT_WINDOWS=(
+    ["deepseek-r1:7b"]="131072"
+    ["nomic-embed-text"]="8192"
+    ["qwen2.5-coder:7b"]="32768"
+    ["qwen3:14b"]="262144"
+    ["qwen3:4b"]="131072"
+    ["qwen3.5:4b"]="131072"
+    ["qwen2.5-7b:multi"]="1010000"
+    ["qwen3-8b:sonnet4.5"]="40960"
+)
+
+declare -A MODELFILE_PARAMS=(
+    ["qwen3:4b"]="PARAMETER temperature 0.2"
+    ["qwen2.5-coder:7b"]="PARAMETER temperature 0\nPARAMETER repeat_penalty 1.05"
+    ["qwen3:14b"]="PARAMETER temperature 0.5"
+    ["deepseek-r1:7b"]="PARAMETER temperature 0.3"
+    ["qwen3.5:4b"]="PARAMETER temperature 0.2"
+    ["qwen2.5-7b:multi"]="PARAMETER temperature 0.6"
+    ["qwen3-8b:sonnet4.5"]="PARAMETER temperature 0.6"
+)
+# <<< SHARED GGUF-FIRST DEFINITIONS <<<
+
 # ==============================================
 # CLOUD MODELS (via OpenRouter — tools connect directly)
 # ==============================================
@@ -37,49 +166,13 @@ OPENROUTER_MODELS=(
 # No local weights — only a tiny JSON manifest is downloaded.
 # ==============================================
 OLLAMA_CLOUD_MODELS=(
-    "qwen3.5:cloud"              # 397B | Writing, thinking, tools, vision (262K context)
+    "qwen3.5:397b-cloud"        # 397B | Writing, thinking, tools, vision (262K context)
     "qwen3-coder:480b-cloud"     # 480B | Coding, tools (262K context)
-    "qwen3-coder-next:cloud"     # 80B  | Coding, tools (262K context)
+    "qwen3-coder-next:80b-cloud" # 80B  | Coding, tools (262K context)
     "gemma4:31b-cloud"           # 33B  | Thinking, tools, vision (262K context)
     "gpt-oss:120b-cloud"         # 117B | Tools, thinking (131K context)
 )
 
-# ==============================================
-# LOCAL MODELS (pull with ollama)
-# ==============================================
-OLLAMA_MODELS=(
-    # CODING / GENERAL (solo mode)
-
-    "qwen2.5-coder:7b"            # ~5 GB  | Primary coding + general (q4_K_M, 32k)
-
-    # CODE APPLY / INSERT (on-demand)
-    "codestral:22b"               # ~14 GB | Diff application (q4 default, on-demand, 32k)
-
-    # CODING (solo / swap-in)
-    "qwen3:14b"                    # ~11 GB | Solo coding when 7B is insufficient (256k)
-
-    # REASONING (swap-in)
-    "deepseek-r1-tools:8b"         # ~5 GB  | Reasoning + function calling (128k)
-
-    # PLANNING / FAST
-    "qwen3:4b"                    # ~5 GB  | Planning, routing, task breakdown (256k)
-
-    # CODE (fast/on-demand)
-    "qwen2.5-coder:1.5b"          # ~1 GB  | FIM inline completions + light chat (32k)
-
-    # EMBEDDINGS
-    "nomic-embed-text"            # ~0.3 GB | Semantic search / RAG (8k)
-)
-
-# ==============================================
-# REMOTE MODELS — pull from community namespace, alias locally
-# Some models are not in the official Ollama library and must be
-# pulled from a community namespace (e.g., MFDoom/). After pulling,
-# a local alias is created so all tool configs use the short name.
-# ==============================================
-declare -A MODEL_REMOTES=(
-    ["deepseek-r1-tools:8b"]="MFDoom/deepseek-r1-tool-calling:8b"
-)
 # ==============================================
 # ALTERNATIVE QUANTS — on-demand only
 # ==============================================
@@ -90,13 +183,6 @@ declare -A MODEL_QUANTS=(
 # ==============================================
 # CONTEXT WINDOW VARIANTS — auto-created during install
 # ==============================================
-declare -A MODEL_CONTEXTS=(
-    ["qwen2.5-coder:7b"]="8k 32k"
-    ["qwen3:14b"]="8k 40k 128k 256k"
-    ["qwen3:4b"]="8k 128k"
-    ["deepseek-r1-tools:8b"]="128k"
-    ["codestral:22b"]="32k"
-)
 
 # ==============================================
 # TOOL ASSIGNMENTS — consumed by deploy scripts to generate configs
@@ -105,7 +191,7 @@ declare -A MODEL_CONTEXTS=(
 # --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
     [code]="qwen2.5-coder:7b"                  # primary coding agent
-    [think]="deepseek-r1-tools:8b"             # tradeoff analysis, debugging strategy
+    [think]="deepseek-r1:7b"             # tradeoff analysis, debugging strategy
     [write]="qwen2.5-coder:7b"                 # resumes, cover letters, docs
     [research]="qwen2.5-coder:7b"              # codebase/web investigation
     [plan]="qwen3:4b"                          # next steps, task breakdown, routing
@@ -125,45 +211,47 @@ declare -A CONTINUE_ROLES=(
 declare -A CLAUDE_CODE=(
     [primary]="qwen2.5-coder:7b"
     [fast]="qwen3:4b"
-    [reasoning]="deepseek-r1-tools:8b"
+    [reasoning]="deepseek-r1:7b"
     [research]="qwen2.5-coder:7b"
     [coding]="qwen2.5-coder:7b"
     [opus]="qwen2.5-coder:7b"
 )
 
-# --- Cline / Roo Code / Kilo Code (VS Code) ---
-CLINE_MODEL="qwen2.5-coder:7b"
-CLINE_MODEL_CLOUD="kimi-k2.6"
-
-KILOCODE_MODEL="qwen2.5-coder:7b"
-KILOCODE_MODEL_CLOUD="kimi-k2.6"
-
-# --- Zoo Code (VS Code extension) ---
-ZOOCODE_MODEL="qwen2.5-coder:7b"
-ZOOCODE_MODEL_CLOUD="kimi-k2.6"
-ZOOCODE_MODE_CODE="qwen2.5-coder:7b"
-ZOOCODE_MODE_ARCHITECT="qwen2.5-coder:7b"
-ZOOCODE_MODE_ASK="qwen2.5-coder:7b"
-ZOOCODE_MODE_DEBUG="deepseek-r1-tools:8b"
-
 # --- Aider (CLI) ---
-AIDER_MODEL="qwen2.5-coder:7b"
-AIDER_WEAK_MODEL="qwen3:4b"
-AIDER_EDITOR_MODEL="qwen2.5-coder:7b"
+declare -A AIDER_MODELS=(
+    [editor]="qwen2.5-coder:7b"
+    [model]="qwen2.5-coder:7b"
+    [weak]="qwen3:4b"
+)
 
-# --- Zed ---
-ZED_MODEL="qwen2.5-coder:7b"
+# --- Cline (VS Code) ---
+declare -A CLINE_MODELS=(
+    [cloud]="kimi-k2.6"
+    [model]="qwen2.5-coder:7b"
+)
 
 # --- Cursor ---
-CURSOR_MODEL="qwen2.5-coder:7b"
-CURSOR_MODEL_CLOUD="kimi-k2.6"
+declare -A CURSOR_MODELS=(
+    [cloud]="kimi-k2.6"
+    [model]="qwen2.5-coder:7b"
+)
 
-# ==============================================
-# Ollama direct usage
-# ==============================================
-#   ollama list                                 all installed models
-#   ollama ps                                   currently loaded + memory usage
-#   ollama run qwen3:14b                         interactive shell
-#   ollama run deepseek-r1-tools:8b              reasoning shell
-#   ollama stop <model>                         force-unload to free memory
-#   OLLAMA_KEEP_ALIVE=5m ollama serve           keep models warm for 5 mins
+# --- Kilo Code (VS Code) ---
+declare -A KILOCODE_MODELS=(
+    [cloud]="kimi-k2.6"
+    [model]="qwen2.5-coder:7b"
+)
+
+# --- Zed ---
+declare -A ZED_MODELS=(
+    [model]="qwen2.5-coder:7b"
+)
+
+# --- Zoo Code (VS Code extension) ---
+declare -A ZOOCODE_MODELS=(
+    [architect]="qwen2.5-coder:7b"
+    [cloud]="kimi-k2.6"
+    [code]="qwen2.5-coder:7b"
+    [debug]="deepseek-r1:7b"
+    [model]="qwen2.5-coder:7b"
+)

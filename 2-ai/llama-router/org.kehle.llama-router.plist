@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  launchd LaunchAgent for llama-server router mode (macOS / Apple Silicon).
+
+  macOS does not use systemd. This LaunchAgent is the native equivalent of a
+  systemd user service: it starts llama-server at login and keeps it alive.
+
+  Install path:  ~/Library/LaunchAgents/org.kehle.llama-router.plist
+  (setup.sh installs it for you. To do it manually:)
+      cp org.kehle.llama-router.plist ~/Library/LaunchAgents/
+      launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.kehle.llama-router.plist
+
+  IMPORTANT: launchd does not expand ~ or $HOME inside <string> values, and it
+  runs with a minimal PATH. Replace /Users/isaac everywhere below if your
+  username differs, and set the llama-server path to the output of
+  `which llama-server` (Homebrew on Apple Silicon = /opt/homebrew/bin).
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.kehle.llama-router</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/llama-server</string>
+
+        <!-- Router mode: per-model settings come from the INI preset -->
+        <string>--models-preset</string>
+        <string>/usr/local/lib/llama-models/models.ini</string>
+
+        <!-- Also expose the whole dir so new GGUFs are discoverable -->
+        <string>--models-dir</string>
+        <string>/usr/local/lib/llama-models</string>
+
+        <!-- Keep at most ONE model resident. 32B + KV can be ~25-30GB; one
+             at a time is the safe default on 64GB. Raise to 2 only after you
+             confirm headroom (see tuning-guide.md). -->
+        <string>--models-max</string>
+        <string>1</string>
+
+        <!-- Network -->
+        <string>--host</string>
+        <string>127.0.0.1</string>
+        <string>--port</string>
+        <string>10000</string>
+
+        <!-- Global fallbacks for any model not covered by the INI -->
+        <string>-ngl</string>
+        <string>999</string>
+        <string>--flash-attn</string>
+        <string>on</string>
+    </array>
+
+    <!-- Minimal env. Homebrew bin on PATH; pin the model cache too. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/isaac</string>
+        <key>LLAMA_CACHE</key>
+        <string>/usr/local/lib/llama-models</string>
+    </dict>
+
+    <!-- Start at login and restart if it dies -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Don't hammer restarts if it crash-loops -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <!-- Logs -->
+    <key>StandardOutPath</key>
+    <string>/Users/isaac/Library/Logs/llama-router/llama-router.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/isaac/Library/Logs/llama-router/llama-router.err.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>/usr/local/lib/llama-models</string>
+</dict>
+</plist>

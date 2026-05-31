@@ -1,0 +1,56 @@
+# ============================================================================
+#  systemd unit for llama-server router mode  (LINUX home-lab box)
+#
+#  macOS uses launchd (see org.kehle.llama-router.plist). This systemd unit is
+#  for running the same router on a Linux server in your home lab.
+#
+#  Install as a USER service (no root, recommended):
+#     mkdir -p ~/.config/systemd/user
+#     cp llama-router.service ~/.config/systemd/user/
+#     systemctl --user daemon-reload
+#     systemctl --user enable --now llama-router.service
+#     # let it run without you being logged in:
+#     loginctl enable-linger $USER
+#
+#  Or as a SYSTEM service: cp to /etc/systemd/system/, set User=, then
+#     sudo systemctl daemon-reload && sudo systemctl enable --now llama-router
+#
+#  Status / logs:
+#     systemctl --user status llama-router
+#     journalctl --user -u llama-router -f
+#
+#  NOTE: on Linux/CUDA, -ngl 999 offloads all layers to the GPU. On a CPU-only
+#  box drop -ngl. Adjust paths and the binary location for your build.
+# ============================================================================
+[Unit]
+Description=llama.cpp server (router mode, dynamic model loading)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# Adjust to your install. Homebrew-on-Linux: /home/linuxbrew/.linuxbrew/bin
+ExecStart=/usr/local/bin/llama-server \
+    --models-preset /usr/local/lib/llama-models/models.ini \
+    --models-dir /usr/local/lib/llama-models \
+    --models-max 1 \
+    --host 127.0.0.1 \
+    --port 8080 \
+    -ngl 999 \
+    --flash-attn on
+
+Environment=LLAMA_CACHE=/usr/local/lib/llama-models
+
+Restart=on-failure
+RestartSec=10
+
+# Give a big model time to memory-map and load before systemd gives up
+TimeoutStartSec=300
+
+# Light hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

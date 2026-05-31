@@ -1,48 +1,50 @@
 {
-  "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from Ollama's /v1/models endpoint automatically",
-
+  "_note": "MERGE INTO: ~/.config/zed/settings.json — MacBook M2 32GB",
   "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "qwen3.5-27b:q5"
-    },
+    "default_model": { "provider": "openai", "model": "qwen3-coder-30b-a3b:q5" },
     "version": "2"
   },
-
   "language_models": {
     "openai": {
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
-          "name": "deepseek-r1-tools:8b-128k",
-          "display_name": "DeepSeek R1 8B (REAS, TOOL, 128K)",
+          "name": "qwen3-coder-30b-a3b:q5",
+          "display_name": "Coder — 30B",
           "max_tokens": 32768
         },
         {
-          "name": "qwen3:14b-40k",
-          "display_name": "Qwen 3 14B (CODE, 40K)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "qwen3:4b-128k",
-          "display_name": "Qwen 3 4B (PLAN, 128K)",
-          "max_tokens": 8192
-        },
-        {
-          "name": "qwen3.5-27b:q5-256k",
-          "display_name": "Qwen 3.5 27B (WRIT, Q5 256K)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi K2.6 (REAS, CLD)",
+          "name": "qwen3-coder-30b-a3b:q5-128k",
+          "display_name": "Coder — 30B (+long)",
           "max_tokens": 131072
+        },
+        {
+          "name": "qwen3.5-27b:q4",
+          "display_name": "Writing / General — 27B",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3.5-27b:q4-128k",
+          "display_name": "Writing / General — 27B (+long)",
+          "max_tokens": 131072
+        },
+        {
+          "name": "deepseek-r1:7b",
+          "display_name": "Reasoning — DeepSeek R1 7B",
+          "max_tokens": 65536
+        },
+        {
+          "name": "qwen3:14b",
+          "display_name": "Heavy — 14B",
+          "max_tokens": 131072
+        },
+        {
+          "name": "qwen3:4b",
+          "display_name": "Fast / Plan — 4B",
+          "max_tokens": 32768
         }
       ]
     }
   },
-
-  "features": {
-    "inline_completion_provider": "none"
-  }
+  "features": { "inline_completion_provider": "none" }
 }

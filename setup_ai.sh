@@ -45,6 +45,7 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/2-ai/kilocode.sh"
 . "${SETTINGS_BASE}/2-ai/llm.sh"
 . "${SETTINGS_BASE}/2-ai/lmstudio.sh"
+. "${SETTINGS_BASE}/2-ai/omlx.sh"
 . "${SETTINGS_BASE}/2-ai/ollama.sh"
 . "${SETTINGS_BASE}/2-ai/olol.sh"
 . "${SETTINGS_BASE}/2-ai/open-hands.sh"
@@ -67,10 +68,7 @@ REPO_ROOT="$SETTINGS_BASE"
 # CONFIGURATION DEPLOYMENT
 # ============================================================================
 
-deploy_configs() {
-  log_info "Deploying AI tool configurations..."
-
-  # --- MCP config (~/.mcp.json) ---
+deploy_mcp_servers() {
   print_step "MCP Servers"
   read -p "Install Claude MCP servers? (y/N) " -n 1 -r
   echo
@@ -108,8 +106,10 @@ deploy_configs() {
       [ ! -f "$mcp_src" ] && echo "  (skip) source not found: $mcp_src"
     fi
   fi
+}
 
-  # --- AI tool configs ---
+deploy_configs() {
+  log_info "Deploying AI tool configurations..."
   print_step "Copying AI tool configs"
 
   # Resolve per-profile config directory and source models.sh
@@ -159,6 +159,24 @@ deploy_configs() {
   [ -n "${OPENCODE_AGENTS[*]:-}" ] && _collect_models "OPENCODE_AGENTS"
   [ -n "${CONTINUE_ROLES[*]:-}" ]   && _collect_models "CONTINUE_ROLES"
   [ -n "${CLAUDE_CODE[*]:-}" ]       && _collect_models "CLAUDE_CODE"
+
+  # Also trust the canonical runtime inventory maps. Provider catalogs often
+  # list selectable local models that are not assigned to a specific tool role.
+  [ -n "${LOCAL_MODEL_NAMES[*]:-}" ] && _collect_models "LOCAL_MODEL_NAMES"
+  if declare -p OLLAMA_CONTEXT_WINDOWS &>/dev/null; then
+    local _ctx_model
+    for _ctx_model in "${!OLLAMA_CONTEXT_WINDOWS[@]}"; do
+      _known_models+=("$_ctx_model")
+    done
+  fi
+  if declare -p MODEL_REMOTES &>/dev/null; then
+    local _remote_model
+    for _remote_model in "${!MODEL_REMOTES[@]}"; do
+      _known_models+=("$_remote_model")
+    done
+  fi
+  [ -n "${OLLAMA_CLOUD_MODELS[*]:-}" ] && _collect_models "OLLAMA_CLOUD_MODELS"
+
   log_info "  Model list built (${#_known_models[@]} entries)"
 
   # Validate: check that model references in a config file match known models
@@ -404,14 +422,33 @@ PYEOF
 
     local _local=() _cloud=()
 
-    # OLLAMA_MODELS
-    for _m in "${OLLAMA_MODELS[@]}"; do
-      if [[ "$_m" == *":cloud" ]]; then
+    # Canonical local models from LOCAL_MODEL_NAMES plus any explicit GGUF variants
+    if declare -p LOCAL_MODEL_NAMES &>/dev/null 2>&1; then
+      for _alias in "${LOCAL_MODEL_NAMES[@]}"; do
+        _local+=("$_alias")
+
+        local _variants="${GGUF_VARIANTS[$_alias]:-}"
+        if [[ -n "$_variants" ]]; then
+          IFS=',' read -ra _variant_specs <<< "$_variants"
+          for _spec in "${_variant_specs[@]}"; do
+            _spec="$(echo "$_spec" | sed 's/^ *//;s/ *$//')"
+            [[ -z "$_spec" ]] && continue
+            IFS='|' read -r _extra_quant _extra_filename _extra_source <<< "$_spec"
+            [[ -z "$_extra_quant" ]] && continue
+            local _safe_quant
+            _safe_quant="$(echo "$_extra_quant" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g; s/--*/-/g; s/^-//; s/-$//')"
+            _local+=("${_alias}-${_safe_quant}")
+          done
+        fi
+      done
+    fi
+
+    # Cloud Ollama manifests retained separately
+    if declare -p OLLAMA_CLOUD_MODELS &>/dev/null 2>&1; then
+      for _m in "${OLLAMA_CLOUD_MODELS[@]}"; do
         _cloud+=("${_m%:cloud}")
-      else
-        _local+=("$_m")
-      fi
-    done
+      done
+    fi
 
     # Context variants from MODEL_CONTEXTS
     if declare -p MODEL_CONTEXTS &>/dev/null 2>&1; then
@@ -464,7 +501,7 @@ PYEOF
   # --- Generate model map ---
   local _mapper="${SETTINGS_BASE}/2-ai/profiles/generate-model-map.sh"
   if [ -f "$_mapper" ]; then
-    bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map-ollama.md" || true
+    bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
 
   # --- Offer to scout for new agents ---
@@ -480,44 +517,7 @@ PYEOF
     fi
   fi
 
-  # --- Offer to suggest new models ---
-  echo ""
-  echo "  New Model Suggestions"
-  echo "  ---------------------"
-  read -p "  Check OpenRouter for new models worth trying? (y/N) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local _suggester="${SETTINGS_BASE}/2-ai/profiles/suggest-models.sh"
-    if [ -f "$_suggester" ]; then
-      bash "$_suggester" "${_profile}" 2>/dev/null || true
-    fi
-  fi
-
-  # --- Offer to install missing models ---
-  echo ""
-  echo "  Ollama Model Management"
-  echo "  -----------------------"
-  read -p "  Install missing Ollama models and context variants? (y/N) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local _human_name
-    _human_name="$(_profile_name "$_profile")"
-    install_ollama_models "$_human_name" OLLAMA_MODELS
-    create_context_variants
-  fi
-
-  # --- Offer to prune old Ollama models ---
-  echo "  Edit ~/.ollama/required-models.txt to add models you want to keep."
-  read -p "  Prune obsolete Ollama models? (y/N) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local _pruner="${SETTINGS_BASE}/2-ai/profiles/prune_models.sh"
-    if [ -f "$_pruner" ]; then
-      bash "$_pruner" "${_profile}"
-    else
-      echo "  (skip) pruner script not found at $_pruner"
-    fi
-  fi
+  log_info "Local model install/update is handled by the setup wizard Local Models step or ./setup_ai.sh models."
 }
 
 # Function to backup existing configurations
@@ -716,6 +716,75 @@ declare -A DISPLAY_NAMES=(
   ["zoocode"]="Zoo Code"
 )
 
+
+# Tools in this family are intentionally never installed as an implicit bundle.
+# They are experimental/overlapping terminal agents, so every setup path must
+# force an explicit fzf selection before installing any of them.
+CLAW_SELECTOR_TOOLS=(plandex openclaw ironclaw hermes picoclaw zeroclaw)
+
+declare -A CLAW_SELECTOR_TOOL_DESCRIPTIONS=(
+  ["plandex"]="Terminal AI planner for multi-file coding tasks"
+  ["openclaw"]="Personal AI assistant with 25+ messaging channels"
+  ["ironclaw"]="Privacy-first Agent OS with 13 security layers"
+  ["hermes"]="Self-improving AI agent from Nous Research"
+  ["picoclaw"]="Tiny AI for embedded devices / optional dev toolchain"
+  ["zeroclaw"]="Fast Rust AI assistant / OpenClaw successor"
+)
+
+is_claw_selector_tool() {
+  local tool="$1" candidate
+  for candidate in "${CLAW_SELECTOR_TOOLS[@]}"; do
+    [[ "$tool" == "$candidate" ]] && return 0
+  done
+  return 1
+}
+
+select_claw_tools_with_fzf() {
+  local candidates=("$@")
+  local candidate selected line
+  local entries=()
+
+  if [ ${#candidates[@]} -eq 0 ]; then
+    return 0
+  fi
+
+  if ! command -v fzf >/dev/null 2>&1; then
+    log_error "fzf is required to choose optional Claw/Plandex tools. Run: brew install fzf"
+    return 1
+  fi
+
+  for candidate in "${candidates[@]}"; do
+    entries+=("${candidate}"$'	'"$(printf '%-10s  %s' "${DISPLAY_NAMES[$candidate]:-$candidate}" "${CLAW_SELECTOR_TOOL_DESCRIPTIONS[$candidate]:-Optional terminal agent}")")
+  done
+
+  selected=$(printf "%s
+" "${entries[@]}" |     fzf --multi         --header "Choose optional Claw/Plandex tools to install (Tab/Space=toggle, Enter=confirm, q=skip)"         --layout=reverse -d $'	' --with-nth=2 --bind 'space:toggle') || true
+
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    cut -f1 <<<"$line"
+  done <<< "$selected"
+}
+
+install_selected_claw_tools() {
+  local candidates=("$@")
+  local selected=()
+  local tool
+
+  mapfile -t selected < <(select_claw_tools_with_fzf "${candidates[@]}") || return 1
+
+  if [ ${#selected[@]} -eq 0 ]; then
+    log_info "Skipped optional Claw/Plandex tools."
+    return 0
+  fi
+
+  CLAW_SELECTOR_ACTIVE=1
+  for tool in "${selected[@]}"; do
+    install_tool "$tool"
+  done
+  unset CLAW_SELECTOR_ACTIVE
+}
+
 # ============================================================================
 # INFRASTRUCTURE RECOMMENDATIONS
 # ============================================================================
@@ -810,6 +879,49 @@ handle_infrastructure_change() {
   done
 }
 
+apply_infrastructure_stack() {
+  local runtimes="$1"
+  local access_layers="$2"
+
+  local current
+  current=$(check_current_infrastructure)
+  local desired="${runtimes} ${access_layers}"
+  desired="$(echo "$desired" | xargs 2>/dev/null)"
+
+  echo ""
+  echo "  Selected runtimes: ${runtimes:-none}"
+  echo "  Selected access:   ${access_layers:-none}"
+  echo "  Final stack:       ${desired:-hosted-only}"
+
+  if [[ -n "$current" && "$current" != "$desired" ]]; then
+    echo ""
+    read -p "  Change infrastructure? This may uninstall unused components. Continue? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+      log_info "Cancelled."
+      return 1
+    fi
+    handle_infrastructure_change "$current" "$desired"
+  fi
+
+  echo ""
+  log_info "Installing infrastructure: ${desired:-hosted-only}"
+
+  for comp in $desired; do
+    case "$comp" in
+      ollama)     setup_ollama ;;
+      llama.cpp)  log_info "llama.cpp runtime selected — managed via local GGUF / llama.cpp tooling" ;;
+      omlx)       setup_omlx ;;
+      exo)        setup_exo ;;
+      openrouter) setup_openrouter ;;
+      openwebui)  setup_openwebui ;;
+      lmstudio)   setup_lmstudio ;;
+    esac
+  done
+
+  log_status "Infrastructure setup complete!"
+}
+
 # Interactive infrastructure selection menu
 select_infrastructure() {
   local recommended
@@ -828,36 +940,60 @@ select_infrastructure() {
   echo "  Recommended: $recommended"
   echo "  Current:    ${current:-none}"
   echo ""
-  echo "  Choose infrastructure stack:"
-  echo ""
-  echo "  1) Minimal         - Ollama only"
-  echo "  2) Cloud Fallback  - Ollama + OpenRouter"
-  echo "  3) Full Stack      - Ollama + OpenRouter + OpenWebUI"
-  echo "  4) Custom          - Choose individual components"
-  echo ""
-  echo "  Recommendation for your profile: $(echo $recommended | tr ' ' '+')"
-  echo ""
+  if ! command -v fzf >/dev/null 2>&1; then
+    log_error "fzf is required for runtime selection. Run: brew install fzf"
+    return 1
+  fi
+  echo "  Local runtimes run AI models directly on this machine."
+  echo "  Pick the ones you want to use:"
+  echo "    ollama    — Model manager, simplest local runtime"
+  echo "    llama.cpp — Direct GGUF serving (router mode, port 10000)"
+  echo "    omlx      — Apple Silicon MLX runtime (experimental)"
+  echo "    exo       — Distributed inference across devices"
+  echo "  (Tab/Space=toggle, Enter=confirm, Esc=hosted-only)"
+  runtimes=$(printf "ollama\nllama.cpp\nomlx\nexo" | \
+    fzf --multi \
+        --height ~40% \
+        --layout=reverse \
+        --bind 'space:toggle') || true
+  if [ -z "$runtimes" ]; then
+    echo "  -> No local runtimes (hosted-only mode)"
+  else
+    runtimes=$(echo "$runtimes" | tr '\n' ' ' | xargs)
+    echo "  -> Selected: $runtimes"
+  fi
 
-  printf "Select option [3]: "
-  read -r choice
-  choice="${choice:-3}"
+  echo ""
+  echo "  Choose access layer components:"
+  echo ""
+  echo "  1) Standard access layer  - OpenRouter + OpenWebUI + Unsloth Studio"
+  echo "  2) OpenRouter only"
+  echo "  3) OpenWebUI only"
+  echo "  4) Unsloth Studio only"
+  echo "  5) None"
+  echo "  6) Custom access layer"
+  echo ""
+  printf "Select access option [1]: "
+  read -r access_choice
+  access_choice="${access_choice:-1}"
 
-  local desired=""
-  case "$choice" in
-    1) desired="ollama" ;;
-    2) desired="ollama openrouter" ;;
-    3) desired="ollama openrouter openwebui" ;;
-    4)
+  local access_layers=""
+  case "$access_choice" in
+    1) access_layers="openrouter openwebui lmstudio" ;;
+    2) access_layers="openrouter" ;;
+    3) access_layers="openwebui" ;;
+    4) access_layers="lmstudio" ;;
+    5) access_layers="" ;;
+    6)
       echo ""
-      echo "Select components (space-separated, enter to confirm):"
-      echo "  ollama      - Local LLM server"
-
-      echo "  openrouter - Cloud model fallback (requires API key)"
-      echo "  openwebui  - Web UI (Docker)"
+      echo "Select access layer components (space-separated, enter to confirm):"
+      echo "  openrouter - Cloud model fallback / broker"
+      echo "  openwebui  - Web UI"
+      echo "  lmstudio   - Unsloth Studio / local GUI"
       echo ""
-      printf "Components [ollama openrouter openwebui]: "
-      read -r desired
-      desired="${desired:-ollama openrouter openwebui}"
+      printf "Access components [openrouter openwebui lmstudio]: "
+      read -r access_layers
+      access_layers="${access_layers:-openrouter openwebui lmstudio}"
       ;;
     *)
       log_error "Invalid option"
@@ -865,35 +1001,7 @@ select_infrastructure() {
       ;;
   esac
 
-  echo ""
-  echo "  Selected: $desired"
-
-  # Handle uninstalls if changing infrastructure
-  if [[ -n "$current" && "$current" != "$desired" ]]; then
-    echo ""
-    read -p "  Change infrastructure? This may uninstall unused components. Continue? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-      log_info "Cancelled."
-      return 1
-    fi
-    handle_infrastructure_change "$current" "$desired"
-  fi
-
-  # Install the selected components
-  echo ""
-  log_info "Installing infrastructure: $desired"
-
-  for comp in $desired; do
-    case "$comp" in
-      ollama)     setup_ollama ;;
-
-      openrouter) setup_openrouter ;;
-      openwebui)  setup_openwebui ;;
-    esac
-  done
-
-  log_status "Infrastructure setup complete!"
+  apply_infrastructure_stack "$runtimes" "$access_layers"
 }
 
 install_tool() {
@@ -901,6 +1009,11 @@ install_tool() {
   local setup_func="${GROUP_SETUP_FUNCS[$tool]}"
   local verify_func="${GROUP_VERIFY_FUNCS[$tool]}"
   local display_name="${DISPLAY_NAMES[$tool]:-$tool}"
+
+  if is_claw_selector_tool "$tool" && [[ "${CLAW_SELECTOR_ACTIVE:-0}" != "1" ]]; then
+    install_selected_claw_tools "$tool"
+    return $?
+  fi
 
   if [ -n "$verify_func" ] && [ -n "$setup_func" ]; then
     print_step "$display_name"
@@ -926,9 +1039,18 @@ install_group() {
   log_info ""
   log_info "=== Installing group: ${DISPLAY_NAMES[$group]:-$group} ==="
 
+  local claw_candidates=()
   for tool in $tools; do
+    if is_claw_selector_tool "$tool"; then
+      claw_candidates+=("$tool")
+      continue
+    fi
     install_tool "$tool"
   done
+
+  if [ ${#claw_candidates[@]} -gt 0 ]; then
+    install_selected_claw_tools "${claw_candidates[@]}"
+  fi
 }
 
 install_groups() {
@@ -951,6 +1073,463 @@ install_tools() {
   install_group "self-hosted"
 }
 
+wizard_init_context() {
+  WIZARD_PROFILE="${MACHINE_PROFILE:-}"
+  WIZARD_INFRA_ACTION="skip"
+  WIZARD_MODEL_ACTION="skip"
+  WIZARD_CONFIG_ACTION="skip"
+  WIZARD_TOOL_ACTION="skip"
+  WIZARD_VERIFY_ACTION="skip"
+}
+
+prompt_wizard_choice() {
+  local prompt="$1"
+  shift
+
+  echo ""
+  echo "$prompt"
+  local option
+  for option in "$@"; do
+    echo "  $option"
+  done
+  echo ""
+  read -r -p "Enter choice: " WIZARD_CHOICE
+}
+
+wizard_step_profile() {
+  print_step "Profile"
+
+  local detected="${MACHINE_PROFILE:-unknown}"
+  local profiles_dir="${SETTINGS_BASE}/2-ai/profiles"
+
+  echo "Detected profile: ${detected}"
+  prompt_wizard_choice \
+    "Choose profile handling:" \
+    "1) Use detected profile (${detected})" \
+    "2) Choose another profile" \
+    "3) Cancel"
+
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_PROFILE="$detected"
+      ;;
+    2)
+      print_profile_menu "$detected"
+      echo ""
+      local num_profiles
+      num_profiles=$(ls -d "${profiles_dir}"/*/ 2>/dev/null | wc -l | tr -d ' ')
+      local total_options=$((num_profiles + 2))
+      read -r -p "Enter selection [1-$total_options] (Enter = $detected): " choice
+      choice="${choice:-$detected}"
+      local profile
+      profile=$(get_profile_for_choice "$choice") || {
+        log_error "Invalid selection: '$choice'"
+        return 1
+      }
+      WIZARD_PROFILE="$profile"
+      ;;
+    3)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+
+  export MACHINE_PROFILE="$WIZARD_PROFILE"
+  log_info "Using profile: ${WIZARD_PROFILE}"
+}
+
+wizard_step_infrastructure() {
+  print_step "Infrastructure"
+  echo ""
+  if ! command -v fzf >/dev/null 2>&1; then
+    log_error "fzf is required for runtime selection. Run: brew install fzf"
+    return 1
+  fi
+  echo "  Local runtimes run AI models directly on this machine."
+  echo "  Pick the ones you want to use:"
+  echo "    ollama    — Model manager, simplest local runtime"
+  echo "    llama.cpp — Direct GGUF serving (router mode, port 10000)"
+  echo "    omlx      — Apple Silicon MLX runtime (experimental)"
+  echo "    exo       — Distributed inference across devices"
+  echo "  (Tab/Space=toggle, Enter=confirm, Esc=hosted-only)"
+  local runtimes
+  runtimes=$(printf "ollama\nllama.cpp\nomlx\nexo" | \
+    fzf --multi \
+        --height ~40% \
+        --layout=reverse \
+        --bind 'space:toggle') || true
+  if [ -z "$runtimes" ]; then
+    echo "  -> No local runtimes (hosted-only mode)"
+    WIZARD_INFRA_ACTION="hosted-only"
+  else
+    runtimes=$(echo "$runtimes" | tr '\n' ' ' | xargs)
+    WIZARD_INFRA_ACTION="${runtimes// /+}"
+    echo "  -> Selected: $runtimes"
+  fi
+
+  prompt_wizard_choice \
+    "Choose access layer:" \
+    "1) Standard access layer (OpenRouter + OpenWebUI + Unsloth Studio)" \
+    "2) OpenRouter only" \
+    "3) OpenWebUI only" \
+    "4) Unsloth Studio only" \
+    "5) None" \
+    "6) Custom access layer"
+
+  local access_layers=""
+  case "${WIZARD_CHOICE:-1}" in
+    1|"") access_layers="openrouter openwebui lmstudio" ;;
+    2) access_layers="openrouter" ;;
+    3) access_layers="openwebui" ;;
+    4) access_layers="lmstudio" ;;
+    5) access_layers="" ;;
+    6)
+      echo ""
+      echo "Select access layer components (space-separated, enter to confirm):"
+      echo "  openrouter - Cloud model fallback / broker"
+      echo "  openwebui  - Web UI"
+      echo "  lmstudio   - Unsloth Studio / local GUI"
+      echo ""
+      read -r -p "Access components [openrouter openwebui lmstudio]: " access_layers
+      access_layers="${access_layers:-openrouter openwebui lmstudio}"
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+
+  apply_infrastructure_stack "$runtimes" "$access_layers"
+}
+
+wizard_step_local_models() {
+  print_step "Local Models"
+
+  local profile_name="$(_profile_name "$WIZARD_PROFILE")"
+  local runtime_selection="${WIZARD_INFRA_ACTION:-all}"
+
+  # Pre-generate the model plan for the preview pane
+  local plan_file
+  plan_file=$(mktemp)
+  review_local_model_plan_for_profile "$WIZARD_PROFILE" "$profile_name" "$runtime_selection" > "$plan_file" 2>&1
+
+  while true; do
+    local choice
+    choice=$(printf "skip\nreview plan\ninstall/update\nsync (install/update + prune)\ncancel" | \
+      fzf --header "How should local models be handled for ${profile_name}? (enter to confirm, space to toggle plan preview)" \
+          --layout=reverse \
+          --height ~60% \
+          --bind 'space:toggle-preview' \
+          --preview-window=up:55%:wrap \
+          --preview "
+            if [ {} = 'review plan' ]; then
+              cat '$plan_file'
+            else
+              case {} in
+                'install/update')
+                  echo 'Download missing GGUFs and register Ollama aliases.'
+                  echo 'Non-destructive — existing models are kept.'
+                  ;;
+                'sync (install/update + prune)')
+                  echo 'Install/update, then prune — full profile sync.'
+                  echo 'Downloads missing models, removes extras not in profile.'
+                  ;;
+                'cancel')
+                  echo 'Cancel the setup wizard.'
+                  ;;
+                *)
+                  echo 'Skip this step — no changes to local models.'
+                  ;;
+              esac
+            fi
+          ") || true
+
+    case "$choice" in
+      "")
+        # Esc or no selection — skip
+        WIZARD_MODEL_ACTION="skip"
+        break
+        ;;
+      "review plan")
+        # Plan is visible in the preview pane
+        echo ""
+        read -r -p "  Press Enter to return to the menu..." -n 1
+        echo ""
+        continue
+        ;;
+      "skip")
+        WIZARD_MODEL_ACTION="skip"
+        break
+        ;;
+      "install/update")
+        WIZARD_MODEL_ACTION="install:${runtime_selection}"
+        echo ""
+        read -r -p "Proceed with local model install/update? (y/N) " -n 1 -r
+        echo ""
+        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+          install_local_models_for_profile "$WIZARD_PROFILE" "$profile_name" "$runtime_selection"
+        else
+          log_info "Skipped local model install/update."
+          WIZARD_MODEL_ACTION="skip"
+        fi
+        break
+        ;;
+      "sync (install/update + prune)")
+        WIZARD_MODEL_ACTION="sync:${runtime_selection}"
+        echo ""
+        read -r -p "Proceed with local model sync (install/update, then prune)? (y/N) " -n 1 -r
+        echo ""
+        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+          install_local_models_for_profile "$WIZARD_PROFILE" "$profile_name" "$runtime_selection"
+          prune_local_models_for_profile "$WIZARD_PROFILE" "$profile_name"
+        else
+          log_info "Skipped local model sync."
+          WIZARD_MODEL_ACTION="skip"
+        fi
+        break
+        ;;
+      "cancel")
+        log_info "Setup cancelled."
+        return 1
+        ;;
+    esac
+  done
+
+  # --- OpenRouter model suggestions ---
+  echo ""
+  echo "  OpenRouter Model Discovery"
+  echo "  --------------------------"
+  read -p "  Check OpenRouter for new models worth trying? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local _suggester="${SETTINGS_BASE}/2-ai/profiles/suggest-models.sh"
+    if [ -f "$_suggester" ]; then
+      bash "$_suggester" "$WIZARD_PROFILE" 2>/dev/null || true
+    fi
+  fi
+
+  rm -f "$plan_file"
+}
+
+wizard_step_tool_search() {
+  print_step "AI Tool Discovery"
+  echo ""
+  if ! command -v fzf >/dev/null 2>&1; then
+    log_error "fzf is required for tool discovery. Run: brew install fzf"
+    return 1
+  fi
+
+  local tools_catalog=(
+    "server:ollama:Local model manager"
+    "server:exo:Distributed inference"
+    "server:tabby:Autocomplete server"
+    "cloud:openrouter:Cloud model proxy"
+    "cloud:groq:Groq API config"
+    "agent:claude:Claude Code CLI"
+    "agent:opencode:OpenCode AI agent"
+    "agent:aider:Aider coding agent"
+    "agent:crush:Crush terminal agent"
+    "agent:codex:Codex CLI"
+    "agent:gemini:Gemini CLI"
+    "agent:grok:Grok CLI"
+    "agent:llm:Swiss-army-knife LLM CLI"
+    "agent:fabric:Prompt framework"
+    "agent:aichat:Rust AI CLI with MCP"
+    "agent:goose:Open-source agent"
+    "agent:open-hands:Open Hands (Docker)"
+    "agent:plandex:Terminal AI planner"
+    "agent:openclaw:Personal AI assistant"
+    "agent:ironclaw:Privacy-first Agent OS"
+    "agent:hermes:Self-improving agent"
+    "agent:zeroclaw:Fast Rust AI assistant"
+    "editor:continue:Continue VS Code ext"
+    "editor:cline:Cline VS Code ext"
+    "editor:copilot:GitHub Copilot"
+    "editor:kilocode:Kilo Code ext"
+    "editor:windsurf:Windsurf IDE"
+    "editor:cursor:Cursor IDE"
+    "editor:zed:Zed editor"
+    "editor:sublime:Sublime Text"
+    "misc:anythingllm:AnythingLLM desktop"
+    "misc:zoocode:Zoo Code ext"
+  )
+
+  local selected
+  selected=$(printf "%s\n" "${tools_catalog[@]}" | \
+    fzf --multi \
+        --header "Search and select AI tools to install (Tab/Space=toggle, Enter=confirm, Esc=skip)" \
+        --layout=reverse \
+        --height ~70% \
+        --bind 'space:toggle' \
+        --bind 'ctrl-/:toggle-preview' \
+        --preview "
+          case {} in
+            server:*) echo 'Server / runtime tool — installs system-wide.' ;;
+            cloud:*) echo 'Cloud provider — deploys API config.' ;;
+            agent:*) echo 'AI terminal agent — installs CLI and config.' ;;
+            editor:*) echo 'Editor / IDE — installs app or extension.' ;;
+            misc:*) echo 'Other AI tool — installs and configures.' ;;
+          esac
+          echo ''
+          echo 'Tool: {}'
+        " \
+        --preview-window=up:3:wrap) || true
+
+  if [ -z "$selected" ]; then
+    log_info "Skipped tool discovery."
+    return 0
+  fi
+
+  echo ""
+  echo "  Selected tools:"
+  local line tool
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    tool=$(echo "$line" | cut -d: -f2)
+    echo "    - $tool"
+  done <<< "$selected"
+
+  read -r -p "  Install selected tools? (y/N) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    while IFS= read -r line; do
+      [[ -z "$line" ]] && continue
+      tool=$(echo "$line" | cut -d: -f2)
+      install_tool "$tool" 2>/dev/null || log_warning "  Failed to install $tool"
+    done <<< "$selected"
+    log_status "Tool installation complete."
+  else
+    log_info "Skipped tool installation."
+  fi
+}
+
+wizard_step_mcp_servers() {
+  deploy_mcp_servers
+}
+
+wizard_step_configs() {
+  print_step "Configs"
+  prompt_wizard_choice \
+    "How should AI configs be handled?" \
+    "1) Skip" \
+    "2) Deploy recommended configs" \
+    "3) Cancel"
+
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_CONFIG_ACTION="skip"
+      ;;
+    2)
+      WIZARD_CONFIG_ACTION="deploy"
+      deploy_configs
+      ;;
+    3)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+}
+
+wizard_step_tools() {
+  print_step "AI Tools"
+  prompt_wizard_choice \
+    "How should AI tools be installed?" \
+    "1) Skip" \
+    "2) Recommended tool bundles" \
+    "3) Choose tool groups" \
+    "4) Open legacy interactive menu" \
+    "5) Cancel"
+
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_TOOL_ACTION="skip"
+      ;;
+    2)
+      WIZARD_TOOL_ACTION="recommended"
+      install_group "infrastructure"
+      install_group "terminal-agents"
+      install_group "vscode-extensions"
+      ;;
+    3)
+      WIZARD_TOOL_ACTION="groups"
+      echo "Available groups: infrastructure, terminal-agents, vscode-extensions, ides, self-hosted, all"
+      read -r -p "Enter comma-separated groups: " groups
+      [ -n "${groups:-}" ] && install_groups "$groups"
+      ;;
+    4)
+      WIZARD_TOOL_ACTION="legacy-menu"
+      interactive_menu
+      ;;
+    5)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+}
+
+wizard_step_verify() {
+  print_step "Verification"
+  prompt_wizard_choice \
+    "Run verification checks now?" \
+    "1) Skip" \
+    "2) Run verification" \
+    "3) Cancel"
+
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_VERIFY_ACTION="skip"
+      ;;
+    2)
+      WIZARD_VERIFY_ACTION="verify"
+      verify_installations
+      ;;
+    3)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+}
+
+wizard_step_summary() {
+  print_step "Summary"
+  echo "Profile:        ${WIZARD_PROFILE:-unknown}"
+  echo "Infrastructure: ${WIZARD_INFRA_ACTION}"
+  echo "Local models:   ${WIZARD_MODEL_ACTION}"
+  echo "Configs:        ${WIZARD_CONFIG_ACTION}"
+  echo "AI tools:       ${WIZARD_TOOL_ACTION}"
+  echo "Verification:   ${WIZARD_VERIFY_ACTION}"
+}
+
+run_ai_setup_wizard() {
+  print_step "AI Setup Wizard"
+  wizard_init_context
+  wizard_step_profile || return 1
+  wizard_step_infrastructure || return 1
+  wizard_step_local_models || return 1
+  wizard_step_tool_search || return 1
+  wizard_step_mcp_servers || return 1
+  wizard_step_configs || return 1
+  wizard_step_tools || return 1
+  wizard_step_verify || return 1
+  wizard_step_summary
+}
+
 # Dispatch a single action+tool pair
 _run_one() {
   local action="$1" tool="$2"
@@ -970,7 +1549,7 @@ _run_one() {
   setup:kilocode) setup_kilocode ;;
   backup:kilocode) backup_kilocode ;;
   restore:kilocode) restore_kilocode ;;
-  setup:models) install_coding_assistants ;;
+  setup:models) manage_local_models ;;
   setup:ollama) setup_ollama ;;
   setup:olol) setup_olol ;;
   setup:anythingllm) setup_anythingllm ;;
@@ -983,12 +1562,12 @@ _run_one() {
   setup:fabric) setup_fabric ;;
   setup:aichat) setup_aichat ;;
   setup:goose) setup_goose ;;
-  setup:plandex) setup_plandex ;;
-  setup:openclaw) setup_openclaw ;;
-  setup:ironclaw) setup_ironclaw ;;
-  setup:hermes) setup_hermes ;;
-  setup:picoclaw) setup_picoclaw ;;
-  setup:zeroclaw) setup_zeroclaw ;;
+  setup:plandex) install_tool "plandex" ;;
+  setup:openclaw) install_tool "openclaw" ;;
+  setup:ironclaw) install_tool "ironclaw" ;;
+  setup:hermes) install_tool "hermes" ;;
+  setup:picoclaw) install_tool "picoclaw" ;;
+  setup:zeroclaw) install_tool "zeroclaw" ;;
   setup:zoocode) setup_zoocode ;;
 
   setup:tabby) setup_tabby ;;
@@ -1252,8 +1831,8 @@ main() {
   goose)
     setup_goose
     ;;
-  plandex)
-    setup_plandex
+  plandex|openclaw|ironclaw|hermes|picoclaw|zeroclaw)
+    install_tool "$1"
     ;;
   anythingllm)
     setup_anythingllm
@@ -1299,16 +1878,17 @@ main() {
     install_groups "$groups"
     ;;
   models)
-    install_coding_assistants
+    manage_local_models
     ;;
   deploy)
+    deploy_mcp_servers
     deploy_configs
     ;;
   infrastructure)
     select_infrastructure
     ;;
-  "")
-    interactive_menu
+  wizard|"")
+    run_ai_setup_wizard
     ;;
   *)
     echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"

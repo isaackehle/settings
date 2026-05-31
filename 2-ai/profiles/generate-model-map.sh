@@ -27,6 +27,13 @@ link() {
     EDGES+=("${model}|${tool}|${role}")
 }
 
+# Associative tool model maps
+if declare -p AIDER_MODELS &>/dev/null 2>&1; then
+    for role in "${!AIDER_MODELS[@]}"; do
+        link "${AIDER_MODELS[$role]}" "Aider" "$role"
+    done
+fi
+
 # Scalar model vars
 link "${CLINE_MODEL:-}"              "Cline"     "default"
 link "${CLINE_MODEL_CLOUD:-}"        "Cline"     "cloud"
@@ -38,9 +45,6 @@ link "${ZOOCODE_MODE_ASK:-}"         "ZooCode"   "ask"
 link "${ZOOCODE_MODE_DEBUG:-}"       "ZooCode"   "debug"
 link "${KILOCODE_MODEL:-}"           "KiloCode"  "default"
 link "${KILOCODE_MODEL_CLOUD:-}"     "KiloCode"  "cloud"
-link "${AIDER_MODEL:-}"              "Aider"     "default"
-link "${AIDER_WEAK_MODEL:-}"         "Aider"     "weak"
-link "${AIDER_EDITOR_MODEL:-}"       "Aider"     "editor"
 link "${ZED_MODEL:-}"                "Zed"       "default"
 link "${CURSOR_MODEL:-}"             "Cursor"    "default"
 link "${CURSOR_MODEL_CLOUD:-}"       "Cursor"    "cloud"
@@ -156,16 +160,248 @@ for _m in "${ALL_MODELS[@]}"; do
     esac
 done
 
+
+# ==============================================
+# GGUF MATERIALIZATION LOOKUPS — HF → GGUF → Ollama
+# ==============================================
+escape_md_cell() {
+    local value="$1"
+    value="${value//$'\n'/<br>}"
+    value="${value//|/\\|}"
+    printf '%s' "$value"
+}
+
+mermaid_id() {
+    local prefix="$1" value="$2" safe
+    safe="$(printf '%s' "$value" | tr -c '[:alnum:]_' '_')"
+    printf '%s_%s' "$prefix" "$safe"
+}
+
+mermaid_label() {
+    local value="$1"
+    value="${value//\"/}"
+    printf '%s' "$value"
+}
+
+gguf_local_filename_for_alias() {
+    local alias="$1"
+    if declare -p GGUF_LOCAL_FILENAMES &>/dev/null && [[ -v "GGUF_LOCAL_FILENAMES[$alias]" ]]; then
+        printf '%s' "${GGUF_LOCAL_FILENAMES[$alias]}"
+    elif declare -p GGUF_FILENAMES &>/dev/null && [[ -v "GGUF_FILENAMES[$alias]" ]]; then
+        printf '%s' "${GGUF_FILENAMES[$alias]}"
+    fi
+}
+
+gguf_remote_filename_for_alias_quant() {
+    local alias="$1" quant="$2" repo="$3"
+    if declare -p GGUF_REMOTE_FILENAMES &>/dev/null && [[ -v "GGUF_REMOTE_FILENAMES[$alias]" ]]; then
+        printf '%s' "${GGUF_REMOTE_FILENAMES[$alias]}"
+        return
+    fi
+
+    local last base
+    last="${repo#hf.co/}"
+    last="${last%/}"
+    last="${last##*/}"
+    base="$last"
+    [[ "$base" == *-GGUF ]] && base="${base%-GGUF}"
+    printf '%s-%s.gguf' "$base" "$quant"
+}
+
+model_family_for_alias() {
+    local alias="$1"
+    if declare -p GGUF_FAMILIES &>/dev/null && [[ -v "GGUF_FAMILIES[$alias]" ]]; then
+        printf '%s' "${GGUF_FAMILIES[$alias]}"
+    else
+        printf '%s' "${MODEL_CAT[$alias]:-local}"
+    fi
+}
+
+model_params_for_alias() {
+    local alias="$1"
+    if declare -p MODELFILE_PARAMS &>/dev/null && [[ -v "MODELFILE_PARAMS[$alias]" ]]; then
+        printf '%s' "${MODELFILE_PARAMS[$alias]//$'\\n'/$'\n'}"
+    elif declare -p OLLAMA_MODELFILE_PARAMS &>/dev/null && [[ -v "OLLAMA_MODELFILE_PARAMS[$alias]" ]]; then
+        printf '%s' "${OLLAMA_MODELFILE_PARAMS[$alias]//$'\\n'/$'\n'}"
+    fi
+}
+
+context_alias_suffix_for_ctx() {
+    local ctx="$1"
+    if [[ "$ctx" =~ ^[0-9]+$ ]] && (( ctx % 1024 == 0 )); then
+        printf '%sk' "$((ctx / 1024))"
+    else
+        printf '%sctx' "$ctx"
+    fi
+}
+
+context_values_for_alias() {
+    local alias="$1"
+    if declare -p OLLAMA_CONTEXT_WINDOWS &>/dev/null && [[ -v "OLLAMA_CONTEXT_WINDOWS[$alias]" ]]; then
+        printf '%s' "${OLLAMA_CONTEXT_WINDOWS[$alias]}"
+    fi
+}
+
+collect_materialized_aliases() {
+    local alias role
+    declare -A _materialized_seen=()
+
+    if declare -p LOCAL_MODEL_NAMES &>/dev/null; then
+        for role in "${!LOCAL_MODEL_NAMES[@]}"; do
+            alias="${LOCAL_MODEL_NAMES[$role]}"
+            if [[ -n "${alias:-}" && -z "${_materialized_seen[$alias]:-}" ]]; then
+                printf '%s\n' "$alias"
+                _materialized_seen[$alias]=1
+            fi
+        done
+    fi
+
+    if declare -p GGUF_SOURCES &>/dev/null; then
+        for alias in "${!GGUF_SOURCES[@]}"; do
+            if [[ -n "${alias:-}" && -z "${_materialized_seen[$alias]:-}" ]]; then
+                printf '%s\n' "$alias"
+                _materialized_seen[$alias]=1
+            fi
+        done
+    fi
+}
+
+emit_materialization_row() {
+    local alias="$1" repo="$2" quant="$3" local_file="$4" remote_file="$5" family="$6" ctx_values="$7" params="$8"
+    local base_ctx="" variants="" ctx suffix first=true
+
+    if [[ -n "$ctx_values" ]]; then
+        read -ra _ctx_parts <<< "$ctx_values"
+        base_ctx="${_ctx_parts[0]:-}"
+        for ctx in "${_ctx_parts[@]:1}"; do
+            [[ -z "$ctx" || "$ctx" == "$base_ctx" ]] && continue
+            suffix="$(context_alias_suffix_for_ctx "$ctx")"
+            if $first; then
+                variants="${alias}-${suffix} (${ctx})"
+                first=false
+            else
+                variants+=", ${alias}-${suffix} (${ctx})"
+            fi
+        done
+    fi
+
+    [[ -z "$variants" ]] && variants="—"
+    [[ -z "$base_ctx" ]] && base_ctx="—"
+    [[ -z "$params" ]] && params="—"
+
+    printf '| `%s` | `%s` | `%s` | `%s` | `%s` | `%s` | `%s` | %s | %s |\n' \
+        "$(escape_md_cell "$alias")" \
+        "$(escape_md_cell "$repo")" \
+        "$(escape_md_cell "$remote_file")" \
+        "$(escape_md_cell "$quant")" \
+        "$(escape_md_cell "$local_file")" \
+        "$(escape_md_cell "$family")" \
+        "$(escape_md_cell "$base_ctx")" \
+        "$(escape_md_cell "$variants")" \
+        "$(escape_md_cell "$params")"
+}
+
+emit_materialization_mermaid() {
+    local aliases=("$@")
+    local alias repo quant local_file remote_file family ctx_values params
+    local hf_id remote_id local_id alias_id params_id ctx_id ctx suffix
+    local emitted=false
+
+    echo '```mermaid'
+    echo 'flowchart LR'
+    echo '  classDef hf fill:#eef6ff,stroke:#4b8bbe,color:#111;'
+    echo '  classDef file fill:#f7f7f7,stroke:#999,color:#111;'
+    echo '  classDef ollama fill:#edf7ed,stroke:#4f9d5d,color:#111;'
+    echo '  classDef params fill:#fff7e6,stroke:#d99000,color:#111;'
+
+    for alias in "${aliases[@]}"; do
+        [[ -z "$alias" ]] && continue
+        if ! declare -p GGUF_SOURCES &>/dev/null || [[ ! -v "GGUF_SOURCES[$alias]" ]]; then
+            continue
+        fi
+
+        repo="${GGUF_SOURCES[$alias]}"
+        quant="${GGUF_QUANTS[$alias]:-unknown}"
+        local_file="$(gguf_local_filename_for_alias "$alias")"
+        remote_file="$(gguf_remote_filename_for_alias_quant "$alias" "$quant" "$repo")"
+        family="$(model_family_for_alias "$alias")"
+        ctx_values="$(context_values_for_alias "$alias")"
+        params="$(model_params_for_alias "$alias")"
+
+        hf_id="$(mermaid_id hf "$repo")"
+        remote_id="$(mermaid_id remote "${repo}|${remote_file}")"
+        local_id="$(mermaid_id local "$local_file")"
+        alias_id="$(mermaid_id ollama "$alias")"
+
+        echo "  ${hf_id}[\"HF: $(mermaid_label "$repo")\"]:::hf"
+        echo "  ${remote_id}[\"Remote GGUF: $(mermaid_label "$remote_file")\"]:::file"
+        echo "  ${local_id}[\"Local GGUF: $(mermaid_label "$local_file")\"]:::file"
+        echo "  ${alias_id}[\"Ollama: $(mermaid_label "$alias")\\nquant=${quant}; family=${family}\"]:::ollama"
+        echo "  ${hf_id} --> ${remote_id} --> ${local_id} --> ${alias_id}"
+
+        if [[ -n "$params" ]]; then
+            params_id="$(mermaid_id params "$alias")"
+            echo "  ${params_id}[\"MODELFILE params\"]:::params"
+            echo "  ${params_id} -.-> ${alias_id}"
+        fi
+
+        if [[ -n "$ctx_values" ]]; then
+            read -ra _ctx_parts <<< "$ctx_values"
+            local base_ctx="${_ctx_parts[0]:-}"
+            for ctx in "${_ctx_parts[@]:1}"; do
+                [[ -z "$ctx" || "$ctx" == "$base_ctx" ]] && continue
+                suffix="$(context_alias_suffix_for_ctx "$ctx")"
+                ctx_id="$(mermaid_id ctx "${alias}-${suffix}")"
+                echo "  ${ctx_id}[\"Ollama alias: $(mermaid_label "${alias}-${suffix}")\\nnum_ctx=${ctx}\"]:::ollama"
+                echo "  ${alias_id} --> ${ctx_id}"
+            done
+        fi
+
+        emitted=true
+    done
+
+    if ! $emitted; then
+        echo '  none["No Hugging Face GGUF materialization metadata defined for this profile"]'
+    fi
+    echo '```'
+}
+
 # ==============================================
 # OUTPUT
 # ==============================================
-OUTPUT="$PROFILES_DIR/$PROFILE/model-map-ollama.md"
+OUTPUT="$PROFILES_DIR/$PROFILE/model-map.md"
 {
     echo "# Model Map — $PROFILE"
     echo ""
 
+    mapfile -t MATERIALIZED_ALIASES < <(collect_materialized_aliases | sort)
+
     # ------------------------------------------------------------------
-    # 1. PIVOT MATRIX — tools × models
+    # 1. HF → GGUF → OLLAMA MATERIALIZATION
+    # ------------------------------------------------------------------
+    echo "## Hugging Face → GGUF → Ollama Materialization"
+    echo ""
+    echo "This is the profile-specific install graph: Hugging Face source repo, exact remote GGUF filename, normalized local artifact name, Ollama alias, MODELFILE parameters, and context-window aliases."
+    echo ""
+    echo "| Ollama alias | HF repo | Remote GGUF | Quant | Local GGUF | Family | Base num_ctx | Context aliases | MODELFILE params |"
+    echo "| --- | --- | --- | --- | --- | --- | ---: | --- | --- |"
+    for alias in "${MATERIALIZED_ALIASES[@]}"; do
+        [[ -z "$alias" ]] && continue
+        if ! declare -p GGUF_SOURCES &>/dev/null || [[ ! -v "GGUF_SOURCES[$alias]" ]]; then
+            continue
+        fi
+        emit_materialization_row             "$alias"             "${GGUF_SOURCES[$alias]}"             "${GGUF_QUANTS[$alias]:-unknown}"             "$(gguf_local_filename_for_alias "$alias")"             "$(gguf_remote_filename_for_alias_quant "$alias" "${GGUF_QUANTS[$alias]:-unknown}" "${GGUF_SOURCES[$alias]}")"             "$(model_family_for_alias "$alias")"             "$(context_values_for_alias "$alias")"             "$(model_params_for_alias "$alias")"
+    done
+    echo ""
+    echo "### Materialization graph"
+    echo ""
+    emit_materialization_mermaid "${MATERIALIZED_ALIASES[@]}"
+    echo ""
+    echo "---"
+    echo ""
+
+    # ------------------------------------------------------------------
+    # 2. PIVOT MATRIX — tools × models
     # ------------------------------------------------------------------
     echo "## Model Assignment Matrix"
     echo ""
@@ -207,7 +443,7 @@ OUTPUT="$PROFILES_DIR/$PROFILE/model-map-ollama.md"
     echo ""
 
     # ------------------------------------------------------------------
-    # 2. MODEL CATEGORIES REFERENCE
+    # 3. MODEL CATEGORIES REFERENCE
     # ------------------------------------------------------------------
     echo "## Model Categories"
     echo ""
@@ -236,7 +472,7 @@ OUTPUT="$PROFILES_DIR/$PROFILE/model-map-ollama.md"
     echo ""
 
     # ------------------------------------------------------------------
-    # 3. OPENROUTER CLOUD MODELS
+    # 4. OPENROUTER CLOUD MODELS
     # ------------------------------------------------------------------
     if [[ ${#OPENROUTER_MODELS[@]} -gt 0 ]]; then
         echo "## OpenRouter (cloud models)"

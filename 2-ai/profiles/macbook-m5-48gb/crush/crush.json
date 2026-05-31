@@ -20,8 +20,8 @@
           "supports_attachments": false
         },
         {
-          "id": "qwen3.5-27b:q8",
-          "name": "Qwen 3.5 27B (WRIT, Q8)",
+          "id": "qwen3.5-27b:q4",
+          "name": "Qwen 3.5 27B (WRIT, Q4)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
