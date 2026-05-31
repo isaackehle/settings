@@ -5,7 +5,7 @@
         "primary": "qwen3:14b",
         "fast": "qwen3:4b",
         "reasoning": "deepseek-r1-tools:8b",
-        "opus": "qwen3.5-27b:q5"
+        "opus": "qwen3.5-27b:q4"
       },
       "models": [
         "codestral:22b",
@@ -18,10 +18,10 @@
         "qwen3:4b",
         "qwen3:14b",
         "qwen3:14b-40k",
-        "qwen3.5-27b:q5",
-        "qwen3.5-27b:q5-8k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-128k"
+        "qwen3.5-27b:q4",
+        "qwen3.5-27b:q4-8k",
+        "qwen3.5-27b:q4-32k",
+        "qwen3.5-27b:q4-128k"
       ]
     },
     "opencode": {
@@ -36,10 +36,10 @@
         "qwen3:4b",
         "qwen3:14b",
         "qwen3:14b-40k",
-        "qwen3.5-27b:q5",
-        "qwen3.5-27b:q5-8k",
-        "qwen3.5-27b:q5-32k",
-        "qwen3.5-27b:q5-128k"
+        "qwen3.5-27b:q4",
+        "qwen3.5-27b:q4-8k",
+        "qwen3.5-27b:q4-32k",
+        "qwen3.5-27b:q4-128k"
       ]
     }
   },

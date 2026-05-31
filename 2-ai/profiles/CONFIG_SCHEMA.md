@@ -31,59 +31,112 @@ Every profile has one `models.sh` that defines all model assignments.
 
 ### Variable Reference
 
-| Variable               | Type        | Format            | Used By                                                |
-| ---------------------- | ----------- | ----------------- | ------------------------------------------------------ |
-| `OPENROUTER_MODELS`    | array       | `org/model`       | continue, grok, opencode (openrouter provider blocks)  |
-| `OLLAMA_MODELS`        | array       | `model:tag`       | ollama/config, continue, crush, gemini, grok, opencode |
-| `OPENCODE_AGENTS`      | assoc array | key → `model:tag` | opencode                                               |
-| `CONTINUE_ROLES`       | assoc array | key → `model:tag` | continue                                               |
-| `CLAUDE_CODE`          | assoc array | key → `model:tag` | claude/settings.json, ollama/config.json               |
-| `CLINE_MODEL`          | scalar      | `model:tag`       | cline/settings.jsonc (reference only)                  |
-| `CLINE_MODEL_CLOUD`    | scalar      | `model:cloud`     | cline/settings.jsonc (reference only)                  |
-| `ZOOCODE_MODEL`        | scalar      | `model:tag`       | zoocode/settings.jsonc (reference only)                |
-| `ROOCODE_MODEL_CLOUD`  | scalar      | `model:cloud`     | roocode/settings.jsonc (reference only)                |
-| `ROOCODE_MODE_*`       | scalar      | `model:tag`       | roocode/settings.jsonc per-mode config                 |
-| `KILOCODE_MODEL`       | scalar      | `model:tag`       | kilocode/settings.jsonc (reference only)               |
-| `KILOCODE_MODEL_CLOUD` | scalar      | `model:cloud`     | kilocode/settings.jsonc (reference only)               |
-| `AIDER_MODEL`          | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
-| `AIDER_WEAK_MODEL`     | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
-| `AIDER_EDITOR_MODEL`   | scalar      | `model:tag`       | aider/aider.conf.yml                                   |
-| `ZED_MODEL`            | scalar      | `model:tag`       | zed/settings.json                                      |
-| `CURSOR_MODEL`         | scalar      | `model:tag`       | cursor/settings.jsonc (reference only)                 |
-| `CURSOR_MODEL_CLOUD`   | scalar      | `model:cloud`     | cursor/settings.jsonc (reference only)                 |
+| Variable              | Type        | Format                   | Used By                                               |
+| --------------------- | ----------- | ------------------------ | ----------------------------------------------------- |
+| `LOCAL_MODEL_NAMES`   | array       | `model:tag`              | canonical local aliases for GGUF materialization      |
+| `GGUF_SOURCES`        | assoc array | alias → HuggingFace repo | local artifact download / sync                        |
+| `GGUF_QUANTS`         | assoc array | alias → quant label      | Ollama registration, local variant naming             |
+| `GGUF_FILENAMES`      | assoc array | alias → `.gguf` filename | local artifact path resolution                        |
+| `GGUF_FAMILIES`       | assoc array | alias → family           | family-specific registration/runtime defaults         |
+| `GGUF_VARIANTS`       | assoc array | alias → variant specs    | concurrent quant variants / extra local aliases       |
+| `OLLAMA_CLOUD_MODELS` | array       | `model:cloud`            | reference list of cloud-only Ollama manifests         |
+| `OPENROUTER_MODELS`   | array       | `org/model`              | continue, grok, opencode (openrouter provider blocks) |
+| `OPENCODE_AGENTS`     | assoc array | key → `model:tag`        | opencode                                              |
+| `CONTINUE_ROLES`      | assoc array | key → `model:tag`        | continue                                              |
+| `CLAUDE_CODE`         | assoc array | key → `model:tag`        | claude/settings.json, ollama/config.json              |
+| `CLINE_MODELS`        | assoc array | key → `model:tag/cloud`  | cline/settings.jsonc (reference only)                 |
+| `ZOOCODE_MODELS`      | assoc array | key → `model:tag/cloud`  | zoocode/settings.jsonc (reference only)               |
+| `ROOCODE_MODEL_CLOUD` | scalar      | `model:cloud`            | roocode/settings.jsonc (reference only)               |
+| `ROOCODE_MODE_*`      | scalar      | `model:tag`              | roocode/settings.jsonc per-mode config                |
+| `KILOCODE_MODELS`     | assoc array | key → `model:tag/cloud`  | kilocode/settings.jsonc (reference only)              |
+| `AIDER_MODELS`        | assoc array | key → `model:tag`        | aider/aider.conf.yml                                  |
+| `ZED_MODELS`          | assoc array | key → `model:tag`        | zed/settings.json                                     |
+| `CURSOR_MODELS`       | assoc array | key → `model:tag/cloud`  | cursor/settings.jsonc (reference only)                |
+
+### Validation Example
+
+Use associative maps for tool-specific assignments, with stable keys per tool.
+Keys should sort alphabetically within each map, and values must be valid local aliases or cloud aliases already defined elsewhere in `models.sh`.
+
+```bash
+declare -A AIDER_MODELS=(
+  [editor]="codestral:22b"
+  [model]="qwen3-coder-30b-a3b:q5"
+  [weak]="qwen3:4b"
+)
+
+declare -A CLINE_MODELS=(
+  [cloud]="kimi-k2.6"
+  [model]="qwen3-coder-30b-a3b:q5"
+)
+
+declare -A CURSOR_MODELS=(
+  [cloud]="kimi-k2.6"
+  [model]="qwen3-coder-30b-a3b:q5"
+)
+
+declare -A KILOCODE_MODELS=(
+  [cloud]="kimi-k2.6"
+  [model]="qwen3-coder-30b-a3b:q5"
+)
+
+declare -A ZED_MODELS=(
+  [model]="qwen3.5-27b:q5"
+)
+
+declare -A ZOOCODE_MODELS=(
+  [architect]="qwen3-coder-30b-a3b:q5"
+  [cloud]="kimi-k2.6"
+  [code]="qwen3-coder-30b-a3b:q5"
+  [debug]="deepseek-r1-tools:8b"
+  [model]="qwen3-coder-30b-a3b:q5"
+)
+```
+
+Validation checklist:
+
+- Every map name must match the canonical schema names exactly.
+- Every referenced alias must resolve through `LOCAL_MODEL_NAMES`, derived GGUF aliases, `OPENROUTER_MODELS`, or `OLLAMA_CLOUD_MODELS`.
+- Use `model:tag` for local Ollama aliases and `model:cloud` or provider-specific names only where the schema allows cloud entries.
+- Do not mix legacy scalar variables like `AIDER_MODEL` or `CLINE_MODEL` with the new associative map form in the same profile.
 
 ### Naming Convention
 
-All model names in `models.sh` use **plain Ollama format** (`model:tag`).
+All local model aliases in `models.sh` use **plain Ollama format** (`model:tag`).
+GGUF metadata maps (`GGUF_SOURCES`, `GGUF_QUANTS`, `GGUF_FILENAMES`, etc.)
+materialize local artifacts and then register those aliases in Ollama.
 No more LiteLLM format (hyphens). No more `:latest` appending in configs —
 bare names like `qwen3:14b` resolve to defaults natively.
 
-| Target          | Format                                   | Example                         |
-| --------------- | ---------------------------------------- | ------------------------------- |
-| Ollama          | `model:tag`                              | `qwen3-coder-30b-a3b:q5`        |
-| OpenRouter      | `org/model`                              | `anthropic/claude-sonnet-4-6`   |
-| OpenCode prefix | `ollama/model:tag` or `openrouter/org/m` | `ollama/qwen3-coder-30b-a3b:q5` |
+| Target               | Format                                   | Example                                     |
+| -------------------- | ---------------------------------------- | ------------------------------------------- |
+| Local alias / Ollama | `model:tag`                              | `qwen3-coder-30b-a3b:q5`                    |
+| GGUF source repo     | HuggingFace repo slug                    | `unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF` |
+| GGUF filename        | `.gguf` filename                         | `Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf`  |
+| OpenRouter           | `org/model`                              | `anthropic/claude-sonnet-4-6`               |
+| OpenCode prefix      | `ollama/model:tag` or `openrouter/org/m` | `ollama/qwen3-coder-30b-a3b:q5`             |
 
 ### Rules
 
-1. **Plain Ollama names only** — `OLLAMA_MODELS` entries use standard Ollama format.
-2. **No `:latest`** — bare model names resolve to default tags automatically.
-3. **All references must resolve** — every model name in every config file must exist in `OLLAMA_MODELS` or `OPENROUTER_MODELS`.
-4. **Align comments** — right-side comments in `models.sh` groups must be column-aligned within each section.
-5. **Markdown pull commands use standard names** — in `.md` files, use names from ollama.com (e.g., `ollama pull qwen3:14b`).
+1. **Plain Ollama alias names only** — local aliases and downstream tool assignments use standard `model:tag` names.
+2. **GGUF metadata is the local source of truth** — `LOCAL_MODEL_NAMES` plus the `GGUF_*` maps define what gets materialized and registered in Ollama.
+3. **No `:latest`** — bare model names resolve to default tags automatically.
+4. **All references must resolve** — every local model reference in config must exist in `LOCAL_MODEL_NAMES`, a derived `GGUF_VARIANTS` alias, or another explicitly assigned alias; cloud references must exist in `OPENROUTER_MODELS` or `OLLAMA_CLOUD_MODELS`.
+5. **Align comments** — right-side comments in `models.sh` groups must be column-aligned within each section.
+6. **Markdown pull commands should match the actual fetch path** — use HuggingFace repo/file references for GGUF downloads and Ollama alias names for local runtime examples.
 
 ### Context Window Variants
 
-Create via Ollama Modelfiles with `PARAMETER num_ctx`:
+Create via Ollama Modelfiles with `PARAMETER num_ctx`, typically after the base alias has been registered from a local GGUF:
 
 ```shell
-# Create a 32k context variant of the base model
+# Create a 32k context variant of an already-registered local alias
 echo 'FROM qwen3-coder-30b-a3b:q5
 PARAMETER num_ctx 32768' > /tmp/Modelfile.32k
 ollama create qwen3-coder-30b-a3b:q5-32k -f /tmp/Modelfile.32k
 ```
 
-These aliases share the same underlying weights, so they don't consume additional disk space.
+These aliases share the same underlying registered model, so they don't consume additional disk space for a second GGUF copy.
 
 ---
 
@@ -300,9 +353,9 @@ Kilo Code (VS Code extension). Same as Cline/RooCode — `:11434/v1` endpoint.
 Aider CLI — uses Ollama's native chat API.
 
 ```yaml
-model: ollama_chat/<ollama-model> # AIDER_MODEL
-weak-model: ollama_chat/<ollama-model> # AIDER_WEAK_MODEL
-editor-model: ollama_chat/<ollama-model> # AIDER_EDITOR_MODEL
+model: ollama_chat/<ollama-model> # AIDER_MODELS[model]
+weak-model: ollama_chat/<ollama-model> # AIDER_MODELS[weak]
+editor-model: ollama_chat/<ollama-model> # AIDER_MODELS[editor]
 ```
 
 **Gotchas:**

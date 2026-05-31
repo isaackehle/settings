@@ -12,35 +12,20 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "codestral:22b": { "name": "Codestral 22B (DIFF)" },
-        "codestral:22b-32k": { "name": "Codestral 22B (DIFF, 32K)" },
-        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (REAS, TOOL)" },
-        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 32B (REAS, TOOL, 128K)" },
-        "gemma4:31b": { "name": "Gemma 4 31B (REAS)" },
-        "gemma4:31b-8k": { "name": "Gemma 4 31B (REAS, 8K)" },
-        "gemma4:31b-32k": { "name": "Gemma 4 31B (REAS, 32K)" },
-        "gemma4:31b-128k": { "name": "Gemma 4 31B (REAS, 128K)" },
-        "gemma4:31b-256k": { "name": "Gemma 4 31B (REAS, 256K)" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (EMBD)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (FILL)" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (FILL)" },
-        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" },
-        "qwen3:4b-8k": { "name": "Qwen 3 4B (PLAN, 8K)" },
-        "qwen3:4b-128k": { "name": "Qwen 3 4B (PLAN, 128K)" },
-        "qwen3.5-27b:q5": { "name": "Qwen 3.5 27B (WRIT, Q5)" },
-        "qwen3.5-27b:q5-8k": { "name": "Qwen 3.5 27B (WRIT, Q5 8K)" },
-        "qwen3.5-27b:q5-32k": { "name": "Qwen 3.5 27B (WRIT, Q5 32K)" },
-        "qwen3.5-27b:q5-128k": { "name": "Qwen 3.5 27B (WRIT, Q5 128K)" },
-        "qwen3.5-27b:q5-256k": { "name": "Qwen 3.5 27B (WRIT, Q5 256K)" },
-        "qwen3.5-27b:q8": { "name": "Qwen 3.5 27B (WRIT, Q8)" },
-        "qwen3.6-35b:q4": { "name": "Qwen 3.6 35B A3B (CODE, Q4)" },
-        "qwen3.6-35b:q4-8k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 8K)" },
-        "qwen3.6-35b:q4-128k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 128K)" },
-        "qwen3.6-35b:q4-256k": { "name": "Qwen 3.6 35B A3B (CODE, Q4 256K)" },
-        "qwen3-coder-30b-a3b:q5": { "name": "Qwen3 Coder 30B A3B (CODE, Q5)" },
-        "qwen3-coder-30b-a3b:q5-8k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 8K)" },
-        "qwen3-coder-30b-a3b:q5-32k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 32K)" },
-        "qwen3-coder-30b-a3b:q5-128k": { "name": "Qwen3 Coder 30B A3B (CODE, Q5 128K)" }
+        "qwen3.6-35b:opus4.6": { "name": "Heavy — 35B (Claude Opus distill)" },
+        "qwen3-coder-30b-a3b:q5": { "name": "Coder — 30B" },
+        "qwen3-coder-30b-a3b:q5-128k": { "name": "Coder — 30B (+long)" },
+        "qwen3.5-27b:q4": { "name": "Writing / General — 27B (Claude Opus distill)" },
+        "qwen3.5-27b:q4-128k": { "name": "Writing / General — 27B (+long)" },
+        "deepseek-r1:32b": { "name": "Reasoning — DeepSeek R1 32B" },
+        "qwen3:4b": { "name": "Fast / Plan — 4B" },
+        "nomic-embed-text": { "name": "Embed" },
+        "qwen3.5-27b:gemini3.1": { "name": "Gemini 3.1 distill — 27B" },
+        "qwen3.6-27b:opus-sonnet": { "name": "Claude Opus+Sonnet distill — 27B" },
+        "qwen3-14b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 14B" },
+        "qwen3-8b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 8B" },
+        "qwen2.5-7b:multi": { "name": "Multi-distill Claude+Gemini+GPT — 7B" },
+        "qwen3.5:4b": { "name": "Qwen3.5 — 4B" }
       }
     },
     "openrouter": {
@@ -51,152 +36,14 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (CLD)" },
+        "anthropic/claude-opus-4-6":   { "name": "Claude Opus 4.6 (CLD)" },
         "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (CLD)" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (CLD)" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (REAS, CLD)" },
-        "openai/gpt-4o": { "name": "GPT-4o (CLD)" }
+        "google/gemini-2.5-flash":     { "name": "Gemini 2.5 Flash (CLD)" },
+        "moonshot/kimi-k2.6":          { "name": "Kimi K2.6 (REAS, CLD)" },
+        "openai/gpt-4o":               { "name": "GPT-4o (CLD)" }
       }
     }
   },
-  "agent": {
-    "code": {
-      "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "qwen3-coder-30b-a3b:q5-32k",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
-    },
-    "ask": {
-      "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "qwen3-coder-30b-a3b:q5-32k",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only Q&A agent. Answer questions about the codebase clearly and concisely. Explain logic, trace flows, and provide context. Do not edit files or run commands."
-    },
-    "debug": {
-      "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "deepseek-r1-tools:32b-128k",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a debugging agent. Diagnose errors, trace bugs through the codebase, and suggest targeted fixes. Read logs, inspect code, and propose minimal, precise solutions. Explain root causes before suggesting changes."
-    },
-    "plan": {
-      "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.25,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
-    },
-    "think": {
-      "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "deepseek-r1-tools:32b-128k",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands."
-    },
-    "write": {
-      "description": "Writing agent — docs, summaries, cover letters, polished prose.",
-      "model": "qwen3.6-35b:q4",
-      "mode": "primary",
-      "temperature": 0.65,
-      "permission": {
-        "bash": "deny",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication."
-    },
-    "summary": {
-      "description": "Commit message and session summary agent.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "allow",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
-    },
-    "description": {
-      "description": "MR/PR description agent — longer summaries with context.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate detailed MR/PR descriptions. Include: summary of changes, motivation/context, key files changed, testing notes. Use markdown formatting with headers, bullet points, and code snippets where helpful. Be concise but thorough — aim for 2-4 paragraphs."
-    }
-  },
-  "default_agent": "code",
-  "permission": {
-    "bash": "ask",
-    "edit": "ask",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "read": "allow",
-    "webfetch": "allow"
-  }
+  "permission": { "bash": "ask", "edit": "ask", "glob": "allow", "grep": "allow",
+                  "list": "allow", "read": "allow", "webfetch": "allow" }
 }

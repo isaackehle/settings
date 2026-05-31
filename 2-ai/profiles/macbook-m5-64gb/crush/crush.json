@@ -8,8 +8,8 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3.6-35b:q4",
-          "name": "Qwen 3.6 35B A3B (CODE, Q4)",
+          "id": "qwen3-coder-next-80b:q4",
+          "name": "Qwen3 Coder Next 80B (CODE, Q4)",
           "context_window": 131072,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -22,18 +22,6 @@
         {
           "id": "qwen3.5-27b:q8",
           "name": "Qwen 3.5 27B (WRIT, Q8)",
-          "context_window": 32768,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
-        },
-        {
-          "id": "deepseek-r1-tools:32b",
-          "name": "DeepSeek R1 32B (REAS, TOOL)",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,

@@ -144,13 +144,13 @@ shared, with the capability code distinguishing them:
 These models route inference to remote servers through Ollama's cloud integration.
 Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 
-| Model ID                 | Display Name                         | Params | Context | Capabilities            |
-| ------------------------ | ------------------------------------ | ------ | ------- | ----------------------- |
-| `qwen3.5:cloud`          | Qwen 3.5 Cloud (WRIT, TOOL, CLD)     | 397B   | 262K    | thinking, tools, vision |
-| `qwen3-coder:480b-cloud` | Qwen3 Coder 480B Cloud (CODE, CLD)   | 480B   | 262K    | tools                   |
-| `qwen3-coder-next:cloud` | Qwen3 Coder Next Cloud (CODE, CLD)   | 80B    | 262K    | tools                   |
-| `gemma4:31b-cloud`       | Gemma 4 31B Cloud (REAS, TOOL, CLD)  | 33B    | 262K    | thinking, tools, vision |
-| `gpt-oss:120b-cloud`     | GPT-OSS 120B Cloud (REAS, TOOL, CLD) | 117B   | 131K    | thinking, tools         |
+| Model ID                     | Display Name                         | Params | Context | Capabilities            |
+| ---------------------------- | ------------------------------------ | ------ | ------- | ----------------------- |
+| `qwen3.5:397b-cloud`         | Qwen 3.5 Cloud (WRIT, TOOL, CLD)     | 397B   | 262K    | thinking, tools, vision |
+| `qwen3-coder:480b-cloud`     | Qwen3 Coder 480B Cloud (CODE, CLD)   | 480B   | 262K    | tools                   |
+| `qwen3-coder-next:80b-cloud` | Qwen3 Coder Next Cloud (CODE, CLD)   | 80B    | 262K    | tools                   |
+| `gemma4:31b-cloud`           | Gemma 4 31B Cloud (REAS, TOOL, CLD)  | 33B    | 262K    | thinking, tools, vision |
+| `gpt-oss:120b-cloud`         | GPT-OSS 120B Cloud (REAS, TOOL, CLD) | 117B   | 131K    | thinking, tools         |
 
 ## Model Identity Notes
 

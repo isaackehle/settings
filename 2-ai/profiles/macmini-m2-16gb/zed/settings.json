@@ -1,38 +1,45 @@
 {
-  "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from Ollama's /v1/models endpoint automatically",
-
+  "_note": "MERGE INTO: ~/.config/zed/settings.json — Mac Mini M2 16GB",
   "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "qwen3:14b"
-    },
+    "default_model": { "provider": "openai", "model": "qwen3:14b" },
     "version": "2"
   },
-
   "language_models": {
     "openai": {
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
-          "name": "deepseek-r1-tools:8b-128k",
-          "display_name": "DeepSeek R1 8B (REAS, TOOL, 128K)",
+          "name": "qwen3:14b",
+          "display_name": "Heavy / General — 14B",
+          "max_tokens": 131072
+        },
+        {
+          "name": "qwen3:14b-128k",
+          "display_name": "Heavy / General — 14B (+long)",
+          "max_tokens": 131072
+        },
+        {
+          "name": "qwen2.5-coder:7b",
+          "display_name": "Coder — 7B",
           "max_tokens": 32768
         },
         {
-          "name": "qwen3:14b-40k",
-          "display_name": "Qwen 3 14B (CODE, 40K)",
-          "max_tokens": 40960
+          "name": "deepseek-r1:7b",
+          "display_name": "Reasoning — DeepSeek R1 7B",
+          "max_tokens": 65536
         },
         {
-          "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi K2.6 (REAS, CLD)",
-          "max_tokens": 131072
+          "name": "qwen3:4b",
+          "display_name": "Fast / Plan — 4B",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3-8b:sonnet4.5",
+          "display_name": "Claude Sonnet 4.5 distill — 8B",
+          "max_tokens": 40960
         }
       ]
     }
   },
-
-  "features": {
-    "inline_completion_provider": "none"
-  }
+  "features": { "inline_completion_provider": "none" }
 }

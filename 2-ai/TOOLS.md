@@ -8,22 +8,63 @@ Comprehensive reference for all AI tools in this setup. Install scripts live in 
 
 ## Contents
 
-- [Infrastructure](#infrastructure)
-  - [Ollama](#ollama) · [oMLX](#omlx) · [OpenWebUI](#openwebui) · [Olol](#olol) · [Exo](#exo)
-- [Local Runtimes](#local-runtimes)
-  - [LM Studio](#lm-studio) · [GPT4All](#gpt4all) · [Llama.cpp](#llamacpp) · [vLLM](#vllm)
-- [Terminal Coding Agents](#terminal-coding-agents)
-  - [Claude Code](#claude-code) · [OpenCode](#opencode) · [Crush](#crush) · [Aider](#aider) · [Gemini CLI](#gemini-cli) · [Grok CLI](#grok-cli) · [Open Interpreter](#open-interpreter) · [OpenHands](#openhands) · [OpenShell](#openshell) · [Codex](#codex)
-- [VS Code Extensions](#vs-code-extensions)
-  - [VS Code](#vs-code) · [Cline](#cline) · [Continue](#continue) · [GitHub Copilot](#github-copilot) · [Kilo Code](#kilo-code) · [Windsurf](#windsurf)
-- [Self-Hosted Assistants](#self-hosted-assistants)
-  - [AnythingLLM](#anythingllm) · [Tabby](#tabby)
-- [APIs & Services](#apis--services)
-  - [OpenRouter](#openrouter) · [Groq](#groq) · [Perplexity](#perplexity) · [Hugging Face](#hugging-face)
-- [Image Generation](#image-generation)
-  - [Automatic1111](#automatic1111) · [Draw Things](#draw-things)
-- [Frameworks & Libraries](#frameworks--libraries)
-  - [LangChain](#langchain) · [LlamaIndex](#llamaindex) · [PyTorch](#pytorch)
+- [AI Tools Reference](#ai-tools-reference)
+  - [Contents](#contents)
+  - [Infrastructure](#infrastructure)
+    - [Ollama](#ollama)
+    - [oMLX](#omlx)
+  - [Local LLM Server Architectures](#local-llm-server-architectures)
+    - [Architecture Options](#architecture-options)
+    - [Recommended: Ollama Direct](#recommended-ollama-direct)
+    - [Starting the Stack](#starting-the-stack)
+    - [OpenWebUI](#openwebui)
+    - [Olol](#olol)
+    - [Exo](#exo)
+  - [Local Runtimes](#local-runtimes)
+    - [LM Studio](#lm-studio)
+    - [GPT4All](#gpt4all)
+    - [Llama.cpp](#llamacpp)
+    - [vLLM](#vllm)
+  - [Terminal Coding Agents](#terminal-coding-agents)
+    - [Claude Code](#claude-code)
+    - [OpenCode](#opencode)
+    - [Crush](#crush)
+    - [Aider](#aider)
+    - [Gemini CLI](#gemini-cli)
+    - [Grok CLI](#grok-cli)
+    - [Open Interpreter](#open-interpreter)
+    - [OpenHands](#openhands)
+    - [OpenShell](#openshell)
+    - [Codex](#codex)
+  - [VS Code Extensions](#vs-code-extensions)
+    - [VS Code](#vs-code)
+    - [Cline](#cline)
+    - [Continue](#continue)
+    - [GitHub Copilot](#github-copilot)
+    - [Kilo Code](#kilo-code)
+      - [Config Structure](#config-structure)
+      - [Model per Mode (agents)](#model-per-mode-agents)
+      - [Agent Permissions](#agent-permissions)
+      - [Model Selection by Agent](#model-selection-by-agent)
+      - [Memory-Based Guidelines](#memory-based-guidelines)
+      - [Common Issues to Check](#common-issues-to-check)
+      - [Validation](#validation)
+    - [Windsurf](#windsurf)
+  - [Self-Hosted Assistants](#self-hosted-assistants)
+    - [AnythingLLM](#anythingllm)
+    - [Tabby](#tabby)
+  - [APIs \& Services](#apis--services)
+    - [OpenRouter](#openrouter)
+    - [Groq](#groq)
+    - [Perplexity](#perplexity)
+    - [Hugging Face](#hugging-face)
+  - [Image Generation](#image-generation)
+    - [Automatic1111](#automatic1111)
+    - [Draw Things](#draw-things)
+  - [Frameworks \& Libraries](#frameworks--libraries)
+    - [LangChain](#langchain)
+    - [LlamaIndex](#llamaindex)
+    - [PyTorch](#pytorch)
 
 ---
 
@@ -35,18 +76,13 @@ Local LLM manager for Apple Silicon. Handles model downloads and serves an OpenA
 
 ```shell
 brew install ollama
-```
-
-```shell
-# Start server
 brew services start ollama
-
-# Pull a model
-ollama pull qwen3-14b:q5-40k
-
-# List installed models
-ollama list
+ollama list   # list installed models
 ```
+
+**Model registration** — GGUFs are downloaded to `/usr/local/lib/llama-models/` via the `hf` CLI, then registered in Ollama using `FROM hf.co/<repo>:<filename>` in the Modelfile. This is critical: using a bare local GGUF path (`FROM /path/to/file.gguf`) causes Ollama to drop the embedded chat template and lose tool-calling support. The `FROM hf.co/...` reference causes Ollama to fetch its own metadata so templates and capabilities are correctly set.
+
+Registration is handled automatically by `setup_ai.sh` → Install/update local models.
 
 All tools route through **Ollama** (`:11434/v1` OpenAI-compatible endpoint) directly. Cloud models via OpenRouter provider blocks natively in each tool — no proxy required.
 
@@ -96,17 +132,17 @@ Choose the architecture that matches your setup. All configurations support hybr
 
 ### Architecture Options
 
-| Architecture                     | Components                                | Best For                              |
-| -------------------------------- | ----------------------------------------- | ------------------------------------- |
-| **Ollama only**                  | Ollama `:11434`                           | Default — direct, no proxy            |
-| **oMLX**                         | oMLX `:8000`                              | MLX-native, menu bar, tiered cache     |
-| **Ollama + OpenWebUI**           | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans                    |
-| **LMStudio**                     | LMStudio `:1234`                          | Prefer GUI over CLI                   |
-| **LMStudio + OpenRouter**        | LMStudio + cloud models                   | GUI-first, cloud fallback             |
-| **llama.cpp server**             | llama-server `:8080`                      | Custom quantization, max performance  |
-| **vLLM**                         | vLLM `:8000`                              | Linux server, NVIDIA GPU              |
-| **Olol (load balancer)**         | Olol `:11435` + multiple Ollama instances | Multi-machine inference               |
-| **Exo (distributed)**            | Exo `:52415`                              | Split model across machines           |
+| Architecture              | Components                                | Best For                             |
+| ------------------------- | ----------------------------------------- | ------------------------------------ |
+| **Ollama only**           | Ollama `:11434`                           | Default — direct, no proxy           |
+| **oMLX**                  | oMLX `:8000`                              | MLX-native, menu bar, tiered cache   |
+| **Ollama + OpenWebUI**    | Ollama `:11434` + OpenWebUI `:8080`       | Chat UI for humans                   |
+| **LMStudio**              | LMStudio `:1234`                          | Prefer GUI over CLI                  |
+| **LMStudio + OpenRouter** | LMStudio + cloud models                   | GUI-first, cloud fallback            |
+| **llama.cpp server**      | llama-server `:8080`                      | Custom quantization, max performance |
+| **vLLM**                  | vLLM `:8000`                              | Linux server, NVIDIA GPU             |
+| **Olol (load balancer)**  | Olol `:11435` + multiple Ollama instances | Multi-machine inference              |
+| **Exo (distributed)**     | Exo `:52415`                              | Split model across machines          |
 
 ### Recommended: Ollama Direct
 
@@ -117,12 +153,12 @@ Choose the architecture that matches your setup. All configurations support hybr
 │               http://localhost:11434/v1                 │
 │                            ↓                            │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │                    Ollama                         │   │
+│  │                    Ollama                        │   │
 │  │  - Model serving                  ───────────    │   │
 │  │  - OpenAI-compatible API              │   │      │   │
-│  │  - Cloud models via tool-native      │   │      │   │
-│  │    OpenRouter provider blocks        │   │      │   │
-│  └──────────────────────────────────────┴───┴──────┘   │
+│  │  - Cloud models via tool-native       │   │      │   │
+│  │    OpenRouter provider blocks         │   │      │   │
+│  └───────────────────────────────────────┴───┴──────┘   │
 │                            ↓                            │
 │                   ┌──────────────────┐                  │
 │                   │ OpenWebUI        │                  │
@@ -273,20 +309,39 @@ Start: Open from Applications.
 
 ### Llama.cpp
 
-Apple Silicon-optimized inference library for GGUF models. Provides a local HTTP server with an OpenAI-compatible API.
+Apple Silicon-optimized inference library for GGUF models. Reads GGUF files directly — chat templates (including tool calling) are taken from the GGUF metadata with no conversion step, so tool support works natively.
+
+Build from source at `~/code/llama.cpp` for M-series optimizations:
 
 ```shell
-brew install llama.cpp
+git clone https://github.com/ggerganov/llama.cpp ~/code/llama.cpp
+cd ~/code/llama.cpp
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_METAL=ON   -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=Apple   -DCMAKE_C_FLAGS="-march=native" -DCMAKE_CXX_FLAGS="-march=native"
+cmake --build build --config Release -j$(sysctl -n hw.logicalcpu)
 ```
+
+Use `2-ai/llama-cpp.sh` to serve models by role — each role has a dedicated port:
+
+| Role      | Port | Profile model (64GB)          |
+|-----------|------|-------------------------------|
+| fast      | 8011 | qwen3:4b                      |
+| general   | 8012 | qwen3.5-27b:q4                |
+| coder     | 8013 | qwen3-coder-30b-a3b:q6        |
+| heavy     | 8014 | qwen3-coder-next-80b:q4       |
+| reasoning | 8015 | deepseek-r1:32b               |
 
 ```shell
-# Start server
-llama-server --model path/to/model.gguf --port 8080
+# Serve a role (uses GGUF directly from $(GGUF_DIR))
+MACHINE_PROFILE=macbook-m5-64gb 2-ai/llama-cpp.sh serve heavy
+MACHINE_PROFILE=macbook-m5-64gb 2-ai/llama-cpp.sh serve coder
 
-# API at http://localhost:8080/v1
+# Inspect what would be served
+MACHINE_PROFILE=macbook-m5-64gb 2-ai/llama-cpp.sh inspect heavy
 ```
 
-- [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) · `2-ai/llama.cpp/llama_cpp.sh`
+Tool configs (OpenCode, KiloCode, etc.) point at Ollama by default. llama.cpp ports are listed as additional providers in each tool's config for when native tool calling is preferred.
+
+- [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) · `2-ai/llama-cpp.sh`
 
 ---
 
@@ -344,7 +399,18 @@ brew install anomalyco/tap/opencode
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config/opencode/opencode.jsonc`. All models route through Ollama on `:11434`.
+Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config/opencode/opencode.jsonc`. Single config file per profile — Ollama-only, no variants needed.
+
+Agents and their assigned models (64GB profile):
+
+| Agent    | Model                        | Purpose                        |
+|----------|------------------------------|--------------------------------|
+| code     | qwen3-coder-next-80b:q4      | Implementation, refactoring    |
+| local    | qwen3-coder-30b-a3b:q6       | Offline/sensitive work         |
+| think    | deepseek-r1:32b              | Reasoning, tradeoffs           |
+| write    | qwen3.5-27b:q4               | Docs, summaries, prose         |
+| research | qwen3-coder-30b-a3b:q6       | Evidence gathering             |
+| plan     | qwen3:4b                     | Fast planning, routing         |
 
 ```shell
 opencode          # interactive TUI
@@ -642,11 +708,11 @@ code --install-extension kilohealth.kilo-code
 
 #### Config Structure
 
-| Field                | Purpose                      | Example                        |
-| -------------------- | ---------------------------- | ------------------------------ |
-| `model`              | Default model (fallback)     | `qwen3-coder-30b-a3b:q5`      |
-| `small_model`        | Lightweight tasks, summaries | `qwen2.5-coder:7b`            |
-| `autocomplete_model` | Inline code completion       | `qwen2.5-coder:1.5b`          |
+| Field                | Purpose                      | Example                  |
+| -------------------- | ---------------------------- | ------------------------ |
+| `model`              | Default model (fallback)     | `qwen3-coder-30b-a3b:q5` |
+| `small_model`        | Lightweight tasks, summaries | `qwen2.5-coder:7b`       |
+| `autocomplete_model` | Inline code completion       | `qwen2.5-coder:1.5b`     |
 
 #### Model per Mode (agents)
 
@@ -684,12 +750,14 @@ Each agent has its own permission set:
 
 #### Memory-Based Guidelines
 
-| RAM      | Default Model              | Write Model            | Summary Model        |
-| -------- | -------------------------- | ---------------------- | -------------------- |
-| **64GB** | `qwen3-coder-next-80b:q4`  | `qwen3.6-35b:q4`       | `qwen2.5-coder:7b`   |
-| **48GB** | `qwen3-coder-30b-a3b:q5`   | `qwen3.5-27b:q8`       | `qwen3:4b`           |
-| **32GB** | `qwen3:14b`                | `qwen3.5-27b:q5`       | `qwen3:4b`           |
-| **16GB** | `qwen3:14b`                | `qwen3:14b`            | `qwen3:4b`           |
+| RAM      | Default Model             | Write Model        | Fast/Plan  |
+| -------- | ------------------------- | ------------------ | ---------- |
+| **64GB** | `qwen3-coder-next-80b:q4` | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **48GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **32GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **16GB** | `qwen3:14b`               | `qwen2.5-coder:7b` | `qwen3:4b` |
+
+**Config:** Single `kilo.jsonc` per profile, Ollama-only. Model list grouped by purpose (role), not by context window size. Each role has a base alias (default context) and one `+long` variant for large sessions.
 
 #### Common Issues to Check
 
@@ -855,18 +923,21 @@ curl https://api.perplexity.ai/chat/completions \
 
 ### Hugging Face
 
-Hub for sharing models and datasets, with a CLI for downloading them locally.
+Hub for sharing models and datasets. GGUFs are downloaded to `/usr/local/lib/llama-models/` via the `hf` CLI (replaces the deprecated `huggingface-cli`).
 
 ```shell
-pip install -U "huggingface_hub[cli]"
-huggingface-cli login
+uv tool install "huggingface_hub[hf_xet,cli]"
+hf auth login   # get token at huggingface.co/settings/tokens
 ```
 
 ```shell
-huggingface-cli download meta-llama/Meta-Llama-3-8B
+# Download a specific GGUF file
+hf download Qwen/Qwen3-4B-GGUF Qwen3-4B-Q4_K_M.gguf --local-dir /usr/local/lib/llama-models/
 ```
 
-- [huggingface.co](https://huggingface.co) · [CLI docs](https://huggingface.co/docs/huggingface_hub/guides/cli) · `2-ai/huggingface/huggingface.sh`
+Model downloads are managed automatically by `setup_ai.sh` → Install/update local models, which reads `GGUF_SOURCES` and `GGUF_REMOTE_FILENAMES` from each profile's `models.sh`.
+
+- [huggingface.co](https://huggingface.co) · [CLI docs](https://huggingface.co/docs/huggingface_hub/guides/cli) · `2-ai/huggingface.sh`
 
 ---
 

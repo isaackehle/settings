@@ -69,11 +69,11 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen 3.5 27B (WRIT, Q5)'
+  - name: 'Qwen 3.5 27B (WRIT, Q4)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
-    model: 'qwen3.5-27b:q5'
+    model: 'qwen3.5-27b:q4'
     roles:
       - chat
 

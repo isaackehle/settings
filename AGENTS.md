@@ -287,6 +287,19 @@ All profiles get the **same infrastructure stack** (Ollama + OpenRouter + OpenWe
 
 ## Repo Memory
 
+### docs/ — AI Operational Runbooks
+
+The root-level `docs/` folder contains AI infrastructure best practices and
+runbooks. Always consult these when working on AI tooling, the llama-router,
+or the setup pipeline:
+
+- `docs/AI_SETUP_REPEATABLE_WORKFLOW.md` — Canonical runbook for the AI setup
+  pipeline: architecture, import flow, source-of-truth contract, profile sizing,
+  validation, and operating principles.
+- `docs/llama-server-three-backend-workflow.md` — Three-backend architecture
+  (llama-server router, Ollama, OpenRouter) with Open WebUI on port 8080.
+- `docs/llama-router-testing.md` — Router health verification commands.
+
 ### WORKSTREAM Files
 
 `WORKSTREAM_*.md` files at the repository root contain **TODO work items** for the repository. These are work-in-progress documents that track:

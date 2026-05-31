@@ -1,6 +1,6 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "qwen3:14b",
+  "model": "qwen2.5-coder:7b",
   "small_model": "qwen3:4b",
   "disabled_providers": [],
   "provider": {
@@ -12,23 +12,15 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "codestral:22b": { "name": "Codestral 22B (DIFF)" },
-        "codestral:22b-32k": { "name": "Codestral 22B (DIFF, 32K)" },
-        "deepseek-r1-tools:8b": { "name": "DeepSeek R1 8B (REAS, TOOL)" },
-        "deepseek-r1-tools:8b-128k": { "name": "DeepSeek R1 8B (REAS, TOOL, 128K)" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (EMBD)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (FILL)" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (FILL)" },
-        "qwen2.5-coder:7b-8k": { "name": "Qwen 2.5 Coder 7B (FILL, 8K)" },
-        "qwen2.5-coder:7b-32k": { "name": "Qwen 2.5 Coder 7B (FILL, 32K)" },
-        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" },
-        "qwen3:4b-8k": { "name": "Qwen 3 4B (PLAN, 8K)" },
-        "qwen3:4b-128k": { "name": "Qwen 3 4B (PLAN, 128K)" },
-        "qwen3:14b": { "name": "Qwen 3 14B (CODE)" },
-        "qwen3:14b-8k": { "name": "Qwen 3 14B (CODE, 8K)" },
-        "qwen3:14b-40k": { "name": "Qwen 3 14B (CODE, 40K)" },
-        "qwen3:14b-128k": { "name": "Qwen 3 14B (CODE, 128K)" },
-        "qwen3:14b-256k": { "name": "Qwen 3 14B (CODE, 256K)" }
+        "qwen3:14b": { "name": "Heavy / General — 14B" },
+        "qwen3:14b-128k": { "name": "Heavy / General — 14B (+long)" },
+        "qwen2.5-coder:7b": { "name": "Coder — 7B" },
+        "deepseek-r1:7b": { "name": "Reasoning — DeepSeek R1 7B" },
+        "qwen3:4b": { "name": "Fast / Plan — 4B" },
+        "nomic-embed-text": { "name": "Embed" },
+        "qwen3.5:4b": { "name": "Qwen3.5 — 4B" },
+        "qwen3-8b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 8B" },
+        "qwen2.5-7b:multi": { "name": "Multi-distill Claude+Gemini+GPT — 7B" }
       }
     },
     "openrouter": {
@@ -39,152 +31,14 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (CLD)" },
+        "anthropic/claude-opus-4-6":   { "name": "Claude Opus 4.6 (CLD)" },
         "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (CLD)" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (CLD)" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (REAS, CLD)" },
-        "openai/gpt-4o": { "name": "GPT-4o (CLD)" }
+        "google/gemini-2.5-flash":     { "name": "Gemini 2.5 Flash (CLD)" },
+        "moonshot/kimi-k2.6":          { "name": "Kimi K2.6 (REAS, CLD)" },
+        "openai/gpt-4o":               { "name": "GPT-4o (CLD)" }
       }
     }
   },
-  "agent": {
-    "code": {
-      "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "qwen3:14b",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
-    },
-    "ask": {
-      "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "qwen3:14b",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only Q&A agent. Answer questions about the codebase clearly and concisely. Explain logic, trace flows, and provide context. Do not edit files or run commands."
-    },
-    "debug": {
-      "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "deepseek-r1-tools:8b",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a debugging agent. Diagnose errors, trace bugs through the codebase, and suggest targeted fixes. Read logs, inspect code, and propose minimal, precise solutions. Explain root causes before suggesting changes."
-    },
-    "plan": {
-      "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.25,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
-    },
-    "think": {
-      "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "deepseek-r1-tools:8b",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands."
-    },
-    "write": {
-      "description": "Writing agent — docs, summaries, cover letters, polished prose.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.65,
-      "permission": {
-        "bash": "deny",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication."
-    },
-    "summary": {
-      "description": "Commit message and session summary agent.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "allow",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
-    },
-    "description": {
-      "description": "MR/PR description agent — longer summaries with context.",
-      "model": "qwen3:4b",
-      "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate detailed MR/PR descriptions. Include: summary of changes, motivation/context, key files changed, testing notes. Use markdown formatting with headers, bullet points, and code snippets where helpful. Be concise but thorough — aim for 2-4 paragraphs."
-    }
-  },
-  "default_agent": "code",
-  "permission": {
-    "bash": "ask",
-    "edit": "ask",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "read": "allow",
-    "webfetch": "allow"
-  }
+  "permission": { "bash": "ask", "edit": "ask", "glob": "allow", "grep": "allow",
+                  "list": "allow", "read": "allow", "webfetch": "allow" }
 }
