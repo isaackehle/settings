@@ -229,11 +229,11 @@ mkdir -p "$BACKUP_DIR"
 
 # Machine folder → folder name (Used for resolution in update functions)
 declare -A MACHINE_DIRS=(
-    ["macbook-m1-16gb"]="2-ai/profiles/macbook-m1-16gb"
-    ["macbook-m2-32gb"]="2-ai/profiles/macbook-m2-32gb"
-    ["macbook-m5-48gb"]="2-ai/profiles/macbook-m5-48gb"
-    ["macbook-m5-64gb"]="2-ai/profiles/macbook-m5-64gb"
-    ["macmini-m2-16gb"]="2-ai/profiles/macmini-m2-16gb"
+    ["macbook-m1-16gb"]="ai/profiles/macbook-m1-16gb"
+    ["macbook-m2-32gb"]="ai/profiles/macbook-m2-32gb"
+    ["macbook-m5-48gb"]="ai/profiles/macbook-m5-48gb"
+    ["macbook-m5-64gb"]="ai/profiles/macbook-m5-64gb"
+    ["macmini-m2-16gb"]="ai/profiles/macmini-m2-16gb"
 )
 
 
@@ -310,7 +310,7 @@ install_config_file() {
 # PROFILE DETECTION & MANAGEMENT
 # ============================================================================
 
-PROFILES_DIR="$SETTINGS_BASE/2-ai/profiles"
+PROFILES_DIR="$SETTINGS_BASE/ai/profiles"
 declare -A _PROFILE_CACHE
 
 _get_profile_numbers() {
@@ -571,7 +571,7 @@ update_models_sh() {
     local new_val="$4"
     local mode="$5"
 
-    local models_file="${SETTINGS_BASE}/2-ai/profiles/${MACHINE_DIRS[$mem_class]}/models.sh"
+    local models_file="${SETTINGS_BASE}/${MACHINE_DIRS[$mem_class]}/models.sh"
     if [[ ! -f "$models_file" ]]; then
         log_warning "Models file not found: $models_file"
         return

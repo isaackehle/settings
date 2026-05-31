@@ -81,7 +81,7 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.kehle.llama-router.p
 ### Build from source (when updating llama.cpp)
 
 ```bash
-cd ~/code/isaackehle/settings/2-ai/llama-router
+cd ~/code/isaackehle/settings/ai/router
 ./build.sh     # pulls latest llama.cpp, builds with Metal
 ./setup.sh     # patches models.ini, installs LaunchAgent
 ```
@@ -189,7 +189,7 @@ docker exec openwebui sh -c 'curl -s -H "Authorization: Bearer $(echo $OPENAI_AP
 
 ## References
 
-- [Full router setup docs](../2-ai/llama-router/README.md)
-- [Open WebUI integration details](../2-ai/llama-router/open-webui-integration.md)
-- [Router performance tuning guide](../2-ai/llama-router/tuning-guide.md)
+- [Full router setup docs](../ai/router/README.md)
+- [Open WebUI integration details](../ai/router/open-webui-integration.md)
+- [Router performance tuning guide](../ai/router/tuning-guide.md)
 - [Router health check suite](llama-router-testing.md)

@@ -66,11 +66,11 @@ if command -v fzf >/dev/null 2>&1; then
       _disp="$(echo "$e" | cut -d'|' -f2)"
       if [[ "$_disp" == "$_selected" ]]; then
         _name="$(echo "$e" | cut -d'|' -f1)"
-        read -p "Generate 2-ai/${_name}.sh + default config? (y/N) " -n 1 -r
+        read -p "Generate ai/${_name}.sh + default config? (y/N) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
           _stub="$(generate_agent "$_name")"
-          _dest="${SETTINGS_BASE}/2-ai/${_name}.sh"
+          _dest="${SETTINGS_BASE}/ai/${_name}.sh"
           echo "$_stub" > "$_dest"
           chmod +x "$_dest"
           log_status "Created $_dest"
@@ -82,7 +82,7 @@ c=[c for c in json.load(open('${SCOUT_PY}'.replace('.py','_catalog.json') if Fal
 print('')
 " 2>/dev/null || echo "")"
           # Fallback: infer from stub content
-          _cfg_dir="${SETTINGS_BASE}/2-ai/profiles/default/${_name}"
+          _cfg_dir="${SETTINGS_BASE}/ai/profiles/default/${_name}"
           mkdir -p "$_cfg_dir"
           python3 "$SCOUT_PY" --repo-root "$SETTINGS_BASE" --generate "$_name" 2>/dev/null | head -1 || true
           # Best-effort: create empty config placeholder
@@ -90,7 +90,7 @@ print('')
           log_info "Config dir prepared: $_cfg_dir"
           log_info "Next steps:"
           log_info "  1. Review $_dest"
-          log_info "  2. Add profile-specific configs under 2-ai/profiles/<machine>/${_name}/"
+          log_info "  2. Add profile-specific configs under ai/profiles/<machine>/${_name}/"
           log_info "  3. Register the tool in setup_ai.sh (source, TOOL_GROUPS, GROUP_SETUP_FUNCS, ...)"
         fi
         break

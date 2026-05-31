@@ -23,46 +23,46 @@ REPO_ROOT="$SETTINGS_BASE"
 
 . "${SETTINGS_BASE}/helpers.sh"
 # Source AI tool setup scripts
-. "${SETTINGS_BASE}/2-ai/aichat.sh"
-. "${SETTINGS_BASE}/2-ai/aider.sh"
-. "${SETTINGS_BASE}/2-ai/anythingllm.sh"
-. "${SETTINGS_BASE}/2-ai/claude.sh"
-. "${SETTINGS_BASE}/2-ai/cline.sh"
-. "${SETTINGS_BASE}/2-ai/codex.sh"
-. "${SETTINGS_BASE}/2-ai/continue.sh"
-. "${SETTINGS_BASE}/2-ai/crush.sh"
-. "${SETTINGS_BASE}/2-ai/cursor.sh"
-. "${SETTINGS_BASE}/2-ai/exo.sh"
-. "${SETTINGS_BASE}/2-ai/fabric.sh"
-. "${SETTINGS_BASE}/2-ai/gemini.sh"
-. "${SETTINGS_BASE}/2-ai/github-copilot.sh"
-. "${SETTINGS_BASE}/2-ai/goose.sh"
-. "${SETTINGS_BASE}/2-ai/grok.sh"
-. "${SETTINGS_BASE}/2-ai/groq.sh"
-. "${SETTINGS_BASE}/2-ai/hermes.sh"
-. "${SETTINGS_BASE}/2-ai/install-models.sh"
-. "${SETTINGS_BASE}/2-ai/ironclaw.sh"
-. "${SETTINGS_BASE}/2-ai/kilocode.sh"
-. "${SETTINGS_BASE}/2-ai/llm.sh"
-. "${SETTINGS_BASE}/2-ai/lmstudio.sh"
-. "${SETTINGS_BASE}/2-ai/omlx.sh"
-. "${SETTINGS_BASE}/2-ai/ollama.sh"
-. "${SETTINGS_BASE}/2-ai/olol.sh"
-. "${SETTINGS_BASE}/2-ai/open-hands.sh"
-. "${SETTINGS_BASE}/2-ai/open-interpreter.sh"
-. "${SETTINGS_BASE}/2-ai/opencode.sh"
-. "${SETTINGS_BASE}/2-ai/openwebui.sh"
-. "${SETTINGS_BASE}/2-ai/openrouter.sh"
-. "${SETTINGS_BASE}/2-ai/openclaw.sh"
-. "${SETTINGS_BASE}/2-ai/picoclaw.sh"
-. "${SETTINGS_BASE}/2-ai/plandex.sh"
-. "${SETTINGS_BASE}/2-ai/sublime.sh"
-. "${SETTINGS_BASE}/2-ai/zeroclaw.sh"
-. "${SETTINGS_BASE}/2-ai/zoocode.sh"
-. "${SETTINGS_BASE}/2-ai/tabby.sh"
-. "${SETTINGS_BASE}/2-ai/vscode.sh"
-. "${SETTINGS_BASE}/2-ai/windsurf.sh"
-. "${SETTINGS_BASE}/2-ai/zed.sh"
+. "${SETTINGS_BASE}/ai/agents/aichat.sh"
+. "${SETTINGS_BASE}/ai/agents/aider.sh"
+. "${SETTINGS_BASE}/ai/other/anythingllm.sh"
+. "${SETTINGS_BASE}/ai/agents/claude.sh"
+. "${SETTINGS_BASE}/editors/cline.sh"
+. "${SETTINGS_BASE}/ai/agents/codex.sh"
+. "${SETTINGS_BASE}/editors/continue.sh"
+. "${SETTINGS_BASE}/ai/agents/crush.sh"
+. "${SETTINGS_BASE}/editors/cursor.sh"
+. "${SETTINGS_BASE}/ai/other/exo.sh"
+. "${SETTINGS_BASE}/ai/agents/fabric.sh"
+. "${SETTINGS_BASE}/ai/agents/gemini.sh"
+. "${SETTINGS_BASE}/editors/github-copilot.sh"
+. "${SETTINGS_BASE}/ai/agents/goose.sh"
+. "${SETTINGS_BASE}/ai/agents/grok.sh"
+. "${SETTINGS_BASE}/ai/cloud/groq.sh"
+. "${SETTINGS_BASE}/ai/agents/hermes.sh"
+. "${SETTINGS_BASE}/ai/runtimes/install-models.sh"
+. "${SETTINGS_BASE}/ai/agents/ironclaw.sh"
+. "${SETTINGS_BASE}/editors/kilocode.sh"
+. "${SETTINGS_BASE}/ai/agents/llm.sh"
+. "${SETTINGS_BASE}/ai/runtimes/lmstudio.sh"
+. "${SETTINGS_BASE}/ai/runtimes/omlx.sh"
+. "${SETTINGS_BASE}/ai/runtimes/ollama.sh"
+. "${SETTINGS_BASE}/ai/other/olol.sh"
+. "${SETTINGS_BASE}/ai/agents/open-hands.sh"
+. "${SETTINGS_BASE}/ai/agents/open-interpreter.sh"
+. "${SETTINGS_BASE}/ai/agents/opencode.sh"
+. "${SETTINGS_BASE}/ai/other/openwebui.sh"
+. "${SETTINGS_BASE}/ai/cloud/openrouter.sh"
+. "${SETTINGS_BASE}/ai/agents/openclaw.sh"
+. "${SETTINGS_BASE}/ai/agents/picoclaw.sh"
+. "${SETTINGS_BASE}/ai/agents/plandex.sh"
+. "${SETTINGS_BASE}/editors/sublime.sh"
+. "${SETTINGS_BASE}/ai/agents/zeroclaw.sh"
+. "${SETTINGS_BASE}/editors/zoocode.sh"
+. "${SETTINGS_BASE}/ai/other/tabby.sh"
+. "${SETTINGS_BASE}/editors/vscode.sh"
+. "${SETTINGS_BASE}/editors/windsurf.sh"
+. "${SETTINGS_BASE}/editors/zed.sh"
 
 # ============================================================================
 # CONFIGURATION DEPLOYMENT
@@ -76,7 +76,7 @@ deploy_mcp_servers() {
     local mcp_dest="$HOME/.mcp.json"
     local mcp_src
     mcp_src=$(find_source "mcp.json")
-    [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/2-ai/claude-code/mcp.json"
+    [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
 
     local do_install=true
     if [ -f "$mcp_dest" ]; then
@@ -115,7 +115,7 @@ deploy_configs() {
   # Resolve per-profile config directory and source models.sh
   local _profile _profdir
   _profile="${MACHINE_PROFILE}"
-  _profdir="${SETTINGS_BASE}/2-ai/profiles/${_profile}"
+  _profdir="${SETTINGS_BASE}/ai/profiles/${_profile}"
   [ -n "$_profile" ] && log_info "Profile: ${_profile}" ||
     log_warning "Profile not detected — per-profile configs will be skipped"
 
@@ -215,7 +215,7 @@ deploy_configs() {
   copy_file "${_profdir}/gemini/settings.json" "$HOME/.gemini/settings.json"
   _validate_config_models "$HOME/.gemini/settings.json" "Gemini"
   copy_file "${_profdir}/gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
-  copy_file "${SETTINGS_BASE}/2-ai/gemini-projects.json" "$HOME/.gemini/projects.json"
+  copy_file "${SETTINGS_BASE}/ai/agents/gemini-projects.json" "$HOME/.gemini/projects.json"
 
   [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
   mkdir -p "$HOME/.continue"
@@ -499,7 +499,7 @@ PYEOF
   log_info "  Wrote required models list to $_reqfile"
 
   # --- Generate model map ---
-  local _mapper="${SETTINGS_BASE}/2-ai/profiles/generate-model-map.sh"
+  local _mapper="${SETTINGS_BASE}/ai/profiles/generate-model-map.sh"
   if [ -f "$_mapper" ]; then
     bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
@@ -1100,7 +1100,7 @@ wizard_step_profile() {
   print_step "Profile"
 
   local detected="${MACHINE_PROFILE:-unknown}"
-  local profiles_dir="${SETTINGS_BASE}/2-ai/profiles"
+  local profiles_dir="${SETTINGS_BASE}/ai/profiles"
 
   echo "Detected profile: ${detected}"
   prompt_wizard_choice \
@@ -1306,7 +1306,7 @@ wizard_step_local_models() {
   read -p "  Check OpenRouter for new models worth trying? (y/N) " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local _suggester="${SETTINGS_BASE}/2-ai/profiles/suggest-models.sh"
+    local _suggester="${SETTINGS_BASE}/ai/profiles/suggest-models.sh"
     if [ -f "$_suggester" ]; then
       bash "$_suggester" "$WIZARD_PROFILE" 2>/dev/null || true
     fi

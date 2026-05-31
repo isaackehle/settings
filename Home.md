@@ -27,9 +27,9 @@ Personal macOS development environment setup guide and reference.
 - [[iTerm]] — iTerm2 setup and keyboard shortcuts
 - [[SSH]] — SSH configuration
 
-## 1-dev
+## 0 — Setup & Dev Tools
 
-### Install
+### Setup
 
 - [[install/Editors]] — VS Code, Vim, and other editors
 - [[install/Git]] — Git setup, gh CLI, aliases
@@ -88,7 +88,7 @@ Personal macOS development environment setup guide and reference.
 - [[install/Databases/Services]] — Microservices and supporting services
 - [[install/Databases/Apache]] — Apache server configuration
 
-### Best Practices
+### Best Practices (moved to `docs/best-practices/`)
 
 - [[best-practices/Web Dev]] — Web development overview
 - [[best-practices/APIs]] — API development tools
@@ -111,7 +111,7 @@ Personal macOS development environment setup guide and reference.
 - [[Auth]] — Authentication configuration
 - [[Encryption]] — Encryption tools
 - [[VPN]] — VPN setup
-- [[0-core/Tailscale|Tailscale]] — WireGuard-based zero-config VPN for multi-machine networking
+- [[./remote/Tailscale|Tailscale]] — WireGuard-based zero-config VPN for multi-machine networking
 - [[VNC]] — VNC / remote desktop
 - [[VM]] — Virtual machines
 - [[Synology]] — Synology NAS management tools
