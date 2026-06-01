@@ -109,209 +109,72 @@
   "agent": {
     "code": {
       "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-128k",
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
       "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": {
-          "*": "ask",
-          "rm -rf *": "deny",
-          "sudo *": "deny",
-          "git *": "allow",
-          "ls *": "allow",
-          "cat *": "allow",
-          "grep *": "allow",
-          "find *": "allow",
-          "head *": "allow",
-          "tail *": "allow",
-          "wc *": "allow",
-          "sort *": "allow",
-          "uniq *": "allow",
-          "diff *": "allow",
-          "echo *": "allow",
-          "printf *": "allow",
-          "mkdir *": "allow",
-          "touch *": "allow",
-          "cp *": "allow",
-          "mv *": "allow",
-          "chmod *": "allow",
-          "python *": "allow",
-          "node *": "allow",
-          "npm *": "allow",
-          "pip *": "allow",
-          "uv *": "allow",
-          "cargo *": "allow",
-          "rustc *": "allow",
-          "make *": "allow",
-          "cmake *": "allow",
-          "swift *": "allow",
-          "xcodebuild *": "allow"
-        },
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.\n\nWhen generating git commit messages: Output ONLY the raw commit message string — no JSON, no markdown, no labels, no wrapping. Format: `type(scope): short description` (≤72 chars, imperative mood, no period). Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. NEVER write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
+      "temperature": 0.2
+      // Prompt and permissions live in ~/.kilo/agents/code.md
     },
     "ask": {
       "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-128k",
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
       "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only Q&A agent. Answer questions about the codebase clearly and concisely. Explain logic, trace flows, and provide context. Do not edit files or run commands."
+      "temperature": 0.2
+      // Prompt and permissions live in ~/.kilo/agents/ask.md
     },
     "debug": {
       "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
       "model": "ollama/deepseek-r1:32b-128k",
       "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": {
-          "*": "ask",
-          "rm -rf *": "deny",
-          "sudo *": "deny",
-          "git *": "allow",
-          "ls *": "allow",
-          "cat *": "allow",
-          "grep *": "allow",
-          "find *": "allow",
-          "head *": "allow",
-          "tail *": "allow",
-          "wc *": "allow",
-          "diff *": "allow",
-          "echo *": "allow",
-          "printf *": "allow",
-          "python *": "allow",
-          "node *": "allow"
-        },
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a debugging agent. Diagnose errors, trace bugs through the codebase, and suggest targeted fixes. Read logs, inspect code, and propose minimal, precise solutions. Explain root causes before suggesting changes."
+      "temperature": 0.3
+      // Prompt and permissions live in ~/.kilo/agents/debug.md
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
       "model": "ollama/qwen3.5:4b",
       "mode": "primary",
-      "temperature": 0.25,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented."
+      "temperature": 0.25
+      // Prompt and permissions live in ~/.kilo/agents/plan.md
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
       "model": "ollama/deepseek-r1:32b-128k",
       "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, and evaluation decisions. Do not edit files or run commands."
+      "temperature": 0.3
+      // Prompt and permissions live in ~/.kilo/agents/think.md
     },
     "write": {
       "description": "Writing agent — docs, summaries, cover letters, polished prose.",
       "model": "ollama/qwen3.5-27b:q4-128k",
       "mode": "primary",
-      "temperature": 0.65,
-      "permission": {
-        "bash": {
-          "*": "deny",
-          "ls *": "allow",
-          "cat *": "allow",
-          "grep *": "allow",
-          "find *": "allow",
-          "head *": "allow",
-          "tail *": "allow",
-          "wc *": "allow",
-          "echo *": "allow",
-          "printf *": "allow"
-        },
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished documentation, summaries, and communication."
+      "temperature": 0.65
+      // Prompt and permissions live in ~/.kilo/agents/write.md
     },
     "summary": {
       "description": "Commit message and session summary agent.",
       "model": "ollama/qwen3.5:4b",
       "mode": "primary",
-      "temperature": 0.2,
-      "permission": {
-        "bash": {
-          "*": "deny",
-          "git diff *": "allow",
-          "git log *": "allow",
-          "git status": "allow",
-          "git diff --stat": "allow",
-          "git diff --cached": "allow",
-          "git diff HEAD": "allow",
-          "git log --oneline -10": "allow",
-          "ls *": "allow",
-          "cat *": "allow",
-          "grep *": "allow",
-          "head *": "allow",
-          "tail *": "allow",
-          "wc *": "allow",
-          "echo *": "allow",
-          "printf *": "allow"
-        },
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate Conventional Commit messages only. Format: `type(scope): short description` — ≤72 chars, imperative mood, no period. Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build. Never write paragraph summaries, numbered breakdowns, or Co-Authored-By trailers."
+      "temperature": 0.2
+      // Prompt and permissions live in ~/.kilo/agents/summary.md
     },
     "description": {
       "description": "MR/PR description agent — longer summaries with context.",
       "model": "ollama/qwen3.5-27b:q4",
       "mode": "primary",
-      "temperature": 0.3,
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow"
-      },
-      "prompt": "Generate detailed MR/PR descriptions. Include: summary of changes, motivation/context, key files changed, testing notes. Use markdown formatting with headers, bullet points, and code snippets where helpful. Be concise but thorough — aim for 2-4 paragraphs."
+      "temperature": 0.3
+      // Prompt and permissions live in ~/.kilo/agents/description.md
+    }
+  },
+  "mcp": {
+    "git": {
+      "type": "local",
+      "command": ["uvx", "mcp-server-git"]
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "environment": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "env.AGENT_GITHUB_PERSONAL_ACCESS_TOKEN"
+      }
     }
   },
   "default_agent": "code",
