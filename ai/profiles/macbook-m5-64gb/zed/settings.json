@@ -1,57 +1,54 @@
 {
   "_note": "MERGE INTO: ~/.config/zed/settings.json — Zed discovers models from Ollama's /v1/models endpoint automatically",
-
   "assistant": {
     "default_model": {
       "provider": "openai",
-      "model": "qwen3-coder-next-80b:q4-64k"
+      "model": "qwen3-coder-30b-a3b:q6-64k"
     },
     "version": "2"
   },
-
   "language_models": {
     "openai": {
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
           "name": "deepseek-r1-tools:32b-128k",
-          "display_name": "DeepSeek R1 32B (REAS, TOOL, 128K)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "qwen3:4b",
-          "display_name": "Qwen 3 4B (PLAN)",
-          "max_tokens": 8192
-        },
-        {
-          "name": "qwen3-coder-next-80b:q4-16k",
-          "display_name": "Qwen3 Coder Next 80B (CODE, Q4 16K)",
-          "max_tokens": 16384
-        },
-        {
-          "name": "qwen3-coder-next-80b:q4-64k",
-          "display_name": "Qwen3 Coder Next 80B (CODE, Q4 64K)",
-          "max_tokens": 65536
-        },
-        {
-          "name": "qwen3.5-27b:q4-32k",
-          "display_name": "Qwen 3.5 27B (WRIT, Q4 32K)",
-          "max_tokens": 32768
-        },
-        {
-          "name": "qwen3-coder-next-80b:q4-32k",
-          "display_name": "Qwen3 Coder Next 80B (CODE, Q4 32K)",
+          "display_name": "DeepSeek R1 32B — Reasoning, Tools, 128K",
           "max_tokens": 32768
         },
         {
           "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi K2.6 (REAS, CLD)",
+          "display_name": "Kimi K2.6 — Reasoning, Cloud",
           "max_tokens": 131072
+        },
+        {
+          "name": "qwen3-coder-30b-a3b:q6-16k",
+          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 16K",
+          "max_tokens": 16384
+        },
+        {
+          "name": "qwen3-coder-30b-a3b:q6-32k",
+          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 32K",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3-coder-30b-a3b:q6-64k",
+          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 64K",
+          "max_tokens": 65536
+        },
+        {
+          "name": "qwen3.5-27b:q4-32k",
+          "display_name": "Qwen 3.5 27B — Writing, Q4 32K",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3:4b",
+          "display_name": "Qwen 3 4B — Planning",
+          "max_tokens": 8192
         }
       ]
     }
   },
-
   "features": {
     "inline_completion_provider": "none"
   }

@@ -5,7 +5,7 @@
   // API config is set via the Kilo Code sidebar → API Provider: OpenAI Compatible
   //   Base URL  → http://localhost:11434/v1
   //   API Key   → sk-local
-  //   Model     → qwen3-coder-next-80b:q4
+  //   Model     → qwen3-coder-30b-a3b:q6
   //
   // Cloud fallback:
   //   Provider  → OpenRouter

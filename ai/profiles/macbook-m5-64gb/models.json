@@ -1,0 +1,174 @@
+{
+  "models": {
+    "codestral:22b": {
+      "family": "coder",
+      "quant": "Q4_K_M",
+      "local_filename": "codestral-22b-v0.1-cd-q4_k_m.gguf",
+      "remote_filename": "Codestral-22B-v0.1-Q4_K_M.gguf",
+      "hf_source": "hf.co/bartowski/Codestral-22B-v0.1-GGUF",
+      "context_windows": [32768],
+      "modelfile_params": ["PARAMETER temperature 0"],
+      "remote_pull": ""
+    },
+    "deepseek-r1:32b": {
+      "family": "reasoning-tools",
+      "quant": "Q4_K_M",
+      "local_filename": "deepseek-r1-32b-ds-q4_k_m.gguf",
+      "remote_filename": "DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf",
+      "hf_source": "hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF",
+      "context_windows": [131072],
+      "modelfile_params": ["PARAMETER temperature 0.3"],
+      "remote_pull": ""
+    },
+    "deepseek-r1-tools:32b": {
+      "family": "reasoning-tools",
+      "quant": "",
+      "local_filename": "",
+      "remote_filename": "",
+      "hf_source": "",
+      "context_windows": [131072],
+      "modelfile_params": ["PARAMETER temperature 0.3"],
+      "remote_pull": "MFDoom/deepseek-r1-tool-calling:32b"
+    },
+    "deepseek-r1-tools:8b": {
+      "family": "reasoning-tools",
+      "quant": "",
+      "local_filename": "",
+      "remote_filename": "",
+      "hf_source": "",
+      "context_windows": [131072],
+      "modelfile_params": ["PARAMETER temperature 0.3"],
+      "remote_pull": "MFDoom/deepseek-r1-tool-calling:8b"
+    },
+    "nomic-embed-text": {
+      "family": "embedding",
+      "quant": "F16",
+      "local_filename": "nomic-embed-text-em-f16.gguf",
+      "remote_filename": "nomic-embed-text-v1.5.f16.gguf",
+      "hf_source": "hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF",
+      "context_windows": [8192],
+      "modelfile_params": [],
+      "remote_pull": ""
+    },
+    "qwen2.5-7b:multi": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen2.5-7b-multi-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf",
+      "hf_source": "hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF",
+      "context_windows": [1010000],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen2.5-coder:1.5b": {
+      "family": "coder",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen2.5-coder-1.5b-it-q4_k_m.gguf",
+      "remote_filename": "Qwen2.5-Coder-1.5B-Instruct-Q4_K_M.gguf",
+      "hf_source": "hf.co/unsloth/Qwen2.5-Coder-1.5B-Instruct-GGUF",
+      "context_windows": [32768],
+      "modelfile_params": ["PARAMETER temperature 0.2"],
+      "remote_pull": ""
+    },
+    "qwen2.5-coder:7b": {
+      "family": "coder",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen2.5-coder-7b-it-q4_k_m.gguf",
+      "remote_filename": "Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf",
+      "hf_source": "hf.co/unsloth/Qwen2.5-Coder-7B-Instruct-GGUF",
+      "context_windows": [32768, 8192],
+      "modelfile_params": ["PARAMETER temperature 0", "PARAMETER repeat_penalty 1.05"],
+      "remote_pull": ""
+    },
+    "qwen3-14b:sonnet4.5": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf",
+      "hf_source": "hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF",
+      "context_windows": [40960],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3-8b:sonnet4.5": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf",
+      "hf_source": "hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF",
+      "context_windows": [40960],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3.5-27b:gemini3.1": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3.5-27b-gemini3.1-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen3.5-27B.Q4_K_M.gguf",
+      "hf_source": "hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF",
+      "context_windows": [262144],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3.5-27b:q4": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen3.5-27B.Q4_K_M.gguf",
+      "hf_source": "hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF",
+      "context_windows": [32768, 8192, 32768, 131072, 262144],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3.5:4b": {
+      "family": "instruct",
+      "quant": "UD-Q4_K_XL",
+      "local_filename": "qwen3.5-4b-it-ud-q4_k_xl.gguf",
+      "remote_filename": "Qwen3.5-4B-UD-Q4_K_XL.gguf",
+      "hf_source": "hf.co/unsloth/Qwen3.5-4B-GGUF",
+      "context_windows": [131072],
+      "modelfile_params": ["PARAMETER temperature 0.2"],
+      "remote_pull": ""
+    },
+    "qwen3.6-27b:opus-sonnet": {
+      "family": "instruct-distill",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3.6-27b-opus-sonnet-it-ds-q4_k_m.gguf",
+      "remote_filename": "Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-Q4_K_M.gguf",
+      "hf_source": "hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF",
+      "context_windows": [262144],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3.6-35b:opus4.6": {
+      "family": "instruct",
+      "quant": "",
+      "local_filename": "",
+      "remote_filename": "",
+      "hf_source": "",
+      "context_windows": [262144],
+      "modelfile_params": ["PARAMETER temperature 0.6"],
+      "remote_pull": ""
+    },
+    "qwen3:4b": {
+      "family": "instruct",
+      "quant": "Q4_K_M",
+      "local_filename": "qwen3-4b-it-q4_k_m.gguf",
+      "remote_filename": "Qwen3-4B-Q4_K_M.gguf",
+      "hf_source": "hf.co/Qwen/Qwen3-4B-GGUF",
+      "context_windows": [131072, 8192, 131072],
+      "modelfile_params": ["PARAMETER temperature 0.2"],
+      "remote_pull": ""
+    },
+    "qwen3-coder-30b-a3b:q6": {
+      "family": "coder",
+      "quant": "UD-Q6_K_XL",
+      "local_filename": "qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf",
+      "remote_filename": "Qwen3-Coder-30B-A3B-Instruct-UD-Q6_K_XL.gguf",
+      "hf_source": "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "context_windows": [32768, 8192, 16384, 65536, 131072, 262144],
+      "modelfile_params": ["PARAMETER temperature 0", "PARAMETER repeat_penalty 1.05"],
+      "remote_pull": ""
+    }
+  }
+}

@@ -7,14 +7,14 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (PLAN, CLD)"
-        },
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 (CLD)"
+          "name": "Claude Sonnet 4.6 — Cloud"
         },
         "moonshot/kimi-k2.6": {
-          "name": "Kimi K2.6 (REAS, CLD)"
+          "name": "Kimi K2.6 — Reasoning, Cloud"
+        },
+        "qwen/qwen3-8b": {
+          "name": "Qwen3 8B — Planning, Cloud"
         }
       }
     },
@@ -24,14 +24,14 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen3:14b": {
-          "name": "Qwen 3 14B (CODE)"
-        },
         "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B (REAS, TOOL)"
+          "name": "DeepSeek R1 8B — Reasoning, Tools"
+        },
+        "qwen3:14b": {
+          "name": "Qwen 3 14B — Coding"
         },
         "qwen3:4b": {
-          "name": "Qwen 3 4B (PLAN)"
+          "name": "Qwen 3 4B — Planning"
         }
       }
     }

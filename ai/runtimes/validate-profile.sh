@@ -75,7 +75,9 @@ PATHS_FILE="${SETTINGS_BASE}/ai/runtimes/paths.sh"
 [ -f "${MODELS_FILE}" ] || die "Missing models file: ${MODELS_FILE}"
 [ -f "${PATHS_FILE}" ] || die "Missing paths file: ${PATHS_FILE}"
 
-. "${MODELS_FILE}"
+# Promote declare -A to declare -gA so associative arrays survive
+# the function scope when models.sh is sourced inside a function.
+source <(sed 's/^declare -A /declare -gA /g' "${MODELS_FILE}")
 . "${PATHS_FILE}"
 
 ensure_profile_paths

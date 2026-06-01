@@ -5,7 +5,7 @@
 ## ── Model assignments ──────────────────────────────────────────────────────
 
 # Primary coding model
-model: qwen3-coder-next-80b:q4
+model: qwen3-coder-30b-a3b:q6
 
 # Weak model — commit messages, simple edits, routing decisions
 weak-model: qwen3:4b

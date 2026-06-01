@@ -406,17 +406,12 @@ preflight_validate_local_model_rebuild() {
         fi
     fi
 
-    local spec alias quant filename source remote_filename ctx params template model_name
+    local spec alias quant filename source remote_filename ctx params model_name
     while IFS='|' read -r alias quant filename source remote_filename; do
         [[ -z "$alias" || -z "$quant" || -z "$filename" || -z "$source" ]] && continue
         model_name="$(canonical_ollama_model_name_for_alias_quant "$alias" "$quant")"
         ctx="${OLLAMA_CONTEXT_WINDOWS[$alias]:-}"
         params="$(modelfile_params_for_alias "$alias")"
-        if declare -p OLLAMA_MODELFILE_TEMPLATES &>/dev/null; then
-            template="${OLLAMA_MODELFILE_TEMPLATES[$alias]:-}"
-        else
-            template=""
-        fi
 
         [[ "$filename" == *.gguf ]] || {
             log_warning "⚠ Invalid GGUF local filename for $model_name: $filename"
@@ -435,10 +430,6 @@ preflight_validate_local_model_rebuild() {
                     break
                 fi
             done
-        fi
-        if [[ -n "$template" && ! -f "$template" ]]; then
-            log_warning "⚠ Missing Modelfile template for $alias: $template"
-            ((errors++)) || true
         fi
         if [[ -n "$params" ]]; then
             # Strip comment and blank lines before checking for actual PARAMETER directives.
@@ -826,10 +817,6 @@ build_ollama_modelfile_from_gguf() {
     local quant="${quant_override:-${GGUF_QUANTS[$alias]:-}}"
     local filename="${filename_override:-${GGUF_LOCAL_FILENAMES[$alias]:-}}"
     local family="${GGUF_FAMILIES[$alias]:-generic}"
-    local template=""
-    if declare -p OLLAMA_MODELFILE_TEMPLATES &>/dev/null 2>&1; then
-        template="${OLLAMA_MODELFILE_TEMPLATES[$alias]:-}"
-    fi
     local ctx="${OLLAMA_CONTEXT_WINDOWS[$alias]:-}"
     local extra_params
     extra_params="$(modelfile_params_for_alias "$alias")"
@@ -854,79 +841,15 @@ build_ollama_modelfile_from_gguf() {
         normalize_ollama_modelfile_params "$extra_params" >> "$modelfile_path"
     fi
 
-    if [[ -n "$template" && -f "$template" ]]; then
-        # Explicit template file — use it directly.
-        sed '/^[[:space:]]*FROM[[:space:]]\+/d' "$template" >> "$modelfile_path"
-    else
-        # No explicit template file. Pull the TEMPLATE block from a reference
-        # Ollama model (pulled via registry, so it has the correct Go template).
-        # This preserves tool-calling support that local GGUF import loses.
-        local ref_model
-        ref_model="$(_gguf_template_ref_model "$alias" "$family")"
-        if [[ -n "$ref_model" ]] && ollama_model_exists "$ref_model"; then
-            local tmpl_block
-            tmpl_block=$(ollama show --modelfile "$ref_model" 2>/dev/null \
-                | awk '/^TEMPLATE/,/^[A-Z][A-Z_]*[[:space:]]|^$/' \
-                | head -n -1)
-            if [[ -n "$tmpl_block" && "$tmpl_block" != *'{{ .Prompt }}'* ]]; then
-                printf '%s\n' "$tmpl_block" >> "$modelfile_path"
-            fi
-        fi
-    fi
+    # Template overrides were removed in May 2026.
+    # GGUFs now use their embedded Jinja2 templates directly.
+    # The FROM hf.co/<repo>:<remote_filename> reference causes Ollama to
+    # fetch the model manifest from Hugging Face, preserving the author's
+    # intended chat template and tool-calling support.
 }
 
 # (Archived: template overrides were removed in May 2026.
 #  GGUFs now use their embedded Jinja2 templates directly.)
-
-# ==============================================
-# TEMPLATE HASH TRACKING
-# Hash files stored alongside GGUFs so that template changes trigger
-# automatic re-registration on the next install run.
-# ==============================================
-
-_template_hash_file() {
-    local model_name="$1"
-    local safe="${model_name//[:\/]/_}"
-    printf '%s/.tmpl_%s' "${GGUF_DIR}" "$safe"
-}
-
-_current_template_hash() {
-    local alias="$1"
-    local template=""
-    if declare -p OLLAMA_MODELFILE_TEMPLATES &>/dev/null 2>&1; then
-        template="${OLLAMA_MODELFILE_TEMPLATES[$alias]:-}"
-    fi
-    if [[ -z "$template" || ! -f "$template" ]]; then
-        echo "none"
-    else
-        shasum -a 256 "$template" 2>/dev/null | cut -d' ' -f1
-    fi
-}
-
-_stored_template_hash() {
-    local model_name="$1"
-    local hf
-    hf="$(_template_hash_file "$model_name")"
-    [[ -f "$hf" ]] && cat "$hf" || echo ""
-}
-
-_save_template_hash() {
-    local model_name="$1"
-    local hash="$2"
-    printf '%s\n' "$hash" > "$(_template_hash_file "$model_name")"
-}
-
-_template_changed() {
-    local alias="$1"
-    local model_name="$2"
-    local current stored
-    current="$(_current_template_hash "$alias")"
-    stored="$(_stored_template_hash "$model_name")"
-    # No template → never triggers a re-register
-    [[ "$current" == "none" ]] && return 1
-    # Hash differs or no stored hash → template changed
-    [[ "$current" != "$stored" ]]
-}
 
 print_command_output_with_colored_errors() {
     local line
@@ -967,23 +890,9 @@ register_ollama_models_from_gguf() {
         fi
 
         if ollama_model_exists "$model_name"; then
-            if _template_changed "$alias" "$model_name"; then
-                log_info "Template changed for $model_name — re-registering"
-                # Delete the base model and all its context variants so reconcile
-                # rebuilds them from the freshly-registered base.
-                ollama rm "$model_name" 2>/dev/null || true
-                _ollama_list_invalidate
-                # Remove context variants (they inherit template from the base)
-                local variant
-                while IFS= read -r variant; do
-                    [[ "$variant" == "${model_name}-"* ]] && \
-                        { ollama rm "$variant" 2>/dev/null || true; _ollama_list_invalidate; }
-                done < <(_ollama_list | awk '{print $1}')
-            else
-                log_success "Already registered in Ollama: $model_name"
-                passed+=("$model_name")
-                continue
-            fi
+            log_success "Already registered in Ollama: $model_name"
+            passed+=("$model_name")
+            continue
         fi
 
         # Build the HF reference for the FROM line.
@@ -1012,7 +921,6 @@ register_ollama_models_from_gguf() {
         if create_output="$(ollama create "$model_name" -f "$modelfile" 2>&1)"; then
             printf '%s\n' "$create_output"
             _ollama_list_invalidate
-            _save_template_hash "$model_name" "$(_current_template_hash "$alias")"
             log_success "Registered Ollama model: $model_name"
             passed+=("$model_name")
         else

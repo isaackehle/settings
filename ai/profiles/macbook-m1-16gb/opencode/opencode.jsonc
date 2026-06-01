@@ -140,15 +140,15 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen3:14b": { "name": "Heavy / General — 14B" },
-        "qwen3:14b-128k": { "name": "Heavy / General — 14B (+long)" },
-        "qwen2.5-coder:7b": { "name": "Coder — 7B" },
-        "deepseek-r1:7b": { "name": "Reasoning — DeepSeek R1 7B" },
-        "qwen3:4b": { "name": "Fast / Plan — 4B" },
-        "nomic-embed-text": { "name": "Embed" },
-        "qwen3.5:4b": { "name": "Qwen3.5 — 4B" },
-        "qwen3-8b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 8B" },
-        "qwen2.5-7b:multi": { "name": "Multi-distill Claude+Gemini+GPT — 7B" }
+        "deepseek-r1:7b": { "name": "DeepSeek R1 7B — Reasoning" },
+        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi — Claude+Gemini+GPT distill" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B — Coding" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B — Claude Sonnet 4.5 distill" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing" },
+        "qwen3:14b": { "name": "Qwen3 14B — General" },
+        "qwen3:14b-128k": { "name": "Qwen3 14B 128K — General" },
+        "qwen3:4b": { "name": "Qwen3 4B — Planning" }
       }
     },
     "openrouter": {
@@ -177,7 +177,6 @@
         "openai/o3": { "name": "OpenAI o3 — Heavy reasoning, STEM" },
         "perplexity/sonar-pro": { "name": "Sonar Pro — Web search + chat" },
         "qwen/qwen3-8b": { "name": "Qwen3 8B — Fast planning, cheap" },
-        "qwen/qwen3-coder-next-80b": { "name": "Qwen3 Coder Next 80B — Heavy coding" },
         "thudm/glm-5.1": { "name": "GLM 5.1 — General purpose" },
         "x-ai/grok-3": { "name": "Grok 3 — General, real-time data" },
         "x-ai/grok-3-mini": { "name": "Grok 3 Mini — Fast, cheap" }

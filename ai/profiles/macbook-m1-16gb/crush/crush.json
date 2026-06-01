@@ -8,8 +8,8 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3:14b",
-          "name": "Qwen 3 14B (CODE)",
+          "id": "deepseek-r1-tools:8b",
+          "name": "DeepSeek R1 8B — Reasoning, Tools",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -20,8 +20,8 @@
           "supports_attachments": false
         },
         {
-          "id": "deepseek-r1-tools:8b",
-          "name": "DeepSeek R1 8B (REAS, TOOL)",
+          "id": "qwen3:14b",
+          "name": "Qwen 3 14B — Coding",
           "context_window": 32768,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,

@@ -120,9 +120,11 @@ deploy_configs() {
     log_warning "Profile not detected — per-profile configs will be skipped"
 
   # Source the single source of truth for all model assignments
+  # Promote declare -A to declare -gA so associative arrays survive
+  # the function scope and are visible to install-models.sh functions.
   local _models_sh="${_profdir}/models.sh"
   if [ -f "$_models_sh" ]; then
-    source "$_models_sh"
+    source <(sed 's/^declare -A /declare -gA /g' "$_models_sh")
     log_info "  Loaded model config from $_models_sh"
   else
     log_warning "  models.sh not found at $_models_sh — configs may use stale values"

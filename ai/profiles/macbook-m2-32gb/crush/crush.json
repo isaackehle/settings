@@ -8,20 +8,8 @@
       "api_key": "sk-local",
       "models": [
         {
-          "id": "qwen3:14b",
-          "name": "Qwen 3 14B (CODE)",
-          "context_window": 40960,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
-        },
-        {
           "id": "deepseek-r1-tools:8b",
-          "name": "DeepSeek R1 8B (REAS, TOOL)",
+          "name": "DeepSeek R1 8B — Reasoning, Tools",
           "context_window": 131072,
           "default_max_tokens": 8192,
           "cost_per_1m_in": 0.0,
@@ -32,8 +20,20 @@
           "supports_attachments": false
         },
         {
+          "id": "qwen3:14b",
+          "name": "Qwen 3 14B — Coding",
+          "context_window": 40960,
+          "default_max_tokens": 8192,
+          "cost_per_1m_in": 0.0,
+          "cost_per_1m_out": 0.0,
+          "cost_per_1m_in_cached": 0.0,
+          "cost_per_1m_out_cached": 0.0,
+          "can_reason": false,
+          "supports_attachments": false
+        },
+        {
           "id": "qwen3:4b",
-          "name": "Qwen 3 4B (PLAN)",
+          "name": "Qwen 3 4B — Planning",
           "context_window": 262144,
           "default_max_tokens": 4096,
           "cost_per_1m_in": 0.0,

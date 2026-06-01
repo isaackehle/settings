@@ -2,12 +2,12 @@
   "integrations": {
     "claude": {
       "aliases": {
-        "primary": "qwen3-coder-next-80b:q4",
+        "primary": "qwen3-coder-30b-a3b:q6",
         "fast": "qwen3:4b",
         "reasoning": "deepseek-r1-tools:32b",
         "research": "qwen3.5-27b:q4",
         "coding": "qwen3-coder-30b-a3b:q6",
-        "opus": "qwen3-coder-next-80b:q4"
+        "opus": "qwen3-coder-30b-a3b:q6"
       },
       "models": [
         "codestral:22b",
@@ -23,10 +23,6 @@
         "qwen2.5-coder:1.5b",
         "qwen2.5-coder:7b",
         "qwen3:4b",
-        "qwen3-coder-next-80b:q4",
-        "qwen3-coder-next-80b:q4-16k",
-        "qwen3-coder-next-80b:q4-64k",
-        "qwen3-coder-next-80b:q4-256k",
         "qwen3-coder-30b-a3b:q6",
         "qwen3-coder-30b-a3b:q6-8k",
         "qwen3-coder-30b-a3b:q6-32k",
@@ -36,11 +32,7 @@
         "qwen3.5-27b:q4-8k",
         "qwen3.5-27b:q4-32k",
         "qwen3.5-27b:q4-128k",
-        "qwen3.5-27b:q4-256k",
-        "qwen3-coder-next-80b:q4",
-        "qwen3-coder-next-80b:q4-8k",
-        "qwen3-coder-next-80b:q4-128k",
-        "qwen3-coder-next-80b:q4-256k"
+        "qwen3.5-27b:q4-256k"
       ]
     },
     "opencode": {
@@ -58,10 +50,6 @@
         "qwen2.5-coder:1.5b",
         "qwen2.5-coder:7b",
         "qwen3:4b",
-        "qwen3-coder-next-80b:q4",
-        "qwen3-coder-next-80b:q4-16k",
-        "qwen3-coder-next-80b:q4-64k",
-        "qwen3-coder-next-80b:q4-256k",
         "qwen3-coder-30b-a3b:q6",
         "qwen3-coder-30b-a3b:q6-8k",
         "qwen3-coder-30b-a3b:q6-32k",
@@ -71,14 +59,10 @@
         "qwen3.5-27b:q4-8k",
         "qwen3.5-27b:q4-32k",
         "qwen3.5-27b:q4-128k",
-        "qwen3.5-27b:q4-256k",
-        "qwen3-coder-next-80b:q4",
-        "qwen3-coder-next-80b:q4-8k",
-        "qwen3-coder-next-80b:q4-128k",
-        "qwen3-coder-next-80b:q4-256k"
+        "qwen3.5-27b:q4-256k"
       ]
     }
   },
-  "last_model": "qwen3-coder-next-80b:q4",
+  "last_model": "qwen3-coder-30b-a3b:q6",
   "last_selection": "run"
 }

@@ -45,6 +45,7 @@ declare -A ROLE_CTX_DEFAULTS=(
     ["heavy"]="65536"
     ["reasoning"]="65536"
     ["embedding"]="8192"
+    ["summary"]="32768"
 )
 
 declare -A ROLE_BATCH_DEFAULTS=(
@@ -54,6 +55,7 @@ declare -A ROLE_BATCH_DEFAULTS=(
     ["heavy"]="512"
     ["reasoning"]="512"
     ["embedding"]="1024"
+    ["summary"]="1024"
 )
 
 declare -A ROLE_UBATCH_DEFAULTS=(
@@ -63,6 +65,7 @@ declare -A ROLE_UBATCH_DEFAULTS=(
     ["heavy"]="256"
     ["reasoning"]="256"
     ["embedding"]="512"
+    ["summary"]="512"
 )
 
 LLAMA_SERVER_HOST="127.0.0.1"
@@ -78,6 +81,7 @@ declare -A ROLE_PORTS=(
     ["heavy"]="8014"
     ["reasoning"]="8015"
     ["embedding"]="8016"
+    ["summary"]="8017"
 )
 
 ENABLE_OLLAMA_IMPORTS=1
