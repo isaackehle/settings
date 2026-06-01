@@ -228,6 +228,11 @@ deploy_configs() {
   mkdir -p "$HOME/.config/opencode"
   copy_file "${_profdir}/opencode/opencode.jsonc" "$HOME/.config/opencode/opencode.jsonc"
   _validate_config_models "$HOME/.config/opencode/opencode.jsonc" "OpenCode"
+  # Deploy shared OpenCode agent prompts (profile-agnostic)
+  mkdir -p "$HOME/.config/opencode/agents"
+  for _agent_md in "${SETTINGS_BASE}/ai/opencode/agents/"*.md; do
+    [ -f "$_agent_md" ] && copy_file "$_agent_md" "$HOME/.config/opencode/agents/$(basename "$_agent_md")"
+  done
 
   [ -L "$HOME/.ollama" ] && rm "$HOME/.ollama"
   mkdir -p "$HOME/.ollama"
@@ -333,6 +338,11 @@ PYEOF
   mkdir -p "$HOME/.kilo"
   copy_file "${_profdir}/kilocode/kilo.jsonc" "$HOME/.kilo/kilo.jsonc"
   _validate_config_models "$HOME/.kilo/kilo.jsonc" "Kilo Code"
+  # Deploy shared Kilo Code agent prompts (profile-agnostic)
+  mkdir -p "$HOME/.kilo/agents"
+  for _agent_md in "${SETTINGS_BASE}/ai/kilocode/agents/"*.md; do
+    [ -f "$_agent_md" ] && copy_file "$_agent_md" "$HOME/.kilo/agents/$(basename "$_agent_md")"
+  done
 
   # --- Cursor (separate IDE from VS Code) ---
   local cursor_settings="$HOME/Library/Application Support/Cursor/User/settings.json"
