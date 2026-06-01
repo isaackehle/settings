@@ -311,12 +311,12 @@ install_config_file() {
 # ============================================================================
 
 PROFILES_DIR="$SETTINGS_BASE/ai/profiles"
-declare -A _PROFILE_CACHE
+declare -gA _PROFILE_CACHE
 
 _get_profile_numbers() {
-    # List directories in profiles dir, sorted
+    # List only profile directories that have a PROFILE file
     ls -d "$PROFILES_DIR"/*/ 2>/dev/null | while read -r d; do
-        basename "$d"
+        [[ -f "$d/PROFILE" ]] && basename "$d"
     done | sort
 }
 

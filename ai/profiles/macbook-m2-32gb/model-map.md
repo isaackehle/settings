@@ -4,23 +4,24 @@
 
 This is the profile-specific install graph: Hugging Face source repo, exact remote GGUF filename, normalized local artifact name, Ollama alias, MODELFILE parameters, and context-window aliases.
 
-| Ollama alias             | HF repo                                                                                | Remote GGUF                                                                | Quant    | Local GGUF                               | Family             | Base num_ctx | Context aliases | MODELFILE params                                         |
-| ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------- | ---------------------------------------- | ------------------ | -----------: | --------------- | -------------------------------------------------------- |
-| `codestral:22b`          | `hf.co/bartowski/Codestral-22B-v0.1-GGUF`                                              | `Codestral-22B-v0.1-Q4_K_M.gguf`                                           | `Q4_K_M` | `codestral-22b-cd-q4_k_m.gguf`           | `coder`            |          `—` | —               | —                                                        |
-| `deepseek-r1:7b`         | `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF`                                     | `DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf`                                  | `Q4_K_M` | `deepseek-r1-7b-ds-q4_k_m.gguf`          | `reasoning-tools`  |     `131072` | —               | PARAMETER temperature 0.3                                |
-| `nomic-embed-text`       | `hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF`                                            | `nomic-embed-text-v1.5.f16.gguf`                                           | `F16`    | `nomic-embed-text-em-f16.gguf`           | `embedding`        |       `8192` | —               | —                                                        |
-| `qwen2.5-7b:multi`       | `hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF` | `Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf` | `Q4_K_M` | `qwen2.5-7b-multi-it-ds-q4_k_m.gguf`     | `instruct-distill` |    `1010000` | —               | PARAMETER temperature 0.6                                |
-| `qwen2.5-coder:1.5b`     | `hf.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF`                                          | `qwen2.5-coder-1.5b-instruct-q4_k_m.gguf`                                  | `Q4_K_M` | `qwen2.5-coder-1.5b-cd-q4_k_m.gguf`      | `coder`            |          `—` | —               | —                                                        |
-| `qwen2.5-coder:7b`       | `hf.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF`                                            | `qwen2.5-coder-7b-instruct-q4_k_m.gguf`                                    | `Q4_K_M` | `qwen2.5-coder-7b-cd-q4_k_m.gguf`        | `coder`            |          `—` | —               | —                                                        |
-| `qwen3-14b:sonnet4.5`    | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                     | `Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`           | `Q4_K_M` | `qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf`  | `instruct-distill` |      `40960` | —               | PARAMETER temperature 0.6                                |
-| `qwen3-8b:sonnet4.5`     | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                      | `Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`            | `Q4_K_M` | `qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf`   | `instruct-distill` |      `40960` | —               | PARAMETER temperature 0.6                                |
-| `qwen3-coder-30b-a3b:q5` | `hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF`                                      | `Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf`                                 | `Q5_K_M` | `qwen3-coder-30b-a3b-cd-q5_k_m.gguf`     | `coder`            |      `32768` | —               | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
-| `qwen3.5-27b:q4`         | `hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF`                  | `Qwen3.5-27B.Q4_K_M.gguf`                                                  | `Q4_K_M` | `qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf`  | `instruct-distill` |      `32768` | —               | PARAMETER temperature 0.6                                |
-| `qwen3.5-9b:gemini3.1`   | `hf.co/Jackrong/Qwen3.5-9B-Gemini-3.1-Pro-Reasoning-Distill-GGUF`                      | `Qwen3.5-9B.Q4_K_M.gguf`                                                   | `Q4_K_M` | `qwen3.5-9b-gemini3.1-it-ds-q4_k_m.gguf` | `instruct-distill` |     `262144` | —               | PARAMETER temperature 0.6                                |
-| `qwen3.5-9b:opus4.6`     | `hf.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF`                | `Qwen3.5-9B.Q4_K_M.gguf`                                                   | `Q4_K_M` | `qwen3.5-9b-opus4.6-it-ds-q4_k_m.gguf`   | `instruct-distill` |     `262144` | —               | PARAMETER temperature 0.6                                |
-| `qwen3.5:4b`             | `hf.co/unsloth/Qwen3.5-4B-GGUF`                                                        | `Qwen3.5-4B-Q4_K_M.gguf`                                                   | `Q4_K_M` | `qwen3.5-4b-it-q4_k_m.gguf`              | `instruct`         |     `131072` | —               | PARAMETER temperature 0.2                                |
-| `qwen3:14b`              | `hf.co/Qwen/Qwen3-14B-GGUF`                                                            | `Qwen3-14B-Q4_K_M.gguf`                                                    | `Q4_K_M` | `qwen3-14b-it-q4_k_m.gguf`               | `instruct`         |     `262144` | —               | PARAMETER temperature 0.5                                |
-| `qwen3:4b`               | `hf.co/Qwen/Qwen3-4B-GGUF`                                                             | `Qwen3-4B-Q4_K_M.gguf`                                                     | `Q4_K_M` | `qwen3-4b-it-q4_k_m.gguf`                | `instruct`         |     `131072` | —               | PARAMETER temperature 0.2                                |
+| Ollama alias             | HF repo                                                                                | Remote GGUF                                                                | Quant        | Local GGUF                               | Family             | Base num_ctx | Context aliases | MODELFILE params                                         |
+| ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ---------------------------------------- | ------------------ | -----------: | --------------- | -------------------------------------------------------- |
+| `codestral:22b`          | `hf.co/bartowski/Codestral-22B-v0.1-GGUF`                                              | `Codestral-22B-v0.1-Q4_K_M.gguf`                                           | `Q4_K_M`     | `codestral-22b-cd-q4_k_m.gguf`           | `coder`            |          `—` | —               | —                                                        |
+| `deepseek-r1:7b`         | `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF`                                     | `DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf`                                  | `Q4_K_M`     | `deepseek-r1-7b-ds-q4_k_m.gguf`          | `reasoning-tools`  |     `131072` | —               | PARAMETER temperature 0.3                                |
+| `nomic-embed-text`       | `hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF`                                            | `nomic-embed-text-v1.5.f16.gguf`                                           | `F16`        | `nomic-embed-text-em-f16.gguf`           | `embedding`        |       `8192` | —               | —                                                        |
+| `qwen2.5-7b:multi`       | `hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF` | `Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf` | `Q4_K_M`     | `qwen2.5-7b-multi-it-ds-q4_k_m.gguf`     | `instruct-distill` |    `1010000` | —               | PARAMETER temperature 0.6                                |
+| `qwen2.5-coder:1.5b`     | `hf.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF`                                          | `qwen2.5-coder-1.5b-instruct-q4_k_m.gguf`                                  | `Q4_K_M`     | `qwen2.5-coder-1.5b-cd-q4_k_m.gguf`      | `coder`            |          `—` | —               | —                                                        |
+| `qwen2.5-coder:7b`       | `hf.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF`                                            | `qwen2.5-coder-7b-instruct-q4_k_m.gguf`                                    | `Q4_K_M`     | `qwen2.5-coder-7b-cd-q4_k_m.gguf`        | `coder`            |          `—` | —               | —                                                        |
+| `qwen3-14b:sonnet4.5`    | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                     | `Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`           | `Q4_K_M`     | `qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf`  | `instruct-distill` |      `40960` | —               | PARAMETER temperature 0.6                                |
+| `qwen3-8b:sonnet4.5`     | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                      | `Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`            | `Q4_K_M`     | `qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf`   | `instruct-distill` |      `40960` | —               | PARAMETER temperature 0.6                                |
+| `qwen3-coder-30b-a3b:q5` | `hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF`                                      | `Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf`                                 | `Q5_K_M`     | `qwen3-coder-30b-a3b-cd-q5_k_m.gguf`     | `coder`            |      `32768` | —               | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
+| `qwen3:14b`              | `hf.co/Qwen/Qwen3-14B-GGUF`                                                            | `Qwen3-14B-Q4_K_M.gguf`                                                    | `Q4_K_M`     | `qwen3-14b-it-q4_k_m.gguf`               | `instruct`         |     `262144` | —               | PARAMETER temperature 0.5                                |
+| `qwen3:4b`               | `hf.co/Qwen/Qwen3-4B-GGUF`                                                             | `Qwen3-4B-Q4_K_M.gguf`                                                     | `Q4_K_M`     | `qwen3-4b-it-q4_k_m.gguf`                | `instruct`         |     `131072` | —               | PARAMETER temperature 0.2                                |
+| `qwen3.5-27b:q4`         | `hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF`                  | `Qwen3.5-27B.Q4_K_M.gguf`                                                  | `Q4_K_M`     | `qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf`  | `instruct-distill` |      `32768` | —               | PARAMETER temperature 0.6                                |
+| `qwen3.5-27b:q8`         | `hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF`                  | `Qwen3.5-27B.Q8_0.gguf`                                                    | `Q8_0`       | `qwen3.5-27b-opus4.6-it-ds-q8_0.gguf`    | `instruct-distill` |      `32768` | —               | PARAMETER temperature 0.6                                |
+| `qwen3.5-9b:gemini3.1`   | `hf.co/Jackrong/Qwen3.5-9B-Gemini-3.1-Pro-Reasoning-Distill-GGUF`                      | `Qwen3.5-9B.Q4_K_M.gguf`                                                   | `Q4_K_M`     | `qwen3.5-9b-gemini3.1-it-ds-q4_k_m.gguf` | `instruct-distill` |     `262144` | —               | PARAMETER temperature 0.6                                |
+| `qwen3.5-9b:opus4.6`     | `hf.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF`                | `Qwen3.5-9B.Q4_K_M.gguf`                                                   | `Q4_K_M`     | `qwen3.5-9b-opus4.6-it-ds-q4_k_m.gguf`   | `instruct-distill` |     `262144` | —               | PARAMETER temperature 0.6                                |
+| `qwen3.5:4b`             | `hf.co/unsloth/Qwen3.5-4B-GGUF`                                                        | `Qwen3.5-4B-UD-Q4_K_XL.gguf`                                               | `UD-Q4_K_XL` | `qwen3.5-4b-it-ud-q4_k_xl.gguf`          | `instruct`         |     `131072` | —               | PARAMETER temperature 0.2                                |
 
 ### Materialization graph
 
@@ -85,6 +86,20 @@ flowchart LR
   hf_hf_co_unsloth_Qwen3_Coder_30B_A3B_Instruct_GGUF --> remote_hf_co_unsloth_Qwen3_Coder_30B_A3B_Instruct_GGUF_Qwen3_Coder_30B_A3B_Instruct_Q5_K_M_gguf --> local_qwen3_coder_30b_a3b_cd_q5_k_m_gguf --> ollama_qwen3_coder_30b_a3b_q5
   params_qwen3_coder_30b_a3b_q5["MODELFILE params"]:::params
   params_qwen3_coder_30b_a3b_q5 -.-> ollama_qwen3_coder_30b_a3b_q5
+  hf_hf_co_Qwen_Qwen3_14B_GGUF["HF: hf.co/Qwen/Qwen3-14B-GGUF"]:::hf
+  remote_hf_co_Qwen_Qwen3_14B_GGUF_Qwen3_14B_Q4_K_M_gguf["Remote GGUF: Qwen3-14B-Q4_K_M.gguf"]:::file
+  local_qwen3_14b_it_q4_k_m_gguf["Local GGUF: qwen3-14b-it-q4_k_m.gguf"]:::file
+  ollama_qwen3_14b["Ollama: qwen3:14b\nquant=Q4_K_M; family=instruct"]:::ollama
+  hf_hf_co_Qwen_Qwen3_14B_GGUF --> remote_hf_co_Qwen_Qwen3_14B_GGUF_Qwen3_14B_Q4_K_M_gguf --> local_qwen3_14b_it_q4_k_m_gguf --> ollama_qwen3_14b
+  params_qwen3_14b["MODELFILE params"]:::params
+  params_qwen3_14b -.-> ollama_qwen3_14b
+  hf_hf_co_Qwen_Qwen3_4B_GGUF["HF: hf.co/Qwen/Qwen3-4B-GGUF"]:::hf
+  remote_hf_co_Qwen_Qwen3_4B_GGUF_Qwen3_4B_Q4_K_M_gguf["Remote GGUF: Qwen3-4B-Q4_K_M.gguf"]:::file
+  local_qwen3_4b_it_q4_k_m_gguf["Local GGUF: qwen3-4b-it-q4_k_m.gguf"]:::file
+  ollama_qwen3_4b["Ollama: qwen3:4b\nquant=Q4_K_M; family=instruct"]:::ollama
+  hf_hf_co_Qwen_Qwen3_4B_GGUF --> remote_hf_co_Qwen_Qwen3_4B_GGUF_Qwen3_4B_Q4_K_M_gguf --> local_qwen3_4b_it_q4_k_m_gguf --> ollama_qwen3_4b
+  params_qwen3_4b["MODELFILE params"]:::params
+  params_qwen3_4b -.-> ollama_qwen3_4b
   hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF["HF: hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF"]:::hf
   remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q4_K_M_gguf["Remote GGUF: Qwen3.5-27B.Q4_K_M.gguf"]:::file
   local_qwen3_5_27b_opus4_6_it_ds_q4_k_m_gguf["Local GGUF: qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf"]:::file
@@ -92,6 +107,13 @@ flowchart LR
   hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q4_K_M_gguf --> local_qwen3_5_27b_opus4_6_it_ds_q4_k_m_gguf --> ollama_qwen3_5_27b_q4
   params_qwen3_5_27b_q4["MODELFILE params"]:::params
   params_qwen3_5_27b_q4 -.-> ollama_qwen3_5_27b_q4
+  hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF["HF: hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF"]:::hf
+  remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q8_0_gguf["Remote GGUF: Qwen3.5-27B.Q8_0.gguf"]:::file
+  local_qwen3_5_27b_opus4_6_it_ds_q8_0_gguf["Local GGUF: qwen3.5-27b-opus4.6-it-ds-q8_0.gguf"]:::file
+  ollama_qwen3_5_27b_q8["Ollama: qwen3.5-27b:q8\nquant=Q8_0; family=instruct-distill"]:::ollama
+  hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q8_0_gguf --> local_qwen3_5_27b_opus4_6_it_ds_q8_0_gguf --> ollama_qwen3_5_27b_q8
+  params_qwen3_5_27b_q8["MODELFILE params"]:::params
+  params_qwen3_5_27b_q8 -.-> ollama_qwen3_5_27b_q8
   hf_hf_co_Jackrong_Qwen3_5_9B_Gemini_3_1_Pro_Reasoning_Distill_GGUF["HF: hf.co/Jackrong/Qwen3.5-9B-Gemini-3.1-Pro-Reasoning-Distill-GGUF"]:::hf
   remote_hf_co_Jackrong_Qwen3_5_9B_Gemini_3_1_Pro_Reasoning_Distill_GGUF_Qwen3_5_9B_Q4_K_M_gguf["Remote GGUF: Qwen3.5-9B.Q4_K_M.gguf"]:::file
   local_qwen3_5_9b_gemini3_1_it_ds_q4_k_m_gguf["Local GGUF: qwen3.5-9b-gemini3.1-it-ds-q4_k_m.gguf"]:::file
@@ -107,26 +129,12 @@ flowchart LR
   params_qwen3_5_9b_opus4_6["MODELFILE params"]:::params
   params_qwen3_5_9b_opus4_6 -.-> ollama_qwen3_5_9b_opus4_6
   hf_hf_co_unsloth_Qwen3_5_4B_GGUF["HF: hf.co/unsloth/Qwen3.5-4B-GGUF"]:::hf
-  remote_hf_co_unsloth_Qwen3_5_4B_GGUF_Qwen3_5_4B_Q4_K_M_gguf["Remote GGUF: Qwen3.5-4B-Q4_K_M.gguf"]:::file
-  local_qwen3_5_4b_it_q4_k_m_gguf["Local GGUF: qwen3.5-4b-it-q4_k_m.gguf"]:::file
-  ollama_qwen3_5_4b["Ollama: qwen3.5:4b\nquant=Q4_K_M; family=instruct"]:::ollama
-  hf_hf_co_unsloth_Qwen3_5_4B_GGUF --> remote_hf_co_unsloth_Qwen3_5_4B_GGUF_Qwen3_5_4B_Q4_K_M_gguf --> local_qwen3_5_4b_it_q4_k_m_gguf --> ollama_qwen3_5_4b
+  remote_hf_co_unsloth_Qwen3_5_4B_GGUF_Qwen3_5_4B_UD_Q4_K_XL_gguf["Remote GGUF: Qwen3.5-4B-UD-Q4_K_XL.gguf"]:::file
+  local_qwen3_5_4b_it_ud_q4_k_xl_gguf["Local GGUF: qwen3.5-4b-it-ud-q4_k_xl.gguf"]:::file
+  ollama_qwen3_5_4b["Ollama: qwen3.5:4b\nquant=UD-Q4_K_XL; family=instruct"]:::ollama
+  hf_hf_co_unsloth_Qwen3_5_4B_GGUF --> remote_hf_co_unsloth_Qwen3_5_4B_GGUF_Qwen3_5_4B_UD_Q4_K_XL_gguf --> local_qwen3_5_4b_it_ud_q4_k_xl_gguf --> ollama_qwen3_5_4b
   params_qwen3_5_4b["MODELFILE params"]:::params
   params_qwen3_5_4b -.-> ollama_qwen3_5_4b
-  hf_hf_co_Qwen_Qwen3_14B_GGUF["HF: hf.co/Qwen/Qwen3-14B-GGUF"]:::hf
-  remote_hf_co_Qwen_Qwen3_14B_GGUF_Qwen3_14B_Q4_K_M_gguf["Remote GGUF: Qwen3-14B-Q4_K_M.gguf"]:::file
-  local_qwen3_14b_it_q4_k_m_gguf["Local GGUF: qwen3-14b-it-q4_k_m.gguf"]:::file
-  ollama_qwen3_14b["Ollama: qwen3:14b\nquant=Q4_K_M; family=instruct"]:::ollama
-  hf_hf_co_Qwen_Qwen3_14B_GGUF --> remote_hf_co_Qwen_Qwen3_14B_GGUF_Qwen3_14B_Q4_K_M_gguf --> local_qwen3_14b_it_q4_k_m_gguf --> ollama_qwen3_14b
-  params_qwen3_14b["MODELFILE params"]:::params
-  params_qwen3_14b -.-> ollama_qwen3_14b
-  hf_hf_co_Qwen_Qwen3_4B_GGUF["HF: hf.co/Qwen/Qwen3-4B-GGUF"]:::hf
-  remote_hf_co_Qwen_Qwen3_4B_GGUF_Qwen3_4B_Q4_K_M_gguf["Remote GGUF: Qwen3-4B-Q4_K_M.gguf"]:::file
-  local_qwen3_4b_it_q4_k_m_gguf["Local GGUF: qwen3-4b-it-q4_k_m.gguf"]:::file
-  ollama_qwen3_4b["Ollama: qwen3:4b\nquant=Q4_K_M; family=instruct"]:::ollama
-  hf_hf_co_Qwen_Qwen3_4B_GGUF --> remote_hf_co_Qwen_Qwen3_4B_GGUF_Qwen3_4B_Q4_K_M_gguf --> local_qwen3_4b_it_q4_k_m_gguf --> ollama_qwen3_4b
-  params_qwen3_4b["MODELFILE params"]:::params
-  params_qwen3_4b -.-> ollama_qwen3_4b
 ```
 
 ---

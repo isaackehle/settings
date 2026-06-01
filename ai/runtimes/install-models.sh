@@ -684,7 +684,13 @@ iter_desired_gguf_specs() {
 
     local alias source quant filename remote_filename variants spec
     local extra_quant extra_filename extra_source extra_remote_filename
+
+    # Track which aliases we've already emitted so we don't duplicate.
+    local -A _emitted=()
+
+    # Pass 1: models assigned to roles in LOCAL_MODEL_NAMES.
     for alias in "${LOCAL_MODEL_NAMES[@]}"; do
+        [[ -n "${_emitted[$alias]:-}" ]] && continue
         source="${GGUF_SOURCES[$alias]:-}"
         quant="${GGUF_QUANTS[$alias]:-}"
         filename="${GGUF_LOCAL_FILENAMES[$alias]:-}"
@@ -696,6 +702,7 @@ iter_desired_gguf_specs() {
         fi
         if [[ -n "$source" && -n "$quant" && -n "$filename" ]]; then
             printf '%s|%s|%s|%s|%s\n' "$alias" "$quant" "$filename" "$source" "$remote_filename"
+            _emitted["$alias"]=1
         fi
 
         variants="${GGUF_VARIANTS[$alias]:-}"
@@ -714,6 +721,24 @@ iter_desired_gguf_specs() {
                 printf '%s|%s|%s|%s|%s\n' "$alias" "$extra_quant" "$extra_filename" "$extra_source" "$extra_remote_filename"
             fi
         done
+    done
+
+    # Pass 2: all remaining GGUF models not assigned to a role.
+    # This catches distillation models and other GGUF-only entries that are
+    # defined in models.json but not in LOCAL_MODEL_NAMES.
+    for alias in "${!GGUF_SOURCES[@]}"; do
+        [[ -n "${_emitted[$alias]:-}" ]] && continue
+        source="${GGUF_SOURCES[$alias]:-}"
+        quant="${GGUF_QUANTS[$alias]:-}"
+        filename="${GGUF_LOCAL_FILENAMES[$alias]:-}"
+        if declare -p GGUF_REMOTE_FILENAMES &>/dev/null; then
+            remote_filename="${GGUF_REMOTE_FILENAMES[$alias]:-$filename}"
+        else
+            remote_filename="$filename"
+        fi
+        if [[ -n "$source" && -n "$quant" && -n "$filename" ]]; then
+            printf '%s|%s|%s|%s|%s\n' "$alias" "$quant" "$filename" "$source" "$remote_filename"
+        fi
     done
 }
 
@@ -924,11 +949,33 @@ register_ollama_models_from_gguf() {
             log_success "Registered Ollama model: $model_name"
             passed+=("$model_name")
         else
-            print_command_output_with_colored_errors <<< "$create_output"
-            log_error "Failed to register Ollama model: $model_name"
-            log_error "Generated Modelfile was left at: $modelfile"
-            modelfile=""
-            failed+=("$model_name")
+            # If the hf.co/ reference failed, retry with the local GGUF path.
+            # Some repos (e.g., those with mmproj files) cause Ollama's
+            # hf.co resolver to return 400 errors.
+            if [[ "$model_ref" == hf.co/* ]] && [[ -f "$gguf_path" ]]; then
+                log_warning "hf.co reference failed for $model_name, retrying with local GGUF path"
+                rm -f "$modelfile"
+                modelfile=$(mktemp /tmp/ollama_gguf_XXXXXX)
+                build_ollama_modelfile_from_gguf "$alias" "$gguf_path" "$modelfile" "$quant" "$filename"
+                if create_output="$(ollama create "$model_name" -f "$modelfile" 2>&1)"; then
+                    printf '%s\n' "$create_output"
+                    _ollama_list_invalidate
+                    log_success "Registered Ollama model: $model_name (local GGUF fallback)"
+                    passed+=("$model_name")
+                else
+                    print_command_output_with_colored_errors <<< "$create_output"
+                    log_error "Failed to register Ollama model: $model_name"
+                    log_error "Generated Modelfile was left at: $modelfile"
+                    modelfile=""
+                    failed+=("$model_name")
+                fi
+            else
+                print_command_output_with_colored_errors <<< "$create_output"
+                log_error "Failed to register Ollama model: $model_name"
+                log_error "Generated Modelfile was left at: $modelfile"
+                modelfile=""
+                failed+=("$model_name")
+            fi
         fi
         [[ -z "$modelfile" ]] || rm -f "$modelfile"
         echo
