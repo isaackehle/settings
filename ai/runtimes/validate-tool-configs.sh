@@ -52,19 +52,26 @@ VERBOSE=0
 WARNINGS=0
 ERRORS=0
 
-# ── Argument parsing ───────────────────────────────────────────────────────
-usage() {
-    cat <<'EOF'
-Usage:
-  ai/runtimes/validate-tool-configs.sh [options]
+# ── Categorized tracking ─────────────────────────────────────────────────────
+# Each category maps to a count. record_warning/record_error increment the
+# appropriate category so the summary shows a breakdown.
+declare -A WARN_BY_CAT=()
+declare -A ERR_BY_CAT=()
 
-Options:
-  --profile NAME    Validate a specific profile (default: auto-detect)
-  --strict          Treat warnings as failures
-  --deployed        Also check deployed configs match source configs
-  --verbose         Show passing checks too
-  -h, --help        Show this help
-EOF
+record_warning() {
+    WARNINGS=$((WARNINGS + 1))
+    local cat="${1:-general}"
+    WARN_BY_CAT["$cat"]=$(( ${WARN_BY_CAT["$cat"]:-0} + 1 ))
+    shift
+    log_warning "$*"
+}
+
+record_error() {
+    ERRORS=$((ERRORS + 1))
+    local cat="${1:-general}"
+    ERR_BY_CAT["$cat"]=$(( ${ERR_BY_CAT["$cat"]:-0} + 1 ))
+    shift
+    log_error "$*"
 }
 
 while [ $# -gt 0 ]; do
@@ -172,16 +179,6 @@ fi
 # HELPER FUNCTIONS
 # ============================================================================
 
-record_warning() {
-    WARNINGS=$((WARNINGS + 1))
-    log_warning "$*"
-}
-
-record_error() {
-    ERRORS=$((ERRORS + 1))
-    log_error "$*"
-}
-
 record_pass() {
     if [ "$VERBOSE" = "1" ]; then
         log_success "$*"
@@ -246,7 +243,7 @@ check_ollama_running() {
     log_info "Checking Ollama connectivity..."
 
     OLLAMA_JSON=$(curl -sf http://localhost:11434/api/tags 2>/dev/null) || {
-        record_error "Ollama is not running or not reachable on :11434"
+        record_error ollama-down "Ollama is not running or not reachable on :11434"
         return 1
     }
 
@@ -314,7 +311,7 @@ check_llamacpp_servers() {
         if [ "$http_code" = "200" ]; then
             record_pass "llama.cpp ${provider} on :${port} — reachable"
         else
-            record_warning "llama.cpp ${provider} on :${port} — not reachable (HTTP ${http_code})"
+            record_warning server-down "llama.cpp ${provider} on :${port} — not reachable (HTTP ${http_code})"
         fi
     done
 }
@@ -333,7 +330,7 @@ validate_kilocode() {
     local config_file="$1"
     local config_label="$2"
 
-    [ ! -f "$config_file" ] && { record_warning "Kilo Code config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "Kilo Code config not found: ${config_file}"; return; }
 
     log_info "Validating Kilo Code config: ${config_label}"
 
@@ -353,7 +350,7 @@ for pname, pdata in data.get('provider', {}).items():
     ptype = 'openrouter' if 'openrouter' in base_url else 'local'
     models = list(pdata.get('models', {}).keys())
     print(f'{pname}|{ptype}|{chr(31).join(models)}')
-" 2>/dev/null) || { record_error "Failed to parse Kilo Code config"; return; }
+" 2>/dev/null) || { record_error parse-error "Failed to parse Kilo Code config"; return; }
 
     while IFS='|' read -r provider ptype models_str; do
         KC_PROVIDER_TYPE["$provider"]="$ptype"
@@ -390,23 +387,60 @@ for name, agent in data.get('agent', {}).items():
     top_small=$(echo "$content" | python3 -c "import sys,json; data=json.loads(sys.stdin.read()); print(data.get('small_model',''))" 2>/dev/null)
 
     # ── Check: every agent model must exist in a provider ──────────────────
+    # Kilo Code uses provider_id/model_id format (e.g., "ollama/qwen3.5:4b").
+    # Strip the provider prefix and verify the model_id exists in that provider.
     log_info "  Checking agent → provider model resolution..."
     for agent in "${!KC_AGENT_MODELS[@]}"; do
         local model="${KC_AGENT_MODELS[$agent]}"
-        if [ -z "${KC_PROVIDER_MODELS[$model]:-}" ]; then
-            record_error "  Kilo Code agent '${agent}' uses model '${model}' which is NOT in any provider model list"
+        local model_id="$model"
+        local provider_hint=""
+        # Strip provider prefix if present (e.g., "ollama/qwen3.5:4b" → "qwen3.5:4b")
+        if [[ "$model" == */* ]]; then
+            provider_hint="${model%%/*}"
+            model_id="${model#*/}"
+        fi
+        if [ -n "$provider_hint" ]; then
+            # Model has explicit provider — check model_id exists in that provider
+            if [ -z "${KC_PROVIDER_MODELS[$model_id]:-}" ]; then
+                record_error agent-orphan "  Kilo Code agent '${agent}' uses model '${model}' — model_id '${model_id}' NOT in any provider model list"
+            elif [[ "${KC_PROVIDER_MODELS[$model_id]}" != *"$provider_hint"* ]]; then
+                record_error agent-orphan "  Kilo Code agent '${agent}' uses '${model}' — model_id '${model_id}' exists but not in provider '${provider_hint}' (found in: ${KC_PROVIDER_MODELS[$model_id]})"
+            else
+                record_pass "  agent '${agent}' → '${model}' → provider ${KC_PROVIDER_MODELS[$model_id]}"
+            fi
         else
-            record_pass "  agent '${agent}' → '${model}' → provider ${KC_PROVIDER_MODELS[$model]}"
+            # No provider prefix — check model exists in any provider
+            if [ -z "${KC_PROVIDER_MODELS[$model]:-}" ]; then
+                record_error agent-orphan "  Kilo Code agent '${agent}' uses model '${model}' which is NOT in any provider model list (add provider prefix like 'ollama/')"
+            else
+                record_pass "  agent '${agent}' → '${model}' → provider ${KC_PROVIDER_MODELS[$model]}"
+            fi
         fi
     done
 
     # ── Check: top-level model must exist in a provider ──────────────────
     for top_var in "$top_model" "$top_small"; do
         [ -z "$top_var" ] && continue
-        if [ -z "${KC_PROVIDER_MODELS[$top_var]:-}" ]; then
-            record_error "  Kilo Code model '${top_var}' is NOT in any provider model list"
+        local top_id="$top_var"
+        local top_hint=""
+        if [[ "$top_var" == */* ]]; then
+            top_hint="${top_var%%/*}"
+            top_id="${top_var#*/}"
+        fi
+        if [ -n "$top_hint" ]; then
+            if [ -z "${KC_PROVIDER_MODELS[$top_id]:-}" ]; then
+                record_error agent-orphan "  Kilo Code model '${top_var}' — model_id '${top_id}' NOT in any provider model list"
+            elif [[ "${KC_PROVIDER_MODELS[$top_id]}" != *"$top_hint"* ]]; then
+                record_error agent-orphan "  Kilo Code model '${top_var}' — model_id '${top_id}' exists but not in provider '${top_hint}'"
+            else
+                record_pass "  model '${top_var}' → provider ${KC_PROVIDER_MODELS[$top_id]}"
+            fi
         else
-            record_pass "  model '${top_var}' → provider ${KC_PROVIDER_MODELS[$top_var]}"
+            if [ -z "${KC_PROVIDER_MODELS[$top_var]:-}" ]; then
+                record_error agent-orphan "  Kilo Code model '${top_var}' is NOT in any provider model list (add provider prefix like 'ollama/')"
+            else
+                record_pass "  model '${top_var}' → provider ${KC_PROVIDER_MODELS[$top_var]}"
+            fi
         fi
     done
 
@@ -435,14 +469,14 @@ for name, agent in data.get('agent', {}).items():
                                 record_pass "  '${mid}' — canonical ✓, installed ✓"
                                 found=1
                             else
-                                record_error "  '${mid}' — canonical ✓, NOT installed in Ollama (run: setup_ai.sh models)"
+                                record_error not-installed "  '${mid}' — canonical ✓, NOT installed in Ollama (run: setup_ai.sh models)"
                                 found=1
                             fi
                         elif is_cloud "$mid"; then
                             record_pass "  '${mid}' — cloud model"
                             found=1
                         else
-                            record_warning "  '${mid}' — NOT in models.sh (phantom or distillation model)"
+                            record_warning phantom "  '${mid}' — NOT in models.sh (phantom or distillation model)"
                             found=1
                         fi
                     fi
@@ -456,7 +490,7 @@ for name, agent in data.get('agent', {}).items():
 
         if [ "$found" = "0" ]; then
             if [[ "$providers" == *llamacpp* ]]; then
-                record_warning "  '${mid}' — llama.cpp server(s) not reachable"
+                record_warning server-down "  '${mid}' — llama.cpp server(s) not reachable"
             fi
         fi
     done
@@ -468,7 +502,7 @@ validate_opencode() {
     local config_file="$1"
     local config_label="$2"
 
-    [ ! -f "$config_file" ] && { record_warning "OpenCode config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "OpenCode config not found: ${config_file}"; return; }
 
     log_info "Validating OpenCode config: ${config_label}"
 
@@ -494,17 +528,17 @@ for name, agent in data.get('agent', {}).items():
                     if ollama_has_model "$model_name"; then
                         record_pass "  OpenCode '${agent}' → '${model_name}' — canonical ✓, installed ✓"
                     else
-                        record_error "  OpenCode '${agent}' → '${model_name}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
+                        record_error not-installed "  OpenCode '${agent}' → '${model_name}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
                     fi
                 else
-                    record_error "  OpenCode '${agent}' → '${model_name}' — NOT in models.sh"
+                    record_error not-canonical "  OpenCode '${agent}' → '${model_name}' — NOT in models.sh"
                 fi
                 ;;
             openrouter/*)
                 record_pass "  OpenCode '${agent}' → '${full_model}' — cloud model"
                 ;;
             *)
-                record_warning "  OpenCode '${agent}' → '${full_model}' — unknown provider prefix"
+                record_warning unknown-provider "  OpenCode '${agent}' → '${full_model}' — unknown provider prefix"
                 ;;
         esac
     done <<< "$agent_data"
@@ -516,7 +550,7 @@ validate_continue() {
     local config_file="$1"
     local config_label="$2"
 
-    [ ! -f "$config_file" ] && { record_warning "Continue config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "Continue config not found: ${config_file}"; return; }
 
     log_info "Validating Continue config: ${config_label}"
 
@@ -539,7 +573,7 @@ for m in data.get('models', []):
         print(f'LLAMACPP|{model}|{name}|{port}')
     else:
         print(f'UNKNOWN|{model}|{name}')
-" 2>/dev/null) || { record_warning "  Could not parse Continue YAML (install pyyaml)"; return; }
+" 2>/dev/null) || { record_warning parse-error "  Could not parse Continue YAML (install pyyaml)"; return; }
 
     while IFS='|' read -r provider model name port; do
         [ -z "$model" ] && continue
@@ -549,10 +583,10 @@ for m in data.get('models', []):
                     if ollama_has_model "$model"; then
                         record_pass "  Continue '${name}' → '${model}' — canonical ✓, installed ✓"
                     else
-                        record_error "  Continue '${name}' → '${model}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
+                        record_error not-installed "  Continue '${name}' → '${model}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
                     fi
                 else
-                    record_error "  Continue '${name}' → '${model}' — NOT in models.sh"
+                    record_error not-canonical "  Continue '${name}' → '${model}' — NOT in models.sh"
                 fi
                 ;;
             OPENROUTER)
@@ -564,11 +598,11 @@ for m in data.get('models', []):
                 if [ "$http_code" = "200" ]; then
                     record_pass "  Continue '${name}' → '${model}' on llama.cpp :${port} — server up"
                 else
-                    record_warning "  Continue '${name}' → '${model}' on llama.cpp :${port} — server not reachable"
+                    record_warning server-down "  Continue '${name}' → '${model}' on llama.cpp :${port} — server not reachable"
                 fi
                 ;;
             *)
-                record_warning "  Continue '${name}' → '${model}' — unknown provider"
+                record_warning unknown-provider "  Continue '${name}' → '${model}' — unknown provider"
                 ;;
         esac
     done <<< "$model_entries"
@@ -580,7 +614,7 @@ validate_claude() {
     local config_file="$1"
     local config_label="$2"
 
-    [ ! -f "$config_file" ] && { record_warning "Claude Code config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "Claude Code config not found: ${config_file}"; return; }
 
     log_info "Validating Claude Code config: ${config_label}"
 
@@ -602,10 +636,10 @@ if model: print(model)
             if ollama_has_model "$model"; then
                 record_pass "  Claude Code '${model}' — canonical ✓, installed ✓"
             else
-                record_error "  Claude Code '${model}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
+                record_error not-installed "  Claude Code '${model}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
             fi
         else
-            record_error "  Claude Code '${model}' — NOT in models.sh"
+            record_error not-canonical "  Claude Code '${model}' — NOT in models.sh"
         fi
     done <<< "$models"
 }
@@ -616,7 +650,7 @@ validate_aider() {
     local config_file="$1"
     local config_label="$2"
 
-    [ ! -f "$config_file" ] && { record_warning "Aider config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "Aider config not found: ${config_file}"; return; }
 
     log_info "Validating Aider config: ${config_label}"
 
@@ -635,10 +669,10 @@ validate_aider() {
                     if ollama_has_model "$stripped"; then
                         record_pass "  Aider '${model}' → '${stripped}' — canonical ✓, installed ✓"
                     else
-                        record_error "  Aider '${model}' → '${stripped}' — canonical ✓, NOT installed"
+                        record_error not-installed "  Aider '${model}' → '${stripped}' — canonical ✓, NOT installed"
                     fi
                 else
-                    record_error "  Aider '${model}' → '${stripped}' — NOT in models.sh"
+                    record_error not-canonical "  Aider '${model}' → '${stripped}' — NOT in models.sh"
                 fi
                 ;;
             openrouter/*)
@@ -649,10 +683,10 @@ validate_aider() {
                     if ollama_has_model "$model"; then
                         record_pass "  Aider '${model}' — canonical ✓, installed ✓"
                     else
-                        record_error "  Aider '${model}' — canonical ✓, NOT installed"
+                        record_error not-installed "  Aider '${model}' — canonical ✓, NOT installed"
                     fi
                 else
-                    record_error "  Aider '${model}' — NOT in models.sh"
+                    record_error not-canonical "  Aider '${model}' — NOT in models.sh"
                 fi
                 ;;
         esac
@@ -666,7 +700,7 @@ validate_json_provider_config() {
     local config_label="$2"
     local provider_key="${3:-provider}"  # "provider" for Gemini/Grok, "providers" for Crush
 
-    [ ! -f "$config_file" ] && { record_warning "${config_label} config not found: ${config_file}"; return; }
+    [ ! -f "$config_file" ] && { record_warning config-missing "${config_label} config not found: ${config_file}"; return; }
 
     log_info "Validating ${config_label} config: ${config_label}"
 
@@ -702,17 +736,17 @@ if isinstance(providers, dict):
                     if ollama_has_model "$mid"; then
                         record_pass "  ${config_label} '${mid}' — canonical ✓, installed ✓"
                     else
-                        record_error "  ${config_label} '${mid}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
+                        record_error not-installed "  ${config_label} '${mid}' — canonical ✓, NOT installed (run: setup_ai.sh models)"
                     fi
                 else
-                    record_error "  ${config_label} '${mid}' — NOT in models.sh"
+                    record_error not-canonical "  ${config_label} '${mid}' — NOT in models.sh"
                 fi
                 ;;
             openrouter)
                 record_pass "  ${config_label} '${mid}' — cloud model"
                 ;;
             *)
-                record_warning "  ${config_label} '${mid}' — unknown provider type '${ptype}'"
+                record_warning unknown-provider "  ${config_label} '${mid}' — unknown provider type '${ptype}'"
                 ;;
         esac
     done <<< "$model_entries"
@@ -745,8 +779,8 @@ check_deployed_configs() {
         local deployed="${DEPLOY_MAP[$tool]}"
         local source="${SOURCE_MAP[$tool]}"
 
-        [ ! -f "$deployed" ] && { record_warning "  ${tool}: deployed config not found at ${deployed}"; continue; }
-        [ ! -f "$source" ] && { record_warning "  ${tool}: source config not found at ${source}"; continue; }
+        [ ! -f "$deployed" ] && { record_warning config-missing "  ${tool}: deployed config not found at ${deployed}"; continue; }
+        [ ! -f "$source" ] && { record_warning config-missing "  ${tool}: source config not found at ${source}"; continue; }
 
         case "$tool" in
             kilocode|opencode|claude|grok|crush|gemini)
@@ -754,18 +788,18 @@ check_deployed_configs() {
                 deployed_norm=$(strip_jsonc < "$deployed" | python3 -c "import sys,json; print(json.dumps(json.load(sys.stdin), sort_keys=True))" 2>/dev/null || echo "")
                 source_norm=$(strip_jsonc < "$source" | python3 -c "import sys,json; print(json.dumps(json.load(sys.stdin), sort_keys=True))" 2>/dev/null || echo "")
                 if [ -z "$deployed_norm" ] || [ -z "$source_norm" ]; then
-                    record_warning "  ${tool}: could not normalize JSON for comparison"
+                    record_warning parse-error "  ${tool}: could not normalize JSON for comparison"
                 elif [ "$deployed_norm" = "$source_norm" ]; then
                     record_pass "  ${tool}: deployed matches source"
                 else
-                    record_warning "  ${tool}: deployed config DIFFERS from source"
+                    record_warning config-drift "  ${tool}: deployed config DIFFERS from source"
                 fi
                 ;;
             *)
                 if diff -q "$source" "$deployed" >/dev/null 2>&1; then
                     record_pass "  ${tool}: deployed matches source"
                 else
-                    record_warning "  ${tool}: deployed config DIFFERS from source"
+                    record_warning config-drift "  ${tool}: deployed config DIFFERS from source"
                 fi
                 ;;
         esac
@@ -790,10 +824,10 @@ cross_check_models_sh() {
                 if ollama_has_model "$model"; then
                     record_pass "  [${arr_name}] ${role} = ${model} — canonical ✓, installed ✓"
                 else
-                    record_error "  [${arr_name}] ${role} = ${model} — canonical ✓, NOT installed (run: setup_ai.sh models)"
+                    record_error not-installed "  [${arr_name}] ${role} = ${model} — canonical ✓, NOT installed (run: setup_ai.sh models)"
                 fi
             else
-                record_error "  [${arr_name}] ${role} = ${model} — NOT in models.sh"
+                record_error not-canonical "  [${arr_name}] ${role} = ${model} — NOT in models.sh"
             fi
         done < <(declare -p "$arr_name" 2>/dev/null | sed -n 's/.*\[\([^]]*\)\]="\([^"]*\)".*/\1=\2/p')
     done
@@ -804,7 +838,7 @@ cross_check_models_sh() {
         if ollama_has_model "$model"; then
             record_pass "  [LOCAL_MODEL_NAMES] ${role} = ${model} — installed ✓"
         else
-            record_error "  [LOCAL_MODEL_NAMES] ${role} = ${model} — NOT installed (run: setup_ai.sh models)"
+            record_error not-installed "  [LOCAL_MODEL_NAMES] ${role} = ${model} — NOT installed (run: setup_ai.sh models)"
         fi
     done
 
@@ -816,7 +850,7 @@ cross_check_models_sh() {
         if [ -n "$filename" ] && [ -f "$gguf_path" ]; then
             record_pass "  [GGUF] ${alias} — file exists: ${filename}"
         elif [ -n "$filename" ]; then
-            record_warning "  [GGUF] ${alias} — file missing: ${gguf_path}"
+            record_warning gguf-missing "  [GGUF] ${alias} — file missing: ${gguf_path}"
         fi
     done
 }
@@ -833,7 +867,7 @@ echo ""
 
 # Step 1: Check Ollama is running
 if ! check_ollama_running; then
-    record_error "Cannot proceed without Ollama. Start it with: brew services start ollama"
+    record_error ollama-down "Cannot proceed without Ollama. Start it with: brew services start ollama"
     echo ""
     log_error "Validation failed — Ollama not running"
     exit 1
@@ -893,6 +927,40 @@ echo "════════════════════════�
 echo "  Validation summary for profile '${PROFILE_NAME}'"
 echo "  warnings: ${WARNINGS}"
 echo "  errors:   ${ERRORS}"
+
+# Print categorized breakdown if there are any issues
+if [ "$WARNINGS" -gt 0 ] || [ "$ERRORS" -gt 0 ]; then
+    echo ""
+    echo "  Breakdown by category:"
+
+    # Merge warning and error categories
+    declare -A ALL_CATS=()
+    for cat in "${!WARN_BY_CAT[@]}"; do ALL_CATS["$cat"]=1; done
+    for cat in "${!ERR_BY_CAT[@]}"; do ALL_CATS["$cat"]=1; done
+
+    # Sort categories for consistent output
+    for cat in $(echo "${!ALL_CATS[@]}" | tr ' ' '\n' | sort); do
+        w="${WARN_BY_CAT[$cat]:-0}"
+        e="${ERR_BY_CAT[$cat]:-0}"
+        label=""
+        case "$cat" in
+            ollama-down)     label="Ollama not running" ;;
+            server-down)     label="llama.cpp server not reachable" ;;
+            config-missing)  label="Config file not found" ;;
+            config-drift)    label="Deployed config differs from source" ;;
+            parse-error)     label="Failed to parse config" ;;
+            not-canonical)   label="Model not in models.sh" ;;
+            not-installed)   label="Model canonical but not in Ollama" ;;
+            phantom)         label="Phantom/distillation model" ;;
+            agent-orphan)    label="Agent model not in provider list" ;;
+            unknown-provider) label="Unknown provider type" ;;
+            gguf-missing)    label="GGUF file missing from disk" ;;
+            *)               label="$cat" ;;
+        esac
+        printf "    %-35s  %d warn  %d err\n" "$label" "$w" "$e"
+    done
+fi
+
 echo ""
 echo "  Legend:"
 echo "    canonical ✓  = model is defined in models.sh"

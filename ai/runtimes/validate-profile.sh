@@ -138,7 +138,6 @@ validate_gguf_metadata() {
         filename="${GGUF_LOCAL_FILENAMES[$alias]:-${GGUF_FILENAMES[$alias]:-}}"
         family="${GGUF_FAMILIES[$alias]:-}"
         ctx="${OLLAMA_CONTEXT_WINDOWS[$alias]:-}"
-        template="${OLLAMA_MODELFILE_TEMPLATES[$alias]:-}"
         params="$(modelfile_params_for_alias "$alias")"
 
         [ -n "$source" ] || record_error "Missing GGUF_SOURCES entry for alias '$alias'"
@@ -158,10 +157,6 @@ validate_gguf_metadata() {
                     break
                 fi
             done
-        fi
-
-        if [ -n "$template" ] && [ ! -f "$template" ]; then
-            record_error "OLLAMA_MODELFILE_TEMPLATES entry for alias '$alias' does not exist: $template"
         fi
 
         if [ -n "$params" ]; then

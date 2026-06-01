@@ -46,143 +46,76 @@ declare -A LOCAL_MODEL_NAMES=(
     ["summary"]="qwen3.5:4b"
 )
 
-declare -A GGUF_SOURCES=(
-    ["codestral:22b"]="hf.co/bartowski/Codestral-22B-v0.1-GGUF"
-    ["deepseek-r1:7b"]="hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF"
-    ["nomic-embed-text"]="hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF"
-    ["qwen2.5-7b:multi"]="hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF"
-    ["qwen2.5-coder:1.5b"]="hf.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF"
-    ["qwen2.5-coder:7b"]="hf.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF"
-    ["qwen3-14b:sonnet4.5"]="hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF"
-    ["qwen3-8b:sonnet4.5"]="hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF"
-    ["qwen3-coder-30b-a3b:q5"]="hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF"
-    ["qwen3.5-27b:q4"]="hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF"
-    ["qwen3.5-9b:gemini3.1"]="hf.co/Jackrong/Qwen3.5-9B-Gemini-3.1-Pro-Reasoning-Distill-GGUF"
-    ["qwen3.5-9b:opus4.6"]="hf.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF"
-    ["qwen3.5:4b"]="hf.co/unsloth/Qwen3.5-4B-GGUF"
-    ["qwen3:14b"]="hf.co/Qwen/Qwen3-14B-GGUF"
-    ["qwen3:4b"]="hf.co/Qwen/Qwen3-4B-GGUF"
-)
+# ==============================================
+# MODEL REGISTRY — loaded from models.json
+# ==============================================
+# All model metadata lives in models.json (one model = one JSON object).
+# This section parses it into the associative arrays that install/deploy scripts expect.
+# To add or edit a model, change models.json — do not edit the arrays below.
 
-declare -A GGUF_QUANTS=(
-    ["codestral:22b"]="Q4_K_M"
-    ["deepseek-r1:7b"]="Q4_K_M"
-    ["nomic-embed-text"]="F16"
-    ["qwen2.5-7b:multi"]="Q4_K_M"
-    ["qwen2.5-coder:1.5b"]="Q4_K_M"
-    ["qwen2.5-coder:7b"]="Q4_K_M"
-    ["qwen3-14b:sonnet4.5"]="Q4_K_M"
-    ["qwen3-8b:sonnet4.5"]="Q4_K_M"
-    ["qwen3-coder-30b-a3b:q5"]="Q5_K_M"
-    ["qwen3.5-27b:q4"]="Q4_K_M"
-    ["qwen3.5-9b:gemini3.1"]="Q4_K_M"
-    ["qwen3.5-9b:opus4.6"]="Q4_K_M"
-    ["qwen3.5:4b"]="UD-Q4_K_XL"
-    ["qwen3:14b"]="Q4_K_M"
-    ["qwen3:4b"]="Q4_K_M"
-)
+# Resolve models.json relative to this file's directory.
+# BASH_SOURCE works when sourced directly; fall back to SETTINGS_BASE when
+# sourced through process substitution (source <(sed ...)).
+if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "${BASH_SOURCE[0]%/*}/models.json" ]; then
+    _MODELS_JSON="${BASH_SOURCE[0]%/*}/models.json"
+elif [ -n "${SETTINGS_BASE:-}" ] && [ -f "${SETTINGS_BASE}/ai/profiles/macbook-m2-32gb/models.json" ]; then
+    _MODELS_JSON="${SETTINGS_BASE}/ai/profiles/macbook-m2-32gb/models.json"
+else
+    echo "ERROR: models.json not found (tried BASH_SOURCE and SETTINGS_BASE)" >&2
+    return 1 2>/dev/null || exit 1
+fi
 
-# Simplified local filenames: {alias-normalized}-{family-tag}-{quant-lower}.gguf
-# Family tags:
-#   -it    instruct/vision
-#   -cd    coder
-#   -ds    distill
-#   -it-ds instruct+distill
-#   -em    embedding
-declare -A GGUF_LOCAL_FILENAMES=(
-    ["codestral:22b"]="codestral-22b-cd-q4_k_m.gguf"
-    ["deepseek-r1:7b"]="deepseek-r1-7b-ds-q4_k_m.gguf"
-    ["nomic-embed-text"]="nomic-embed-text-em-f16.gguf"
-    ["qwen2.5-7b:multi"]="qwen2.5-7b-multi-it-ds-q4_k_m.gguf"
-    ["qwen2.5-coder:1.5b"]="qwen2.5-coder-1.5b-cd-q4_k_m.gguf"
-    ["qwen2.5-coder:7b"]="qwen2.5-coder-7b-cd-q4_k_m.gguf"
-    ["qwen3-14b:sonnet4.5"]="qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf"
-    ["qwen3-8b:sonnet4.5"]="qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf"
-    ["qwen3-coder-30b-a3b:q5"]="qwen3-coder-30b-a3b-cd-q5_k_m.gguf"
-    ["qwen3.5-27b:q4"]="qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf"
-    ["qwen3.5-9b:gemini3.1"]="qwen3.5-9b-gemini3.1-it-ds-q4_k_m.gguf"
-    ["qwen3.5-9b:opus4.6"]="qwen3.5-9b-opus4.6-it-ds-q4_k_m.gguf"
-    ["qwen3.5:4b"]="qwen3.5-4b-it-ud-q4_k_xl.gguf"
-    ["qwen3:14b"]="qwen3-14b-it-q4_k_m.gguf"
-    ["qwen3:4b"]="qwen3-4b-it-q4_k_m.gguf"
-)
+# Require jq for JSON parsing
+if ! command -v jq >/dev/null 2>&1; then
+    echo "ERROR: jq is required to parse models.json. Install with: brew install jq" >&2
+    return 1 2>/dev/null || exit 1
+fi
 
-# Verbatim filenames as they appear in the Hugging Face repo.
-declare -A GGUF_REMOTE_FILENAMES=(
-    ["codestral:22b"]="Codestral-22B-v0.1-Q4_K_M.gguf"
-    ["deepseek-r1:7b"]="DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf"
-    ["nomic-embed-text"]="nomic-embed-text-v1.5.f16.gguf"
-    ["qwen2.5-7b:multi"]="Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf"
-    ["qwen2.5-coder:1.5b"]="qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
-    ["qwen2.5-coder:7b"]="qwen2.5-coder-7b-instruct-q4_k_m.gguf"
-    ["qwen3-14b:sonnet4.5"]="Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf"
-    ["qwen3-8b:sonnet4.5"]="Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf"
-    ["qwen3-coder-30b-a3b:q5"]="Qwen3-Coder-30B-A3B-Instruct-Q5_K_M.gguf"
-    ["qwen3.5-27b:q4"]="Qwen3.5-27B.Q4_K_M.gguf"
-    ["qwen3.5-9b:gemini3.1"]="Qwen3.5-9B.Q4_K_M.gguf"
-    ["qwen3.5-9b:opus4.6"]="Qwen3.5-9B.Q4_K_M.gguf"
-    ["qwen3.5:4b"]="Qwen3.5-4B-UD-Q4_K_XL.gguf"
-    ["qwen3:14b"]="Qwen3-14B-Q4_K_M.gguf"
-    ["qwen3:4b"]="Qwen3-4B-Q4_K_M.gguf"
-)
+declare -A GGUF_SOURCES=() GGUF_QUANTS=() GGUF_LOCAL_FILENAMES=() GGUF_REMOTE_FILENAMES=()
+declare -A GGUF_FAMILIES=() OLLAMA_CONTEXT_WINDOWS=() MODELFILE_PARAMS=() MODEL_REMOTES=()
 
-declare -A GGUF_FAMILIES=(
-    ["codestral:22b"]="coder"
-    ["deepseek-r1:7b"]="reasoning-tools"
-    ["nomic-embed-text"]="embedding"
-    ["qwen2.5-7b:multi"]="instruct-distill"
-    ["qwen2.5-coder:1.5b"]="coder"
-    ["qwen2.5-coder:7b"]="coder"
-    ["qwen3-14b:sonnet4.5"]="instruct-distill"
-    ["qwen3-8b:sonnet4.5"]="instruct-distill"
-    ["qwen3-coder-30b-a3b:q5"]="coder"
-    ["qwen3.5-27b:q4"]="instruct-distill"
-    ["qwen3.5-9b:gemini3.1"]="instruct-distill"
-    ["qwen3.5-9b:opus4.6"]="instruct-distill"
-    ["qwen3.5:4b"]="instruct"
-    ["qwen3:14b"]="instruct"
-    ["qwen3:4b"]="instruct"
+while IFS= read -r _line; do
+    _alias="${_line%%|*}"
+    _rest="${_line#*|}"
+    _family="${_rest%%|*}"; _rest="${_rest#*|}"
+    _quant="${_rest%%|*}"; _rest="${_rest#*|}"
+    _local_fn="${_rest%%|*}"; _rest="${_rest#*|}"
+    _remote_fn="${_rest%%|*}"; _rest="${_rest#*|}"
+    _hf_source="${_rest%%|*}"; _rest="${_rest#*|}"
+    _ctx="${_rest%%|*}"; _rest="${_rest#*|}"
+    _params="${_rest%%|*}"; _rest="${_rest#*|}"
+    _remote_pull="${_rest%%|*}"
+    [[ -z "$_alias" ]] && continue
+    [[ -n "$_hf_source" ]] && GGUF_SOURCES["$_alias"]="$_hf_source"
+    [[ -n "$_quant" ]] && GGUF_QUANTS["$_alias"]="$_quant"
+    [[ -n "$_local_fn" ]] && GGUF_LOCAL_FILENAMES["$_alias"]="$_local_fn"
+    [[ -n "$_remote_fn" ]] && GGUF_REMOTE_FILENAMES["$_alias"]="$_remote_fn"
+    [[ -n "$_family" ]] && GGUF_FAMILIES["$_alias"]="$_family"
+    [[ -n "$_ctx" ]] && OLLAMA_CONTEXT_WINDOWS["$_alias"]="$_ctx"
+    [[ -n "$_params" ]] && MODELFILE_PARAMS["$_alias"]="$_params"
+    [[ -n "$_remote_pull" ]] && MODEL_REMOTES["$_alias"]="$_remote_pull"
+done < <(
+    jq -r '
+        .models | to_entries[] |
+        .key as $alias |
+        .value |
+        [
+            $alias,
+            .family // "",
+            .quant // "",
+            .local_filename // "",
+            .remote_filename // "",
+            .hf_source // "",
+            (.context_windows | map(tostring) | join(" ")),
+            (.modelfile_params | join("\\n")),
+            .remote_pull // ""
+        ] | join("|")
+    ' "$_MODELS_JSON"
 )
+unset _line _alias _rest _family _quant _local_fn _remote_fn _hf_source _ctx _params _remote_pull _MODELS_JSON
 
-declare -A GGUF_VARIANTS=(
-    ["qwen3.5-27b:q4"]="Q8_0|qwen3.5-27b-opus4.6-it-ds-q8_0.gguf|hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF|Qwen3.5-27B.Q8_0.gguf"
-)
-
-declare -A OLLAMA_CONTEXT_WINDOWS=(
-    ["deepseek-r1:7b"]="131072"
-    ["deepseek-r1-tools:8b"]="131072"
-    ["nomic-embed-text"]="8192"
-    ["qwen2.5-7b:multi"]="1010000"
-    ["qwen3-14b:sonnet4.5"]="40960"
-    ["qwen3-8b:sonnet4.5"]="40960"
-    ["qwen3-coder-30b-a3b:q5"]="32768"
-    ["qwen3.5-27b:q4"]="32768"
-    ["qwen3.5-9b:gemini3.1"]="262144"
-    ["qwen3.5-9b:opus4.6"]="262144"
-    ["qwen3.5:4b"]="131072"
-    ["qwen3:14b"]="262144"
-    ["qwen3:4b"]="131072"
-)
-
-declare -A MODELFILE_PARAMS=(
-    ["deepseek-r1:7b"]="PARAMETER temperature 0.3"
-    ["deepseek-r1-tools:8b"]="PARAMETER temperature 0.3"
-    ["qwen2.5-7b:multi"]="PARAMETER temperature 0.6"
-    ["qwen3-14b:sonnet4.5"]="PARAMETER temperature 0.6"
-    ["qwen3-8b:sonnet4.5"]="PARAMETER temperature 0.6"
-    ["qwen3-coder-30b-a3b:q5"]="PARAMETER temperature 0\nPARAMETER repeat_penalty 1.05"
-    ["qwen3.5-27b:q4"]="PARAMETER temperature 0.6"
-    ["qwen3.5-9b:gemini3.1"]="PARAMETER temperature 0.6"
-    ["qwen3.5-9b:opus4.6"]="PARAMETER temperature 0.6"
-    ["qwen3.5:4b"]="PARAMETER temperature 0.2"
-    ["qwen3:14b"]="PARAMETER temperature 0.5"
-    ["qwen3:4b"]="PARAMETER temperature 0.2"
-)
+declare -A GGUF_VARIANTS=()
 # <<< SHARED GGUF-FIRST DEFINITIONS <<<
-
-declare -A MODEL_REMOTES=(
-    ["deepseek-r1-tools:8b"]="MFDoom/deepseek-r1-tool-calling:8b"
-)
 
 # ==============================================
 # CLOUD MODELS (via OpenRouter — tools connect directly)
