@@ -7,10 +7,18 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "qwen3-coder-30b-a3b:q5": { "name": "Qwen3 Coder 30B A3B (CODE, Q5)" },
-        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (WRIT, Q4)" },
-        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (REAS, TOOL)" },
-        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" }
+        "deepseek-r1-tools:32b": {
+          "name": "DeepSeek R1 32B — Reasoning, Tools"
+        },
+        "qwen3-coder-30b-a3b:q5": {
+          "name": "Qwen3 Coder 30B A3B — Coding, Q5"
+        },
+        "qwen3.5-27b:q4": {
+          "name": "Qwen 3.5 27B — Writing, Q4"
+        },
+        "qwen3:4b": {
+          "name": "Qwen 3 4B — Planning"
+        }
       }
     }
   }

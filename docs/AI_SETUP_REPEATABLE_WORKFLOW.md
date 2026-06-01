@@ -369,7 +369,6 @@ Applies to `macbook-m5-48gb`.
 Applies to `macbook-m5-64gb`.
 
 - This is the widest profile and can keep large coding, writing, reasoning, embeddings, and cloud options.
-- `qwen3-coder-next-80b:q4` belongs here as a solo or heavyweight coding path.
 - `qwen3-coder-30b-a3b:q6` is the practical coding model.
 - `qwen3.5-27b:q8` stays for now as a manual large writing alternate.
 
@@ -515,7 +514,7 @@ Refresh process:
 
 For the current naming generation:
 
-- Maximum coding on 64 GB: `qwen3-coder-next-80b:q4`.
+- Maximum coding on 64 GB: `qwen3-coder-30b-a3b:q6`.
 - Practical coding on 64 GB: `qwen3-coder-30b-a3b:q6`.
 - Writing/default local path: `qwen3.5-27b:q4` unless a profile explicitly retains a larger manual alternate.
 - Fast/planning: `qwen3:4b`.

@@ -7,9 +7,9 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "deepseek-r1-tools:8b": { "name": "DeepSeek R1 8B (REAS, TOOL)" },
-        "qwen3:14b": { "name": "Qwen 3 14B (CODE)" },
-        "qwen3:4b": { "name": "Qwen 3 4B (PLAN)" }
+        "deepseek-r1-tools:8b": { "name": "DeepSeek R1 8B — Reasoning, Tools" },
+        "qwen3:14b": { "name": "Qwen 3 14B — Coding" },
+        "qwen3:4b": { "name": "Qwen 3 4B — Planning" }
       }
     }
   }

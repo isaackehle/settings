@@ -1,7 +1,7 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "qwen3-coder-next-80b:q4",
-  "small_model": "qwen3:4b",
+  "model": "qwen3-coder-30b-a3b:q6",
+  "small_model": "qwen3.5:4b",
   "disabled_providers": [],
   "provider": {
     "ollama": {
@@ -12,43 +12,82 @@
         "apiKey": "sk-local"
       },
       "models": {
-        // ── Core roles ───────────────────────────────────────────────────
-        // Default context from GGUF registration. Use +long for large files/sessions.
-        "qwen3-coder-next-80b:q4": { "name": "Coder Heavy — 80B" },
-        "qwen3-coder-next-80b:q4-128k": { "name": "Coder Heavy — 80B (+long)" },
-        "qwen3-coder-30b-a3b:q6": { "name": "Coder — 30B" },
-        "qwen3-coder-30b-a3b:q6-128k": { "name": "Coder — 30B (+long)" },
-        "qwen3.5-27b:q4": { "name": "Writing / General — 27B (Claude Opus distill)" },
-        "qwen3.5-27b:q4-128k": { "name": "Writing / General — 27B (+long)" },
-        "deepseek-r1:32b": { "name": "Reasoning — DeepSeek R1 32B" },
-        "qwen3:4b": { "name": "Fast / Plan — 4B" },
-        "nomic-embed-text": { "name": "Embed" },
-
-        // ── Competitive distills ─────────────────────────────────────────
-        "qwen3.5-27b:gemini3.1": { "name": "Gemini 3.1 distill — 27B" },
-        "qwen3.6-27b:opus-sonnet": { "name": "Claude Opus+Sonnet distill — 27B" },
-        "qwen3-14b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 14B" },
-        "qwen3-8b:sonnet4.5": { "name": "Claude Sonnet 4.5 distill — 8B" },
-        "qwen2.5-7b:multi": { "name": "Multi-distill Claude+Gemini+GPT — 7B (1M ctx)" },
-        "qwen3.5:4b": { "name": "Qwen3.5 — 4B" }
+        "codestral:22b": { "name": "Codestral 22B — Diff, Apply" },
+        "deepseek-r1:32b": { "name": "DeepSeek R1 32B — Reasoning" },
+        "deepseek-r1:32b-128k": { "name": "DeepSeek R1 32B 128K — Reasoning" },
+        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 Tools 32B — Reasoning, Tools" },
+        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 Tools 32B 128K — Reasoning, Tools" },
+        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi — Claude+Gemini+GPT distill" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B — Autocomplete" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B — Autocomplete" },
+        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B — Claude Sonnet 4.5 distill" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B — Claude Sonnet 4.5 distill" },
+        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B — Coding" },
+        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B 128K — Coding" },
+        "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B — Gemini 3.1 distill" },
+        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B — Writing, Claude Opus distill" },
+        "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B 128K — Writing" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing" },
+        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B 128K — Planning, Writing" },
+        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B — Claude Opus+Sonnet distill" }
       }
     },
     // ── llama.cpp — native tool calling via GGUF Jinja2 template ─────────────
-    // Requires: ai/runtimes/llama-cpp.sh serve heavy (port 8014)
-    "llamacpp-heavy": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Coder Next 80B (8014)",
-      "options": { "baseURL": "http://localhost:8014/v1", "apiKey": "sk-local" },
-      "models": {
-        "qwen3-coder-next-80b:q4": { "name": "Coder Heavy — 80B (llama.cpp, tools ✓)" }
-      }
-    },
     "llamacpp-coder": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Coder 30B (8013)",
+      "name": "llama.cpp — Coder 30B",
       "options": { "baseURL": "http://localhost:8013/v1", "apiKey": "sk-local" },
       "models": {
-        "qwen3-coder-30b-a3b:q6": { "name": "Coder — 30B (llama.cpp, tools ✓)" }
+        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B — Coding, llama.cpp" }
+      }
+    },
+    "llamacpp-embedding": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — Embedding",
+      "options": { "baseURL": "http://localhost:8016/v1", "apiKey": "sk-local" },
+      "models": {
+        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding, llama.cpp" }
+      }
+    },
+    "llamacpp-fast": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — Fast 4B",
+      "options": { "baseURL": "http://localhost:8011/v1", "apiKey": "sk-local" },
+      "models": {
+        "qwen3:4b": { "name": "Qwen3 4B — Planning, llama.cpp" }
+      }
+    },
+    "llamacpp-general": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — General 27B",
+      "options": { "baseURL": "http://localhost:8012/v1", "apiKey": "sk-local" },
+      "models": {
+        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B — Writing, Claude Opus distill, llama.cpp" }
+      }
+    },
+    "llamacpp-heavy": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — Heavy 35B",
+      "options": { "baseURL": "http://localhost:8014/v1", "apiKey": "sk-local" },
+      "models": {
+        "qwen3.6-35b:opus4.6": { "name": "Qwen 3.6 35B — Heavy, Claude Opus distill, llama.cpp" }
+      }
+    },
+    "llamacpp-reasoning": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — Reasoning 32B",
+      "options": { "baseURL": "http://localhost:8015/v1", "apiKey": "sk-local" },
+      "models": {
+        "deepseek-r1:32b": { "name": "DeepSeek R1 32B — Reasoning, llama.cpp" }
+      }
+    },
+    "llamacpp-summary": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp — Summary 4B",
+      "options": { "baseURL": "http://localhost:8017/v1", "apiKey": "sk-local" },
+      "models": {
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing, llama.cpp" }
       }
     },
     "openrouter": {
@@ -59,22 +98,55 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (CLD)" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (CLD)" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (CLD)" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (REAS, CLD)" },
-        "openai/gpt-4o": { "name": "GPT-4o (CLD)" }
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 — Cloud" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 — Cloud" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash — Cloud" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 — Reasoning, Cloud" },
+        "openai/gpt-4o": { "name": "GPT-4o — Cloud" }
       }
     }
   },
   "agent": {
     "code": {
       "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "qwen3-coder-next-80b:q4-128k",
+      "model": "qwen3-coder-30b-a3b:q6-128k",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
-        "bash": "ask",
+        "bash": {
+          "*": "ask",
+          "rm -rf *": "deny",
+          "sudo *": "deny",
+          "git *": "allow",
+          "ls *": "allow",
+          "cat *": "allow",
+          "grep *": "allow",
+          "find *": "allow",
+          "head *": "allow",
+          "tail *": "allow",
+          "wc *": "allow",
+          "sort *": "allow",
+          "uniq *": "allow",
+          "diff *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "mkdir *": "allow",
+          "touch *": "allow",
+          "cp *": "allow",
+          "mv *": "allow",
+          "chmod *": "allow",
+          "python *": "allow",
+          "node *": "allow",
+          "npm *": "allow",
+          "pip *": "allow",
+          "uv *": "allow",
+          "cargo *": "allow",
+          "rustc *": "allow",
+          "make *": "allow",
+          "cmake *": "allow",
+          "swift *": "allow",
+          "xcodebuild *": "allow"
+        },
         "edit": "ask",
         "glob": "allow",
         "grep": "allow",
@@ -86,7 +158,7 @@
     },
     "ask": {
       "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "qwen3-coder-next-80b:q4-128k",
+      "model": "qwen3-coder-30b-a3b:q6-128k",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
@@ -106,7 +178,24 @@
       "mode": "primary",
       "temperature": 0.3,
       "permission": {
-        "bash": "ask",
+        "bash": {
+          "*": "ask",
+          "rm -rf *": "deny",
+          "sudo *": "deny",
+          "git *": "allow",
+          "ls *": "allow",
+          "cat *": "allow",
+          "grep *": "allow",
+          "find *": "allow",
+          "head *": "allow",
+          "tail *": "allow",
+          "wc *": "allow",
+          "diff *": "allow",
+          "echo *": "allow",
+          "printf *": "allow",
+          "python *": "allow",
+          "node *": "allow"
+        },
         "edit": "ask",
         "glob": "allow",
         "grep": "allow",
@@ -118,7 +207,7 @@
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
-      "model": "qwen3:4b",
+      "model": "qwen3.5:4b",
       "mode": "primary",
       "temperature": 0.25,
       "permission": {
@@ -154,7 +243,18 @@
       "mode": "primary",
       "temperature": 0.65,
       "permission": {
-        "bash": "deny",
+        "bash": {
+          "*": "deny",
+          "ls *": "allow",
+          "cat *": "allow",
+          "grep *": "allow",
+          "find *": "allow",
+          "head *": "allow",
+          "tail *": "allow",
+          "wc *": "allow",
+          "echo *": "allow",
+          "printf *": "allow"
+        },
         "edit": "ask",
         "glob": "allow",
         "grep": "allow",
@@ -166,11 +266,28 @@
     },
     "summary": {
       "description": "Commit message and session summary agent.",
-      "model": "qwen3:4b",
+      "model": "qwen3.5:4b",
       "mode": "primary",
       "temperature": 0.2,
       "permission": {
-        "bash": "allow",
+        "bash": {
+          "*": "deny",
+          "git diff *": "allow",
+          "git log *": "allow",
+          "git status": "allow",
+          "git diff --stat": "allow",
+          "git diff --cached": "allow",
+          "git diff HEAD": "allow",
+          "git log --oneline -10": "allow",
+          "ls *": "allow",
+          "cat *": "allow",
+          "grep *": "allow",
+          "head *": "allow",
+          "tail *": "allow",
+          "wc *": "allow",
+          "echo *": "allow",
+          "printf *": "allow"
+        },
         "edit": "deny",
         "glob": "allow",
         "grep": "allow",
@@ -199,7 +316,38 @@
   },
   "default_agent": "code",
   "permission": {
-    "bash": "ask",
+    "bash": {
+      "*": "ask",
+      "rm -rf *": "deny",
+      "sudo *": "deny",
+      "curl *": "allow",
+      "wget *": "allow",
+      "git *": "allow",
+      "ls *": "allow",
+      "cat *": "allow",
+      "grep *": "allow",
+      "find *": "allow",
+      "head *": "allow",
+      "tail *": "allow",
+      "wc *": "allow",
+      "sort *": "allow",
+      "uniq *": "allow",
+      "diff *": "allow",
+      "echo *": "allow",
+      "printf *": "allow",
+      "mkdir *": "allow",
+      "touch *": "allow",
+      "cp *": "allow",
+      "mv *": "allow",
+      "chmod *": "allow",
+      "brew *": "allow",
+      "ollama *": "allow",
+      "python *": "allow",
+      "node *": "allow",
+      "npm *": "allow",
+      "pip *": "allow",
+      "uv *": "allow"
+    },
     "edit": "ask",
     "glob": "allow",
     "grep": "allow",

@@ -1,7 +1,10 @@
 {
   "_note": "MERGE INTO: ~/.config/zed/settings.json — MacBook M2 32GB",
   "assistant": {
-    "default_model": { "provider": "openai", "model": "qwen3-coder-30b-a3b:q5" },
+    "default_model": {
+      "provider": "openai",
+      "model": "qwen3-coder-30b-a3b:q5"
+    },
     "version": "2"
   },
   "language_models": {
@@ -9,42 +12,44 @@
       "api_url": "http://localhost:11434/v1",
       "available_models": [
         {
+          "name": "deepseek-r1:7b",
+          "display_name": "DeepSeek R1 7B — Reasoning",
+          "max_tokens": 65536
+        },
+        {
           "name": "qwen3-coder-30b-a3b:q5",
-          "display_name": "Coder — 30B",
+          "display_name": "Qwen3 Coder 30B A3B — Coding",
           "max_tokens": 32768
         },
         {
           "name": "qwen3-coder-30b-a3b:q5-128k",
-          "display_name": "Coder — 30B (+long)",
+          "display_name": "Qwen3 Coder 30B A3B 128K — Coding",
           "max_tokens": 131072
         },
         {
           "name": "qwen3.5-27b:q4",
-          "display_name": "Writing / General — 27B",
+          "display_name": "Qwen 3.5 27B — Writing",
           "max_tokens": 32768
         },
         {
           "name": "qwen3.5-27b:q4-128k",
-          "display_name": "Writing / General — 27B (+long)",
+          "display_name": "Qwen 3.5 27B 128K — Writing",
           "max_tokens": 131072
         },
         {
-          "name": "deepseek-r1:7b",
-          "display_name": "Reasoning — DeepSeek R1 7B",
-          "max_tokens": 65536
-        },
-        {
           "name": "qwen3:14b",
-          "display_name": "Heavy — 14B",
+          "display_name": "Qwen3 14B — General",
           "max_tokens": 131072
         },
         {
           "name": "qwen3:4b",
-          "display_name": "Fast / Plan — 4B",
+          "display_name": "Qwen3 4B — Planning",
           "max_tokens": 32768
         }
       ]
     }
   },
-  "features": { "inline_completion_provider": "none" }
+  "features": {
+    "inline_completion_provider": "none"
+  }
 }

@@ -3,13 +3,13 @@
     "ollama": {
       "models": {
         "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B (REAS, TOOL)"
+          "name": "DeepSeek R1 8B — Reasoning, Tools"
         },
         "qwen3:14b": {
-          "name": "Qwen 3 14B (CODE)"
+          "name": "Qwen 3 14B — Coding"
         },
         "qwen3:4b": {
-          "name": "Qwen 3 4B (PLAN)"
+          "name": "Qwen 3 4B — Planning"
         }
       },
       "name": "Ollama (Local)",
@@ -20,13 +20,13 @@
     "openrouter": {
       "models": {
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 (CLD)"
+          "name": "Claude Sonnet 4.6 — Cloud"
         },
         "moonshot/kimi-k2.6": {
-          "name": "Kimi K2.6 (REAS, CLD)"
+          "name": "Kimi K2.6 — Reasoning, Cloud"
         }
       },
-      "name": "OpenRouter (Cloud)",
+      "name": "OpenRouter — Cloud",
       "options": {
         "apiKey": "env.OPENROUTER_API_KEY",
         "baseURL": "https://openrouter.ai/api/v1"

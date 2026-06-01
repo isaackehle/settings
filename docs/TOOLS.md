@@ -327,8 +327,10 @@ Use `ai/runtimes/llama-cpp.sh` to serve models by role — each role has a dedic
 | fast      | 8011 | qwen3:4b                      |
 | general   | 8012 | qwen3.5-27b:q4                |
 | coder     | 8013 | qwen3-coder-30b-a3b:q6        |
-| heavy     | 8014 | qwen3-coder-next-80b:q4       |
+| heavy     | 8014 | qwen3.6-35b:opus4.6           |
 | reasoning | 8015 | deepseek-r1:32b               |
+| embedding | 8016 | nomic-embed-text              |
+| summary   | 8017 | qwen3.5:4b                    |
 
 ```shell
 # Serve a role (uses GGUF directly from $(GGUF_DIR))
@@ -405,7 +407,7 @@ Agents and their assigned models (64GB profile):
 
 | Agent    | Model                        | Purpose                        |
 |----------|------------------------------|--------------------------------|
-| code     | qwen3-coder-next-80b:q4      | Implementation, refactoring    |
+| code     | qwen3-coder-30b-a3b:q6       | Implementation, refactoring    |
 | local    | qwen3-coder-30b-a3b:q6       | Offline/sensitive work         |
 | think    | deepseek-r1:32b              | Reasoning, tradeoffs           |
 | write    | qwen3.5-27b:q4               | Docs, summaries, prose         |
@@ -752,7 +754,7 @@ Each agent has its own permission set:
 
 | RAM      | Default Model             | Write Model        | Fast/Plan  |
 | -------- | ------------------------- | ------------------ | ---------- |
-| **64GB** | `qwen3-coder-next-80b:q4` | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **64GB** | `qwen3-coder-30b-a3b:q6`   | `qwen3.5-27b:q4`   | `qwen3:4b` |
 | **48GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
 | **32GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
 | **16GB** | `qwen3:14b`               | `qwen2.5-coder:7b` | `qwen3:4b` |

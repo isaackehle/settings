@@ -261,7 +261,6 @@ against the current installation.
 
 | Model                 | Pull Command                        | Role           |
 | --------------------- | ----------------------------------- | -------------- |
-| Qwen3 Coder Next 80B  | `ollama pull qwen3-coder-next-80b`  | Coding (max)   |
 | Qwen3 Coder 30B A3B   | `ollama pull qwen3-coder-30b-a3b`   | Coding         |
 | Qwen3.6 35B           | `ollama pull qwen3.6-35b`           | Agentic coding |
 | Qwen3.5 27B           | `ollama pull qwen3.5-27b`           | Writing        |

@@ -444,4 +444,4 @@ When `models.sh` changes, update these files in order:
 - Multi mode: coder-30B-q6 + r1-tools-32B + 4B + 1.5B + embed = 52.3GB
 - Wide model selection for all roles
 - `CONTINUE_ROLES[kimi]` for cloud reasoning
-- `CLAUDE_CODE[primary]` = `qwen3-coder-next-80b:q4`
+- `CLAUDE_CODE[primary]` = `qwen3-coder-30b-a3b:q6`
