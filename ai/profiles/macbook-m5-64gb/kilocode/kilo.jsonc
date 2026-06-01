@@ -162,6 +162,27 @@
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/description.md
+    },
+    "architect": {
+      "description": "Stress-test technical designs and produce implementation-ready plans.",
+      "model": "ollama/deepseek-r1:32b-128k",
+      "mode": "primary",
+      "temperature": 0.3
+      // Prompt and permissions live in ~/.kilo/agents/architect.md
+    },
+    "code-reviewer": {
+      "description": "Senior software engineer conducting thorough code reviews.",
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "mode": "primary",
+      "temperature": 0.2
+      // Prompt and permissions live in ~/.kilo/agents/code-reviewer.md
+    },
+    "test-engineer": {
+      "description": "QA engineer and testing specialist.",
+      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "mode": "primary",
+      "temperature": 0.2
+      // Prompt and permissions live in ~/.kilo/agents/test-engineer.md
     }
   },
   "mcp": {
