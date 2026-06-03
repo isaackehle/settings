@@ -139,7 +139,9 @@ Personal macOS development environment setup guide and reference.
 - [[Cline]] — Autonomous AI coding agent for VS Code with MCP and browser support.
 - [[Continue]] — Open-source AI code assistant for VS Code and JetBrains.
 - [[Google Gemini CLI]] — Google's Gemini AI assistant for command-line.
-- [[OpenCode]] — Terminal-based AI coding assistant by Charm.
+- [[Pi]] — Interactive coding agent CLI with multi-provider LLM support, tool-calling, and MCP.
+- [[Pi Studio]] — Local Codex-style desktop GUI for the Pi coding agent (Tauri app).
+- [[OpenCode]] — Terminal-based AI coding agent by Charm.
 - [[OpenShell]] — NVIDIA's sandboxed runtime for running AI coding agents safely.
 - [[VS Code: AI Extensions]] — VS Code: extensions for AI coding assistance.
 - [[OpenClaw]] — Terminal AI agent via custom Homebrew tap.

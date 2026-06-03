@@ -56,6 +56,8 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/ai/agents/openclaw.sh"
 . "${SETTINGS_BASE}/ai/agents/picoclaw.sh"
 . "${SETTINGS_BASE}/ai/agents/plandex.sh"
+. "${SETTINGS_BASE}/ai/agents/pi.sh"
+. "${SETTINGS_BASE}/editors/pi-studio.sh"
 . "${SETTINGS_BASE}/editors/sublime.sh"
 . "${SETTINGS_BASE}/ai/agents/zeroclaw.sh"
 . "${SETTINGS_BASE}/editors/zoocode.sh"
@@ -553,6 +555,8 @@ backup_existing_configs() {
   backup_picoclaw
   backup_zeroclaw
   backup_zoocode
+  backup_pi
+  backup_pi_studio
   log_status "All existing configurations backed up successfully"
 }
 
@@ -577,6 +581,8 @@ restore_configs() {
   restore_picoclaw
   restore_zeroclaw
   restore_zoocode
+  restore_pi
+  restore_pi_studio
   log_status "All configurations restored successfully"
 }
 
@@ -584,10 +590,11 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_zoocode; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_zoocode verify_pi verify_pi_studio; do
     local label="${check#verify_}"
     [[ "$label" == "claude_code" ]] && label="claude"
     [[ "$label" == "cline_cli" ]] && label="cline"
+    [[ "$label" == "pi_studio" ]] && label="pi-studio"
     if $check; then
       verification_results="$verification_results ✓ $label - OK\n"
     else
@@ -610,7 +617,7 @@ verify_installations() {
 
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui"
-  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex openclaw ironclaw hermes picoclaw zeroclaw"
+  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex pi openclaw ironclaw hermes picoclaw zeroclaw"
   ["vscode-extensions"]="continue copilot kilocode zoocode"
   ["ides"]="windsurf cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
@@ -650,6 +657,8 @@ declare -A GROUP_SETUP_FUNCS=(
   ["picoclaw"]="setup_picoclaw"
   ["zeroclaw"]="setup_zeroclaw"
   ["zoocode"]="setup_zoocode"
+  ["pi"]="setup_pi"
+  ["pi-studio"]="setup_pi_studio"
 )
 
 # Verify functions map
@@ -685,6 +694,8 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["picoclaw"]="verify_picoclaw"
   ["zeroclaw"]="verify_zeroclaw"
   ["zoocode"]="verify_zoocode"
+  ["pi"]="verify_pi"
+  ["pi-studio"]="verify_pi_studio"
 )
 
 # Display names for groups/tools
@@ -726,6 +737,8 @@ declare -A DISPLAY_NAMES=(
   ["picoclaw"]="PicoClaw"
   ["zeroclaw"]="ZeroClaw"
   ["zoocode"]="Zoo Code"
+  ["pi"]="Pi"
+  ["pi-studio"]="Pi Studio"
 )
 
 
@@ -1358,6 +1371,7 @@ wizard_step_tool_search() {
     "agent:ironclaw:Privacy-first Agent OS"
     "agent:hermes:Self-improving agent"
     "agent:zeroclaw:Fast Rust AI assistant"
+    "agent:pi:Pi coding agent CLI"
     "editor:continue:Continue VS Code ext"
     "editor:cline:Cline VS Code ext"
     "editor:copilot:GitHub Copilot"
@@ -1368,6 +1382,7 @@ wizard_step_tool_search() {
     "editor:sublime:Sublime Text"
     "misc:anythingllm:AnythingLLM desktop"
     "misc:zoocode:Zoo Code ext"
+    "misc:pi-studio:Pi Studio desktop GUI for Pi coding agent"
   )
 
   local selected
@@ -1580,6 +1595,8 @@ _run_one() {
   setup:hermes) install_tool "hermes" ;;
   setup:picoclaw) install_tool "picoclaw" ;;
   setup:zeroclaw) install_tool "zeroclaw" ;;
+  setup:pi) setup_pi ;;
+  setup:pi-studio) setup_pi_studio ;;
   setup:zoocode) setup_zoocode ;;
 
   setup:tabby) setup_tabby ;;
@@ -1606,6 +1623,8 @@ _run_one() {
   restore:hermes) restore_hermes ;;
   restore:picoclaw) restore_picoclaw ;;
   restore:zeroclaw) restore_zeroclaw ;;
+  restore:pi) restore_pi ;;
+  restore:pi-studio) restore_pi_studio ;;
   restore:zoocode) restore_zoocode ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
   backup:claude) backup_claude ;;
@@ -1626,6 +1645,8 @@ _run_one() {
   backup:hermes) backup_hermes ;;
   backup:picoclaw) backup_picoclaw ;;
   backup:zeroclaw) backup_zeroclaw ;;
+  backup:pi) backup_pi ;;
+  backup:pi-studio) backup_pi_studio ;;
   backup:zoocode) backup_zoocode ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
   esac
@@ -1674,6 +1695,8 @@ interactive_menu() {
     "hermes|tools|Self-improving AI agent from Nous Research"
     "zeroclaw|tools|Fast Rust AI assistant (OpenClaw successor)"
     "picoclaw|tools|Tiny AI for embedded devices (optional dev toolchain)"
+    "pi|tools|Install Pi coding agent CLI + configure auth"
+    "pi-studio|editors|Install Pi Studio desktop GUI for Pi coding agent"
     "open-hands|tools|Install Open Hands (Docker) + deploy config"
 
      "cursor|editors|Install Cursor IDE + show Ollama config"
@@ -1770,6 +1793,12 @@ main() {
     ;;
   open-hands)
     setup_openhands
+    ;;
+  pi)
+    setup_pi
+    ;;
+  pi-studio)
+    setup_pi_studio
     ;;
   opencode)
     setup_opencode
@@ -1903,7 +1932,7 @@ main() {
     run_ai_setup_wizard
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -1934,6 +1963,8 @@ main() {
     echo "  fabric      - Setup Fabric"
     echo "  aichat      - Setup AIChat"
     echo "  goose       - Setup Goose"
+    echo "  pi          - Install Pi coding agent CLI"
+    echo "  pi-studio   - Install Pi Studio desktop GUI"
     echo "  plandex     - Setup Plandex"
     echo "  windsurf    - Install Windsurf IDE"
     echo "  cursor      - Install Cursor IDE"
