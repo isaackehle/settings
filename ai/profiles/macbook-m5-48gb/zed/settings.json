@@ -13,37 +13,37 @@
       "available_models": [
         {
           "name": "deepseek-r1:32b",
-          "display_name": "DeepSeek R1 32B — Reasoning",
+          "display_name": "DeepSeek R1 32B (Reasoning)",
           "max_tokens": 65536
         },
         {
           "name": "qwen3-coder-30b-a3b:q5",
-          "display_name": "Qwen3 Coder 30B A3B — Coding",
+          "display_name": "Qwen3 Coder 30B A3B (Coding)",
           "max_tokens": 32768
         },
         {
           "name": "qwen3-coder-30b-a3b:q5-128k",
-          "display_name": "Qwen3 Coder 30B A3B 128K — Coding",
+          "display_name": "Qwen3 Coder 30B A3B (Coding, 128K)",
           "max_tokens": 131072
         },
         {
           "name": "qwen3.5-27b:q4",
-          "display_name": "Qwen 3.5 27B — Writing",
+          "display_name": "Qwen 3.5 27B (Writing)",
           "max_tokens": 32768
         },
         {
           "name": "qwen3.5-27b:q4-128k",
-          "display_name": "Qwen 3.5 27B 128K — Writing",
+          "display_name": "Qwen 3.5 27B (Writing, 128K)",
           "max_tokens": 131072
         },
         {
           "name": "qwen3.6-35b:opus4.6",
-          "display_name": "Qwen 3.6 35B — Heavy, Claude Opus distill",
+          "display_name": "Qwen 3.6 35B A3B (Coding, Claude Opus 4.6 Distill)",
           "max_tokens": 65536
         },
         {
           "name": "qwen3:4b",
-          "display_name": "Qwen3 4B — Planning",
+          "display_name": "Qwen3 4B (Planning)",
           "max_tokens": 32768
         }
       ]

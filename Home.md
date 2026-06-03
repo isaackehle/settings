@@ -120,6 +120,7 @@ Personal macOS development environment setup guide and reference.
 
 - [[AI Setup Architecture]] — Layered stack design, tool conflict map, machine-type model selection, and VS Code troubleshooting.
 - [[Models]] — Central model reference: IDs, display names, capability codes, and profile assignments for Ollama and OpenRouter.
+- [[docs/ollama-model-registration]] — Authoritative reference for Ollama registration patterns, version requirements, chat-template audit, and re-registration procedure.
 
 ### Local Runtimes
 

@@ -257,6 +257,21 @@ against the current installation.
 - Update `ai/runtimes/ollama.sh` and profile `models.sh` files when new models are commonly used
 - Ensure all pages referencing Ollama (`Continue.md`, `OpenCode.md`, `VS Code AI Extensions.md`, etc.) use consistent, valid model names
 
+**For registration patterns, chat templates, version requirements, and the
+template audit, see [[docs/ollama-model-registration.md]]** — that file is the
+authoritative reference and MUST be updated whenever any of the following
+changes occur:
+
+- An Ollama model alias is added, removed, or renamed
+- A model's Hugging Face source or remote filename changes
+- A model's chat template is re-registered (e.g., to fix tool-calling)
+- The Ollama version requirement for a model architecture changes (e.g., `qwen35` → 0.30+)
+- The template audit table needs refreshing (new full-template or minimal-template entries)
+- A re-registration priority changes
+
+When debugging `unknown model architecture` errors, missing tool-calling, or
+chat-format issues, load `docs/ollama-model-registration.md` first.
+
 **Currently recommended models (May 2026):**
 
 | Model                 | Pull Command                        | Role           |
@@ -319,6 +334,12 @@ or the setup pipeline:
 - `docs/llama-server-three-backend-workflow.md` — Three-backend architecture
   (llama-server router, Ollama, OpenRouter) with Open WebUI on port 8080.
 - `docs/llama-router-testing.md` — Router health verification commands.
+- `docs/ollama-model-registration.md` — Authoritative reference for Ollama
+  model registration patterns, version requirements, template audit, and
+  re-registration procedure. **Update this file when:** adding/removing an
+  Ollama model alias, changing a model's HF source or quant, fixing a chat
+  template / tool-calling issue, upgrading Ollama, or auditing the template
+  table.
 
 ### WORKSTREAM Files
 
@@ -332,6 +353,13 @@ or the setup pipeline:
 
 - Include two sets of models: one for Ollama, one for oMLX
 - Merge helpful files (`TOOLS.md`, `SUGGESTIONS.md`, `SOURCES.md`, `MODELS.md`) into a root-level `docs/` folder
+- Move WORKSTREAM content into a dedicated `docs/WORKSTREAM/` subfolder rather than the repository root, so the root stays clean and `docs/` remains the single source of operational truth
+
+**Related operational content also lives in `docs/`:**
+
+- [[docs/ollama-model-registration.md]] — Ollama registration, templates, version requirements (load when working on WORKSTREAM model items)
+- `docs/AI_SETUP_REPEATABLE_WORKFLOW.md` — AI setup pipeline (already linked above)
+- `docs/llama-server-three-backend-workflow.md` — Three-backend architecture (already linked above)
 
 **Note:** WORKSTREAM files are moved to the root of the repository during consolidation. See `docs/WORKSTREAM_2026-05-*.md` after merge.
 

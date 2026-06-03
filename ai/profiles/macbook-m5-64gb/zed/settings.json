@@ -13,37 +13,37 @@
       "available_models": [
         {
           "name": "deepseek-r1-tools:32b-128k",
-          "display_name": "DeepSeek R1 32B — Reasoning, Tools, 128K",
+          "display_name": "DeepSeek R1 32B (Reasoning, Tools, 128K)",
           "max_tokens": 32768
         },
         {
           "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi K2.6 — Reasoning, Cloud",
+          "display_name": "Kimi K2.6 (Deep Reasoning, Long Context)",
           "max_tokens": 131072
         },
         {
           "name": "qwen3-coder-30b-a3b:q6-16k",
-          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 16K",
+          "display_name": "Qwen3 Coder 30B A3B (Coding, 16K)",
           "max_tokens": 16384
         },
         {
           "name": "qwen3-coder-30b-a3b:q6-32k",
-          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 32K",
+          "display_name": "Qwen3 Coder 30B A3B (Coding, 32K)",
           "max_tokens": 32768
         },
         {
           "name": "qwen3-coder-30b-a3b:q6-64k",
-          "display_name": "Qwen3 Coder 30B A3B — Coding, Q6 64K",
+          "display_name": "Qwen3 Coder 30B A3B (Coding, 64K)",
           "max_tokens": 65536
         },
         {
           "name": "qwen3.5-27b:q4-32k",
-          "display_name": "Qwen 3.5 27B — Writing, Q4 32K",
+          "display_name": "Qwen 3.5 27B (Writing, 32K)",
           "max_tokens": 32768
         },
         {
           "name": "qwen3:4b",
-          "display_name": "Qwen 3 4B — Planning",
+          "display_name": "Qwen 3 4B (Planning)",
           "max_tokens": 8192
         }
       ]

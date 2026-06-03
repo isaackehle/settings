@@ -12,15 +12,15 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "deepseek-r1:7b": { "name": "DeepSeek R1 7B — Reasoning" },
-        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding" },
-        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi — Claude+Gemini+GPT distill" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B — Coding" },
-        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B — Claude Sonnet 4.5 distill" },
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing" },
-        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B 128K — Planning, Writing" },
-        "qwen3:14b": { "name": "Qwen3 14B — General" },
-        "qwen3:14b-128k": { "name": "Qwen3 14B 128K — General" }
+        "deepseek-r1:7b": { "name": "DeepSeek R1 7B (Reasoning)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (Claude+Gemini+GPT Distill)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Coding)" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Claude Sonnet 4.5 Distill)" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning, Writing)" },
+        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B (Planning, Writing, 128K)" },
+        "qwen3:14b": { "name": "Qwen3 14B (General)" },
+        "qwen3:14b-128k": { "name": "Qwen3 14B (General, 128K)" }
       }
     },
     "openrouter": {
@@ -31,11 +31,11 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 — Cloud" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 — Cloud" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash — Cloud" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 — Reasoning, Cloud" },
-        "openai/gpt-4o": { "name": "GPT-4o — Cloud" }
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (Heavy Reasoning, Best Quality)" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (Balanced All-Rounder)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (Fast, Vision, Long Context)" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (Deep Reasoning, Long Context)" },
+        "openai/gpt-4o": { "name": "GPT-4o (General, Vision, Multimodal)" }
       }
     }
   },

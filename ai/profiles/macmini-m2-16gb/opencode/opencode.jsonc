@@ -140,15 +140,15 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "deepseek-r1:7b": { "name": "DeepSeek R1 7B — Reasoning" },
-        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding" },
-        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi — Claude+Gemini+GPT distill" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B — Coding" },
-        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B — Claude Sonnet 4.5 distill" },
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing" },
-        "qwen3:14b": { "name": "Qwen3 14B — General" },
-        "qwen3:14b-128k": { "name": "Qwen3 14B 128K — General" },
-        "qwen3:4b": { "name": "Qwen3 4B — Planning" }
+        "deepseek-r1:7b": { "name": "DeepSeek R1 7B (Reasoning)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (Claude+Gemini+GPT Distill)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Coding)" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Claude Sonnet 4.5 Distill)" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning, Writing)" },
+        "qwen3:14b": { "name": "Qwen3 14B (General)" },
+        "qwen3:14b-128k": { "name": "Qwen3 14B (General, 128K)" },
+        "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
       }
     },
     "openrouter": {
@@ -164,22 +164,22 @@
         }
       },
       "models": {
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 — Fast, cheap, lightweight" },
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 — Heavy reasoning, best quality" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 — Balanced all-rounder" },
-        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools — Reasoning + tool calling" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash — Fast, vision, long context" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro — Deep reasoning, multimodal" },
-        "mistralai/codestral": { "name": "Codestral — Code generation, fill-in-middle" },
-        "mistralai/mistral-large": { "name": "Mistral Large — Strong general purpose" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 — Deep reasoning, long context" },
-        "openai/gpt-4o": { "name": "GPT-4o — General, vision, multimodal" },
-        "openai/o3": { "name": "OpenAI o3 — Heavy reasoning, STEM" },
-        "perplexity/sonar-pro": { "name": "Sonar Pro — Web search + chat" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B — Fast planning, cheap" },
-        "thudm/glm-5.1": { "name": "GLM 5.1 — General purpose" },
-        "x-ai/grok-3": { "name": "Grok 3 — General, real-time data" },
-        "x-ai/grok-3-mini": { "name": "Grok 3 Mini — Fast, cheap" }
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (Fast, Cheap, Lightweight)" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (Heavy Reasoning, Best Quality)" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (Balanced All-Rounder)" },
+        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools (Reasoning, Tools)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (Fast, Vision, Long Context)" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (Deep Reasoning, Multimodal)" },
+        "mistralai/codestral": { "name": "Codestral (Code Generation, Fill-In-Middle)" },
+        "mistralai/mistral-large": { "name": "Mistral Large (Strong General Purpose)" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (Deep Reasoning, Long Context)" },
+        "openai/gpt-4o": { "name": "GPT-4o (General, Vision, Multimodal)" },
+        "openai/o3": { "name": "OpenAI o3 (Heavy Reasoning, STEM)" },
+        "perplexity/sonar-pro": { "name": "Sonar Pro (Web Search, Chat)" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B (Fast Planning, Cheap)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1 (General Purpose)" },
+        "x-ai/grok-3": { "name": "Grok 3 (General, Real-Time Data)" },
+        "x-ai/grok-3-mini": { "name": "Grok 3 Mini (Fast, Cheap)" }
       }
     }
   },

@@ -12,82 +12,36 @@
         "apiKey": "sk-local"
       },
       "models": {
-        "codestral:22b": { "name": "Codestral 22B — Diff, Apply" },
-        "deepseek-r1:32b": { "name": "DeepSeek R1 32B — Reasoning" },
-        "deepseek-r1:32b-128k": { "name": "DeepSeek R1 32B 128K — Reasoning" },
-        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 Tools 32B — Reasoning, Tools" },
-        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 Tools 32B 128K — Reasoning, Tools" },
-        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding" },
-        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi — Claude+Gemini+GPT distill" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B — Autocomplete" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B — Autocomplete" },
-        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B — Claude Sonnet 4.5 distill" },
-        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B — Claude Sonnet 4.5 distill" },
-        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B — Coding" },
-        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B 128K — Coding" },
-        "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B — Gemini 3.1 distill" },
-        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B — Writing, Claude Opus distill" },
-        "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B 128K — Writing" },
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing" },
-        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B 128K — Planning, Writing" },
-        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B — Claude Opus+Sonnet distill" }
+        "codestral:22b": { "name": "Codestral 22B (Apply)" },
+        "deepseek-r1:32b": { "name": "DeepSeek R1 32B (Reasoning)" },
+        "deepseek-r1:32b-128k": { "name": "DeepSeek R1 32B (Reasoning, 128K)" },
+        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (Reasoning, Tools)" },
+        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 32B (Reasoning, Tools, 128K)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (General, Claude+Gemini+GPT Distill)" },
+        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (Autocomplete)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Autocomplete)" },
+        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B (Coding, Claude Sonnet 4.5 Distill)" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Coding, Claude Sonnet 4.5 Distill)" },
+        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B (Coding)" },
+        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B (Coding, 128K)" },
+        "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B (Writing, Gemini 3.1 Distill)" },
+        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill)" },
+        "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill, 128K)" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning)" },
+        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B (Planning, 128K)" },
+        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Writing, Claude Opus+Sonnet Distill)" }
       }
     },
-    // ── llama.cpp — native tool calling via GGUF Jinja2 template ─────────────
-    "llamacpp-coder": {
+    // ── llama-server — GGUF direct serving on port 10000 ──────────────────
+    "llamarouter": {
+      "name": "llama-server",
       "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Coder 30B",
-      "options": { "baseURL": "http://localhost:8013/v1", "apiKey": "sk-local" },
+      "options": { "baseURL": "http://localhost:10000/v1", "apiKey": "sk-local" },
       "models": {
-        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B — Coding, llama.cpp" }
-      }
-    },
-    "llamacpp-embedding": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Embedding",
-      "options": { "baseURL": "http://localhost:8016/v1", "apiKey": "sk-local" },
-      "models": {
-        "nomic-embed-text": { "name": "Nomic Embed Text — Embedding, llama.cpp" }
-      }
-    },
-    "llamacpp-fast": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Fast 4B",
-      "options": { "baseURL": "http://localhost:8011/v1", "apiKey": "sk-local" },
-      "models": {
-        "qwen3:4b": { "name": "Qwen3 4B — Planning, llama.cpp" }
-      }
-    },
-    "llamacpp-general": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — General 27B",
-      "options": { "baseURL": "http://localhost:8012/v1", "apiKey": "sk-local" },
-      "models": {
-        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B — Writing, Claude Opus distill, llama.cpp" }
-      }
-    },
-    "llamacpp-heavy": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Heavy 35B",
-      "options": { "baseURL": "http://localhost:8014/v1", "apiKey": "sk-local" },
-      "models": {
-        "qwen3.6-35b:opus4.6": { "name": "Qwen 3.6 35B — Heavy, Claude Opus distill, llama.cpp" }
-      }
-    },
-    "llamacpp-reasoning": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Reasoning 32B",
-      "options": { "baseURL": "http://localhost:8015/v1", "apiKey": "sk-local" },
-      "models": {
-        "deepseek-r1:32b": { "name": "DeepSeek R1 32B — Reasoning, llama.cpp" }
-      }
-    },
-    "llamacpp-summary": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "llama.cpp — Summary 4B",
-      "options": { "baseURL": "http://localhost:8017/v1", "apiKey": "sk-local" },
-      "models": {
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B — Planning, Writing, llama.cpp" }
+        "deepseek-r1-32b": { "name": "DeepSeek R1 32B (Reasoning, llama)" },
+        "qwen3-4b-it": { "name": "Qwen 3 4B (Planning, llama)" },
+        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" }
       }
     },
     "openrouter": {
@@ -98,11 +52,22 @@
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 — Cloud" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 — Cloud" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash — Cloud" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 — Reasoning, Cloud" },
-        "openai/gpt-4o": { "name": "GPT-4o — Cloud" }
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (Fast, Cheap, Lightweight)" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (Heavy Reasoning, Best Quality)" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (Balanced All-Rounder)" },
+        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools (Reasoning, Tools)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (Fast, Vision, Long Context)" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (Deep Reasoning, Multimodal)" },
+        "mistralai/codestral": { "name": "Codestral (Code Generation, Fill-In-Middle)" },
+        "mistralai/mistral-large": { "name": "Mistral Large (Strong General Purpose)" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (Deep Reasoning, Long Context)" },
+        "openai/gpt-4o": { "name": "GPT-4o (General, Vision, Multimodal)" },
+        "openai/o3": { "name": "OpenAI o3 (Heavy Reasoning, STEM)" },
+        "perplexity/sonar-pro": { "name": "Sonar Pro (Web Search, Chat)" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B (Fast Planning, Cheap)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1 (General Purpose)" },
+        "x-ai/grok-3": { "name": "Grok 3 (General, Real-Time Data)" },
+        "x-ai/grok-3-mini": { "name": "Grok 3 Mini (Fast, Cheap)" }
       }
     }
   },

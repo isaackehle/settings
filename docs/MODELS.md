@@ -22,34 +22,36 @@ decision is superseded, log the date and reason.
 ## Display Names
 
 Every config file MUST use names from this table. Capability codes go in
-parentheses before quant info, comma-separated: `Qwen 3 4B (PLAN)`,
-`Qwen3 Coder 30B A3B (CODE, Q5 32K)`.
+parentheses before quant info, comma-separated: `Qwen 3 4B (Planning)`,
+`Qwen3 Coder 30B A3B (Coding, Q5 32K)`.
 
-### Capability Codes
+### Capability Tags
 
-| Code   | Meaning      | Use Case                                |
-| ------ | ------------ | --------------------------------------- |
-| `CODE` | Coding       | Code generation, refactoring, debugging |
-| `REAS` | Reasoning    | Chain-of-thought, analysis, tradeoffs   |
-| `TOOL` | Tools        | Function calling / tool use             |
-| `WRIT` | Writing      | Prose, docs, resumes                    |
-| `PLAN` | Planning     | Fast routing, task breakdown            |
-| `FIND` | Research     | Investigation, evidence gathering       |
-| `DIFF` | Apply        | Diff insertion, code patching           |
-| `FILL` | Autocomplete | Fill-in-the-middle, inline completions  |
-| `EMBD` | Embedding    | Semantic search embeddings              |
-| `CHAT` | General chat | Multi-purpose conversation              |
-| `CLD`  | Cloud        | Remote API model (not local)            |
+Tags used in display names to indicate a model's primary role. Use the full word, not an abbreviation.
+
+| Tag            | Meaning      | Use Case                                |
+| -------------- | ------------ | --------------------------------------- |
+| `Coding`       | Coding       | Code generation, refactoring, debugging |
+| `Reasoning`    | Reasoning    | Chain-of-thought, analysis, tradeoffs   |
+| `Tools`        | Tools        | Function calling / tool use             |
+| `Writing`      | Writing      | Prose, docs, resumes                    |
+| `Planning`     | Planning     | Fast routing, task breakdown            |
+| `Research`     | Research     | Investigation, evidence gathering       |
+| `Apply`        | Apply        | Diff insertion, code patching           |
+| `Autocomplete` | Autocomplete | Fill-in-the-middle, inline completions  |
+| `Embedding`    | Embedding    | Semantic search embeddings              |
+| `General`      | General chat | Multi-purpose conversation              |
+| `Cloud`        | Cloud        | Remote API model (not local)            |
 
 ### Naming Rules
 
 1. **Base model names**: Space before version — `Qwen 3 4B`, `Qwen 3.5 27B`
 2. **Product-line names**: No space — `Qwen3 Coder 30B A3B`
-3. **Capability codes**: Before quant — `(CODE, Q5 32K)`, `(PLAN)`, `(REAS, TOOL)`
+3. **Capability tags**: Before quant — `(Coding, Q5 32K)`, `(Planning)`, `(Reasoning, Tools)`
 4. **Quant variants**: Uppercase Q + space + uppercase K — `(Q4 64K)`, `(Q8)`
 5. **Context-only**: Uppercase K — `(8K)`, `(32K)`, `(128K)`
-6. **Cloud**: Use `CLD` code, drop "Cloud" suffix — `Kimi K2.6 (REAS, CLD)`
-7. **No role words**: No `(reasoning)`, `(fast)`, `(planning)` — use codes instead
+6. **Cloud**: Use `Cloud` tag — `Kimi K2.6 (Reasoning, Cloud)`
+7. **Full words only**: No `(REAS)`, `(CODE)`, `(PLAN)` — use `(Reasoning)`, `(Coding)`, `(Planning)`
 8. **Vendor capitalization**: `K2.6` not `k2.6`
 
 ### DeepSeek R1 — Three Distinct Models
@@ -57,100 +59,100 @@ parentheses before quant info, comma-separated: `Qwen 3 4B (PLAN)`,
 There are three different DeepSeek R1 models. The display name `DeepSeek R1` is
 shared, with the capability code distinguishing them:
 
-| Model ID                                | Display Name                                   | Notes                        |
-| --------------------------------------- | ---------------------------------------------- | ---------------------------- |
-| `deepseek-r1:8b`                        | DeepSeek R1 8B (REAS)                          | Official, no tool-calling    |
-| `deepseek-r1-tools:8b`                  | DeepSeek R1 8B (REAS, TOOL)                    | Community, with tool-calling |
-| `deepseek-r1-tools:32b`                 | DeepSeek R1 32B (REAS, TOOL)                   | Community, with tool-calling |
-| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD) | OpenRouter cloud version     |
+| Model ID                                | Display Name                                           | Notes                        |
+| --------------------------------------- | ------------------------------------------------------ | ---------------------------- |
+| `deepseek-r1:8b`                        | DeepSeek R1 8B (Reasoning)                             | Official, no tool-calling    |
+| `deepseek-r1-tools:8b`                  | DeepSeek R1 8B (Reasoning, Tools)                      | Community, with tool-calling |
+| `deepseek-r1-tools:32b`                 | DeepSeek R1 32B (Reasoning, Tools)                     | Community, with tool-calling |
+| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (Reasoning, Tools, Cloud) | OpenRouter cloud version     |
 
 ### Local Models (Ollama)
 
-| Model ID                       | Display Name                         |
-| ------------------------------ | ------------------------------------ |
-| `codestral:22b`                | Codestral 22B (DIFF)                 |
-| `codestral:22b-32k`            | Codestral 22B (DIFF, 32K)            |
-| `deepseek-r1:8b`               | DeepSeek R1 8B (REAS)                |
-| `deepseek-r1-tools:8b`         | DeepSeek R1 8B (REAS, TOOL)          |
-| `deepseek-r1-tools:8b-128k`    | DeepSeek R1 8B (REAS, TOOL, 128K)    |
-| `deepseek-r1-tools:32b`        | DeepSeek R1 32B (REAS, TOOL)         |
-| `deepseek-r1-tools:32b-128k`   | DeepSeek R1 32B (REAS, TOOL, 128K)   |
-| `gemma4:31b`                   | Gemma 4 31B (REAS)                   |
-| `gemma4:31b-8k`                | Gemma 4 31B (REAS, 8K)               |
-| `gemma4:31b-32k`               | Gemma 4 31B (REAS, 32K)              |
-| `gemma4:31b-128k`              | Gemma 4 31B (REAS, 128K)             |
-| `gemma4:31b-256k`              | Gemma 4 31B (REAS, 256K)             |
-| `nomic-embed-text`             | Nomic Embed Text (EMBD)              |
-| `qwen2.5-coder:1.5b`           | Qwen 2.5 Coder 1.5B (FILL)           |
-| `qwen2.5-coder:7b`             | Qwen 2.5 Coder 7B (FILL)             |
-| `qwen2.5-coder:7b-8k`          | Qwen 2.5 Coder 7B (FILL, 8K)         |
-| `qwen2.5-coder:7b-32k`         | Qwen 2.5 Coder 7B (FILL, 32K)        |
-| `qwen3:4b`                     | Qwen 3 4B (PLAN)                     |
-| `qwen3:4b-8k`                  | Qwen 3 4B (PLAN, 8K)                 |
-| `qwen3:4b-128k`                | Qwen 3 4B (PLAN, 128K)               |
-| `qwen3:14b`                    | Qwen 3 14B (CODE)                    |
-| `qwen3:14b-8k`                 | Qwen 3 14B (CODE, 8K)                |
-| `qwen3:14b-40k`                | Qwen 3 14B (CODE, 40K)               |
-| `qwen3:14b-128k`               | Qwen 3 14B (CODE, 128K)              |
-| `qwen3:14b-256k`               | Qwen 3 14B (CODE, 256K)              |
-| `qwen3.5-27b:q5`               | Qwen 3.5 27B (WRIT, Q5)              |
-| `qwen3.5-27b:q5-8k`            | Qwen 3.5 27B (WRIT, Q5 8K)           |
-| `qwen3.5-27b:q5-32k`           | Qwen 3.5 27B (WRIT, Q5 32K)          |
-| `qwen3.5-27b:q5-128k`          | Qwen 3.5 27B (WRIT, Q5 128K)         |
-| `qwen3.5-27b:q5-256k`          | Qwen 3.5 27B (WRIT, Q5 256K)         |
-| `qwen3.5-27b:q8`               | Qwen 3.5 27B (WRIT, Q8)              |
-| `qwen3.6-35b:q4`               | Qwen 3.6 35B A3B (CODE, Q4)          |
-| `qwen3.6-35b:q4-8k`            | Qwen 3.6 35B A3B (CODE, Q4 8K)       |
-| `qwen3.6-35b:q4-128k`          | Qwen 3.6 35B A3B (CODE, Q4 128K)     |
-| `qwen3.6-35b:q4-256k`          | Qwen 3.6 35B A3B (CODE, Q4 256K)     |
-| `qwen3-coder-30b-a3b:q5`       | Qwen3 Coder 30B A3B (CODE, Q5)       |
-| `qwen3-coder-30b-a3b:q5-8k`    | Qwen3 Coder 30B A3B (CODE, Q5 8K)    |
-| `qwen3-coder-30b-a3b:q5-32k`   | Qwen3 Coder 30B A3B (CODE, Q5 32K)   |
-| `qwen3-coder-30b-a3b:q5-128k`  | Qwen3 Coder 30B A3B (CODE, Q5 128K)  |
-| `qwen3-coder-30b-a3b:q6`       | Qwen3 Coder 30B A3B (CODE, Q6)       |
-| `qwen3-coder-30b-a3b:q6-8k`    | Qwen3 Coder 30B A3B (CODE, Q6 8K)    |
-| `qwen3-coder-30b-a3b:q6-32k`   | Qwen3 Coder 30B A3B (CODE, Q6 32K)   |
-| `qwen3-coder-30b-a3b:q6-128k`  | Qwen3 Coder 30B A3B (CODE, Q6 128K)  |
-| `qwen3-coder-30b-a3b:q6-256k`  | Qwen3 Coder 30B A3B (CODE, Q6 256K)  |
-| `qwen3-coder-next-80b:q4`      | Qwen3 Coder Next 80B (CODE, Q4)      |
-| `qwen3-coder-next-80b:q4-16k`  | Qwen3 Coder Next 80B (CODE, Q4 16K)  |
-| `qwen3-coder-next-80b:q4-64k`  | Qwen3 Coder Next 80B (CODE, Q4 64K)  |
-| `qwen3-coder-next-80b:q4-256k` | Qwen3 Coder Next 80B (CODE, Q4 256K) |
+| Model ID                       | Display Name                             |
+| ------------------------------ | ---------------------------------------- |
+| `codestral:22b`                | Codestral 22B (Apply)                    |
+| `codestral:22b-32k`            | Codestral 22B (Apply, 32K)               |
+| `deepseek-r1:8b`               | DeepSeek R1 8B (Reasoning)               |
+| `deepseek-r1-tools:8b`         | DeepSeek R1 8B (Reasoning, Tools)        |
+| `deepseek-r1-tools:8b-128k`    | DeepSeek R1 8B (Reasoning, Tools, 128K)  |
+| `deepseek-r1-tools:32b`        | DeepSeek R1 32B (Reasoning, Tools)       |
+| `deepseek-r1-tools:32b-128k`   | DeepSeek R1 32B (Reasoning, Tools, 128K) |
+| `gemma4:31b`                   | Gemma 4 31B (Reasoning)                  |
+| `gemma4:31b-8k`                | Gemma 4 31B (Reasoning, 8K)              |
+| `gemma4:31b-32k`               | Gemma 4 31B (Reasoning, 32K)             |
+| `gemma4:31b-128k`              | Gemma 4 31B (Reasoning, 128K)            |
+| `gemma4:31b-256k`              | Gemma 4 31B (Reasoning, 256K)            |
+| `nomic-embed-text`             | Nomic Embed Text (Embedding)             |
+| `qwen2.5-coder:1.5b`           | Qwen 2.5 Coder 1.5B (Autocomplete)       |
+| `qwen2.5-coder:7b`             | Qwen 2.5 Coder 7B (Autocomplete)         |
+| `qwen2.5-coder:7b-8k`          | Qwen 2.5 Coder 7B (Autocomplete, 8K)     |
+| `qwen2.5-coder:7b-32k`         | Qwen 2.5 Coder 7B (Autocomplete, 32K)    |
+| `qwen3:4b`                     | Qwen 3 4B (Planning)                     |
+| `qwen3:4b-8k`                  | Qwen 3 4B (Planning, 8K)                 |
+| `qwen3:4b-128k`                | Qwen 3 4B (Planning, 128K)               |
+| `qwen3:14b`                    | Qwen 3 14B (Coding)                      |
+| `qwen3:14b-8k`                 | Qwen 3 14B (Coding, 8K)                  |
+| `qwen3:14b-40k`                | Qwen 3 14B (Coding, 40K)                 |
+| `qwen3:14b-128k`               | Qwen 3 14B (Coding, 128K)                |
+| `qwen3:14b-256k`               | Qwen 3 14B (Coding, 256K)                |
+| `qwen3.5-27b:q5`               | Qwen 3.5 27B (Writing, Q5)               |
+| `qwen3.5-27b:q5-8k`            | Qwen 3.5 27B (Writing, Q5 8K)            |
+| `qwen3.5-27b:q5-32k`           | Qwen 3.5 27B (Writing, Q5 32K)           |
+| `qwen3.5-27b:q5-128k`          | Qwen 3.5 27B (Writing, Q5 128K)          |
+| `qwen3.5-27b:q5-256k`          | Qwen 3.5 27B (Writing, Q5 256K)          |
+| `qwen3.5-27b:q8`               | Qwen 3.5 27B (Writing, Q8)               |
+| `qwen3.6-35b:q4`               | Qwen 3.6 35B A3B (Coding, Q4)            |
+| `qwen3.6-35b:q4-8k`            | Qwen 3.6 35B A3B (Coding, Q4 8K)         |
+| `qwen3.6-35b:q4-128k`          | Qwen 3.6 35B A3B (Coding, Q4 128K)       |
+| `qwen3.6-35b:q4-256k`          | Qwen 3.6 35B A3B (Coding, Q4 256K)       |
+| `qwen3-coder-30b-a3b:q5`       | Qwen3 Coder 30B A3B (Coding, Q5)         |
+| `qwen3-coder-30b-a3b:q5-8k`    | Qwen3 Coder 30B A3B (Coding, Q5 8K)      |
+| `qwen3-coder-30b-a3b:q5-32k`   | Qwen3 Coder 30B A3B (Coding, Q5 32K)     |
+| `qwen3-coder-30b-a3b:q5-128k`  | Qwen3 Coder 30B A3B (Coding, Q5 128K)    |
+| `qwen3-coder-30b-a3b:q6`       | Qwen3 Coder 30B A3B (Coding, Q6)         |
+| `qwen3-coder-30b-a3b:q6-8k`    | Qwen3 Coder 30B A3B (Coding, Q6 8K)      |
+| `qwen3-coder-30b-a3b:q6-32k`   | Qwen3 Coder 30B A3B (Coding, Q6 32K)     |
+| `qwen3-coder-30b-a3b:q6-128k`  | Qwen3 Coder 30B A3B (Coding, Q6 128K)    |
+| `qwen3-coder-30b-a3b:q6-256k`  | Qwen3 Coder 30B A3B (Coding, Q6 256K)    |
+| `qwen3-coder-next-80b:q4`      | Qwen3 Coder Next 80B (Coding, Q4)        |
+| `qwen3-coder-next-80b:q4-16k`  | Qwen3 Coder Next 80B (Coding, Q4 16K)    |
+| `qwen3-coder-next-80b:q4-64k`  | Qwen3 Coder Next 80B (Coding, Q4 64K)    |
+| `qwen3-coder-next-80b:q4-256k` | Qwen3 Coder Next 80B (Coding, Q4 256K)   |
 
 ### Cloud Models (OpenRouter)
 
-| Model ID                                | Display Name                                   |
-| --------------------------------------- | ---------------------------------------------- |
-| `anthropic/claude-haiku-4-5`            | Claude Haiku 4.5 (CLD)                         |
-| `anthropic/claude-opus-4-6`             | Claude Opus 4.6 (CLD)                          |
-| `anthropic/claude-sonnet-4-6`           | Claude Sonnet 4.6 (CLD)                        |
-| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (REAS, TOOL, CLD) |
-| `google/gemini-2.5-flash`               | Gemini 2.5 Flash (CLD)                         |
-| `google/gemini-2.5-pro`                 | Gemini 2.5 Pro (REAS, CLD)                     |
-| `mistralai/codestral`                   | Codestral (CODE, CLD)                          |
-| `mistralai/mistral-large`               | Mistral Large (CLD)                            |
-| `moonshot/kimi-k2.6`                    | Kimi K2.6 (REAS, CLD)                          |
-| `openai/gpt-4o`                         | GPT-4o (CLD)                                   |
-| `openai/o3`                             | OpenAI o3 (REAS, CLD)                          |
-| `perplexity/sonar-pro`                  | Perplexity Sonar Pro (FIND, CLD)               |
-| `qwen/qwen3-8b`                         | Qwen3 8B (PLAN, CLD)                           |
-| `qwen/qwen3-coder-next-80b`             | Qwen3 Coder Next 80B (CODE, CLD)               |
-| `thudm/glm-5.1`                         | GLM 5.1 (CLD)                                  |
-| `x-ai/grok-3`                           | Grok 3 (REAS, CLD)                             |
-| `x-ai/grok-3-mini`                      | Grok 3 Mini (CLD)                              |
+| Model ID                                | Display Name                                           |
+| --------------------------------------- | ------------------------------------------------------ |
+| `anthropic/claude-haiku-4-5`            | Claude Haiku 4.5 (Cloud)                               |
+| `anthropic/claude-opus-4-6`             | Claude Opus 4.6 (Cloud)                                |
+| `anthropic/claude-sonnet-4-6`           | Claude Sonnet 4.6 (Cloud)                              |
+| `deepseek/deepseek-r1-tool-calling-32b` | DeepSeek R1 Tool Calling 32B (Reasoning, Tools, Cloud) |
+| `google/gemini-2.5-flash`               | Gemini 2.5 Flash (Cloud)                               |
+| `google/gemini-2.5-pro`                 | Gemini 2.5 Pro (Reasoning, Cloud)                      |
+| `mistralai/codestral`                   | Codestral (Coding, Cloud)                              |
+| `mistralai/mistral-large`               | Mistral Large (Cloud)                                  |
+| `moonshot/kimi-k2.6`                    | Kimi K2.6 (Reasoning, Cloud)                           |
+| `openai/gpt-4o`                         | GPT-4o (Cloud)                                         |
+| `openai/o3`                             | OpenAI o3 (Reasoning, Cloud)                           |
+| `perplexity/sonar-pro`                  | Perplexity Sonar Pro (Research, Cloud)                 |
+| `qwen/qwen3-8b`                         | Qwen3 8B (Planning, Cloud)                             |
+| `qwen/qwen3-coder-next-80b`             | Qwen3 Coder Next 80B (Coding, Cloud)                   |
+| `thudm/glm-5.1`                         | GLM 5.1 (Cloud)                                        |
+| `x-ai/grok-3`                           | Grok 3 (Reasoning, Cloud)                              |
+| `x-ai/grok-3-mini`                      | Grok 3 Mini (Cloud)                                    |
 
 ### Ollama Cloud Models (zero-disk manifests)
 
 These models route inference to remote servers through Ollama's cloud integration.
 Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 
-| Model ID                     | Display Name                         | Params | Context | Capabilities            |
-| ---------------------------- | ------------------------------------ | ------ | ------- | ----------------------- |
-| `qwen3.5:397b-cloud`         | Qwen 3.5 Cloud (WRIT, TOOL, CLD)     | 397B   | 262K    | thinking, tools, vision |
-| `qwen3-coder:480b-cloud`     | Qwen3 Coder 480B Cloud (CODE, CLD)   | 480B   | 262K    | tools                   |
-| `qwen3-coder-next:80b-cloud` | Qwen3 Coder Next Cloud (CODE, CLD)   | 80B    | 262K    | tools                   |
-| `gemma4:31b-cloud`           | Gemma 4 31B Cloud (REAS, TOOL, CLD)  | 33B    | 262K    | thinking, tools, vision |
-| `gpt-oss:120b-cloud`         | GPT-OSS 120B Cloud (REAS, TOOL, CLD) | 117B   | 131K    | thinking, tools         |
+| Model ID                     | Display Name                                 | Params | Context | Capabilities            |
+| ---------------------------- | -------------------------------------------- | ------ | ------- | ----------------------- |
+| `qwen3.5:397b-cloud`         | Qwen 3.5 Cloud (Writing, Tools, Cloud)       | 397B   | 262K    | thinking, tools, vision |
+| `qwen3-coder:480b-cloud`     | Qwen3 Coder 480B Cloud (Coding, Cloud)       | 480B   | 262K    | tools                   |
+| `qwen3-coder-next:80b-cloud` | Qwen3 Coder Next Cloud (Coding, Cloud)       | 80B    | 262K    | tools                   |
+| `gemma4:31b-cloud`           | Gemma 4 31B Cloud (Reasoning, Tools, Cloud)  | 33B    | 262K    | thinking, tools, vision |
+| `gpt-oss:120b-cloud`         | GPT-OSS 120B Cloud (Reasoning, Tools, Cloud) | 117B   | 131K    | thinking, tools         |
 
 ## Model Identity Notes
 
