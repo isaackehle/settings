@@ -1,20 +1,20 @@
 {
   "provider": {
     "openrouter": {
-      "name": "OpenRouter — Cloud",
+      "name": "OpenRouter",
       "options": {
         "baseURL": "https://openrouter.ai/api/v1",
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 — Cloud"
+          "name": "Claude Sonnet 4.6 (Balanced All-Rounder)"
         },
         "moonshot/kimi-k2.6": {
-          "name": "Kimi K2.6 — Reasoning, Cloud"
+          "name": "Kimi K2.6 (Deep Reasoning, Long Context)"
         },
         "qwen/qwen3-8b": {
-          "name": "Qwen3 8B — Planning, Cloud"
+          "name": "Qwen3 8B (Fast Planning, Cheap)"
         }
       }
     },
@@ -25,13 +25,13 @@
       },
       "models": {
         "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B — Reasoning, Tools"
+          "name": "DeepSeek R1 8B (Reasoning, Tools)"
         },
         "qwen3:14b": {
-          "name": "Qwen 3 14B — Coding"
+          "name": "Qwen 3 14B (Coding)"
         },
         "qwen3:4b": {
-          "name": "Qwen 3 4B — Planning"
+          "name": "Qwen 3 4B (Planning)"
         }
       }
     }

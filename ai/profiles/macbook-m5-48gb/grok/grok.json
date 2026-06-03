@@ -3,16 +3,16 @@
     "ollama": {
       "models": {
         "deepseek-r1-tools:32b": {
-          "name": "DeepSeek R1 32B — Reasoning, Tools"
+          "name": "DeepSeek R1 32B (Reasoning, Tools)"
         },
         "qwen3-coder-30b-a3b:q5": {
-          "name": "Qwen3 Coder 30B A3B — Coding, Q5"
+          "name": "Qwen3 Coder 30B A3B (Coding)"
         },
         "qwen3.5-27b:q4": {
-          "name": "Qwen 3.5 27B — Writing, Q4"
+          "name": "Qwen 3.5 27B (Writing)"
         },
         "qwen3.6-35b:opus4.6": {
-          "name": "Qwen 3.6 35B A3B Opus 4.6 — Coding, Q4"
+          "name": "Qwen 3.6 35B A3B (Coding, Claude Opus 4.6 Distill)"
         }
       },
       "name": "Ollama (Local)",
@@ -23,13 +23,13 @@
     "openrouter": {
       "models": {
         "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 — Cloud"
+          "name": "Claude Sonnet 4.6 (Balanced All-Rounder)"
         },
         "deepseek/deepseek-r1-tool-calling-32b": {
-          "name": "DeepSeek R1 Tool Calling 32B — Reasoning, Tools, Cloud"
+          "name": "DeepSeek R1 32B Tools (Reasoning, Tools)"
         },
         "qwen/qwen3-8b": {
-          "name": "Qwen3 8B — Planning, Cloud"
+          "name": "Qwen3 8B (Fast Planning, Cheap)"
         }
       },
       "name": "OpenRouter (Cloud)",

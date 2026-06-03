@@ -4,7 +4,7 @@ schema: 'v1'
 
 models:
   # ── Cloud Models (via OpenRouter — direct, not proxied) ────────────────────
-  - name: 'Claude Opus 4.6 — Cloud'
+  - name: 'Claude Opus 4.6 (Heavy Reasoning, Best Quality)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
@@ -12,7 +12,7 @@ models:
     roles:
       - chat
 
-  - name: 'Claude Sonnet 4.6 — Cloud'
+  - name: 'Claude Sonnet 4.6 (Balanced All-Rounder)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
@@ -20,7 +20,7 @@ models:
     roles:
       - chat
 
-  - name: 'GLM 5.1 — Cloud'
+  - name: 'GLM 5.1 (General Purpose)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
@@ -28,7 +28,7 @@ models:
     roles:
       - chat
 
-  - name: 'Kimi K2.6 — Reasoning, Cloud'
+  - name: 'Kimi K2.6 (Deep Reasoning, Long Context)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
@@ -37,7 +37,7 @@ models:
       - chat
 
   # ── Local Models via Ollama (chat / apply) ─────────────────────────────────
-  - name: 'Codestral 22B — Diff'
+  - name: 'Codestral 22B (Diff)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -45,7 +45,7 @@ models:
     roles:
       - apply
 
-  - name: 'DeepSeek R1 8B — Reasoning, Tools'
+  - name: 'DeepSeek R1 8B (Reasoning, Tools)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -53,7 +53,7 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen3 4B — Planning'
+  - name: 'Qwen3 4B (Planning)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -61,7 +61,7 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen3 14B — Coding'
+  - name: 'Qwen3 14B (Coding)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -69,7 +69,7 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen 3.5 27B — Writing, Q4'
+  - name: 'Qwen 3.5 27B (Writing)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -77,7 +77,7 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen3 Coder 30B A3B — Coding, Q5'
+  - name: 'Qwen3 Coder 30B A3B (Coding)'
     provider: openai
     apiBase: http://localhost:11434/v1
     apiKey: 'sk-local'
@@ -88,7 +88,7 @@ models:
       - summarize
 
   # ── Autocomplete — Ollama direct (latency-critical) ────────────────────────
-  - name: 'Qwen 2.5 Coder 1.5B — Fill-in-middle'
+  - name: 'Qwen 2.5 Coder 1.5B (Fill-In-Middle)'
     provider: openai
     apiBase: http://localhost:11434/v1
     model: 'qwen2.5-coder:1.5b'
@@ -97,7 +97,7 @@ models:
     requestOptions:
       timeout: 8000
 
-  - name: 'Qwen 2.5 Coder 7B — Fill-in-middle'
+  - name: 'Qwen 2.5 Coder 7B (Fill-In-Middle)'
     provider: openai
     apiBase: http://localhost:11434/v1
     model: 'qwen2.5-coder:7b'
@@ -107,7 +107,7 @@ models:
       timeout: 8000
 
   # ── Embeddings — Ollama direct ─────────────────────────────────────────────
-  - name: 'Nomic Embed Text — Embedding'
+  - name: 'Nomic Embed Text (Embedding)'
     provider: openai
     apiBase: http://localhost:11434/v1
     model: 'nomic-embed-text'
