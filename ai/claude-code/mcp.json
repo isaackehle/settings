@@ -17,12 +17,9 @@
         "HOMEASSISTANT_TOKEN": "YOUR_LONG_LIVED_TOKEN"
       }
     },
-    "open-meteo": {
+    "weather": {
       "command": "npx",
-      "args": ["-y", "@cyanheads/open-meteo-mcp-server@latest"],
-      "env": {
-        "MCP_LOG_LEVEL": "error"
-      }
+      "args": ["-y", "@dangahagan/weather-mcp@latest"]
     },
     "one-search": {
       "command": "npx",

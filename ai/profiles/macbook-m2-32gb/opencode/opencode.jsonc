@@ -194,13 +194,10 @@
         "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}"
       }
     },
-    "open-meteo": {
+    "weather": {
       "type": "local",
-      "command": ["npx", "-y", "@cyanheads/open-meteo-mcp-server@latest"],
-      "enabled": true,
-      "env": {
-        "MCP_LOG_LEVEL": "error"
-      }
+      "command": ["npx", "-y", "@dangahagan/weather-mcp@latest"],
+      "enabled": true
     },
     "one-search": {
       "type": "local",
