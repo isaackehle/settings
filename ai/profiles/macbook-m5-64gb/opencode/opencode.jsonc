@@ -4,23 +4,31 @@
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
-      "maxTokens": 16000,
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q6",
       // Prompt and permissions live in agents/code.md
-      "temperature": 0.2
+      "temperature": 0.2,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "local": {
       "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
-      "maxTokens": 8000,
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q6",
       // Prompt and permissions live in agents/local.md
-      "temperature": 0.2
+      "temperature": 0.2,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
-      "maxTokens": 1500,
+      "maxTokens": 512,
       "mode": "primary",
       "model": "ollama/qwen3:4b",
       // Prompt and permissions live in agents/plan.md
@@ -28,8 +36,9 @@
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
+      "maxTokens": 1024,
       "mode": "primary",
-      "model": "ollama/qwen3-coder-30b-a3b:q6",
+      "model": "ollama/qwen3-14b:sonnet4.5",
       // Prompt and permissions live in agents/research.md
       "temperature": 0.25
     },
@@ -38,17 +47,27 @@
       "mode": "primary",
       "model": "ollama/deepseek-r1:32b",
       // Prompt and permissions live in agents/think.md
-      "temperature": 0.3
+      "temperature": 0.3,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
+      "maxTokens": 2048,
       "mode": "primary",
-      "model": "ollama/qwen3.5-27b:q4",
+      "model": "ollama/qwen3-14b:sonnet4.5",
       // Prompt and permissions live in agents/write.md
-      "temperature": 0.65
+      "temperature": 0.65,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "build": {
       "description": "Build and test agent — runs build commands, test suites, and CI checks.",
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q6",
       // Prompt and permissions live in agents/build.md
@@ -101,20 +120,30 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
+        "alpie-core:latest": { "name": "Alpie-Core 32B (DeepSeek-R1 Distill, NF4)" },
         "codestral:22b": { "name": "Codestral 22B (Apply)" },
         "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (Reasoning, Tools)" },
         "deepseek-r1:32b": { "name": "DeepSeek R1 32B (Reasoning)" },
         "gemma4:31b": { "name": "Gemma 4 31B (Reasoning)" },
         "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "phi4": { "name": "Phi-4 14B (Microsoft, Strong Reasoning)" },
+        "phi4-mini": { "name": "Phi-4 Mini 3.8B (Microsoft, Fast/Chat)" },
         "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (Autocomplete)" },
         "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Autocomplete)" },
+        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B Distilled (Coding)" },
+        "qwen3-8b:sonnet4.5-distill": { "name": "Qwen3 8B (Claude Sonnet 4.5 Reasoning Distill)" },
         "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B (Coding)" },
         "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B (Coding, 128K)" },
         "qwen3-coder-next-80b:q4": { "name": "Qwen3 Coder Next 80B (Coding)" },
+        "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B (Gemini 3.1 Distill)" },
         "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (Writing)" },
         "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, 128K)" },
+        "qwen3.5-4b:opus-distill-v2": { "name": "Qwen 3.5 4B (Claude Opus 4.6 Distill v2)" },
         "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning)" },
+        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Opus+Sonnet Distill)" },
+        "qwen3.6-35b:opus4.6": { "name": "Qwen 3.6 35B A3B (Opus 4.6 Reasoning Distill)" },
         "qwen3.6-35b:q4": { "name": "Qwen 3.6 35B A3B (Coding)" },
+        "qwen35-27b:opus-agent": { "name": "Qwen 3.5 27B (Opus Distill Agent, 262K)" },
         "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
       }
     },
@@ -161,7 +190,45 @@
     }
   },
 
+  // 4. MCP Servers (inherited from ~/.mcp.json for Claude)
+  "mcp": {
+    "apple-reminders": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-server-apple-events"],
+      "enabled": true
+    },
+    "home-assistant": {
+      "type": "local",
+      "command": ["uvx", "ha-mcp@latest"],
+      "enabled": true,
+      "env": {
+        "HOMEASSISTANT_URL": "https://kehle.duckdns.org:8123",
+        "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}"
+      }
+    },
+    "open-meteo": {
+      "type": "local",
+      "command": ["npx", "-y", "@cyanheads/open-meteo-mcp-server@latest"],
+      "enabled": true,
+      "env": {
+        "MCP_LOG_LEVEL": "error"
+      }
+    },
+    "one-search": {
+      "type": "local",
+      "command": ["npx", "-y", "one-search-mcp"],
+      "enabled": true,
+      "env": {
+        "SEARCH_PROVIDER": "duckduckgo"
+      }
+    }
+  },
+
+  "experimental": {
+    "mcp_timeout": 8000
+  },
+
   // 5. Instructions & Plugins
-  "instructions": ["CONTRIBUTING.md", "docs/*.md"],
+  "instructions": [],
   "plugin": ["opencode-openai-codex-auth@latest"]
 }

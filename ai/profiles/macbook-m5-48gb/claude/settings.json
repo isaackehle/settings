@@ -4,7 +4,7 @@
     "ANTHROPIC_API_KEY": "sk-local",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder-30b-a3b:q5",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3:4b",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.5-27b:q4"
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.6-35b:opus4.6"
   },
   "model": "qwen3-coder-30b-a3b:q5",
   "permissions": {

@@ -1,71 +1,26 @@
+# ---------------------------------------------------------------------------
+# Windsurf → Devin Desktop backward-compat shim
+#
+# Windsurf was rebranded to Devin Desktop effective June 2, 2026 after
+# Cognition AI acquired Windsurf.  This file delegates to devin.sh so that
+# existing scripts sourcing windsurf.sh continue to work without changes.
+#
+# New setups should source devin.sh directly and call setup_devin.
+# ---------------------------------------------------------------------------
+
 if [ -z "${SETTINGS_BASE:-}" ]; then
     SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
 fi
-. "${SETTINGS_BASE}/helpers.sh"
 
-# Install Windsurf IDE and deploy argv.json + codeium telemetry config.
+DEVIN_SH="${SETTINGS_BASE}/editors/devin.sh"
 
-_install_windsurf() {
-    if command_exists "brew"; then
-        print_info "Installing Windsurf via Homebrew..."
-        brew install --cask windsurf && return 0
-    fi
-    print_warning "Homebrew not available — download Windsurf from https://codeium.com/windsurf"
-    return 1
-}
-
-verify_windsurf() {
-    check_tool_with_version "Windsurf" "0.0.0"
-}
-
-setup_windsurf() {
-    print_info "Setting up Windsurf..."
-    verify_windsurf || _install_windsurf || print_warning "Windsurf not installed — skipping config deploy"
-
-    local argv_dir="$HOME/.windsurf"
-    local codeium_dir="$HOME/.codeium"
-    mkdir -p "$argv_dir" "$codeium_dir"
-
-    local script_dir="$(dirname "${BASH_SOURCE[0]}")"
-
-    if [ -f "$script_dir/argv.json" ]; then
-        [ -f "$argv_dir/argv.json" ] && backup_windsurf
-        cp "$script_dir/argv.json" "$argv_dir/argv.json"
-        print_status "Deployed argv.json to $argv_dir/argv.json"
-    fi
-
-    if [ -f "$script_dir/codeium-config.json" ]; then
-        cp "$script_dir/codeium-config.json" "$codeium_dir/config.json"
-        print_status "Deployed codeium config to $codeium_dir/config.json (telemetry disabled)"
-    fi
-
-    print_info ""
-    print_info "=== Windsurf ==="
-    print_info "IDE:        windsurf"
-    print_info "Autocomplete: connect Ollama at http://localhost:11434/v1 in Settings > AI"
-    print_info "Docs:       https://docs.codeium.com/windsurf"
-    print_info ""
-}
-
-backup_windsurf() {
-    if [ -f "$HOME/.windsurf/argv.json" ]; then
-        cp "$HOME/.windsurf/argv.json" "$BACKUP_DIR/windsurf_argv_backup_$DATE.json"
-        print_status "Backed up Windsurf argv.json"
-    fi
-}
-
-restore_windsurf() {
-    local latest_file
-    latest_file=$(ls -t "$BACKUP_DIR"/windsurf_argv_backup_*.json 2>/dev/null | head -1)
-    if [ -n "$latest_file" ]; then
-        mkdir -p "$HOME/.windsurf"
-        cp "$latest_file" "$HOME/.windsurf/argv.json"
-        print_status "Restored Windsurf argv.json from $(basename "$latest_file")"
-    else
-        print_warning "No Windsurf config backup found in $BACKUP_DIR"
-    fi
-}
-
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    setup_windsurf
+if [ ! -f "$DEVIN_SH" ]; then
+    # Fallback: define functions inline if devin.sh is missing
+    . "${SETTINGS_BASE}/helpers.sh"
+    verify_windsurf()  { log_warning "Devin Desktop / Windsurf config not found"; return 1; }
+    setup_windsurf()   { log_warning "Devin Desktop / Windsurf not available"; return 1; }
+    backup_windsurf()  { :; }
+    restore_windsurf() { :; }
+else
+    . "$DEVIN_SH"
 fi

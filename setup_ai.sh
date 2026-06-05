@@ -63,50 +63,80 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/editors/zoocode.sh"
 . "${SETTINGS_BASE}/ai/other/tabby.sh"
 . "${SETTINGS_BASE}/editors/vscode.sh"
-. "${SETTINGS_BASE}/editors/windsurf.sh"
+. "${SETTINGS_BASE}/editors/devin.sh"
 . "${SETTINGS_BASE}/editors/zed.sh"
 
 # ============================================================================
 # CONFIGURATION DEPLOYMENT
 # ============================================================================
 
+_deploy_mcp_to() {
+  local dest="$1" label="$2"
+  local mcp_src
+  mcp_src=$(find_source "mcp.json")
+  [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
+  [ ! -f "$mcp_src" ] && { log_warning "MCP source not found: $mcp_src"; return 1; }
+
+  if [ -f "$dest" ]; then
+    read -p "  $dest ($label) already exists. Overwrite? (y/N) " -n 1 -r
+    echo
+    [[ ! $REPLY =~ ^[Yy]$ ]] && return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  [ -L "$dest" ] && rm "$dest"
+  cp "$mcp_src" "$dest"
+  chmod 600 "$dest"
+  log_status "Deployed MCP config to $dest ($label)"
+}
+
 deploy_mcp_servers() {
   print_step "MCP Servers"
-  read -p "Install Claude MCP servers? (y/N) " -n 1 -r
+  echo ""
+  echo "  Deploy shared MCP server config to all MCP-using tools:"
+  echo "    Claude Code   → ~/.mcp.json"
+  echo "    Cline         → ~/.config/cline/mcp_settings.json"
+  echo "    Aider         → ~/.aider/mcp.json"
+  echo ""
+
+  read -p "  Deploy MCP servers to all tools? (y/N) " -n 1 -r
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local mcp_dest="$HOME/.mcp.json"
-    local mcp_src
-    mcp_src=$(find_source "mcp.json")
-    [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
+  [[ ! $REPLY =~ ^[Yy]$ ]] && { WIZARD_MCP_ACTION="skip"; log_info "Skipped MCP deployment."; return 0; }
 
-    local do_install=true
-    if [ -f "$mcp_dest" ]; then
-      read -p "  ~/.mcp.json already exists. Overwrite? (y/N) " -n 1 -r
-      echo
-      [[ ! $REPLY =~ ^[Yy]$ ]] && do_install=false
-    fi
+  local mcp_src
+  mcp_src=$(find_source "mcp.json")
+  [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
+  if [ ! -f "$mcp_src" ]; then
+    log_warning "MCP source not found: $mcp_src"
+    return 1
+  fi
 
-    if [ "$do_install" = true ] && [ -f "$mcp_src" ]; then
-      [ -L "$mcp_dest" ] && rm "$mcp_dest"
-      cp "$mcp_src" "$mcp_dest"
-      echo "  copied $mcp_src -> $mcp_dest"
+  # Deploy to each tool destination
+  _deploy_mcp_to "$HOME/.mcp.json" "Claude Code"
+  _deploy_mcp_to "$HOME/.config/cline/mcp_settings.json" "Cline"
+  _deploy_mcp_to "$HOME/.aider/mcp.json" "Aider"
 
-      if grep -q "home-assistant" "$mcp_dest"; then
-        echo ""
-        echo "  Home Assistant server detected."
-        read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
-        HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
-        [ -n "$HA_URL" ] && sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$mcp_dest" && echo "    Set HOMEASSISTANT_URL."
-        read -p "    Long-lived token (enter = keep placeholder): " HA_TOKEN
-        HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
-        [ -n "$HA_TOKEN" ] && sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$mcp_dest" && echo "    Set HOMEASSISTANT_TOKEN."
-      fi
-      chmod 600 "$mcp_dest"
-    else
-      [ "$do_install" = false ] && echo "  Skipped."
-      [ ! -f "$mcp_src" ] && echo "  (skip) source not found: $mcp_src"
-    fi
+  WIZARD_MCP_ACTION="deployed"
+
+  # Home Assistant credentials — prompt once, apply to all deployed files
+  local deployed_files=()
+  [ -f "$HOME/.mcp.json" ] && deployed_files+=("$HOME/.mcp.json")
+  [ -f "$HOME/.config/cline/mcp_settings.json" ] && deployed_files+=("$HOME/.config/cline/mcp_settings.json")
+  [ -f "$HOME/.aider/mcp.json" ] && deployed_files+=("$HOME/.aider/mcp.json")
+
+  if grep -q "home-assistant" "$mcp_src"; then
+    echo ""
+    echo "  Home Assistant server detected in MCP config."
+    read -p "    URL (enter = ${HOMEASSISTANT_URL:-keep placeholder}): " HA_URL
+    HA_URL="${HA_URL:-$HOMEASSISTANT_URL}"
+    read -p "    Long-lived token (enter = keep placeholder): " HA_TOKEN
+    HA_TOKEN="${HA_TOKEN:-$HOMEASSISTANT_TOKEN}"
+    for f in "${deployed_files[@]}"; do
+      [ -n "$HA_URL" ] && sed -i '' "s|YOUR_HOMEASSISTANT_URL|$HA_URL|g" "$f"
+      [ -n "$HA_TOKEN" ] && sed -i '' "s|YOUR_LONG_LIVED_TOKEN|$HA_TOKEN|g" "$f"
+    done
+    [ -n "$HA_URL" ] && log_status "Set HOMEASSISTANT_URL in ${#deployed_files[@]} file(s)"
+    [ -n "$HA_TOKEN" ] && log_status "Set HOMEASSISTANT_TOKEN in ${#deployed_files[@]} file(s)"
   fi
 }
 
@@ -368,7 +398,7 @@ PYEOF
   # --- IDE selection ---
   print_step "IDE Selection"
   echo "  1) VS Code   (recommended — broader extension ecosystem)"
-  echo "  2) Windsurf  (VS Code fork with built-in Codeium AI)"
+  echo "  2) Devin Desktop  (formerly Windsurf — Agent Command Center / IDE)"
   echo "  3) Both      (deploy configs for both, install neither)"
   echo ""
   read -p "Which IDE? [1/2/3] (Enter = 1): " IDE_CHOICE
@@ -379,10 +409,20 @@ PYEOF
     mkdir -p "$HOME/.codeium"
     copy_file "${_profdir}/windsurf/codeium-config.json" "$HOME/.codeium/config.json"
 
+    # Deploy to both Devin Desktop and legacy Windsurf paths
+    # (Devin Desktop reads old paths during transition, writes to new paths)
+    [ -L "$HOME/.config/Devin" ] && rm "$HOME/.config/Devin"
+    mkdir -p "$HOME/.config/Devin"
+    copy_file "${_profdir}/windsurf/argv.json" "$HOME/.config/Devin/argv.json"
+
     [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
     mkdir -p "$HOME/.windsurf"
     copy_file "${_profdir}/windsurf/argv.json" "$HOME/.windsurf/argv.json"
-    log_status "Windsurf config deployed."
+
+    [ -L "$HOME/.devin" ] && rm "$HOME/.devin"
+    mkdir -p "$HOME/.devin"
+
+    log_status "Devin Desktop config deployed (legacy Windsurf paths also written)."
   fi
 
   if [[ "$IDE_CHOICE" == "1" || "$IDE_CHOICE" == "3" ]]; then
@@ -720,7 +760,7 @@ declare -A DISPLAY_NAMES=(
   ["continue"]="Continue"
   ["copilot"]="GitHub Copilot"
   ["kilocode"]="Kilo Code"
-  ["windsurf"]="Windsurf"
+  ["windsurf"]="Devin Desktop"
   ["cursor"]="Cursor"
   ["zed"]="Zed"
   ["anythingllm"]="AnythingLLM"
@@ -1102,8 +1142,9 @@ wizard_init_context() {
   WIZARD_PROFILE="${MACHINE_PROFILE:-}"
   WIZARD_INFRA_ACTION="skip"
   WIZARD_MODEL_ACTION="skip"
-  WIZARD_CONFIG_ACTION="skip"
   WIZARD_TOOL_ACTION="skip"
+  WIZARD_MCP_ACTION="skip"
+  WIZARD_CONFIG_ACTION="skip"
   WIZARD_VERIFY_ACTION="skip"
 }
 
@@ -1170,6 +1211,30 @@ wizard_step_profile() {
 wizard_step_infrastructure() {
   print_step "Infrastructure"
   echo ""
+
+  prompt_wizard_choice \
+    "Configure local AI infrastructure?" \
+    "1) Skip infrastructure (no changes)" \
+    "2) Configure infrastructure" \
+    "3) Cancel"
+
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_INFRA_ACTION="skip"
+      log_info "Skipped infrastructure setup."
+      return 0
+      ;;
+    2) ;;
+    3)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
+
   if ! command -v fzf >/dev/null 2>&1; then
     log_error "fzf is required for runtime selection. Run: brew install fzf"
     return 1
@@ -1340,97 +1405,129 @@ wizard_step_local_models() {
   rm -f "$plan_file"
 }
 
-wizard_step_tool_search() {
-  print_step "AI Tool Discovery"
+wizard_step_tools() {
+  print_step "AI Tools"
   echo ""
-  if ! command -v fzf >/dev/null 2>&1; then
-    log_error "fzf is required for tool discovery. Run: brew install fzf"
-    return 1
-  fi
 
-  local tools_catalog=(
-    "server:ollama:Local model manager"
-    "server:exo:Distributed inference"
-    "server:tabby:Autocomplete server"
-    "cloud:openrouter:Cloud model proxy"
-    "cloud:groq:Groq API config"
-    "agent:claude:Claude Code CLI"
-    "agent:opencode:OpenCode AI agent"
-    "agent:aider:Aider coding agent"
-    "agent:crush:Crush terminal agent"
-    "agent:codex:Codex CLI"
-    "agent:gemini:Gemini CLI"
-    "agent:grok:Grok CLI"
-    "agent:llm:Swiss-army-knife LLM CLI"
-    "agent:fabric:Prompt framework"
-    "agent:aichat:Rust AI CLI with MCP"
-    "agent:goose:Open-source agent"
-    "agent:open-hands:Open Hands (Docker)"
-    "agent:plandex:Terminal AI planner"
-    "agent:openclaw:Personal AI assistant"
-    "agent:ironclaw:Privacy-first Agent OS"
-    "agent:hermes:Self-improving agent"
-    "agent:zeroclaw:Fast Rust AI assistant"
-    "agent:pi:Pi coding agent CLI"
-    "editor:continue:Continue VS Code ext"
-    "editor:cline:Cline VS Code ext"
-    "editor:copilot:GitHub Copilot"
-    "editor:kilocode:Kilo Code ext"
-    "editor:windsurf:Windsurf IDE"
-    "editor:cursor:Cursor IDE"
-    "editor:zed:Zed editor"
-    "editor:sublime:Sublime Text"
-    "misc:anythingllm:AnythingLLM desktop"
-    "misc:zoocode:Zoo Code ext"
-    "misc:pi-studio:Pi Studio desktop GUI for Pi coding agent"
-  )
+  prompt_wizard_choice \
+    "How would you like to install AI tools?" \
+    "1) Skip" \
+    "2) Pick individual tools (search + multi-select)" \
+    "3) Install tool groups (infrastructure, terminal-agents, etc.)" \
+    "4) Cancel"
 
-  local selected
-  selected=$(printf "%s\n" "${tools_catalog[@]}" | \
-    fzf --multi \
-        --header "Search and select AI tools to install (Tab/Space=toggle, Enter=confirm, Esc=skip)" \
-        --layout=reverse \
-        --height ~70% \
-        --bind 'space:toggle' \
-        --bind 'ctrl-/:toggle-preview' \
-        --preview "
-          case {} in
-            server:*) echo 'Server / runtime tool — installs system-wide.' ;;
-            cloud:*) echo 'Cloud provider — deploys API config.' ;;
-            agent:*) echo 'AI terminal agent — installs CLI and config.' ;;
-            editor:*) echo 'Editor / IDE — installs app or extension.' ;;
-            misc:*) echo 'Other AI tool — installs and configures.' ;;
-          esac
-          echo ''
-          echo 'Tool: {}'
-        " \
-        --preview-window=up:3:wrap) || true
+  case "${WIZARD_CHOICE:-1}" in
+    1|"")
+      WIZARD_TOOL_ACTION="skip"
+      log_info "Skipped tool installation."
+      return 0
+      ;;
+    2) WIZARD_TOOL_ACTION="individual" ;;
+    3) WIZARD_TOOL_ACTION="groups" ;;
+    4)
+      log_info "Setup cancelled."
+      return 1
+      ;;
+    *)
+      log_error "Invalid selection."
+      return 1
+      ;;
+  esac
 
-  if [ -z "$selected" ]; then
-    log_info "Skipped tool discovery."
-    return 0
-  fi
+  if [ "$WIZARD_TOOL_ACTION" = "individual" ]; then
+    if ! command -v fzf >/dev/null 2>&1; then
+      log_error "fzf is required for tool discovery. Run: brew install fzf"
+      return 1
+    fi
 
-  echo ""
-  echo "  Selected tools:"
-  local line tool
-  while IFS= read -r line; do
-    [[ -z "$line" ]] && continue
-    tool=$(echo "$line" | cut -d: -f2)
-    echo "    - $tool"
-  done <<< "$selected"
+    local tools_catalog=(
+      "server:ollama:Local model manager"
+      "server:exo:Distributed inference"
+      "server:tabby:Autocomplete server"
+      "cloud:openrouter:Cloud model proxy"
+      "cloud:groq:Groq API config"
+      "agent:claude:Claude Code CLI"
+      "agent:opencode:OpenCode AI agent"
+      "agent:aider:Aider coding agent"
+      "agent:crush:Crush terminal agent"
+      "agent:codex:Codex CLI"
+      "agent:gemini:Gemini CLI"
+      "agent:grok:Grok CLI"
+      "agent:llm:Swiss-army-knife LLM CLI"
+      "agent:fabric:Prompt framework"
+      "agent:aichat:Rust AI CLI with MCP"
+      "agent:goose:Open-source agent"
+      "agent:open-hands:Open Hands (Docker)"
+      "agent:plandex:Terminal AI planner"
+      "agent:openclaw:Personal AI assistant"
+      "agent:ironclaw:Privacy-first Agent OS"
+      "agent:hermes:Self-improving agent"
+      "agent:zeroclaw:Fast Rust AI assistant"
+      "agent:pi:Pi coding agent CLI"
+      "editor:continue:Continue VS Code ext"
+      "editor:cline:Cline VS Code ext"
+      "editor:copilot:GitHub Copilot"
+      "editor:kilocode:Kilo Code ext"
+      "editor:windsurf:Devin Desktop IDE (formerly Windsurf)"
+      "editor:cursor:Cursor IDE"
+      "editor:zed:Zed editor"
+      "editor:sublime:Sublime Text"
+      "misc:anythingllm:AnythingLLM desktop"
+      "misc:zoocode:Zoo Code ext"
+      "misc:pi-studio:Pi Studio desktop GUI for Pi coding agent"
+    )
 
-  read -r -p "  Install selected tools? (y/N) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    local selected
+    selected=$(printf "%s\n" "${tools_catalog[@]}" | \
+      fzf --multi \
+          --header "Search and select AI tools to install (Tab/Space=toggle, Enter=confirm, Esc=skip)" \
+          --layout=reverse \
+          --height ~70% \
+          --bind 'space:toggle' \
+          --bind 'ctrl-/:toggle-preview' \
+          --preview "
+            case {} in
+              server:*) echo 'Server / runtime tool — installs system-wide.' ;;
+              cloud:*) echo 'Cloud provider — deploys API config.' ;;
+              agent:*) echo 'AI terminal agent — installs CLI and config.' ;;
+              editor:*) echo 'Editor / IDE — installs app or extension.' ;;
+              misc:*) echo 'Other AI tool — installs and configures.' ;;
+            esac
+            echo ''
+            echo 'Tool: {}'
+          " \
+          --preview-window=up:3:wrap) || true
+
+    if [ -z "$selected" ]; then
+      log_info "Skipped tool discovery."
+      return 0
+    fi
+
+    echo ""
+    echo "  Selected tools:"
+    local line tool
     while IFS= read -r line; do
       [[ -z "$line" ]] && continue
       tool=$(echo "$line" | cut -d: -f2)
-      install_tool "$tool" 2>/dev/null || log_warning "  Failed to install $tool"
+      echo "    - $tool"
     done <<< "$selected"
-    log_status "Tool installation complete."
-  else
-    log_info "Skipped tool installation."
+
+    read -r -p "  Install selected tools? (y/N) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        tool=$(echo "$line" | cut -d: -f2)
+        install_tool "$tool" 2>/dev/null || log_warning "  Failed to install $tool"
+      done <<< "$selected"
+      log_status "Tool installation complete."
+    else
+      log_info "Skipped tool installation."
+    fi
+  elif [ "$WIZARD_TOOL_ACTION" = "groups" ]; then
+    echo "Available groups: infrastructure, terminal-agents, vscode-extensions, ides, self-hosted, all"
+    read -r -p "Enter comma-separated groups: " groups
+    [ -n "${groups:-}" ] && install_groups "$groups"
   fi
 }
 
@@ -1465,46 +1562,7 @@ wizard_step_configs() {
   esac
 }
 
-wizard_step_tools() {
-  print_step "AI Tools"
-  prompt_wizard_choice \
-    "How should AI tools be installed?" \
-    "1) Skip" \
-    "2) Recommended tool bundles" \
-    "3) Choose tool groups" \
-    "4) Open legacy interactive menu" \
-    "5) Cancel"
 
-  case "${WIZARD_CHOICE:-1}" in
-    1|"")
-      WIZARD_TOOL_ACTION="skip"
-      ;;
-    2)
-      WIZARD_TOOL_ACTION="recommended"
-      install_group "infrastructure"
-      install_group "terminal-agents"
-      install_group "vscode-extensions"
-      ;;
-    3)
-      WIZARD_TOOL_ACTION="groups"
-      echo "Available groups: infrastructure, terminal-agents, vscode-extensions, ides, self-hosted, all"
-      read -r -p "Enter comma-separated groups: " groups
-      [ -n "${groups:-}" ] && install_groups "$groups"
-      ;;
-    4)
-      WIZARD_TOOL_ACTION="legacy-menu"
-      interactive_menu
-      ;;
-    5)
-      log_info "Setup cancelled."
-      return 1
-      ;;
-    *)
-      log_error "Invalid selection."
-      return 1
-      ;;
-  esac
-}
 
 wizard_step_verify() {
   print_step "Verification"
@@ -1538,8 +1596,9 @@ wizard_step_summary() {
   echo "Profile:        ${WIZARD_PROFILE:-unknown}"
   echo "Infrastructure: ${WIZARD_INFRA_ACTION}"
   echo "Local models:   ${WIZARD_MODEL_ACTION}"
-  echo "Configs:        ${WIZARD_CONFIG_ACTION}"
   echo "AI tools:       ${WIZARD_TOOL_ACTION}"
+  echo "MCP servers:    ${WIZARD_MCP_ACTION:-skip}"
+  echo "Configs:        ${WIZARD_CONFIG_ACTION}"
   echo "Verification:   ${WIZARD_VERIFY_ACTION}"
 }
 
@@ -1549,10 +1608,9 @@ run_ai_setup_wizard() {
   wizard_step_profile || return 1
   wizard_step_infrastructure || return 1
   wizard_step_local_models || return 1
-  wizard_step_tool_search || return 1
+  wizard_step_tools || return 1
   wizard_step_mcp_servers || return 1
   wizard_step_configs || return 1
-  wizard_step_tools || return 1
   wizard_step_verify || return 1
   wizard_step_summary
 }
@@ -1603,6 +1661,7 @@ _run_one() {
   setup:copilot) setup_github_copilot ;;
   setup:sublime) setup_sublime ;;
   setup:vscode) setup_vscode ;;
+  setup:devin) setup_devin ;;
   setup:windsurf) setup_windsurf ;;
   setup:zed) setup_zed ;;
   restore:claude) restore_claude ;;
@@ -1705,7 +1764,7 @@ interactive_menu() {
     "sublime|editors|Install Sublime Text"
     "zed|editors|Install Zed editor + deploy config"
     "vscode|editors|Install VS Code + Continue + Cline extensions"
-    "windsurf|editors|Install Windsurf IDE + deploy argv.json"
+    "windsurf|editors|Install Devin Desktop + deploy argv.json (formerly Windsurf)"
 
     "continue|extensions|Deploy Continue.dev config"
     "copilot|extensions|Install gh-copilot extension + VS Code extensions"
@@ -1830,6 +1889,9 @@ main() {
   vscode)
     setup_vscode
     ;;
+  devin)
+    setup_devin
+    ;;
   windsurf)
     setup_windsurf
     ;;
@@ -1932,7 +1994,7 @@ main() {
     run_ai_setup_wizard
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|devin|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -1966,7 +2028,8 @@ main() {
     echo "  pi          - Install Pi coding agent CLI"
     echo "  pi-studio   - Install Pi Studio desktop GUI"
     echo "  plandex     - Setup Plandex"
-    echo "  windsurf    - Install Windsurf IDE"
+    echo "  devin       - Install Devin Desktop IDE (formerly Windsurf)"
+    echo "  windsurf    - Backward compat alias for 'devin'"
     echo "  cursor      - Install Cursor IDE"
     echo "  zed         - Install Zed editor"
     echo "  anythingllm - Install AnythingLLM"

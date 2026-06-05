@@ -16,6 +16,20 @@
         "HOMEASSISTANT_URL": "YOUR_HOMEASSISTANT_URL",
         "HOMEASSISTANT_TOKEN": "YOUR_LONG_LIVED_TOKEN"
       }
+    },
+    "open-meteo": {
+      "command": "npx",
+      "args": ["-y", "@cyanheads/open-meteo-mcp-server@latest"],
+      "env": {
+        "MCP_LOG_LEVEL": "error"
+      }
+    },
+    "one-search": {
+      "command": "npx",
+      "args": ["-y", "one-search-mcp"],
+      "env": {
+        "SEARCH_PROVIDER": "duckduckgo"
+      }
     }
   }
 }

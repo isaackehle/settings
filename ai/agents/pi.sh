@@ -32,14 +32,8 @@ _install_pi() {
         return 1
     fi
 
-    local _pkg_mgr="npm"
-    if command -v pnpm >/dev/null 2>&1; then
-        _pkg_mgr="pnpm"
-        log_info "Using pnpm for faster install"
-    fi
-
-    if $_pkg_mgr install -g @earendil-works/pi-coding-agent; then
-        log_status "Pi installed via ${_pkg_mgr}"
+    if npm install -g @earendil-works/pi-coding-agent; then
+        log_status "Pi installed via npm"
         return 0
     fi
     log_error "Failed to install Pi"
@@ -47,22 +41,65 @@ _install_pi() {
 }
 
 _setup_pi_auth() {
-    if [ -f "$_pi_cfg_dir/auth.json" ]; then
-        return 0
+    # Pi reads standard environment variables at runtime (OPENAI_API_KEY,
+    # ANTHROPIC_API_KEY, GEMINI_API_KEY, etc.).  Source ~/.env.local so
+    # you can use keys already configured there — no separate login needed.
+    local env_file="$HOME/.env.local"
+    [ -f "$env_file" ] && source "$env_file"
+
+    # Map GOOGLE_API_KEY → GEMINI_API_KEY if only the former is set
+    if [ -z "${GEMINI_API_KEY:-}" ] && [ -n "${GOOGLE_API_KEY:-}" ]; then
+        export GEMINI_API_KEY="$GOOGLE_API_KEY"
     fi
 
     echo ""
-    log_info "Pi needs model provider credentials."
-    log_info "You can configure them now or later via 'pi /login'."
+    echo "  Pi reads API keys from environment variables — no login required."
+    echo "  Keys from ~/.env.local:"
+    local found=0
+    for var in ANTHROPIC_API_KEY OPENAI_API_KEY GEMINI_API_KEY DEEPSEEK_API_KEY \
+               GROQ_API_KEY OPENROUTER_API_KEY XAI_API_KEY MISTRAL_API_KEY; do
+        if [ -n "${!var:-}" ]; then
+            echo "    ✓ $var set"
+            found=1
+        fi
+    done
+    [ "$found" = 0 ] && echo "    (none detected)"
     echo ""
-    read -p "  Configure API keys now? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        log_info "Skipping — run 'pi /login' later or write ~/.pi/agent/auth.json directly"
-        return 0
-    fi
 
-    pi /login || log_warning "Pi login may need manual re-run"
+    # Merge recommended settings into pi's settings.json
+    local settings_file="$_pi_cfg_dir/settings.json"
+    python3 -c "
+import json, os
+
+path = '$settings_file'
+defaults = {
+    'defaultProvider': 'openrouter',
+    'defaultModel': 'openrouter/moonshot/kimi-k2.6',
+    'enableSkillCommands': True,
+    'skills': ['~/.skills'],
+}
+
+if os.path.exists(path):
+    with open(path) as f:
+        s = json.load(f)
+else:
+    s = {}
+
+for k, v in defaults.items():
+    if k not in s:
+        s[k] = v
+
+os.makedirs(os.path.dirname(path), exist_ok=True)
+with open(path, 'w') as f:
+    json.dump(s, f, indent=2)
+" && log_status "Configured Pi settings (provider, skills path, skill commands)"
+
+    log_info "Pi will use these keys when you run it in any shell that sources ~/.env.local."
+    log_info "Default provider: openrouter (moonshot/kimi-k2.6)"
+    log_info "Override:  pi --provider anthropic     (use Claude)"
+    log_info "           pi --provider groq          (use Groq)"
+    log_info "           pi --model <pattern>        (override model)"
+    echo ""
 }
 
 setup_pi() {
@@ -76,9 +113,10 @@ setup_pi() {
     log_info "=== Pi ==="
     log_info "Binary:   pi"
     log_info "Config:   $_pi_cfg_dir"
-    log_info "Auth:     $_pi_cfg_dir/auth.json"
-    log_info "Login:    pi /login"
-    log_info "Usage:    pi                           (interactive session)"
+    log_info "Auth:     Uses env vars from ~/.env.local (sourced in .zprofile)"
+    log_info "Usage:    pi                           (interactive, OpenRouter/kimi-k2.6)"
+    log_info "          pi --provider anthropic      (use Claude)"
+    log_info "          pi --provider groq           (use Groq)"
     log_info "          pi --mode rpc                (RPC mode for Pi Studio)"
     log_info "          pi /install                  (install shell integration)"
     log_info "Update:   npm update -g @earendil-works/pi-coding-agent"
