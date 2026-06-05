@@ -175,11 +175,15 @@ declare -A MODEL_QUANTS=(
 
 # --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-coder-30b-a3b:q5"         # primary coding agent
-    [think]="deepseek-r1:32b"          # tradeoff analysis, debugging strategy
-    [write]="qwen3.5-27b:q4"                # resumes, cover letters, polished prose
-    [research]="qwen3-coder-30b-a3b:q5"      # codebase/web investigation
+    [build]="qwen3-coder-30b-a3b:q5"         # build, test, CI
+    [code]="qwen3-coder-30b-a3b:q5"          # primary coding agent
+    [local]="qwen3-coder-30b-a3b:q5"         # fully local (no internet)
     [plan]="qwen3:4b"                        # next steps, task breakdown, routing
+    [research]="qwen3-coder-30b-a3b:q5"      # codebase/web investigation
+    [summary]="qwen3.5:4b"                   # commit messages, summaries
+    [think]="deepseek-r1:32b"                # tradeoff analysis, debugging strategy
+    [title]="qwen3.5:4b"                     # PR/MR titles
+    [write]="qwen3.5-27b:q4"                 # resumes, cover letters, polished prose
 )
 
 # --- Continue (VS Code) ---

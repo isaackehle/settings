@@ -146,11 +146,15 @@ OLLAMA_CLOUD_MODELS=(
 
 # --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
+    [build]="qwen2.5-coder:7b"                # build, test, CI
     [code]="qwen2.5-coder:7b"
+    [local]="qwen2.5-coder:7b"                # fully local (no internet)
     [plan]="qwen3:4b"
     [research]="qwen2.5-coder:7b"
+    [summary]="qwen3.5:4b"                    # commit messages, summaries
     [think]="deepseek-r1:7b"
-    [write]="qwen2.5-coder:7b"
+    [title]="qwen3.5:4b"                      # PR/MR titles
+    [write]="qwen3:14b"
 )
 
 # --- Continue (VS Code) ---

@@ -4,108 +4,88 @@
   "agent": {
     "code": {
       "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
-      "maxTokens": 16000,
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q5",
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow",
-        "external_directory": "ask"
-      },
-      "prompt": "You are the main coding agent. Focus on implementation, refactoring, debugging, and precise code changes. Prefer minimal diffs, preserve existing architecture unless there is a clear reason to change it, and explain tradeoffs briefly.",
-      "temperature": 0.2
+      // Prompt and permissions live in agents/code.md
+      "temperature": 0.2,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "local": {
       "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
-      "maxTokens": 8000,
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q5",
-      "permission": {
-        "bash": "ask",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "deny",
-        "external_directory": "ask"
-      },
-      "prompt": "You are a fully local coding agent with no internet access. Work only with files and context provided. Be explicit when you need information you cannot access.",
-      "temperature": 0.2
+      // Prompt and permissions live in agents/local.md
+      "temperature": 0.2,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "plan": {
       "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
-      "maxTokens": 1500,
+      "maxTokens": 512,
       "mode": "primary",
       "model": "ollama/qwen3:4b",
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow",
-        "external_directory": "ask"
-      },
-      "prompt": "You are a lightweight planning agent. Turn goals into actionable steps, break work into phases, identify blockers, and recommend the next best action. Stay concise, practical, and execution-oriented.",
+      // Prompt and permissions live in agents/plan.md
       "temperature": 0.25
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
+      "maxTokens": 1024,
       "mode": "primary",
       "model": "ollama/qwen3-coder-30b-a3b:q5",
-      "permission": {
-        "bash": "deny",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow",
-        "external_directory": "ask"
-      },
-      "prompt": "You are a research agent. Gather evidence, inspect files, compare options, and produce structured findings. Do not execute shell commands.\n\nAt the end of every research session, save your findings to the Obsidian vault at:\n  ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/primary/Research/\n\nName the file using the topic and today's date: `YYYY-MM-DD topic-slug.md`.\n\nStructure the file as:\n# <Topic>\n_Date: YYYY-MM-DD_\n\n## Summary\n<2-4 sentences>\n\n## Findings\n<bullet points, organized by sub-topic>\n\n## Open Questions\n<what still needs investigation>\n\n## Next Steps\n<concrete recommended actions>\n\nIf the user explicitly says not to save, skip writing the file.",
+      // Prompt and permissions live in agents/research.md
       "temperature": 0.25
     },
     "think": {
       "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
       "mode": "primary",
       "model": "ollama/deepseek-r1:32b",
-      "permission": {
-        "bash": "deny",
-        "edit": "deny",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow",
-        "external_directory": "ask"
-      },
-      "prompt": "You are a read-only reasoning agent. Provide concise, stepwise analysis of tradeoffs, debugging hypotheses, architectural choices, interview answers, and evaluation decisions. Do not edit files or run commands. Produce clear structured reasoning, alternatives, and recommendations.",
-      "temperature": 0.3
+      // Prompt and permissions live in agents/think.md
+      "temperature": 0.3,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
     },
     "write": {
       "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
+      "maxTokens": 2048,
       "mode": "primary",
       "model": "ollama/qwen3.5-27b:q4",
-      "permission": {
-        "bash": "deny",
-        "edit": "ask",
-        "glob": "allow",
-        "grep": "allow",
-        "list": "allow",
-        "read": "allow",
-        "webfetch": "allow",
-        "external_directory": "ask"
-      },
-      "prompt": "You are a writing-focused agent. Optimize for clarity, tone, structure, and persuasive but concrete language. Produce polished resumes, cover letters, technical documentation, summaries, and interview prep materials. Avoid unnecessary verbosity and keep claims specific.",
-      "temperature": 0.65
+      // Prompt and permissions live in agents/write.md
+      "temperature": 0.65,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
+    },
+    "build": {
+      "description": "Build and test agent — runs build commands, test suites, and CI checks.",
+      "maxTokens": 1024,
+      "mode": "primary",
+      "model": "ollama/qwen3-coder-30b-a3b:q5",
+      // Prompt and permissions live in agents/build.md
+      "temperature": 0.1
+    },
+    "summary": {
+      "description": "Commit message and session summary agent.",
+      "mode": "primary",
+      "model": "ollama/qwen3.5:4b",
+      // Prompt and permissions live in agents/summary.md
+      "temperature": 0.2
+    },
+    "title": {
+      "description": "Generate concise PR/MR titles from diffs and commit history.",
+      "mode": "primary",
+      "model": "ollama/qwen3.5:4b",
+      // Prompt and permissions live in agents/title.md
+      "temperature": 0.2
     }
   },
   "default_agent": "code",
@@ -140,20 +120,39 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
+        "alpie-core:latest": { "name": "Alpie-Core 32B (DeepSeek-R1 Distill, NF4)" },
         "deepseek-r1:32b": { "name": "DeepSeek R1 32B (Reasoning)" },
+        "gemma4:31b": { "name": "Gemma 4 31B (Reasoning)" },
         "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "phi4": { "name": "Phi-4 14B (Microsoft, Strong Reasoning)" },
+        "phi4-mini": { "name": "Phi-4 Mini 3.8B (Microsoft, Fast/Chat)" },
         "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (Claude+Gemini+GPT Distill)" },
         "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B (Claude Sonnet 4.5 Distill)" },
         "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Claude Sonnet 4.5 Distill)" },
         "qwen3-coder-30b-a3b:q5": { "name": "Qwen3 Coder 30B A3B (Coding)" },
         "qwen3-coder-30b-a3b:q5-128k": { "name": "Qwen3 Coder 30B A3B (Coding, 128K)" },
+        "qwen3-coder-next-80b:q4": { "name": "Qwen3 Coder Next 80B (Coding, Cloud)" },
         "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B (Gemini 3.1 Distill)" },
         "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill)" },
         "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, 128K)" },
+        "qwen3.5-4b:opus-distill-v2": { "name": "Qwen 3.5 4B (Claude Opus 4.6 Distill v2)" },
         "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning, Writing)" },
         "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Claude Opus+Sonnet Distill)" },
         "qwen3.6-35b:opus4.6": { "name": "Qwen 3.6 35B (Heavy, Claude Opus Distill)" },
+        "qwen3.6-35b:q4": { "name": "Qwen 3.6 35B A3B (Coding)" },
+        "qwen35-27b:opus-agent": { "name": "Qwen 3.5 27B (Opus Distill Agent, 262K)" },
         "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
+      }
+    },
+    // ── llama-server — GGUF direct serving on port 10000 ──────────────────
+    "llamarouter": {
+      "name": "llama-server",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "http://localhost:10000/v1", "apiKey": "sk-local" },
+      "models": {
+        "deepseek-r1-32b": { "name": "DeepSeek R1 32B (Reasoning, llama)" },
+        "qwen3-4b-it": { "name": "Qwen 3 4B (Planning, llama)" },
+        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" }
       }
     },
     "openrouter": {
@@ -189,7 +188,45 @@
     }
   },
 
+  // 4. MCP Servers
+  "mcp": {
+    "apple-reminders": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-server-apple-events"],
+      "enabled": true
+    },
+    "home-assistant": {
+      "type": "local",
+      "command": ["uvx", "ha-mcp@latest"],
+      "enabled": true,
+      "env": {
+        "HOMEASSISTANT_URL": "https://kehle.duckdns.org:8123",
+        "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}"
+      }
+    },
+    "open-meteo": {
+      "type": "local",
+      "command": ["npx", "-y", "@cyanheads/open-meteo-mcp-server@latest"],
+      "enabled": true,
+      "env": {
+        "MCP_LOG_LEVEL": "error"
+      }
+    },
+    "one-search": {
+      "type": "local",
+      "command": ["npx", "-y", "one-search-mcp"],
+      "enabled": true,
+      "env": {
+        "SEARCH_PROVIDER": "duckduckgo"
+      }
+    }
+  },
+
+  "experimental": {
+    "mcp_timeout": 8000
+  },
+
   // 5. Instructions & Plugins
-  "instructions": ["CONTRIBUTING.md", "docs/*.md"],
+  "instructions": [],
   "plugin": ["opencode-openai-codex-auth@latest"]
 }

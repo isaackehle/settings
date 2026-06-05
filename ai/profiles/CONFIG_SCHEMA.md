@@ -2,6 +2,11 @@
 
 Canonical reference for how `models.sh` definitions flow into downstream config files.
 
+**Also see:** [`CANONICAL_RULES.md`](./CANONICAL_RULES.md) for weighted decisions
+on maxTokens, instructions, MCP, tool filters, missing agents, temperature,
+permissions, and model assignments per hardware tier. Every profile config
+change must respect the rules there before being committed.
+
 When `models.sh` changes, every file below must be updated to stay consistent.
 
 **May 2026 update: LiteLLM proxy removed.** All tools connect to Ollama directly

@@ -186,10 +186,14 @@ OLLAMA_CLOUD_MODELS=(
 # --- OpenCode agents (→ opencode.jsonc) ---
 declare -A OPENCODE_AGENTS=(
     [code]="qwen3-coder-30b-a3b:q6"
-    [think]="gemma4:31b"
-    [write]="qwen3.5-27b:q4"
-    [research]="qwen3.5-27b:q4"
+    [local]="qwen3-coder-30b-a3b:q6"
+    [think]="deepseek-r1:32b"
+    [write]="qwen3-14b:sonnet4.5"
+    [research]="qwen3-14b:sonnet4.5"
     [plan]="qwen3:4b"
+    [build]="qwen3-coder-30b-a3b:q6"
+    [summary]="qwen3.5:4b"
+    [title]="qwen3.5:4b"
 )
 
 # --- Continue (→ config.yaml) ---
