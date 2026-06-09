@@ -32,7 +32,13 @@
       "mode": "primary",
       "model": "ollama/qwen3:4b",
       // Prompt and permissions live in agents/plan.md
-      "temperature": 0.25
+      "temperature": 0.25,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false,
+        "one-search_*": false,
+        "weather_*": false
+      }
     },
     "research": {
       "description": "Research agent for company research, technical discovery, and structured findings.",
