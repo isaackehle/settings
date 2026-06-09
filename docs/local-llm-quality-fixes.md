@@ -6,18 +6,20 @@
 
 ### Template Status Check
 
-| Model | Template | Tool Support | Status |
-|-------|----------|--------------|--------|
-| `qwen3-coder-30b-a3b:q6` | Full Jinja2 (20+ lines) | ✅ Full | Working |
-| `qwen3-14b:sonnet4.5` | Full Jinja2 (20+ lines) | ✅ Full | Working |
-| `qwen3.5:4b` | `RENDERER qwen3.5` / `PARSER qwen3.5` | ✅ Architecture-native | Working |
-| `qwen3.6-35b:opus4.6` | `TEMPLATE {{ .Prompt }}` | ❌ **None** | **BROKEN** |
+| Model                    | Template                              | Tool Support           | Status     |
+| ------------------------ | ------------------------------------- | ---------------------- | ---------- |
+| `qwen3-coder-30b-a3b:q6` | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
+| `qwen3-14b:sonnet4.5`    | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
+| `qwen3.5:4b`             | `RENDERER qwen3.5` / `PARSER qwen3.5` | ✅ Architecture-native | Working    |
+| `qwen3.6-35b:opus4.6`    | `TEMPLATE {{ .Prompt }}`              | ❌ **None**            | **BROKEN** |
 
 ---
 
 ## Immediate Fix: Re-register Opus Model
 
-The Opus model needs to be re-registered with an HF reference to preserve the chat template:
+**Status: ✅ FIXED** (2026-06-09)
+
+The Opus model has been re-registered with an HF reference to preserve the chat template:
 
 ```shell
 # 1. Remove the broken model
@@ -43,7 +45,8 @@ EOF
 done
 
 # 4. Verify the fix
-ollama show qwen3.6-35b:opus4.6 --modelfile | head -30
+ollama show qwen3.6-35b:opus4.6 --template | grep -c "tool_call"
+# Should show: 11 (tool_call references in template)
 ```
 
 ---
@@ -55,6 +58,7 @@ I've updated the planning agent to prevent it from trying to use MCP tools it ca
 ### Changes Made:
 
 1. **Added tool filters to `opencode.jsonc`:**
+
    ```jsonc
    "plan": {
      "tools": {
@@ -71,6 +75,7 @@ I've updated the planning agent to prevent it from trying to use MCP tools it ca
    - Added clear instruction: "You are a PLANNING agent only. Do NOT execute tools or make external calls."
 
 ### Why This Helps:
+
 The 4B planning model was trying to execute complex tool calls (web search) that it couldn't handle. By filtering out MCP tools and clarifying the agent's role, it will focus on planning instead of attempting tool execution.
 
 ---
@@ -80,11 +85,13 @@ The 4B planning model was trying to execute complex tool calls (web search) that
 ### 1. Context Window Exhaustion ("Mo" output)
 
 If you're seeing truncated output, it could be:
+
 - Context window too small for the task
 - KV cache memory exhausted
 - Model running out of tokens mid-generation
 
 **Check context windows:**
+
 ```shell
 ollama show qwen3-coder-30b-a3b:q6 --modelfile | grep num_ctx
 ollama show qwen3.6-35b:opus4.6 --modelfile | grep num_ctx
@@ -97,6 +104,7 @@ ollama show qwen3.6-35b:opus4.6 --modelfile | grep num_ctx
 ### 3. Model Loading Issues
 
 Verify all models are loaded correctly:
+
 ```shell
 ollama list | grep -E "(qwen3-coder|qwen3.6|qwen3.5:4b)"
 ```
@@ -104,6 +112,8 @@ ollama list | grep -E "(qwen3-coder|qwen3.6|qwen3.5:4b)"
 ---
 
 ## Verification Steps
+
+**Status: ✅ VERIFIED** (2026-06-09)
 
 After applying the fix:
 
@@ -117,6 +127,22 @@ ollama run qwen3.5:4b "Plan the steps to set up a new Python project"
 # Test primary coder (should work fine)
 ollama run qwen3-coder-30b-a3b:q6 "Write a function to calculate fibonacci numbers"
 ```
+
+### Verification Results
+
+All models now have proper tool support:
+
+| Model | Capabilities | Status |
+|-------|--------------|--------|
+| `qwen3.6-35b:opus4.6` | tools, thinking, completion | ✅ Fixed |
+| `qwen3-coder-30b-a3b:q6` | tools, completion | ✅ Working |
+| `qwen3-14b:sonnet4.5` | tools, thinking, completion | ✅ Working |
+| `qwen3.5:4b` | tools, thinking, completion | ✅ Working |
+| `qwen3:4b` | tools, thinking, completion | ✅ Working |
+| `qwen2.5-coder:7b` | tools, insert, completion | ✅ Working |
+| `qwen2.5-coder:1.5b` | tools, insert, completion | ✅ Working |
+| `deepseek-r1:32b` | tools, thinking, completion | ✅ Working |
+| `codestral:22b` | completion | ✅ Expected (no tools needed) |
 
 ---
 
@@ -134,9 +160,10 @@ ollama run qwen3-coder-30b-a3b:q6 "Write a function to calculate fibonacci numbe
 - `ai/profiles/macbook-m5-64gb/opencode/opencode.jsonc` — Added tool filters for planning agent
 - `ai/opencode/agents/plan.md` — Updated prompt to clarify planning-only role
 - `docs/local-llm-quality-diagnosis.md` — Created diagnostic document
+- `docs/local-llm-quality-fixes.md` — Created fix documentation (this file)
 
 ---
 
 _Generated: 2026-06-09_
 _Profile: macbook-m5-64gb_
-_Issue: Local LLM quality degradation_
+_Status: ✅ Fixed and verified_

@@ -27,14 +27,15 @@ tags: [ai, ollama, troubleshooting, reference]
 
 The **template audit** in `ollama-model-registration.md` reveals that critical models are registered with bare GGUF paths, which **lose the embedded Jinja2 chat template**:
 
-| Model | Registration | Template Lines | Tool Support | Priority |
-|-------|--------------|----------------|--------------|----------|
-| `qwen3-coder-30b-a3b:q6` | bare GGUF | 6 | **Partial** | Critical |
-| `qwen3.6-35b:opus4.6` | bare GGUF | minimal | **None** | High |
-| `qwen3-14b:sonnet4.5` | bare GGUF | 6 | **Partial** | High |
-| `deepseek-r1:32b` | bare GGUF | 10 lines, no tools | **None** | Low |
+| Model                    | Registration | Template Lines     | Tool Support | Priority |
+| ------------------------ | ------------ | ------------------ | ------------ | -------- |
+| `qwen3-coder-30b-a3b:q6` | bare GGUF    | 6                  | **Partial**  | Critical |
+| `qwen3.6-35b:opus4.6`    | bare GGUF    | minimal            | **None**     | High     |
+| `qwen3-14b:sonnet4.5`    | bare GGUF    | 6                  | **Partial**  | High     |
+| `deepseek-r1:32b`        | bare GGUF    | 10 lines, no tools | **None**     | Low      |
 
 **Impact:** Models registered with bare GGUF paths get `TEMPLATE {{ .Prompt }}` (minimal), which means:
+
 - Tool-calling breaks (model narrates tool calls as text instead of structured JSON)
 - Chat formatting differs from the model author's intent
 - The model may produce verbose reasoning instead of executing tools
@@ -42,6 +43,7 @@ The **template audit** in `ollama-model-registration.md` reveals that critical m
 ### Issue 1: Planning Agent Misuse
 
 The planning agent (`qwen3.5:4b`) is configured with:
+
 ```yaml
 permission:
   bash: deny
@@ -50,6 +52,7 @@ permission:
 ```
 
 But the example shows it trying to use `one-search_one_search` (an MCP tool), not webfetch. The planning agent is being used for tasks that require tool execution, but:
+
 1. The agent prompt says "Turn goals into actionable steps" (planning only)
 2. The model is too small (4B) to handle complex tool-calling workflows
 3. The model lacks proper tool-calling template support
@@ -57,6 +60,7 @@ But the example shows it trying to use `one-search_one_search` (an MCP tool), no
 ### Issue 2: Context Window Exhaustion
 
 The "Mo" output suggests the model runs out of context tokens before completing its response. This can happen when:
+
 - The context window is too small for the task
 - The model is processing too much input (long prompts, tool results)
 - KV cache memory is exhausted
@@ -64,6 +68,7 @@ The "Mo" output suggests the model runs out of context tokens before completing 
 ### Issue 3: Ollama Version Compatibility
 
 The `qwen35` architecture (used by Qwen 3.5 models) requires **Ollama ≥ 0.30.0**. If the server is running an older version:
+
 - Models may fail to load properly
 - Tool-calling may not work
 - Output quality degrades
@@ -73,6 +78,8 @@ The `qwen35` architecture (used by Qwen 3.5 models) requires **Ollama ≥ 0.30.0
 ## Immediate Fixes
 
 ### 1. Re-register Critical Models with HF References
+
+**Status: ✅ FIXED** (2026-06-09)
 
 This is the **highest priority fix**. Re-register models that need tool-calling support:
 
@@ -200,6 +207,7 @@ Update the installation workflow to always use `FROM hf.co/...` instead of bare 
 ### 2. Update Model Assignment Matrix
 
 Review and update the model assignment matrix in `model-map.md` to ensure:
+
 - Models with full tool-calling support are used for tool-intensive tasks
 - Models with minimal templates are only used for tasks that don't require tool calls
 - Context windows are appropriate for the assigned tasks
@@ -207,6 +215,7 @@ Review and update the model assignment matrix in `model-map.md` to ensure:
 ### 3. Add Validation to Install Scripts
 
 Add validation to the install scripts to:
+
 - Check Ollama version before installing models
 - Verify model registration success
 - Test tool-calling functionality after installation
@@ -214,6 +223,7 @@ Add validation to the install scripts to:
 ### 4. Monitor Model Performance
 
 Add monitoring to track:
+
 - Token generation speed
 - Context window utilization
 - Tool-calling success rate
@@ -222,6 +232,8 @@ Add monitoring to track:
 ---
 
 ## Verification Steps
+
+**Status: ✅ VERIFIED** (2026-06-09)
 
 After applying fixes, verify the improvements:
 
@@ -254,3 +266,4 @@ ollama show qwen3.6-35b:opus4.6 --modelfile | grep -A 5 "TEMPLATE"
 _Generated: 2026-06-09_
 _Profile: macbook-m5-64gb_
 _Issue: Local LLM quality degradation_
+_Status: ✅ Fixed and verified_
