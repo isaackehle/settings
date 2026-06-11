@@ -126,7 +126,7 @@ interactive_menu() {
     "editors|devtools|Install editors (VS Code, Helix, Cursor, etc.)"
     "vscode|devtools|Install VS Code + extensions"
     "cursor|devtools|Install Cursor editor"
-    "windsurf|devtools|Install Windsurf editor"
+    "windsurf|devtools|Install Devin Desktop (formerly Windsurf)"
     "zed|devtools|Install Zed editor"
     "helix|devtools|Install Helix editor"
     "git|devtools|Install Git and GitHub CLI"

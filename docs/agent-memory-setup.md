@@ -12,11 +12,11 @@ All AI agents (Claude Code, opencode, kilo, crush, aider, Gemini CLI, continue, 
 
 Supporting files:
 
-| File | Purpose |
-|---|---|
-| `~/.agents.md` | Canonical source of truth — all agents read this |
-| `~/.vaults.md` | Vault registry (paths, variables, planned renames) |
-| `~/.memory.md` | Persistent cross-session context and change log |
+| File                  | Purpose                                                                   |
+| --------------------- | ------------------------------------------------------------------------- |
+| `~/.agents.md`        | Canonical source of truth — all agents read this                          |
+| `~/.vaults.md`        | Vault registry (paths, variables, planned renames)                        |
+| `~/.memory.md`        | Persistent cross-session context and change log                           |
 | `~/.claude/CLAUDE.md` | Claude Code auto-loaded global instructions (delegates to `~/.agents.md`) |
 
 ---
@@ -29,33 +29,41 @@ Supporting files:
 This is the canonical source of truth for all AI agents operating on Isaac's machines.
 
 ## Tool Registry
+
 ...
 
 ## Identity
+
 - **Owner:** Isaac Kehle
 - **Location:** Baltimore, MD (ZIP 21117, Owings Mills area)
 
 ## People
+
 Names that are always lowercase:
+
 - **ravyn**
 - **amethyst**
 
 ## Vault Registry
+
 See `~/.vaults.md` for the full vault registry and planned renames.
 
-| Variable          | Path                                                         | Purpose                     |
-| ----------------- | ------------------------------------------------------------ | --------------------------- |
-| `$OBSIDIAN_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/vault`             | Job search & career         |
-| `$PERSONAL_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/Documents`         | Personal life, home, DIY    |
+| Variable          | Path                                                 | Purpose                  |
+| ----------------- | ---------------------------------------------------- | ------------------------ |
+| `$OBSIDIAN_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/vault`     | Job search & career      |
+| `$PERSONAL_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/Documents` | Personal life, home, DIY |
 
 ## Job Search Routing
+
 All job search, resume, and career output → `$OBSIDIAN_VAULT/job_search/`
 Use absolute paths. Do not write to the current working directory.
 
 ## Personal Vault Routing
+
 Personal life content → `$PERSONAL_VAULT`. See `$PERSONAL_VAULT/AGENTS.md` for routing rules.
 
 ## Commit Message Style
+
 Format: `type(scope): short description` (≤72 chars, imperative mood, no period)
 Types: feat, fix, docs, style, refactor, test, chore, ci, perf, build
 Output ONLY the raw string — no JSON, no markdown, no wrapping.
@@ -68,10 +76,10 @@ Output ONLY the raw string — no JSON, no markdown, no wrapping.
 ```markdown
 # Isaac's Vaults
 
-| Variable          | Path                                                                | Purpose                                      |
-| ----------------- | ------------------------------------------------------------------- | -------------------------------------------- |
-| `$OBSIDIAN_VAULT`   | `~/Library/CloudStorage/OneDrive-Personal/vault`                  | Job search & career (future: `$JOB_VAULT`)   |
-| `$PERSONAL_VAULT`   | `~/Library/CloudStorage/OneDrive-Personal/Documents`              | Personal life — home, DIY, finances, health  |
+| Variable          | Path                                                 | Purpose                                     |
+| ----------------- | ---------------------------------------------------- | ------------------------------------------- |
+| `$OBSIDIAN_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/vault`     | Job search & career (future: `$JOB_VAULT`)  |
+| `$PERSONAL_VAULT` | `~/Library/CloudStorage/OneDrive-Personal/Documents` | Personal life — home, DIY, finances, health |
 ```
 
 ---
@@ -85,10 +93,12 @@ Persistent cross-session context for Isaac Kehle.
 For canonical global instructions, vault registry, and conventions, see `~/.agents.md`.
 
 ## People
+
 - **ravyn** — always lowercase
 - **amethyst** — always lowercase
 
 ## Change Log
+
 ...
 ```
 
@@ -175,22 +185,19 @@ If any instruction conflicts, `~/.agents.md` wins.
 Add a `systemMessage` near the top of the config:
 
 ```yaml
-systemMessage: "See ~/.agents.md for global context: vault registry, routing rules, people conventions (ravyn and amethyst are always lowercase), and commit message style."
+systemMessage: 'See ~/.agents.md for global context: vault registry, routing rules, people conventions (ravyn and amethyst are always lowercase), and commit message style.'
 ```
 
-### Windsurf
+### Devin Desktop (formerly Windsurf)
 
-No global instruction mechanism. Use per-project `.windsurfrules` when needed.
-
-### Devin editor
-
-Not yet installed. When set up: find where it loads global instructions and add a pointer to `~/.agents.md`. Update this doc and `~/.agents.md` tool registry when done.
+No global instruction mechanism. Use per-project `.windsurfrules` (legacy) or `.devinclirc` when needed. Rebranded from Windsurf effective June 2, 2026.
 
 ---
 
 ## Step 5 — Wire vault-level AGENTS.md files
 
 Each Obsidian vault should have an `AGENTS.md` at its root that:
+
 1. References `~/.agents.md` for global context
 2. Defines vault-specific identity, structure, and routing rules
 3. Points to `VAULT_STRUCTURE.md` for the folder map

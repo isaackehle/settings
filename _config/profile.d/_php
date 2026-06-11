@@ -1,0 +1,5 @@
+# PHP 8.5-debug — written by setup_config.sh 2026-04-19
+# Re-run setup_config.sh to change version or variant.
+# Source: shivammathur/php tap (https://github.com/shivammathur/homebrew-php)
+[ -d "/opt/homebrew/opt/php-debug" ] && export PATH="/opt/homebrew/opt/php-debug/bin:$PATH"
+[ -d "/opt/homebrew/opt/php-debug" ] && export PATH="/opt/homebrew/opt/php-debug/sbin:$PATH"

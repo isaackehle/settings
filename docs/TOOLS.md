@@ -49,7 +49,8 @@ Comprehensive reference for all AI tools in this setup. Install scripts live in 
       - [Memory-Based Guidelines](#memory-based-guidelines)
       - [Common Issues to Check](#common-issues-to-check)
       - [Validation](#validation)
-    - [Windsurf](#windsurf)
+    - [Cursor](#cursor)
+    - [Devin Desktop](#devin-desktop)
   - [Self-Hosted Assistants](#self-hosted-assistants)
     - [AnythingLLM](#anythingllm)
     - [Tabby](#tabby)
@@ -322,15 +323,15 @@ cmake --build build --config Release -j$(sysctl -n hw.logicalcpu)
 
 Use `ai/runtimes/llama-cpp.sh` to serve models by role — each role has a dedicated port:
 
-| Role      | Port | Profile model (64GB)          |
-|-----------|------|-------------------------------|
-| fast      | 8011 | qwen3:4b                      |
-| general   | 8012 | qwen3.5-27b:q4                |
-| coder     | 8013 | qwen3-coder-30b-a3b:q6        |
-| heavy     | 8014 | qwen3.6-35b:opus4.6           |
-| reasoning | 8015 | deepseek-r1:32b               |
-| embedding | 8016 | nomic-embed-text              |
-| summary   | 8017 | qwen3.5:4b                    |
+| Role      | Port | Profile model (64GB)   |
+| --------- | ---- | ---------------------- |
+| fast      | 8011 | qwen3:4b               |
+| general   | 8012 | qwen3.5-27b:q4         |
+| coder     | 8013 | qwen3-coder-30b-a3b:q6 |
+| heavy     | 8014 | qwen3.6-35b:opus4.6    |
+| reasoning | 8015 | deepseek-r1:32b        |
+| embedding | 8016 | nomic-embed-text       |
+| summary   | 8017 | qwen3.5:4b             |
 
 ```shell
 # Serve a role (uses GGUF directly from $(GGUF_DIR))
@@ -405,14 +406,14 @@ Config deployed from `profiles/<machine>/opencode/opencode.jsonc` → `~/.config
 
 Agents and their assigned models (64GB profile):
 
-| Agent    | Model                        | Purpose                        |
-|----------|------------------------------|--------------------------------|
-| code     | qwen3-coder-30b-a3b:q6       | Implementation, refactoring    |
-| local    | qwen3-coder-30b-a3b:q6       | Offline/sensitive work         |
-| think    | deepseek-r1:32b              | Reasoning, tradeoffs           |
-| write    | qwen3.5-27b:q4               | Docs, summaries, prose         |
-| research | qwen3-coder-30b-a3b:q6       | Evidence gathering             |
-| plan     | qwen3:4b                     | Fast planning, routing         |
+| Agent    | Model                  | Purpose                     |
+| -------- | ---------------------- | --------------------------- |
+| code     | qwen3-coder-30b-a3b:q6 | Implementation, refactoring |
+| local    | qwen3-coder-30b-a3b:q6 | Offline/sensitive work      |
+| think    | deepseek-r1:32b        | Reasoning, tradeoffs        |
+| write    | qwen3.5-27b:q4         | Docs, summaries, prose      |
+| research | qwen3-coder-30b-a3b:q6 | Evidence gathering          |
+| plan     | qwen3:4b               | Fast planning, routing      |
 
 ```shell
 opencode          # interactive TUI
@@ -752,12 +753,12 @@ Each agent has its own permission set:
 
 #### Memory-Based Guidelines
 
-| RAM      | Default Model             | Write Model        | Fast/Plan  |
-| -------- | ------------------------- | ------------------ | ---------- |
-| **64GB** | `qwen3-coder-30b-a3b:q6`   | `qwen3.5-27b:q4`   | `qwen3:4b` |
-| **48GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
-| **32GB** | `qwen3-coder-30b-a3b:q5`  | `qwen3.5-27b:q4`   | `qwen3:4b` |
-| **16GB** | `qwen3:14b`               | `qwen2.5-coder:7b` | `qwen3:4b` |
+| RAM      | Default Model            | Write Model        | Fast/Plan  |
+| -------- | ------------------------ | ------------------ | ---------- |
+| **64GB** | `qwen3-coder-30b-a3b:q6` | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **48GB** | `qwen3-coder-30b-a3b:q5` | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **32GB** | `qwen3-coder-30b-a3b:q5` | `qwen3.5-27b:q4`   | `qwen3:4b` |
+| **16GB** | `qwen3:14b`              | `qwen2.5-coder:7b` | `qwen3:4b` |
 
 **Config:** Single `kilo.jsonc` per profile, Ollama-only. Model list grouped by purpose (role), not by context window size. Each role has a base alias (default context) and one `+long` variant for large sessions.
 
@@ -780,17 +781,39 @@ After editing any `kilo.jsonc`:
 
 ---
 
-### Windsurf
+### Cursor
 
-AI-native IDE from Codeium, built on VS Code. Includes **Cascade** — an agentic AI with full codebase context, terminal access, and multi-file edits.
+AI-first code editor built on VS Code. Includes built-in chat, inline edit (Cmd+K), and agent mode. Uses the `cursor` CLI for opening files from the terminal.
 
 ```shell
-brew install --cask windsurf
+brew install --cask cursor
 ```
 
-Profile config deploys `argv.json` and `codeium-config.json`. Local Ollama models for autocomplete: Settings → AI → Autocomplete → OpenAI Compatible → `http://localhost:11434/v1`.
+```shell
+# Open a file or project
+cursor <path>
+# Agent mode: Cmd+Shift+I  |  Inline edit: Cmd+K
+# Ollama: Settings (Cmd+Shift+J) → Models → OpenAI Base URL → http://localhost:11434/v1
+# API Key: sk-local
+```
 
-- [codeium.com/windsurf](https://codeium.com/windsurf) · `ai/editors/windsurf.sh`
+Profile config at `ai/profiles/<machine>/cursor/settings.jsonc`. Merge into `~/Library/Application Support/Cursor/User/settings.json`.
+
+- [cursor.com](https://cursor.com) · [docs.cursor.com](https://docs.cursor.com) · `editors/cursor.sh`
+
+---
+
+### Devin Desktop
+
+AI-native IDE (formerly Windsurf) from Cognition AI, built on VS Code. Includes **Devin** — an agentic AI with full codebase context, terminal access, and multi-file edits. Rebranded from Windsurf effective June 2, 2026.
+
+```shell
+brew install --cask devin
+```
+
+Profile config deploys `argv.json` and `codeium-config.json` to both Devin and legacy Windsurf paths. Local Ollama models: Settings → AI → Autocomplete → OpenAI Compatible → `http://localhost:11434/v1`.
+
+- [devin.ai](https://devin.ai) · [docs.devin.ai](https://docs.devin.ai/desktop) · `editors/devin.sh`
 
 ---
 
