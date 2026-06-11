@@ -1,0 +1,2 @@
+# Fabric alias (brew installs as fabric-ai)
+command -v fabric-ai >/dev/null 2>&1 && alias fabric='fabric-ai'

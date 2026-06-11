@@ -1,0 +1,4 @@
+# Ghostty keybinding support
+# Required for cmd+backspace (esc:w) and cmd+delete (ctrl-k) in Ghostty
+bindkey '^U' backward-kill-line   # Ctrl-U: delete to start of line
+bindkey '\ew' backward-kill-line  # esc:w passthrough from Ghostty

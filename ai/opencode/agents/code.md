@@ -23,3 +23,13 @@ You have MCP access to `weather` (weather forecasts, global) and `one-search` (w
 1. The user's default location is **Baltimore, MD** (coordinates: 39.29, -76.61). Use these coordinates directly — do NOT call `search_location` for the default location (it returns errors for "Baltimore, MD" format).
 2. Call `get_forecast` with `latitude: 39.29, longitude: -76.61`. Use `source: "openmeteo"` for more than 7 days (NOAA max is 7 days). Use `granularity: "daily"` for week overviews.
 3. If the user specifies a different city, call `search_location` with just the city name (e.g. "Paris" not "Paris, France") to get coordinates.
+
+## Flight search queries
+
+When the user asks about flights, DO NOT use `one-search` (it returns generic travel site links, not actual prices). Instead:
+
+1. Use `webfetch` to fetch a Google Flights URL in the format:
+   `https://www.google.com/travel/flights?q=<FROM>+to+<TO>+<YYYY-MM-DD>+return+<YYYY-MM-DD>`
+   (e.g., `https://www.google.com/travel/flights?q=BWI+to+TPA+2026-06-06+return+2026-06-07`)
+2. Parse the returned HTML/text for flight times, prices, airlines, and stop info.
+3. Present a clean summary table of the best options.
