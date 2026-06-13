@@ -4,6 +4,59 @@ tags: [ai, ollama, troubleshooting, reference]
 
 # Ollama Model Registration — Troubleshooting & Best Practices
 
+## Runtime Install (June 2026) — Official Standalone, NOT Homebrew
+
+**The runtime is the official standalone tarball installed to a user-owned path,
+managed by a launchd agent. Do NOT use Homebrew or the GUI App.**
+
+Why: the Homebrew `ollama` bottle (0.30.7/0.30.8 era) ships only the Go `ollama`
+binary plus an MLX/Metal stub and **omits `llama-server`**. ollama routes every
+GGUF model (our entire `~/.ollama` store) through `llama-server`, so the brew
+build cannot load any model — generation fails with
+`error starting llama-server: llama-server binary not found` and the CPU
+fallback also won't start a server. The macOS GUI App bundled a working
+`llama-server`, which is the only reason it used to work. We replaced both with
+the official standalone release tarball, which bundles `ollama` + the full
+`lib/ollama/` backend (incl. `llama-server` + Metal libs). GPU-accelerated,
+no GUI, no sudo.
+
+Install layout (user-owned):
+
+```
+~/.local/ollama/bin/ollama          # the binary  (client v0.30.8)
+~/.local/ollama/lib/ollama/         # llama-server + ggml/metal backend (36 files)
+~/.local/bin/ollama -> ../ollama/bin/ollama   # on PATH
+```
+
+Service (all tuning env vars baked in — see plist):
+
+```
+~/Library/LaunchAgents/com.kehle.ollama.plist     # label: com.kehle.ollama
+# repo source of truth:
+ai/profiles/macbook-m5-64gb/ollama/com.kehle.ollama.plist
+```
+
+Baked env: `OLLAMA_HOST=0.0.0.0:11434`, `OLLAMA_MAX_LOADED_MODELS=3`,
+`OLLAMA_NUM_PARALLEL=1`, `OLLAMA_KEEP_ALIVE=30m`, `OLLAMA_FLASH_ATTENTION=1`,
+`OLLAMA_KV_CACHE_TYPE=q8_0`. (Do **not** also export these from the shell rc —
+a shell export never reaches the launchd-managed server process.) This service
+supersedes the old env-only agent `com.kehle.ollama-env`.
+
+Install / reinstall is automated by `ai/runtimes/ollama.sh` (`setup_ollama`).
+Manual service reload:
+
+```shell
+cp ai/profiles/macbook-m5-64gb/ollama/com.kehle.ollama.plist ~/Library/LaunchAgents/
+launchctl bootout   gui/$(id -u)/com.kehle.ollama 2>/dev/null || true
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.kehle.ollama.plist
+launchctl enable    gui/$(id -u)/com.kehle.ollama
+```
+
+Verified working: `qwen3.6:35b-96k` loads **100% GPU** (Apple M5 Max, Metal),
+context 98304, generation through `/v1/chat/completions` returns HTTP 200.
+Upgrades = re-run `setup_ollama` (re-downloads the latest tarball); the
+`~/.ollama` model store is never touched.
+
 ## Key Findings (June 2026)
 
 ### Architecture Support Requires Ollama ≥ 0.30.0
@@ -15,7 +68,9 @@ Ollama 0.24.0. Upgrading to Ollama 0.30.0 resolves the `unknown model architectu
 **Symptom:** `unable to load model: /path/to/sha256-blob` with server log showing
 `unknown model architecture: 'qwen35'`.
 
-**Fix:** `brew upgrade ollama` (0.24.0 → 0.30.0+).
+**Fix:** Use Ollama 0.30.0+. (The runtime is now the official standalone tarball
+under `~/.local/ollama` — see the Runtime Install section above. `brew upgrade
+ollama` is obsolete and produces a backend without `llama-server`.)
 
 ### Bare GGUF Path Registration Works (With Caveats)
 
@@ -32,12 +87,17 @@ functionally but **lose the embedded Jinja2 chat template**. This means:
 other custom models still use bare blob paths. See the Template Audit section
 below for the full status.
 
-### Ollama GUI App vs Homebrew Version
+### Ollama GUI App vs Homebrew Version (HISTORICAL — no longer applicable)
+
+> **Superseded (June 2026):** Neither the GUI App nor Homebrew is used anymore.
+> The runtime is the official standalone tarball under `~/.local/ollama`, run by
+> the `com.kehle.ollama` launchd agent (see the Runtime Install section at the
+> top). The notes below are retained only to explain old installs.
 
 The Ollama GUI app (`/Applications/Ollama.app`) and the Homebrew binary
-(`/opt/homebrew/bin/ollama`) are separate installations with separate versions.
-After upgrading via `brew upgrade ollama`, the **GUI app must also be updated**
-separately — the server process runs from the GUI app, not Homebrew.
+(`/opt/homebrew/bin/ollama`) were separate installations with separate versions.
+After upgrading via `brew upgrade ollama`, the **GUI app had to also be updated**
+separately — the server process ran from the GUI app, not Homebrew.
 
 **Fix when server version lags client version:**
 
@@ -171,7 +231,8 @@ ollama create qwen3.5-27b:q4-128k -f /tmp/model-128k.Modelfile
 | `codestral`   | 0.14+          | Codestral 22B          |
 
 Check version: `ollama --version`
-Upgrade: `brew upgrade ollama && brew services restart ollama`
+Upgrade: re-run `setup_ollama` in `ai/runtimes/ollama.sh` (re-downloads the
+official standalone tarball and reloads the `com.kehle.ollama` agent).
 
 ## Template Audit (June 2026)
 

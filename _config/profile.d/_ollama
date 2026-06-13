@@ -1,6 +1,10 @@
 # Ollama
 command -v ollama >/dev/null 2>&1 || return 0
-export OLLAMA_KEEP_ALIVE="10m"   # keep models warm in RAM (0 = immediate unload)
+# NOTE: All OLLAMA_* runtime tuning (HOST, KEEP_ALIVE, NUM_PARALLEL, MAX_LOADED_MODELS,
+# FLASH_ATTENTION, KV_CACHE_TYPE) is baked into the launchd service that runs `ollama serve`
+# -> ai/profiles/macbook-m5-64gb/ollama/com.kehle.ollama.plist. Do NOT re-export them here;
+# a shell-level export would NOT reach the launchd-managed server process and only risks
+# drift between an interactive `ollama` invocation and the daemon. Aliases only below.
 
 alias model-scout="${SETTINGS_BASE:-$HOME/code/isaackehle/settings}/model-scout.sh"
 alias suggest-models="${SETTINGS_BASE:-$HOME/code/isaackehle/settings}/ai/profiles/suggest-models.sh"
