@@ -30,7 +30,7 @@ The **template audit** in `ollama-model-registration.md` reveals that critical m
 | Model                    | Registration | Template Lines     | Tool Support | Priority |
 | ------------------------ | ------------ | ------------------ | ------------ | -------- |
 | `qwen3-coder-30b-a3b:q6` | bare GGUF    | 6                  | **Partial**  | Critical |
-| `qwen2.5:32b`    | bare GGUF    | minimal            | **None**     | High     |
+| `qwen2.5:32b`            | bare GGUF    | minimal            | **None**     | High     |
 | `qwen3-14b:sonnet4.5`    | bare GGUF    | 6                  | **Partial**  | High     |
 | `deepseek-r1:32b`        | bare GGUF    | 10 lines, no tools | **None**     | Low      |
 

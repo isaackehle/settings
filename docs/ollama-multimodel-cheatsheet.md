@@ -4,7 +4,7 @@ tags: [ai, ollama, reference, cheatsheet]
 
 # Ollama Multi-Model Cheat Sheet — M5 Max 64GB
 
-Step-by-step guide: HuggingFace → `ollama create` → concurrent loading.  
+Step-by-step guide: HuggingFace → `ollama create` → concurrent loading.
 Follow sections in order. Every command is copy-pasteable.
 
 ---
@@ -17,12 +17,12 @@ These env vars unlock true multi-model resident behaviour.
 
 ### Env vars to set
 
-| Variable | Value | Effect |
-| --- | --- | --- |
-| `OLLAMA_MAX_LOADED_MODELS` | `3` | Keep up to 3 models in memory simultaneously |
-| `OLLAMA_FLASH_ATTENTION` | `1` | Metal flash-attention — cuts KV cache memory ~3× |
-| `OLLAMA_NUM_PARALLEL` | `1` | One generation at a time per model (keeps GPU coherent) |
-| `OLLAMA_KEEP_ALIVE` | `30m` | Hold a model 30 min after last use before unloading |
+| Variable                   | Value | Effect                                                  |
+| -------------------------- | ----- | ------------------------------------------------------- |
+| `OLLAMA_MAX_LOADED_MODELS` | `3`   | Keep up to 3 models in memory simultaneously            |
+| `OLLAMA_FLASH_ATTENTION`   | `1`   | Metal flash-attention — cuts KV cache memory ~3×        |
+| `OLLAMA_NUM_PARALLEL`      | `1`   | One generation at a time per model (keeps GPU coherent) |
+| `OLLAMA_KEEP_ALIVE`        | `30m` | Hold a model 30 min after last use before unloading     |
 
 > **`OLLAMA_KV_CACHE_TYPE`** (q4_0/q8_0) — available in Ollama 0.5+. On 0.30.0 it
 > is silently ignored. Upgrade to unlock it; it can halve KV memory again.
@@ -270,7 +270,7 @@ rm /tmp/laguna-32k.Modelfile
 # Plan / routing — always-on
 ollama pull qwen3:4b
 
-# Summary / title — always-on  
+# Summary / title — always-on
 ollama pull qwen3.5:4b              # Uses RENDERER qwen3.5 (architecture-native)
 
 # Autocomplete — tiny, always-on
@@ -312,13 +312,13 @@ ollama show <alias> --modelfile | grep -c tool_call   # must be > 0
 
 ### Template source map
 
-| Distill alias | HF source | Base template source |
-| --- | --- | --- |
-| `qwen2.5:32b-distill` | `hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF` | `qwen2.5:32b` |
-| `qwen3.6-27b:opus-sonnet` | `hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF` | `qwen3.6:27b` |
-| `qwen3.5-27b:gemini3.1` | `hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF` | `qwen3.5:27b` |
-| `qwen3-14b:sonnet4.5` | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF` | `qwen3:14b` |
-| `qwen3-8b:sonnet4.5` | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF` | `qwen3:8b` |
+| Distill alias             | HF source                                                             | Base template source |
+| ------------------------- | --------------------------------------------------------------------- | -------------------- |
+| `qwen2.5:32b-distill`     | `hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF`                          | `qwen2.5:32b`        |
+| `qwen3.6-27b:opus-sonnet` | `hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF` | `qwen3.6:27b`        |
+| `qwen3.5-27b:gemini3.1`   | `hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF`    | `qwen3.5:27b`        |
+| `qwen3-14b:sonnet4.5`     | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`    | `qwen3:14b`          |
+| `qwen3-8b:sonnet4.5`      | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`     | `qwen3:8b`           |
 
 > `qwen3.5-27b:q4` already has a proper template (7 tool refs) and does NOT need this fix.
 > Use a distinct alias like `qwen2.5:32b-distill` to keep it alongside the library version.
@@ -329,23 +329,23 @@ ollama show <alias> --modelfile | grep -c tool_call   # must be > 0
 
 **Usable memory:** ~54 GB (64 GB − 6 GB macOS − 4 GB Ollama overhead)
 
-Memory occupied = model weights + KV cache.  
+Memory occupied = model weights + KV cache.
 With `OLLAMA_FLASH_ATTENTION=1`, KV cache at 32K context ≈ 0.5–1 GB per model.
 
 ### Weight reference table
 
-| Model | Weights | @ 32K KV (FA=1) | @ 128K KV (FA=1) | @ 256K KV (FA=1) |
-| --- | --- | --- | --- | --- |
-| `qwen3-coder-30b-a3b:q6` | 26 GB | 27 GB | 29 GB | 33 GB |
-| `qwen2.5:32b` (library) | 24 GB | 25 GB | 27 GB | 31 GB |
-| `qwen2.5:32b` (distill) | 21 GB | 22 GB | 24 GB | 28 GB |
-| `deepseek-r1-tools:32b` | 19 GB | 20 GB | 22 GB | — |
-| `laguna-xs.2` | 23 GB | 24 GB | 26 GB | — |
-| `qwen3.5-27b:q4` | 17 GB | 18 GB | 20 GB | 23 GB |
-| `qwen3:4b` | 2.5 GB | 3 GB | 3.5 GB | — |
-| `qwen3.5:4b` | 2.9 GB | 3.4 GB | — | — |
-| `qwen2.5-coder:1.5b` | 0.9 GB | 1 GB | — | — |
-| `nomic-embed-text` | 0.3 GB | 0.3 GB | — | — |
+| Model                    | Weights | @ 32K KV (FA=1) | @ 128K KV (FA=1) | @ 256K KV (FA=1) |
+| ------------------------ | ------- | --------------- | ---------------- | ---------------- |
+| `qwen3-coder-30b-a3b:q6` | 26 GB   | 27 GB           | 29 GB            | 33 GB            |
+| `qwen2.5:32b` (library)  | 24 GB   | 25 GB           | 27 GB            | 31 GB            |
+| `qwen2.5:32b` (distill)  | 21 GB   | 22 GB           | 24 GB            | 28 GB            |
+| `deepseek-r1-tools:32b`  | 19 GB   | 20 GB           | 22 GB            | —                |
+| `laguna-xs.2`            | 23 GB   | 24 GB           | 26 GB            | —                |
+| `qwen3.5-27b:q4`         | 17 GB   | 18 GB           | 20 GB            | 23 GB            |
+| `qwen3:4b`               | 2.5 GB  | 3 GB            | 3.5 GB           | —                |
+| `qwen3.5:4b`             | 2.9 GB  | 3.4 GB          | —                | —                |
+| `qwen2.5-coder:1.5b`     | 0.9 GB  | 1 GB            | —                | —                |
+| `nomic-embed-text`       | 0.3 GB  | 0.3 GB          | —                | —                |
 
 ---
 
@@ -433,14 +433,14 @@ qwen3:4b-8k                   3 GB   plan agent
 
 #### Which context variant to use per load tier
 
-| Tier | Coder ctx | Architect ctx | Think ctx | Write ctx |
-| --- | --- | --- | --- | --- |
-| 0 — baseline | 32K | — | — | — |
-| 1 — dev | 32K | — | — | — |
-| 2 — research | 32K | — | — | 32K |
-| 3 — think | 32K | — | 32K | — |
-| 4 — architect | 32K | 32K | — | — |
-| Solo (debug big) | 128K | 128K | 128K | 256K |
+| Tier             | Coder ctx | Architect ctx | Think ctx | Write ctx |
+| ---------------- | --------- | ------------- | --------- | --------- |
+| 0 — baseline     | 32K       | —             | —         | —         |
+| 1 — dev          | 32K       | —             | —         | —         |
+| 2 — research     | 32K       | —             | —         | 32K       |
+| 3 — think        | 32K       | —             | 32K       | —         |
+| 4 — architect    | 32K       | 32K           | —         | —         |
+| Solo (debug big) | 128K      | 128K          | 128K      | 256K      |
 
 Use `-NNNk` tagged variants for multi-model tiers, base tags for solo runs.
 
@@ -486,13 +486,13 @@ max output size instead).
 
 ### Quick diff summary
 
-| Agent | Before | After |
-| --- | --- | --- |
-| `code` | `maxTokens: 1024` | remove limit |
-| `local` | `maxTokens: 1024` | remove limit |
-| `write` | `maxTokens: 2048` + `qwen3-14b:sonnet4.5` | `maxTokens: 4096` + `qwen3.5-27b:q4` |
-| `research` | `qwen3-14b:sonnet4.5` | `qwen3.5-27b:q4` |
-| `think` | `deepseek-r1:32b` | `deepseek-r1-tools:32b` |
+| Agent      | Before                                    | After                                |
+| ---------- | ----------------------------------------- | ------------------------------------ |
+| `code`     | `maxTokens: 1024`                         | remove limit                         |
+| `local`    | `maxTokens: 1024`                         | remove limit                         |
+| `write`    | `maxTokens: 2048` + `qwen3-14b:sonnet4.5` | `maxTokens: 4096` + `qwen3.5-27b:q4` |
+| `research` | `qwen3-14b:sonnet4.5`                     | `qwen3.5-27b:q4`                     |
+| `think`    | `deepseek-r1:32b`                         | `deepseek-r1-tools:32b`              |
 
 ---
 
@@ -501,6 +501,7 @@ max output size instead).
 Run these after completing setup. Every check must pass before trusting agents.
 
 **Note on template types:** Ollama has two valid tool-calling modes:
+
 - **Jinja2 template** — explicit `ToolCalls`/`tool_call` tokens in the template text
 - **Architecture-native** — `RENDERER qwen3.5` / `PARSER qwen3.5` directives; Ollama handles
   tool formatting internally — no template tokens needed. Same quality, different mechanism.
@@ -579,7 +580,7 @@ ollama rm "qwen3-coder-next-80b:q4-256k"
 
 ### Goal
 
-The Mac Mini cannot run meaningful local inference (≤10 GB usable).  
+The Mac Mini cannot run meaningful local inference (≤10 GB usable).
 Configure it as a **Hermes remote client** pointing at the M5 Max's Ollama.
 
 ### Prerequisites on M5 Max
@@ -609,9 +610,9 @@ Change `base_url` to point at M5 Max and update model:
 
 ```yaml
 model:
-  default: qwen3-coder-30b-a3b:q6     # served by M5 Max
+  default: qwen3-coder-30b-a3b:q6 # served by M5 Max
   provider: ollama-remote
-  base_url: http://192.168.1.50:11434/v1   # ← M5 Max LAN IP
+  base_url: http://192.168.1.50:11434/v1 # ← M5 Max LAN IP
 
 # Cloud fallback when M5 Max is offline
 fallback_providers:
@@ -689,6 +690,6 @@ The TOML stub can be updated but is not read by Hermes directly.
 
 ---
 
-_Generated: 2026-06-11_  
-_Profile: macbook-m5-64gb_  
+_Generated: 2026-06-11_
+_Profile: macbook-m5-64gb_
 _Status: Planning — no changes made yet_

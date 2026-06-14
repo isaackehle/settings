@@ -185,7 +185,7 @@ back to the default agent. New tools/patterns reference these agents.
 | **critical** | Primary coder for 32GB+ MUST be `qwen3-coder-30b-a3b` (MoE, best quality/speed ratio)   |
 | **critical** | Primary coder for 16GB MUST be `qwen2.5-coder:7b` (fits in RAM)                         |
 | **critical** | Claude's "Sonnet" (primary) MUST match the primary coder, NOT a general model           |
-| high         | Opus for 48GB+ MUST be `qwen3.6-35b:opus4.7-128k` (MoE 35B, 23GB Q4_K_M, ~110 tok/s, Claude 4.6 reasoning distilled). The 3.6:35b base variants are blocked by a `rope_sections` 3-vs-4 bug in llama.cpp's qwen35moe.cpp; the opus4.7-128k distillate from `hf.co/hesamation` is the one variant in the family that ships with a working RoPE layout. Decision: 2026-06-13 (revised 1h).
+| high         | Opus for 48GB+ MUST be `qwen3.6-35b:opus4.7-128k` (MoE 35B, ~25 GB Q5_K_M, ~110 tok/s, Claude 4.7 reasoning). The 3.6:35b base variants are blocked by a `rope_sections` 3-vs-4 bug in llama.cpp's qwen35moe.cpp; the opus4.7-128k distillate from `hf.co/hesamation` is the one variant in the family that ships with a working RoPE layout. Decision: 2026-06-13 (revised 1h).
 
 **NOTE: rope_sections fix in llama.cpp master**
 The `qwen3.6:35b` base variants (96k, 32k, 128k, 256k, and the base opus tag) all carry the `rope_sections` bug (3 vs 4). The opus distillates from both hesamation (4.6) and mudler (4.7) ship with a working RoPE layout. Recommendation: keep only `opus4.6-128k` and `opus4.7-128k` (the distillate variants), drop all base variants. Decision: 2026-06-13. |

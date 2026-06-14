@@ -11,7 +11,7 @@
 | `qwen3-coder-30b-a3b:q6` | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
 | `qwen3-14b:sonnet4.5`    | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
 | `qwen3.5:4b`             | `RENDERER qwen3.5` / `PARSER qwen3.5` | ✅ Architecture-native | Working    |
-| `qwen2.5:32b`    | `TEMPLATE {{ .Prompt }}`              | ❌ **None**            | **BROKEN** |
+| `qwen2.5:32b`            | `TEMPLATE {{ .Prompt }}`              | ❌ **None**            | **BROKEN** |
 
 ---
 
@@ -132,17 +132,17 @@ ollama run qwen3-coder-30b-a3b:q6 "Write a function to calculate fibonacci numbe
 
 All models now have proper tool support:
 
-| Model | Capabilities | Status |
-|-------|--------------|--------|
-| `qwen2.5:32b` | tools, thinking, completion | ✅ Fixed |
-| `qwen3-coder-30b-a3b:q6` | tools, completion | ✅ Working |
-| `qwen3-14b:sonnet4.5` | tools, thinking, completion | ✅ Working |
-| `qwen3.5:4b` | tools, thinking, completion | ✅ Working |
-| `qwen3:4b` | tools, thinking, completion | ✅ Working |
-| `qwen2.5-coder:7b` | tools, insert, completion | ✅ Working |
-| `qwen2.5-coder:1.5b` | tools, insert, completion | ✅ Working |
-| `deepseek-r1:32b` | tools, thinking, completion | ✅ Working |
-| `codestral:22b` | completion | ✅ Expected (no tools needed) |
+| Model                    | Capabilities                | Status                        |
+| ------------------------ | --------------------------- | ----------------------------- |
+| `qwen2.5:32b`            | tools, thinking, completion | ✅ Fixed                      |
+| `qwen3-coder-30b-a3b:q6` | tools, completion           | ✅ Working                    |
+| `qwen3-14b:sonnet4.5`    | tools, thinking, completion | ✅ Working                    |
+| `qwen3.5:4b`             | tools, thinking, completion | ✅ Working                    |
+| `qwen3:4b`               | tools, thinking, completion | ✅ Working                    |
+| `qwen2.5-coder:7b`       | tools, insert, completion   | ✅ Working                    |
+| `qwen2.5-coder:1.5b`     | tools, insert, completion   | ✅ Working                    |
+| `deepseek-r1:32b`        | tools, thinking, completion | ✅ Working                    |
+| `codestral:22b`          | completion                  | ✅ Expected (no tools needed) |
 
 ---
 
