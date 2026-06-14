@@ -1,0 +1,22 @@
+# Aider config — MacBook Intel 2019 16GB
+# DEPLOY TO: ~/.aider.conf.yml
+
+model: qwen2.5-coder:7b
+weak-model: qwen3:4b
+editor-model: qwen2.5-coder:7b
+
+openai-api-base: http://localhost:11434/v1
+openai-api-key: sk-local
+
+auto-commits: true
+dirty-commits: true
+attribute-author: false
+attribute-committer: false
+commit-prompt: "Write a conventional commit message for these changes."
+
+pretty: true
+stream: true
+show-diffs: false
+
+map-tokens: 2048
+cache-prompts: true

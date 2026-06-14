@@ -1,0 +1,214 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "agent": {
+    "code": {
+      "description": "Primary coding agent for implementation, editing, refactoring, and debugging.",
+      "maxTokens": 1024,
+      "mode": "primary",
+      "model": "ollama/qwen2.5-coder:7b",
+      // Prompt and permissions live in agents/code.md
+      "temperature": 0.2
+    },
+    "local": {
+      "description": "Fully local agent — no cloud calls, no webfetch. Use for sensitive or offline work.",
+      "maxTokens": 1024,
+      "mode": "primary",
+      "model": "ollama/qwen2.5-coder:7b",
+      // Prompt and permissions live in agents/local.md
+      "temperature": 0.2
+    },
+    "plan": {
+      "description": "Fast planning agent for next steps, breakdowns, and lightweight routing.",
+      "maxTokens": 512,
+      "mode": "primary",
+      "model": "ollama/qwen3:4b",
+      // Prompt and permissions live in agents/plan.md
+      "temperature": 0.25
+    },
+    "research": {
+      "description": "Research agent for company research, technical discovery, and structured findings.",
+      "maxTokens": 1024,
+      "mode": "primary",
+      "model": "ollama/qwen2.5-coder:7b",
+      // Prompt and permissions live in agents/research.md
+      "temperature": 0.25
+    },
+    "think": {
+      "description": "Reasoning agent for decision analysis, scoring, debugging strategy, and debriefs.",
+      "mode": "primary",
+      "model": "ollama/deepseek-r1:7b",
+      // Prompt and permissions live in agents/think.md
+      "temperature": 0.3,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
+    },
+    "write": {
+      "description": "Writing agent for resumes, cover letters, documentation, summaries, and polished prose.",
+      "maxTokens": 2048,
+      "mode": "primary",
+      "model": "ollama/qwen3:14b",
+      // Prompt and permissions live in agents/write.md
+      "temperature": 0.65,
+      "tools": {
+        "home-assistant_*": false,
+        "apple-reminders_*": false
+      }
+    },
+    "build": {
+      "description": "Build and test agent — runs build commands, test suites, and CI checks.",
+      "maxTokens": 1024,
+      "mode": "primary",
+      "model": "ollama/qwen2.5-coder:7b",
+      // Prompt and permissions live in agents/build.md
+      "temperature": 0.1
+    },
+    "summary": {
+      "description": "Commit message and session summary agent.",
+      "mode": "primary",
+      "model": "ollama/qwen3.5:4b",
+      // Prompt and permissions live in agents/summary.md
+      "temperature": 0.2
+    },
+    "title": {
+      "description": "Generate concise PR/MR titles from diffs and commit history.",
+      "mode": "primary",
+      "model": "ollama/qwen3.5:4b",
+      // Prompt and permissions live in agents/title.md
+      "temperature": 0.2
+    }
+  },
+  "default_agent": "code",
+  "model": "ollama/qwen2.5-coder:7b",
+  "small_model": "ollama/qwen3:4b",
+  // 2. Server Configuration (Does NOT store password)
+  "server": {
+    "port": 4096,
+    "mdns": true
+  },
+
+  // 3. Permissions (Critical for avoiding silent hangs)
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "ask", // Granular deny rules
+      "sudo *": "ask"
+    },
+    "edit": "ask",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "read": "allow",
+    "webfetch": "allow",
+    "external_directory": "ask"
+  },
+  "provider": {
+    "ollama": {
+      "name": "Ollama (Local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "alpie-core:latest": { "name": "Alpie-Core 32B (DeepSeek-R1 Distill, NF4)" },
+        "deepseek-r1:7b": { "name": "DeepSeek R1 7B (Reasoning)" },
+        "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
+        "phi4-mini": { "name": "Phi-4 Mini 3.8B (Microsoft, Fast/Chat)" },
+        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (Claude+Gemini+GPT Distill)" },
+        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Coding)" },
+        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B (Claude Sonnet 4.5 Distill)" },
+        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Claude Sonnet 4.5 Distill)" },
+        "qwen3.5-9b:gemini3.1": { "name": "Qwen 3.5 9B (Gemini 3.1 Distill)" },
+        "qwen3.5-9b:opus4.6": { "name": "Qwen 3.5 9B (Claude Opus 4.6 Distill)" },
+        "qwen3.5-4b:opus-distill-v2": { "name": "Qwen 3.5 4B (Claude Opus 4.6 Distill v2)" },
+        "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning, Writing)" },
+        "qwen3:14b": { "name": "Qwen3 14B (General)" },
+        "qwen3:14b-128k": { "name": "Qwen3 14B (General, 128K)" },
+        "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
+      }
+    },
+    // ── llama-server — GGUF direct serving on port 10000 ──────────────────
+    "llamarouter": {
+      "name": "llama-server",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "http://localhost:10000/v1", "apiKey": "sk-local" },
+      "models": {
+        "deepseek-r1-32b": { "name": "DeepSeek R1 32B (Reasoning, llama)" },
+        "qwen3-4b-it": { "name": "Qwen 3 4B (Planning, llama)" },
+        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" }
+      }
+    },
+    "openrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "{env:OPENROUTER_API_KEY}",
+        // Optional: Required by some OpenRouter features for leaderboards
+        "headers": {
+          "HTTP-Referer": "https://localhost",
+          "X-Title": "OpenCode CLI"
+        }
+      },
+      "models": {
+        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (Fast, Cheap, Lightweight)" },
+        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (Heavy Reasoning, Best Quality)" },
+        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (Balanced All-Rounder)" },
+        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools (Reasoning, Tools)" },
+        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (Fast, Vision, Long Context)" },
+        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (Deep Reasoning, Multimodal)" },
+        "mistralai/codestral": { "name": "Codestral (Code Generation, Fill-In-Middle)" },
+        "mistralai/mistral-large": { "name": "Mistral Large (Strong General Purpose)" },
+        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (Deep Reasoning, Long Context)" },
+        "openai/gpt-4o": { "name": "GPT-4o (General, Vision, Multimodal)" },
+        "openai/o3": { "name": "OpenAI o3 (Heavy Reasoning, STEM)" },
+        "perplexity/sonar-pro": { "name": "Sonar Pro (Web Search, Chat)" },
+        "qwen/qwen3-8b": { "name": "Qwen3 8B (Fast Planning, Cheap)" },
+        "thudm/glm-5.1": { "name": "GLM 5.1 (General Purpose)" },
+        "x-ai/grok-3": { "name": "Grok 3 (General, Real-Time Data)" },
+        "x-ai/grok-3-mini": { "name": "Grok 3 Mini (Fast, Cheap)" }
+      }
+    }
+  },
+
+  // 4. MCP Servers
+  "mcp": {
+    "apple-reminders": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-server-apple-events"],
+      "enabled": true
+    },
+    "home-assistant": {
+      "type": "local",
+      "command": ["uvx", "ha-mcp@latest"],
+      "enabled": true,
+      "env": {
+        "HOMEASSISTANT_URL": "https://kehle.duckdns.org:8123",
+        "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}"
+      }
+    },
+    "weather": {
+      "type": "local",
+      "command": ["npx", "-y", "@dangahagan/weather-mcp@latest"],
+      "enabled": true
+    },
+    "one-search": {
+      "type": "local",
+      "command": ["npx", "-y", "one-search-mcp"],
+      "enabled": true,
+      "env": {
+        "SEARCH_PROVIDER": "duckduckgo"
+      }
+    }
+  },
+
+  "experimental": {
+    "mcp_timeout": 8000
+  },
+
+  // 5. Instructions & Plugins
+  "instructions": [],
+  "plugin": ["opencode-openai-codex-auth@latest"]
+}

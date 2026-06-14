@@ -7,7 +7,7 @@
         "reasoning": "deepseek-r1-tools:32b",
         "research": "qwen3.5-27b:q4",
         "coding": "qwen3-coder-30b-a3b:q6",
-        "opus": "qwen3.6-35b:opus4.6"
+        "opus": "qwen3.6-35b:opus4.7-128k"
       },
       "models": [
         "codestral:22b",
@@ -33,7 +33,11 @@
         "qwen3.5-27b:q4-32k",
         "qwen3.5-27b:q4-128k",
         "qwen3.5-27b:q4-256k",
-        "qwen3.6-35b:opus4.6"
+        "qwen3.6-35b:opus4.7-128k",
+        "qwen3.6-35b:opus4.7-128k",
+        "qwen3.6-35b:opus4.7-32k",
+        "qwen3.6-35b:opus4.7-128k",
+        "laguna-xs.2"
       ]
     },
     "opencode": {
@@ -61,7 +65,11 @@
         "qwen3.5-27b:q4-32k",
         "qwen3.5-27b:q4-128k",
         "qwen3.5-27b:q4-256k",
-        "qwen3.6-35b:opus4.6"
+        "qwen3.6-35b:opus4.7-128k",
+        "qwen3.6-35b:opus4.7-128k",
+        "qwen3.6-35b:opus4.7-32k",
+        "qwen3.6-35b:opus4.7-128k",
+        "laguna-xs.2"
       ]
     }
   },

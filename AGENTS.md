@@ -272,19 +272,19 @@ changes occur:
 When debugging `unknown model architecture` errors, missing tool-calling, or
 chat-format issues, load `docs/ollama-model-registration.md` first.
 
-**Currently recommended models (May 2026):**
+**Currently recommended models (June 2026):**
 
-| Model                 | Pull Command                        | Role           |
-| --------------------- | ----------------------------------- | -------------- |
-| Qwen3 Coder 30B A3B   | `ollama pull qwen3-coder-30b-a3b`   | Coding         |
-| Qwen3.6 35B           | `ollama pull qwen3.6-35b`           | Agentic coding |
-| Qwen3.5 27B           | `ollama pull qwen3.5-27b`           | Writing        |
-| DeepSeek R1 Tools 32B | `ollama pull deepseek-r1-tools:32b` | Reasoning      |
-| Qwen3.5 4B            | `ollama pull qwen3.5:4b`            | Planning/fast  |
-| Qwen2.5 Coder 1.5B    | `ollama pull qwen2.5-coder:1.5b`    | Autocomplete   |
-| Codestral 22B         | `ollama pull codestral:22b`         | Apply/insert   |
-| Gemma 4 31B           | `ollama pull gemma4:31b`            | General        |
-| Nomic Embed Text      | `ollama pull nomic-embed-text`      | Embeddings     |
+| Model                 | Pull Command                        | Role                         |
+| --------------------- | ----------------------------------- | ---------------------------- |
+| Qwen3 Coder 30B A3B   | `ollama pull qwen3-coder-30b-a3b`   | Coding (primary)             |
+| Qwen2.5 32B           | `ollama pull qwen2.5:32b`           | Architect/agentic 73% SWE    |
+| Laguna XS.2           | `ollama pull laguna-xs.2`           | Alt coder 68% SWE, MoE       |
+| Qwen3.5 27B           | `ollama pull qwen3.5-27b`           | Writing/research             |
+| DeepSeek R1 Tools 32B | `ollama pull deepseek-r1-tools:32b` | Reasoning + tools            |
+| Qwen3.5 4B            | `ollama pull qwen3.5:4b`            | Planning/fast                |
+| Qwen2.5 Coder 1.5B    | `ollama pull qwen2.5-coder:1.5b`    | Autocomplete                 |
+| Codestral 22B         | `ollama pull codestral:22b`         | Apply/insert                 |
+| Nomic Embed Text      | `ollama pull nomic-embed-text`      | Embeddings                   |
 
 See `ai/profiles/WORKSTREAM_2026-05.md` for per-profile model budgets and quantization choices.
 
@@ -301,7 +301,7 @@ MEMORY=64
 MEMORY_RANGE_MIN=56
 MEMORY_RANGE_MAX=999
 COMPUTER_TYPES=MacBook*,Mac1*,Mac14*
-DESCRIPTION=Q6 stack + 30B coder + 32B reasoning + 70B solo
+DESCRIPTION=Q6 coder 30B + qwen2.5:32b architect + r1-tools 32B + laguna-xs.2 alt coder
 ```
 
 **Always use the PROFILE file for profile-related information.** Do not hardcode profile names or memory ranges in scripts. Use the helper functions in `helpers.sh`:

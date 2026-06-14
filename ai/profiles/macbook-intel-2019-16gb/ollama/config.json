@@ -1,0 +1,38 @@
+{
+  "_profile": "macbook-intel-2019-16gb (Intel x86_64 + AMD Radeon Pro dGPU, CPU-first)",
+  "_ollama_env_notes": "On Intel 2019 MBP, set OLLAMA_NUM_GPU=0 in the LaunchAgent for CPU-only inference. Metal dGPU offload is partial and 4-8GB VRAM is too small for any model at useful context. Bind OLLAMA_HOST=0.0.0.0:11434 for Tailscale access from the main M5 Max.",
+  "integrations": {
+    "claude": {
+      "aliases": {
+        "primary": "qwen3:14b",
+        "fast": "qwen3:4b",
+        "reasoning": "deepseek-r1-tools:8b",
+        "opus": "qwen3:14b"
+      },
+      "models": [
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "nomic-embed-text",
+        "qwen2.5-coder:1.5b",
+        "qwen2.5-coder:7b",
+        "qwen3:4b",
+        "qwen3:14b",
+        "qwen3:14b-40k"
+      ]
+    },
+    "opencode": {
+      "models": [
+        "deepseek-r1-tools:8b",
+        "deepseek-r1-tools:8b-128k",
+        "nomic-embed-text",
+        "qwen2.5-coder:1.5b",
+        "qwen2.5-coder:7b",
+        "qwen3:4b",
+        "qwen3:14b",
+        "qwen3:14b-40k"
+      ]
+    }
+  },
+  "last_model": "qwen3:14b",
+  "last_selection": "run"
+}

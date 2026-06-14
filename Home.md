@@ -138,7 +138,6 @@ Personal macOS development environment setup guide and reference.
 
 - [[Coding Assistants]] — Overview of AI coding assistants: Copilot, OpenCode, Aider, Tabby, and more.
 - [[Claude Code]] — Anthropic code-focused Claude assistant.
-- [[Cline]] — Autonomous AI coding agent for VS Code with MCP and browser support.
 - [[Cursor]] — AI-first IDE with built-in chat, inline edit, and agent mode.
 - [[Kilo Code]] — VS Code extension for agentic multi-mode coding with Ollama support.
 - [[Continue]] — Open-source AI code assistant for VS Code and JetBrains.

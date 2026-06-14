@@ -160,12 +160,12 @@
       "modelfile_params": ["PARAMETER temperature 0.6"],
       "remote_pull": ""
     },
-    "qwen3.6-35b:opus4.6": {
+    "qwen3.6-35b:opus4.7-128k": {
       "family": "instruct-distill",
       "quant": "Q4_K_M",
-      "local_filename": "qwen3.6-35b-opus4.6-it-ds-q4_k_m.gguf",
-      "remote_filename": "Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled.Q4_K_M.gguf",
-      "hf_source": "hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF",
+      "local_filename": "qwen2.5-32b-it-q4_k_m.gguf",
+      "remote_filename": "Qwen2.5-32B-Instruct.Q4_K_M.gguf",
+      "hf_source": "hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF",
       "context_windows": [32768],
       "modelfile_params": ["PARAMETER temperature 0.5"],
       "remote_pull": ""

@@ -1,0 +1,50 @@
+{
+  "_note": "MERGE INTO: ~/.config/zed/settings.json — MacBook Intel 2019 16GB",
+  "assistant": {
+    "default_model": {
+      "provider": "openai",
+      "model": "qwen3:14b"
+    },
+    "version": "2"
+  },
+  "language_models": {
+    "openai": {
+      "api_url": "http://localhost:11434/v1",
+      "available_models": [
+        {
+          "name": "deepseek-r1:7b",
+          "display_name": "DeepSeek R1 7B (Reasoning)",
+          "max_tokens": 65536
+        },
+        {
+          "name": "qwen2.5-coder:7b",
+          "display_name": "Qwen 2.5 Coder 7B (Coding)",
+          "max_tokens": 32768
+        },
+        {
+          "name": "qwen3-8b:sonnet4.5",
+          "display_name": "Qwen3 8B (Claude Sonnet 4.5 Distill)",
+          "max_tokens": 40960
+        },
+        {
+          "name": "qwen3:14b",
+          "display_name": "Qwen3 14B (General)",
+          "max_tokens": 131072
+        },
+        {
+          "name": "qwen3:14b-128k",
+          "display_name": "Qwen3 14B (General, 128K)",
+          "max_tokens": 131072
+        },
+        {
+          "name": "qwen3:4b",
+          "display_name": "Qwen3 4B (Planning)",
+          "max_tokens": 32768
+        }
+      ]
+    }
+  },
+  "features": {
+    "inline_completion_provider": "none"
+  }
+}

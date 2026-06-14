@@ -52,14 +52,16 @@
 # profile's canonical local model identifiers.
 declare -A LOCAL_MODEL_NAMES=(
     ["apply"]="codestral:22b"
+    ["architect"]="qwen3.6-35b:opus4.7-128k"
     ["autocomplete"]="qwen2.5-coder:1.5b"
     ["autocomplete_heavy"]="qwen2.5-coder:7b"
     ["coder"]="qwen3-coder-30b-a3b:q6"
+    ["coder_alt"]="laguna-xs.2"
     ["embedding"]="nomic-embed-text"
     ["fast"]="qwen3:4b"
     ["fast_alt"]="qwen3.5:4b"
     ["general"]="qwen3.5-27b:q4"
-    ["heavy"]="qwen3.6-35b:opus4.6"
+    ["heavy"]="qwen3.6-35b:opus4.7-128k"
     ["reasoning"]="deepseek-r1:32b"
     ["reasoning_tools"]="deepseek-r1-tools:32b"
     ["summary"]="qwen3.5:4b"
@@ -187,9 +189,9 @@ OLLAMA_CLOUD_MODELS=(
 declare -A OPENCODE_AGENTS=(
     [code]="qwen3-coder-30b-a3b:q6"
     [local]="qwen3-coder-30b-a3b:q6"
-    [think]="deepseek-r1:32b"
-    [write]="qwen3-14b:sonnet4.5"
-    [research]="qwen3-14b:sonnet4.5"
+    [think]="deepseek-r1-tools:32b"
+    [write]="qwen3.5-27b:q4"
+    [research]="qwen3.5-27b:q4"
     [plan]="qwen3:4b"
     [build]="qwen3-coder-30b-a3b:q6"
     [summary]="qwen3.5:4b"
@@ -210,10 +212,10 @@ declare -A CONTINUE_ROLES=(
 declare -A CLAUDE_CODE=(
     [primary]="qwen3-coder-30b-a3b:q6"
     [fast]="qwen3:4b"
-    [reasoning]="deepseek-r1:32b"
+    [reasoning]="deepseek-r1-tools:32b"
     [research]="qwen3.5-27b:q4"
     [coding]="qwen3-coder-30b-a3b:q6"
-    [opus]="qwen3.6-35b:opus4.6"
+    [opus]="qwen3.6-35b:opus4.7-128k"
 )
 
 # --- Aider (CLI) ---
@@ -223,11 +225,6 @@ declare -A AIDER_MODELS=(
     [weak]="qwen3:4b"
 )
 
-# --- Cline (VS Code) ---
-declare -A CLINE_MODELS=(
-    [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q6"
-)
 
 # --- Cursor ---
 declare -A CURSOR_MODELS=(
@@ -246,11 +243,3 @@ declare -A ZED_MODELS=(
     [model]="qwen3-coder-30b-a3b:q6"
 )
 
-# --- Zoo Code (VS Code extension) ---
-declare -A ZOOCODE_MODELS=(
-    [architect]="qwen3-coder-30b-a3b:q6"
-    [cloud]="kimi-k2.6"
-    [code]="qwen3-coder-30b-a3b:q6"
-    [debug]="deepseek-r1:32b"
-    [model]="qwen3-coder-30b-a3b:q6"
-)

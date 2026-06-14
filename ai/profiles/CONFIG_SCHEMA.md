@@ -429,6 +429,17 @@ When `models.sh` changes, update these files in order:
 - No `CLAUDE_CODE[research]` or `CLAUDE_CODE[coding]`
 - All tool assignments use `qwen3:14b` as primary
 
+### macbook-intel-2019-16gb (16 GB, Intel x86_64)
+
+- **Mirrors `macbook-m1-16gb` model stack** — same 16GB budget, same files
+- **Execution substrate differs:** no Apple Silicon, no unified memory, AMD
+  Radeon Pro 4-8GB dGPU (Metal/ROCm partial on Intel macs)
+- **CPU-first:** `OLLAMA_NUM_GPU=0` in `com.kehle.ollama.intel-2019.plist`
+- **Network mode:** `OLLAMA_HOST=0.0.0.0:11434`; reaches main M5 Max via
+  Tailscale
+- Lives in the garage; secondary inference node, not a workhorse
+- See `ai/profiles/macbook-intel-2019-16gb/README.md` for setup
+
 ### macbook-m2-32gb (32 GB)
 
 - Resident set: 14B-q5 + r1-tools-8B + 4B + 1.5B + embed = 20.3GB

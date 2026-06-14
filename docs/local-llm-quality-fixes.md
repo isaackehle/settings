@@ -2,7 +2,7 @@
 
 ## Root Cause Found
 
-**Critical Issue:** `qwen3.6-35b:opus4.6` (your Opus model) is registered with a **minimal template** (`TEMPLATE {{ .Prompt }}`) that **does not support tool-calling**. When this model tries to make tool calls, it produces garbled output like "Mo" because it's outputting tool-call tokens that the system doesn't understand.
+**Critical Issue:** `qwen2.5:32b` (your Opus model) is registered with a **minimal template** (`TEMPLATE {{ .Prompt }}`) that **does not support tool-calling**. When this model tries to make tool calls, it produces garbled output like "Mo" because it's outputting tool-call tokens that the system doesn't understand.
 
 ### Template Status Check
 
@@ -11,7 +11,7 @@
 | `qwen3-coder-30b-a3b:q6` | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
 | `qwen3-14b:sonnet4.5`    | Full Jinja2 (20+ lines)               | ✅ Full                | Working    |
 | `qwen3.5:4b`             | `RENDERER qwen3.5` / `PARSER qwen3.5` | ✅ Architecture-native | Working    |
-| `qwen3.6-35b:opus4.6`    | `TEMPLATE {{ .Prompt }}`              | ❌ **None**            | **BROKEN** |
+| `qwen2.5:32b`    | `TEMPLATE {{ .Prompt }}`              | ❌ **None**            | **BROKEN** |
 
 ---
 
@@ -23,29 +23,29 @@ The Opus model has been re-registered with an HF reference to preserve the chat 
 
 ```shell
 # 1. Remove the broken model
-ollama rm qwen3.6-35b:opus4.6
+ollama rm qwen2.5:32b
 
 # 2. Re-register with HF reference (preserves chat template)
 cat > /tmp/opus.Modelfile << 'EOF'
-FROM hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF:Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled.Q4_K_M.gguf
+FROM hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF:Qwen2.5-32B-Instruct.Q4_K_M.gguf
 PARAMETER num_ctx 262144
 PARAMETER temperature 0.6
 EOF
-ollama create qwen3.6-35b:opus4.6 -f /tmp/opus.Modelfile
+ollama create qwen2.5:32b -f /tmp/opus.Modelfile
 
 # 3. Recreate context variants
 for ctx in 8k 32k 128k 256k; do
   num_ctx=$(echo "$ctx" | sed 's/k/000/')
   cat > /tmp/opus-${ctx}.Modelfile << EOF
-FROM qwen3.6-35b:opus4.6
+FROM qwen2.5:32b
 PARAMETER num_ctx ${num_ctx}
 PARAMETER temperature 0.6
 EOF
-  ollama create qwen3.6-35b:opus4.6-${ctx} -f /tmp/opus-${ctx}.Modelfile
+  ollama create qwen2.5:32b-${ctx} -f /tmp/opus-${ctx}.Modelfile
 done
 
 # 4. Verify the fix
-ollama show qwen3.6-35b:opus4.6 --template | grep -c "tool_call"
+ollama show qwen2.5:32b --template | grep -c "tool_call"
 # Should show: 11 (tool_call references in template)
 ```
 
@@ -94,7 +94,7 @@ If you're seeing truncated output, it could be:
 
 ```shell
 ollama show qwen3-coder-30b-a3b:q6 --modelfile | grep num_ctx
-ollama show qwen3.6-35b:opus4.6 --modelfile | grep num_ctx
+ollama show qwen2.5:32b --modelfile | grep num_ctx
 ```
 
 ### 2. Ollama Version Compatibility
@@ -119,7 +119,7 @@ After applying the fix:
 
 ```shell
 # Test Opus model with tool-calling
-ollama run qwen3.6-35b:opus4.6 "Search for the latest Python 3.12 features"
+ollama run qwen2.5:32b "Search for the latest Python 3.12 features"
 
 # Test planning model (should produce concise plan, not tool calls)
 ollama run qwen3.5:4b "Plan the steps to set up a new Python project"
@@ -134,7 +134,7 @@ All models now have proper tool support:
 
 | Model | Capabilities | Status |
 |-------|--------------|--------|
-| `qwen3.6-35b:opus4.6` | tools, thinking, completion | ✅ Fixed |
+| `qwen2.5:32b` | tools, thinking, completion | ✅ Fixed |
 | `qwen3-coder-30b-a3b:q6` | tools, completion | ✅ Working |
 | `qwen3-14b:sonnet4.5` | tools, thinking, completion | ✅ Working |
 | `qwen3.5:4b` | tools, thinking, completion | ✅ Working |
