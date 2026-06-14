@@ -143,9 +143,7 @@
         "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, 128K)" },
         "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning)" },
         "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Opus+Sonnet Distill)" },
-        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 3.6 35B A3B (Architect/Opus, 128K ctx, Claude 4.6 distill, 109 t/s)" },
-        "qwen3.6-35b:opus4.7-32k": { "name": "Qwen 3.6 35B A3B (Architect, 32K ctx)" },
-        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 3.6 35B A3B (Architect, 128K ctx)" },
+        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 3.6 35B A3B (Architect, 128K ctx, Claude 4.7 distill, 110 t/s)" },
 
 
         "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
@@ -159,7 +157,8 @@
       "models": {
         "deepseek-r1-32b": { "name": "DeepSeek R1 32B (Reasoning, llama)" },
         "qwen3-4b-it": { "name": "Qwen 3 4B (Planning, llama)" },
-        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" }
+        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" },
+        "qwen3.6-35b-opus4.7-128k": { "name": "Qwen 3.6 35B A3B (Architect, 128K, llama)" }
       }
     },
     "openrouter": {

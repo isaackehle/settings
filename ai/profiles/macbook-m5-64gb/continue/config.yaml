@@ -93,11 +93,11 @@ models:
     roles:
       - chat
 
-  - name: 'Qwen 2.5 32B (Architect)'
+  - name: 'Qwen 3.6 35B (Architect)'
     provider: openai
-    apiBase: http://localhost:11434/v1
+    apiBase: http://localhost:10000/v1
     apiKey: 'sk-local'
-    model: 'qwen3.6-35b:opus4.6-32k'
+    model: 'qwen3.6-35b-opus4.7-128k'
     roles:
       - chat
 
