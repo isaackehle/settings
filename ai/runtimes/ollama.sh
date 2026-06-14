@@ -25,7 +25,10 @@ fi
 OLLAMA_PREFIX="${OLLAMA_PREFIX:-$HOME/.local/ollama}"
 OLLAMA_RELEASE_URL="${OLLAMA_RELEASE_URL:-https://github.com/ollama/ollama/releases/latest/download/ollama-darwin.tgz}"
 OLLAMA_PLIST_LABEL="com.kehle.ollama"
-OLLAMA_PLIST_SRC="${SETTINGS_BASE}/ai/profiles/macbook-m5-64gb/ollama/${OLLAMA_PLIST_LABEL}.plist"
+OLLAMA_PLIST_SRC="${SETTINGS_BASE}/ai/profiles/${MACHINE_PROFILE}/ollama/${OLLAMA_PLIST_LABEL}.plist"
+if [ ! -f "$OLLAMA_PLIST_SRC" ]; then
+    OLLAMA_PLIST_SRC="${SETTINGS_BASE}/ai/profiles/macbook-m5-64gb/ollama/${OLLAMA_PLIST_LABEL}.plist"
+fi
 OLLAMA_PLIST_DST="$HOME/Library/LaunchAgents/${OLLAMA_PLIST_LABEL}.plist"
 
 _install_ollama() {
