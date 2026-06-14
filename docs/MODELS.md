@@ -12,16 +12,16 @@ This file is the single source of truth for model identity questions.
 Decisions about model identity, naming, and which variant to use. When a
 decision is superseded, log the date and reason.
 
-| Date       | Model                  | Decision                                                                                                                                                                        | Source                                     |
-| ---------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| 2026-06-13 | `qwen3.6-35b:opus4.7-128k` | **New.** Qwen3.6-35B-A3B with APEX-I calibration and MoE distillation — supersedes `opus4.6-128k`. ~110–120 tok/s on M5 Max 64GB, 128K ctx, ~24 GB (Q8 quant). HF: `hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF`. | hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF |
-| 2026-06-13 | `qwen3.6-35b:opus4.6-128k` | *Superseded by opus4.7-128k.* Was the architect slot (Q4_K_M Qwen 4.6 Opus distill, ~109 tok/s). Safe to leave pulled for compatibility until 4.7 is stable. | hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF |
-| 2026-06-13 | `qwen3.6:35b-96k`      | *Broken in llama.cpp master.* Hits `qwen35moe.cpp:9` and `qwen35.cpp:6` hard-coded `rope_sections` length of 4; the GGUF ships 3. Patch is one-line (`4` → `0` in `ml.get_key_or_arr`) and would unblock, but the working 128k distillate is the better default until then. | unsloth/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF |
-| 2026-06-13 | `qwen2.5:32b`          | *Superseded.* Briefly adopted as 35B replacement but is ~4.3× slower and half the context. Keep until opus4.7-128k proves stable. Safe to `ollama rm` after. | ollama.com/library/qwen2.5 (tag:32b) |
-| 2026-05-27 | `deepseek-r1`          | Official DeepSeek reasoning model. No tool-calling. Variants: `8b`, `14b`, `32b`, `70b`, `671b`.                                                                                | ollama.com/library/deepseek-r1             |
-| 2026-05-27 | `deepseek-r1-tools`    | Community fine-tune (MFDoom) adding tool-calling. Qwen2-based, not a superset of `deepseek-r1`. Pullable as `MFDoom/deepseek-r1-tool-calling`. Local alias via `MODEL_REMOTES`. | ollama.com/MFDoom/deepseek-r1-tool-calling |
-| 2026-05-27 | `deepseek-r1:8b`       | Valid Ollama tag. Official 8B distilled reasoning (no tool-calling).                                                                                                            | ollama.com/library/deepseek-r1             |
-| 2026-05-27 | `deepseek-r1-tools:8b` | Valid via `MFDoom/deepseek-r1-tool-calling:8b`. Pulled and aliased by `MODEL_REMOTES`. Use for reasoning+tool-calling on 16/32GB.                                               | ollama.com/MFDoom/deepseek-r1-tool-calling |
+| Date       | Model                      | Decision                                                                                                                                                                                                                                                                    | Source                                                                    |
+| ---------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 2026-06-13 | `qwen3.6-35b:opus4.7-128k` | **New.** Qwen3.6-35B-A3B with APEX-I calibration and MoE distillation — supersedes `opus4.6-128k`. ~110–120 tok/s on M5 Max 64GB, 128K ctx, ~24 GB (Q8 quant). HF: `hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF`.                                      | hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF          |
+| 2026-06-13 | `qwen3.6-35b:opus4.7-128k` | _Superseded by opus4.7-128k._ Was the architect slot (Q4_K_M Qwen 4.6 Opus distill, ~109 tok/s). Safe to leave pulled for compatibility until 4.7 is stable.                                                                                                                | hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF |
+| 2026-06-13 | `qwen3.6:35b-96k`          | _Broken in llama.cpp master._ Hits `qwen35moe.cpp:9` and `qwen35.cpp:6` hard-coded `rope_sections` length of 4; the GGUF ships 3. Patch is one-line (`4` → `0` in `ml.get_key_or_arr`) and would unblock, but the working 128k distillate is the better default until then. | unsloth/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF          |
+| 2026-06-13 | `qwen2.5:32b`              | _Superseded._ Briefly adopted as 35B replacement but is ~4.3× slower and half the context. Keep until opus4.7-128k proves stable. Safe to `ollama rm` after.                                                                                                                | ollama.com/library/qwen2.5 (tag:32b)                                      |
+| 2026-05-27 | `deepseek-r1`              | Official DeepSeek reasoning model. No tool-calling. Variants: `8b`, `14b`, `32b`, `70b`, `671b`.                                                                                                                                                                            | ollama.com/library/deepseek-r1                                            |
+| 2026-05-27 | `deepseek-r1-tools`        | Community fine-tune (MFDoom) adding tool-calling. Qwen2-based, not a superset of `deepseek-r1`. Pullable as `MFDoom/deepseek-r1-tool-calling`. Local alias via `MODEL_REMOTES`.                                                                                             | ollama.com/MFDoom/deepseek-r1-tool-calling                                |
+| 2026-05-27 | `deepseek-r1:8b`           | Valid Ollama tag. Official 8B distilled reasoning (no tool-calling).                                                                                                                                                                                                        | ollama.com/library/deepseek-r1                                            |
+| 2026-05-27 | `deepseek-r1-tools:8b`     | Valid via `MFDoom/deepseek-r1-tool-calling:8b`. Pulled and aliased by `MODEL_REMOTES`. Use for reasoning+tool-calling on 16/32GB.                                                                                                                                           | ollama.com/MFDoom/deepseek-r1-tool-calling                                |
 
 ## Display Names
 
@@ -180,8 +180,8 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
   profiles only.
 - **`qwen3-coder-30b-a3b`** — MoE coding model, 3B active parameters. Available
   in `q5` and `q6` quants.
-- **`qwen3.6-35b`** — *Removed 2026-06-13: MoE `rope_sections` length bug
-  (3 vs 4) in llama.cpp qwen35moe.cpp; replaced by `qwen2.5:32b`.*
+- **`qwen3.6-35b`** — _Removed 2026-06-13: MoE `rope_sections` length bug
+  (3 vs 4) in llama.cpp qwen35moe.cpp; replaced by `qwen2.5:32b`._
 - **`qwen2.5:32b`** — Architect/agentic slot for 48GB+ profiles. Dense 32B
   at Q4_K_M (~20 GB).
 - **`qwen3.5-27b`** — General/writing model. Available in `q5` and `q8` quants.
@@ -200,34 +200,34 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 
 ### 64GB (macbook-m5-64gb) — Maximum
 
-| Role           | Model                     | Size    |
-| -------------- | ------------------------- | ------- |
-| Coding (max)   | `qwen3-coder-next-80b:q4` | ~48 GB  |
-| Coding         | `qwen3-coder-30b-a3b:q6`  | ~26 GB  |
-| Architect      | `qwen2.5:32b`             | ~20 GB  |
-| Writing        | `qwen3.5-27b:q5`          | ~19 GB  |
-| Reasoning      | `deepseek-r1-tools:32b`   | ~20 GB  |
-| General        | `gemma4:31b`              | ~20 GB  |
-| Planning/fast  | `qwen3:4b`                | ~5 GB   |
-| Apply/insert   | `codestral:22b`           | ~23 GB  |
-| Autocomplete   | `qwen2.5-coder:7b`        | ~5 GB   |
-| Autocomplete   | `qwen2.5-coder:1.5b`      | ~1 GB   |
-| Embeddings     | `nomic-embed-text`        | ~0.3 GB |
+| Role          | Model                     | Size    |
+| ------------- | ------------------------- | ------- |
+| Coding (max)  | `qwen3-coder-next-80b:q4` | ~48 GB  |
+| Coding        | `qwen3-coder-30b-a3b:q6`  | ~26 GB  |
+| Architect     | `qwen2.5:32b`             | ~20 GB  |
+| Writing       | `qwen3.5-27b:q5`          | ~19 GB  |
+| Reasoning     | `deepseek-r1-tools:32b`   | ~20 GB  |
+| General       | `gemma4:31b`              | ~20 GB  |
+| Planning/fast | `qwen3:4b`                | ~5 GB   |
+| Apply/insert  | `codestral:22b`           | ~23 GB  |
+| Autocomplete  | `qwen2.5-coder:7b`        | ~5 GB   |
+| Autocomplete  | `qwen2.5-coder:1.5b`      | ~1 GB   |
+| Embeddings    | `nomic-embed-text`        | ~0.3 GB |
 
 ### 48GB (macbook-m5-48gb) — Powerful
 
-| Role           | Model                    | Size    |
-| -------------- | ------------------------ | ------- |
-| Coding         | `qwen3-coder-30b-a3b:q5` | ~21 GB  |
-| Architect      | `qwen2.5:32b`            | ~20 GB  |
-| Writing        | `qwen3.5-27b:q5`         | ~19 GB  |
-| Reasoning      | `deepseek-r1-tools:32b`  | ~20 GB  |
-| General        | `gemma4:31b`             | ~20 GB  |
-| Planning/fast  | `qwen3:4b`               | ~5 GB   |
-| Apply/insert   | `codestral:22b`          | ~14 GB  |
-| Autocomplete   | `qwen2.5-coder:7b`       | ~5 GB   |
-| Autocomplete   | `qwen2.5-coder:1.5b`     | ~1 GB   |
-| Embeddings     | `nomic-embed-text`       | ~0.3 GB |
+| Role          | Model                    | Size    |
+| ------------- | ------------------------ | ------- |
+| Coding        | `qwen3-coder-30b-a3b:q5` | ~21 GB  |
+| Architect     | `qwen2.5:32b`            | ~20 GB  |
+| Writing       | `qwen3.5-27b:q5`         | ~19 GB  |
+| Reasoning     | `deepseek-r1-tools:32b`  | ~20 GB  |
+| General       | `gemma4:31b`             | ~20 GB  |
+| Planning/fast | `qwen3:4b`               | ~5 GB   |
+| Apply/insert  | `codestral:22b`          | ~14 GB  |
+| Autocomplete  | `qwen2.5-coder:7b`       | ~5 GB   |
+| Autocomplete  | `qwen2.5-coder:1.5b`     | ~1 GB   |
+| Embeddings    | `nomic-embed-text`       | ~0.3 GB |
 
 ### 32GB (macbook-m2-32gb) — Medium
 
@@ -344,8 +344,8 @@ it directly to `ollama pull`. Always verify tags exist at
 | `qwen3.5-27b`         | `qwen3.5:27b-q8_0`         | Tag includes size prefix |
 | `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs     |
 | `gemma4:31b`          | _(none)_                   | Base model is Q6, ~20GB  |
-| `qwen3.6-35b`         | `qwen2.5:32b-q4_k_m`       | *Removed 2026-06-13*      |
-| `qwen2.5:32b`         | `qwen2.5:32b-q4_k_m`       | New architect slot        |
+| `qwen3.6-35b`         | `qwen2.5:32b-q4_k_m`       | _Removed 2026-06-13_     |
+| `qwen2.5:32b`         | `qwen2.5:32b-q4_k_m`       | New architect slot       |
 
 ## May 2026 Refresh — Change Justification
 
