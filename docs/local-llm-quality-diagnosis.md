@@ -30,7 +30,7 @@ The **template audit** in `ollama-model-registration.md` reveals that critical m
 | Model                    | Registration | Template Lines     | Tool Support | Priority |
 | ------------------------ | ------------ | ------------------ | ------------ | -------- |
 | `qwen3-coder-30b-a3b:q6` | bare GGUF    | 6                  | **Partial**  | Critical |
-| `qwen3.6-35b:opus4.6`    | bare GGUF    | minimal            | **None**     | High     |
+| `qwen2.5:32b`    | bare GGUF    | minimal            | **None**     | High     |
 | `qwen3-14b:sonnet4.5`    | bare GGUF    | 6                  | **Partial**  | High     |
 | `deepseek-r1:32b`        | bare GGUF    | 10 lines, no tools | **None**     | Low      |
 
@@ -98,14 +98,14 @@ PARAMETER repeat_penalty 1.05
 EOF
 ollama create qwen3-coder-30b-a3b:q6 -f /tmp/model.Modelfile
 
-# Re-register qwen3.6-35b:opus4.6 (Opus model)
-ollama rm qwen3.6-35b:opus4.6
+# Re-register qwen2.5:32b (Opus model)
+ollama rm qwen2.5:32b
 cat > /tmp/model.Modelfile << 'EOF'
-FROM hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF:Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled.Q4_K_M.gguf
+FROM hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF:Qwen2.5-32B-Instruct.Q4_K_M.gguf
 PARAMETER num_ctx 262144
 PARAMETER temperature 0.6
 EOF
-ollama create qwen3.6-35b:opus4.6 -f /tmp/model.Modelfile
+ollama create qwen2.5:32b -f /tmp/model.Modelfile
 
 # Re-register qwen3-14b:sonnet4.5 (research/write model)
 ollama rm qwen3-14b:sonnet4.5
@@ -168,7 +168,7 @@ ollama list
 
 # Check model details
 ollama show qwen3-coder-30b-a3b:q6
-ollama show qwen3.6-35b:opus4.6
+ollama show qwen2.5:32b
 ```
 
 ### 4. Check Context Window Configuration
@@ -178,7 +178,7 @@ Verify that context windows are properly set:
 ```shell
 # Check model info
 ollama show qwen3-coder-30b-a3b:q6 --modelfile
-ollama show qwen3.6-35b:opus4.6 --modelfile
+ollama show qwen2.5:32b --modelfile
 
 # Look for num_ctx parameter in the output
 ```
@@ -249,7 +249,7 @@ ollama run qwen3-14b:sonnet4.5 "Research the latest features in Python 3.12"
 
 # Check model templates
 ollama show qwen3-coder-30b-a3b:q6 --modelfile | grep -A 5 "TEMPLATE"
-ollama show qwen3.6-35b:opus4.6 --modelfile | grep -A 5 "TEMPLATE"
+ollama show qwen2.5:32b --modelfile | grep -A 5 "TEMPLATE"
 ```
 
 ---

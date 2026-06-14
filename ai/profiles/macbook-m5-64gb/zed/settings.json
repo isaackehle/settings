@@ -17,8 +17,8 @@
           "max_tokens": 32768
         },
         {
-          "name": "kimi-k2.6-cloud",
-          "display_name": "Kimi K2.6 (Deep Reasoning, Long Context)",
+          "name": "qwen3.6-35b:opus4.7-128k",
+          "display_name": "Qwen 2.5 32B (Architect, 32K)",
           "max_tokens": 131072
         },
         {

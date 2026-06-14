@@ -137,9 +137,9 @@
         "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, 128K)" },
         "qwen3.5-4b:opus-distill-v2": { "name": "Qwen 3.5 4B (Claude Opus 4.6 Distill v2)" },
         "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning, Writing)" },
-        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Claude Opus+Sonnet Distill)" },
-        "qwen3.6-35b:opus4.6": { "name": "Qwen 3.6 35B (Heavy, Claude Opus Distill)" },
-        "qwen3.6-35b:q4": { "name": "Qwen 3.6 35B A3B (Coding)" },
+        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Distill)" },
+        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (Heavy, Distill)" },
+        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (Coding)" },
         "qwen35-27b:opus-agent": { "name": "Qwen 3.5 27B (Opus Distill Agent, 262K)" },
         "qwen3:4b": { "name": "Qwen 3 4B (Planning)" }
       }

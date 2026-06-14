@@ -42,7 +42,7 @@ declare -A LOCAL_MODEL_NAMES=(
     ["fast"]="qwen3:4b"
     ["fast_alt"]="qwen3.5:4b"
     ["general"]="qwen3.5-27b:q4"
-    ["heavy"]="qwen3.6-35b:opus4.6"
+    ["heavy"]="qwen3.6-35b:opus4.7-128k"
     ["reasoning"]="deepseek-r1:32b"
     ["summary"]="qwen3.5:4b"
 )
@@ -160,7 +160,7 @@ OLLAMA_CLOUD_MODELS=(
 declare -A MODEL_QUANTS=(
     ["qwen3-coder-30b-a3b"]="qwen3-coder-30b-a3b:q8|qwen3-coder-30b-a3b:q8|32 GB (solo coding)"
     ["qwen3.5-27b"]="qwen3.5-27b:q4|qwen3.5-27b:q4|19 GB (writing / research)"
-    ["qwen3.6-35b:opus4.6"]="qwen3.6-35b:opus4.6:q8_0|qwen3.6-35b:opus4.6:q8|36 GB (agentic reasoning)"
+    ["qwen3.6-35b:opus4.7-128k"]="qwen3.6-35b:opus4.7-128k:q8_0|qwen3.6-35b:opus4.7-128k:q8|36 GB (agentic reasoning)"
 )
 
 # ==============================================
@@ -200,7 +200,7 @@ declare -A CONTINUE_ROLES=(
 declare -A CLAUDE_CODE=(
     [coding]="qwen3-coder-30b-a3b:q5"
     [fast]="qwen3:4b"
-    [opus]="qwen3.6-35b:opus4.6"
+    [opus]="qwen3.6-35b:opus4.7-128k"
     [primary]="qwen3-coder-30b-a3b:q5"
     [reasoning]="deepseek-r1:32b"
     [research]="qwen3-coder-30b-a3b:q5"

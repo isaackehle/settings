@@ -4,23 +4,21 @@
 
 This is the profile-specific install graph: Hugging Face source repo, exact remote GGUF filename, normalized local artifact name, Ollama alias, MODELFILE parameters, and context-window aliases.
 
-| Ollama alias              | HF repo                                                                                | Remote GGUF                                                                | Quant        | Local GGUF                                  | Family             | Base num_ctx | Context aliases                                                                                                                                                                      | MODELFILE params                                         |
-| ------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ------------------------------------------- | ------------------ | -----------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
-| `codestral:22b`           | `hf.co/bartowski/Codestral-22B-v0.1-GGUF`                                              | `Codestral-22B-v0.1-Q4_K_M.gguf`                                           | `Q4_K_M`     | `codestral-22b-v0.1-cd-q4_k_m.gguf`         | `coder`            |      `32768` | —                                                                                                                                                                                    | PARAMETER temperature 0                                  |
-| `deepseek-r1:32b`         | `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF`                                    | `DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf`                                 | `Q4_K_M`     | `deepseek-r1-32b-ds-q4_k_m.gguf`            | `reasoning-tools`  |     `131072` | —                                                                                                                                                                                    | PARAMETER temperature 0.3                                |
-| `nomic-embed-text`        | `hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF`                                            | `nomic-embed-text-v1.5.f16.gguf`                                           | `F16`        | `nomic-embed-text-em-f16.gguf`              | `embedding`        |       `8192` | —                                                                                                                                                                                    | —                                                        |
-| `qwen2.5-7b:multi`        | `hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF` | `Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf` | `Q4_K_M`     | `qwen2.5-7b-multi-it-ds-q4_k_m.gguf`        | `instruct-distill` |    `1010000` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
-| `qwen2.5-coder:1.5b`      | `hf.co/unsloth/Qwen2.5-Coder-1.5B-Instruct-GGUF`                                       | `Qwen2.5-Coder-1.5B-Instruct-Q4_K_M.gguf`                                  | `Q4_K_M`     | `qwen2.5-coder-1.5b-it-q4_k_m.gguf`         | `coder`            |      `32768` | —                                                                                                                                                                                    | PARAMETER temperature 0.2                                |
-| `qwen2.5-coder:7b`        | `hf.co/unsloth/Qwen2.5-Coder-7B-Instruct-GGUF`                                         | `Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf`                                    | `Q4_K_M`     | `qwen2.5-coder-7b-it-q4_k_m.gguf`           | `coder`            |      `32768` | qwen2.5-coder:7b-8k (8192)                                                                                                                                                           | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
-| `qwen3-14b:sonnet4.5`     | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                     | `Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`           | `Q4_K_M`     | `qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf`     | `instruct-distill` |      `40960` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
-| `qwen3-8b:sonnet4.5`      | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                      | `Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`            | `Q4_K_M`     | `qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf`      | `instruct-distill` |      `40960` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
-| `qwen3-coder-30b-a3b:q6`  | `hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF`                                      | `Qwen3-Coder-30B-A3B-Instruct-UD-Q6_K_XL.gguf`                             | `UD-Q6_K_XL` | `qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf`    | `coder`            |      `32768` | qwen3-coder-30b-a3b:q6-8k (8192), qwen3-coder-30b-a3b:q6-16k (16384), qwen3-coder-30b-a3b:q6-64k (65536), qwen3-coder-30b-a3b:q6-128k (131072), qwen3-coder-30b-a3b:q6-256k (262144) | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
-| `qwen3:4b`                | `hf.co/Qwen/Qwen3-4B-GGUF`                                                             | `Qwen3-4B-Q4_K_M.gguf`                                                     | `Q4_K_M`     | `qwen3-4b-it-q4_k_m.gguf`                   | `instruct`         |     `131072` | qwen3:4b-8k (8192)                                                                                                                                                                   | PARAMETER temperature 0.2                                |
-| `qwen3.5-27b:gemini3.1`   | `hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF`                     | `Qwen3.5-27B.Q4_K_M.gguf`                                                  | `Q4_K_M`     | `qwen3.5-27b-gemini3.1-it-ds-q4_k_m.gguf`   | `instruct-distill` |     `262144` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
-| `qwen3.5-27b:q4`          | `hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF`                  | `Qwen3.5-27B.Q4_K_M.gguf`                                                  | `Q4_K_M`     | `qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf`     | `instruct-distill` |      `32768` | qwen3.5-27b:q4-8k (8192), qwen3.5-27b:q4-128k (131072), qwen3.5-27b:q4-256k (262144)                                                                                                 | PARAMETER temperature 0.6                                |
-| `qwen3.5:4b`              | `hf.co/unsloth/Qwen3.5-4B-GGUF`                                                        | `Qwen3.5-4B-UD-Q4_K_XL.gguf`                                               | `UD-Q4_K_XL` | `qwen3.5-4b-it-ud-q4_k_xl.gguf`             | `instruct`         |     `131072` | —                                                                                                                                                                                    | PARAMETER temperature 0.2                                |
-| `qwen3.6-27b:opus-sonnet` | `hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF`                  | `Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-Q4_K_M.gguf`               | `Q4_K_M`     | `qwen3.6-27b-opus-sonnet-it-ds-q4_k_m.gguf` | `instruct-distill` |     `262144` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
-| `qwen3.6-35b:opus4.6`     | `hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF`            | `Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled.Q4_K_M.gguf`          | `Q4_K_M`     | `qwen3.6-35b-opus4.6-it-ds-q4_k_m.gguf`     | `instruct-distill` |     `262144` | —                                                                                                                                                                                    | PARAMETER temperature 0.6                                |
+| Ollama alias | HF repo | Remote GGUF | Quant | Local GGUF | Family | Base num_ctx | Context aliases | MODELFILE params |
+| --- | --- | --- | --- | --- | --- | ---: | --- | --- |
+| `codestral:22b` | `hf.co/bartowski/Codestral-22B-v0.1-GGUF` | `Codestral-22B-v0.1-Q4_K_M.gguf` | `Q4_K_M` | `codestral-22b-v0.1-cd-q4_k_m.gguf` | `coder` | `32768` | — | PARAMETER temperature 0 |
+| `deepseek-r1:32b` | `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF` | `DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf` | `Q4_K_M` | `deepseek-r1-32b-ds-q4_k_m.gguf` | `reasoning-tools` | `131072` | — | PARAMETER temperature 0.3 |
+| `nomic-embed-text` | `hf.co/nomic-ai/nomic-embed-text-v1.5-GGUF` | `nomic-embed-text-v1.5.f16.gguf` | `F16` | `nomic-embed-text-em-f16.gguf` | `embedding` | `8192` | — | — |
+| `qwen2.5-coder:1.5b` | `hf.co/unsloth/Qwen2.5-Coder-1.5B-Instruct-GGUF` | `Qwen2.5-Coder-1.5B-Instruct-Q4_K_M.gguf` | `Q4_K_M` | `qwen2.5-coder-1.5b-it-q4_k_m.gguf` | `coder` | `32768` | — | PARAMETER temperature 0.2 |
+| `qwen2.5-coder:7b` | `hf.co/unsloth/Qwen2.5-Coder-7B-Instruct-GGUF` | `Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf` | `Q4_K_M` | `qwen2.5-coder-7b-it-q4_k_m.gguf` | `coder` | `32768` | qwen2.5-coder:7b-8k (8192) | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
+| `qwen3-14b:sonnet4.5` | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF` | `Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf` | `Q4_K_M` | `qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf` | `instruct-distill` | `40960` | — | PARAMETER temperature 0.6 |
+| `qwen3-coder-30b-a3b:q6` | `hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF` | `Qwen3-Coder-30B-A3B-Instruct-UD-Q6_K_XL.gguf` | `UD-Q6_K_XL` | `qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf` | `coder` | `32768` | qwen3-coder-30b-a3b:q6-8k (8192), qwen3-coder-30b-a3b:q6-16k (16384), qwen3-coder-30b-a3b:q6-64k (65536), qwen3-coder-30b-a3b:q6-128k (131072), qwen3-coder-30b-a3b:q6-256k (262144) | PARAMETER temperature 0<br>PARAMETER repeat_penalty 1.05 |
+| `qwen3:4b` | `hf.co/Qwen/Qwen3-4B-GGUF` | `Qwen3-4B-Q4_K_M.gguf` | `Q4_K_M` | `qwen3-4b-it-q4_k_m.gguf` | `instruct` | `131072` | qwen3:4b-8k (8192) | PARAMETER temperature 0.2 |
+| `qwen3.5-27b:gemini3.1` | `hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF` | `Qwen3.5-27B.Q4_K_M.gguf` | `Q4_K_M` | `qwen3.5-27b-gemini3.1-it-ds-q4_k_m.gguf` | `instruct-distill` | `262144` | — | PARAMETER temperature 0.6 |
+| `qwen3.5-27b:q4` | `hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF` | `Qwen3.5-27B.Q4_K_M.gguf` | `Q4_K_M` | `qwen3.5-27b-opus4.7-it-ds-q4_k_m.gguf` | `instruct-distill` | `32768` | qwen3.5-27b:q4-8k (8192), qwen3.5-27b:q4-128k (131072), qwen3.5-27b:q4-256k (262144) | PARAMETER temperature 0.6 |
+| `qwen3.5:4b` | `hf.co/unsloth/Qwen3.5-4B-GGUF` | `Qwen3.5-4B-UD-Q4_K_XL.gguf` | `UD-Q4_K_XL` | `qwen3.5-4b-it-ud-q4_k_xl.gguf` | `instruct` | `131072` | — | PARAMETER temperature 0.2 |
+| `qwen3.6-27b:opus-sonnet` | `hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF` | `Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-Q4_K_M.gguf` | `Q4_K_M` | `qwen3.6-27b-opus-sonnet-it-ds-q4_k_m.gguf` | `instruct-distill` | `262144` | — | PARAMETER temperature 0.6 |
+| `qwen3.6-35b:opus4.7-128k` | `hf.co/hesamation/Qwen3.6-35B-A3B-Instruct-GGUF` | `Qwen3.6-35B-A3B-Instruct.Q4_K_M.gguf` | `Q4_K_M` | `qwen2.5-32b-it-q4_k_m.gguf` | `instruct-distill` | `262144` | — | PARAMETER temperature 0.6 |
 
 ### Materialization graph
 
@@ -49,13 +47,6 @@ flowchart LR
   local_nomic_embed_text_em_f16_gguf["Local GGUF: nomic-embed-text-em-f16.gguf"]:::file
   ollama_nomic_embed_text["Ollama: nomic-embed-text\nquant=F16; family=embedding"]:::ollama
   hf_hf_co_nomic_ai_nomic_embed_text_v1_5_GGUF --> remote_hf_co_nomic_ai_nomic_embed_text_v1_5_GGUF_nomic_embed_text_v1_5_f16_gguf --> local_nomic_embed_text_em_f16_gguf --> ollama_nomic_embed_text
-  hf_hf_co_mradermacher_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_GGUF["HF: hf.co/mradermacher/Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL-GGUF"]:::hf
-  remote_hf_co_mradermacher_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_GGUF_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_Q4_K_M_gguf["Remote GGUF: Qwen2.5-7B-Instruct-1M-Thinking-Claude-Gemini-GPT5.2-DISTILL.Q4_K_M.gguf"]:::file
-  local_qwen2_5_7b_multi_it_ds_q4_k_m_gguf["Local GGUF: qwen2.5-7b-multi-it-ds-q4_k_m.gguf"]:::file
-  ollama_qwen2_5_7b_multi["Ollama: qwen2.5-7b:multi\nquant=Q4_K_M; family=instruct-distill"]:::ollama
-  hf_hf_co_mradermacher_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_GGUF --> remote_hf_co_mradermacher_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_GGUF_Qwen2_5_7B_Instruct_1M_Thinking_Claude_Gemini_GPT5_2_DISTILL_Q4_K_M_gguf --> local_qwen2_5_7b_multi_it_ds_q4_k_m_gguf --> ollama_qwen2_5_7b_multi
-  params_qwen2_5_7b_multi["MODELFILE params"]:::params
-  params_qwen2_5_7b_multi -.-> ollama_qwen2_5_7b_multi
   hf_hf_co_unsloth_Qwen2_5_Coder_1_5B_Instruct_GGUF["HF: hf.co/unsloth/Qwen2.5-Coder-1.5B-Instruct-GGUF"]:::hf
   remote_hf_co_unsloth_Qwen2_5_Coder_1_5B_Instruct_GGUF_Qwen2_5_Coder_1_5B_Instruct_Q4_K_M_gguf["Remote GGUF: Qwen2.5-Coder-1.5B-Instruct-Q4_K_M.gguf"]:::file
   local_qwen2_5_coder_1_5b_it_q4_k_m_gguf["Local GGUF: qwen2.5-coder-1.5b-it-q4_k_m.gguf"]:::file
@@ -79,13 +70,6 @@ flowchart LR
   hf_hf_co_TeichAI_Qwen3_14B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF --> remote_hf_co_TeichAI_Qwen3_14B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF_Qwen3_14B_claude_sonnet_4_5_high_reasoning_distill_Q4_K_M_gguf --> local_qwen3_14b_sonnet4_5_it_ds_q4_k_m_gguf --> ollama_qwen3_14b_sonnet4_5
   params_qwen3_14b_sonnet4_5["MODELFILE params"]:::params
   params_qwen3_14b_sonnet4_5 -.-> ollama_qwen3_14b_sonnet4_5
-  hf_hf_co_TeichAI_Qwen3_8B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF["HF: hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF"]:::hf
-  remote_hf_co_TeichAI_Qwen3_8B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF_Qwen3_8B_claude_sonnet_4_5_high_reasoning_distill_Q4_K_M_gguf["Remote GGUF: Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf"]:::file
-  local_qwen3_8b_sonnet4_5_it_ds_q4_k_m_gguf["Local GGUF: qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf"]:::file
-  ollama_qwen3_8b_sonnet4_5["Ollama: qwen3-8b:sonnet4.5\nquant=Q4_K_M; family=instruct-distill"]:::ollama
-  hf_hf_co_TeichAI_Qwen3_8B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF --> remote_hf_co_TeichAI_Qwen3_8B_Claude_Sonnet_4_5_Reasoning_Distill_GGUF_Qwen3_8B_claude_sonnet_4_5_high_reasoning_distill_Q4_K_M_gguf --> local_qwen3_8b_sonnet4_5_it_ds_q4_k_m_gguf --> ollama_qwen3_8b_sonnet4_5
-  params_qwen3_8b_sonnet4_5["MODELFILE params"]:::params
-  params_qwen3_8b_sonnet4_5 -.-> ollama_qwen3_8b_sonnet4_5
   hf_hf_co_unsloth_Qwen3_Coder_30B_A3B_Instruct_GGUF["HF: hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF"]:::hf
   remote_hf_co_unsloth_Qwen3_Coder_30B_A3B_Instruct_GGUF_Qwen3_Coder_30B_A3B_Instruct_UD_Q6_K_XL_gguf["Remote GGUF: Qwen3-Coder-30B-A3B-Instruct-UD-Q6_K_XL.gguf"]:::file
   local_qwen3_coder_30b_a3b_cd_ud_q6_k_xl_gguf["Local GGUF: qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf"]:::file
@@ -121,9 +105,9 @@ flowchart LR
   params_qwen3_5_27b_gemini3_1 -.-> ollama_qwen3_5_27b_gemini3_1
   hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF["HF: hf.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF"]:::hf
   remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q4_K_M_gguf["Remote GGUF: Qwen3.5-27B.Q4_K_M.gguf"]:::file
-  local_qwen3_5_27b_opus4_6_it_ds_q4_k_m_gguf["Local GGUF: qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf"]:::file
+  local_qwen3_5_27b_opus4_7_it_ds_q4_k_m_gguf["Local GGUF: qwen3.5-27b-opus4.7-it-ds-q4_k_m.gguf"]:::file
   ollama_qwen3_5_27b_q4["Ollama: qwen3.5-27b:q4\nquant=Q4_K_M; family=instruct-distill"]:::ollama
-  hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q4_K_M_gguf --> local_qwen3_5_27b_opus4_6_it_ds_q4_k_m_gguf --> ollama_qwen3_5_27b_q4
+  hf_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_Jackrong_Qwen3_5_27B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_5_27B_Q4_K_M_gguf --> local_qwen3_5_27b_opus4_7_it_ds_q4_k_m_gguf --> ollama_qwen3_5_27b_q4
   params_qwen3_5_27b_q4["MODELFILE params"]:::params
   params_qwen3_5_27b_q4 -.-> ollama_qwen3_5_27b_q4
   ctx_qwen3_5_27b_q4_8k["Ollama alias: qwen3.5-27b:q4-8k\nnum_ctx=8192"]:::ollama
@@ -146,13 +130,13 @@ flowchart LR
   hf_hf_co_Brian6145_Qwen3_6_27B_Claude_Opus_Sonnet_DistilledV2_MTP_GGUF --> remote_hf_co_Brian6145_Qwen3_6_27B_Claude_Opus_Sonnet_DistilledV2_MTP_GGUF_Qwen3_6_27B_Claude_Opus_Sonnet_DistilledV2_MTP_Q4_K_M_gguf --> local_qwen3_6_27b_opus_sonnet_it_ds_q4_k_m_gguf --> ollama_qwen3_6_27b_opus_sonnet
   params_qwen3_6_27b_opus_sonnet["MODELFILE params"]:::params
   params_qwen3_6_27b_opus_sonnet -.-> ollama_qwen3_6_27b_opus_sonnet
-  hf_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF["HF: hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF"]:::hf
-  remote_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_Q4_K_M_gguf["Remote GGUF: Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled.Q4_K_M.gguf"]:::file
-  local_qwen3_6_35b_opus4_6_it_ds_q4_k_m_gguf["Local GGUF: qwen3.6-35b-opus4.6-it-ds-q4_k_m.gguf"]:::file
-  ollama_qwen3_6_35b_opus4_6["Ollama: qwen3.6-35b:opus4.6\nquant=Q4_K_M; family=instruct-distill"]:::ollama
-  hf_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_Q4_K_M_gguf --> local_qwen3_6_35b_opus4_6_it_ds_q4_k_m_gguf --> ollama_qwen3_6_35b_opus4_6
-  params_qwen3_6_35b_opus4_6["MODELFILE params"]:::params
-  params_qwen3_6_35b_opus4_6 -.-> ollama_qwen3_6_35b_opus4_6
+  hf_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF["HF: hf.co/hesamation/Qwen3.6-35B-A3B-Instruct-GGUF"]:::hf
+  remote_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_Q4_K_M_gguf["Remote GGUF: Qwen3.6-35B-A3B-Instruct.Q4_K_M.gguf"]:::file
+  local_qwen3_6_35b_opus4_7_it_ds_q4_k_m_gguf["Local GGUF: qwen2.5-32b-it-q4_k_m.gguf"]:::file
+  ollama_qwen3_6_35b_opus4_7["Ollama: qwen3.6-35b:opus4.7-128k\nquant=Q4_K_M; family=qwen35moe (Claude 4.7 distill)"]:::ollama
+  hf_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF --> remote_hf_co_hesamation_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_GGUF_Qwen3_6_35B_A3B_Claude_4_6_Opus_Reasoning_Distilled_Q4_K_M_gguf --> local_qwen3_6_35b_opus4_7_it_ds_q4_k_m_gguf --> ollama_qwen3_6_35b_opus4_7
+  params_qwen3_6_35b_opus4_7["MODELFILE params"]:::params
+  params_qwen3_6_35b_opus4_7 -.-> ollama_qwen3_6_35b_opus4_7
 ```
 
 ---
@@ -160,35 +144,34 @@ flowchart LR
 ## Model Assignment Matrix
 
 Tools across the rows, models across the columns. Cells show the role(s)
-each model plays in each tool. `-` = not assigned.
+each model plays in each tool.  `-` = not assigned.
 
-| Tool           | qwen3-coder-30b-a3b:q6 | qwen3.6-35b:opus4.6 | gemma4:31b | qwen3.5-27b:q4  | deepseek-r1:32b | qwen3:4b | codestral:22b | qwen2.5-coder:1.5b |  qwen2.5-coder:7b  | nomic-embed-text |
-| -------------- | :--------------------: | :-----------------: | :--------: | :-------------: | :-------------: | :------: | :-----------: | :----------------: | :----------------: | :--------------: |
-| **Cline**      |           —            |          —          |     —      |        —        |        —        |    —     |       —       |         —          |         —          |        —         |
-| **ZooCode**    |           —            |          —          |     —      |        —        |        —        |    —     |       —       |         —          |         —          |        —         |
-| **KiloCode**   |           —            |          —          |     —      |        —        |        —        |    —     |       —       |         —          |         —          |        —         |
-| **Aider**      |         model          |          —          |     —      |        —        |        —        |   weak   |    editor     |         —          |         —          |        —         |
-| **Zed**        |           —            |          —          |     —      |        —        |        —        |    —     |       —       |         —          |         —          |        —         |
-| **Cursor**     |           —            |          —          |     —      |        —        |        —        |    —     |       —       |         —          |         —          |        —         |
-| **OpenCode**   |          code          |          —          |   think    | write, research |        —        |   plan   |       —       |         —          |         —          |        —         |
-| **Continue**   |          chat          |          —          |     —      |    chat_alt     |        —        |    —     |     apply     |    autocomplete    | autocomplete_heavy |      embed       |
-| **ClaudeCode** |    coding, primary     |        opus         |     —      |    research     |    reasoning    |   fast   |       —       |         —          |         —          |        —         |
+| Tool | qwen3-coder-30b-a3b:q6 | qwen3.6-35b:opus4.7-128k | qwen3.5-27b:q4 | qwen3.5:4b | deepseek-r1-tools:32b | qwen3:4b | codestral:22b | qwen2.5-coder:1.5b | qwen2.5-coder:7b | nomic-embed-text |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Cline** | — | — | — | — | — | — | — | — | — | — |
+| **ZooCode** | — | — | — | — | — | — | — | — | — | — |
+| **KiloCode** | — | — | — | — | — | — | — | — | — | — |
+| **Aider** | model | — | — | — | — | weak | editor | — | — | — |
+| **Zed** | — | — | — | — | — | — | — | — | — | — |
+| **Cursor** | — | — | — | — | — | — | — | — | — | — |
+| **OpenCode** | local, code, build | — | write, research | title, summary | think | plan | — | — | — | — |
+| **Continue** | chat | — | chat_alt | — | — | — | apply | autocomplete | autocomplete_heavy | embed |
+| **ClaudeCode** | coding, primary | opus | research | — | reasoning | fast | — | — | — | — |
 
 ---
 
 ## Model Categories
 
-| Category           |   # | Models                                                   |
-| ------------------ | --: | -------------------------------------------------------- |
-| **Co-resident**    |   1 | `qwen3-coder-30b-a3b:q6` (26 GB)                         |
-| **Architect**      |   1 | `qwen3.6-35b:opus4.6` (22 GB)                            |
-| **Dense / Vision** |   1 | `gemma4:31b` (19 GB)                                     |
-| **Writing**        |   1 | `qwen3.5-27b:q4` (19 GB)                                 |
-| **Reasoning**      |   1 | `deepseek-r1:32b`                                        |
-| **Planning**       |   1 | `qwen3:4b` (2.5 GB)                                      |
-| **Apply / Insert** |   1 | `codestral:22b` (12 GB)                                  |
-| **Autocomplete**   |   2 | `qwen2.5-coder:1.5b` (986 MB), `qwen2.5-coder:7b` (5 GB) |
-| **Embeddings**     |   1 | `nomic-embed-text` (0.3 GB)                              |
+| Category | # | Models |
+| --- | ---:| --- |
+| **Co-resident** | 1 | `qwen3-coder-30b-a3b:q6` (26 GB) |
+| **Architect** | 1 | `qwen3.6-35b:opus4.7-128k` (22 GB) |
+| **Writing** | 2 | `qwen3.5-27b:q4` (19 GB), `qwen3.5:4b` (2.5 GB) |
+| **Reasoning** | 1 | `deepseek-r1-tools:32b` |
+| **Planning** | 1 | `qwen3:4b` (2.5 GB) |
+| **Apply / Insert** | 1 | `codestral:22b` (12 GB) |
+| **Autocomplete** | 2 | `qwen2.5-coder:1.5b` (986 MB), `qwen2.5-coder:7b` (5 GB) |
+| **Embeddings** | 1 | `nomic-embed-text` (0.3 GB) |
 
 ## OpenRouter (cloud models)
 
@@ -209,5 +192,4 @@ These models are available via OpenRouter — no local storage needed:
 - mistral-large-3
 
 ---
-
 Generated by `generate-model-map.sh` for profile `macbook-m5-64gb`. Edit `models.sh` and re-run to regenerate.

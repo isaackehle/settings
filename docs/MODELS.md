@@ -14,6 +14,10 @@ decision is superseded, log the date and reason.
 
 | Date       | Model                  | Decision                                                                                                                                                                        | Source                                     |
 | ---------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| 2026-06-13 | `qwen3.6-35b:opus4.7-128k` | **New.** Qwen3.6-35B-A3B with APEX-I calibration and MoE distillation — supersedes `opus4.6-128k`. ~110–120 tok/s on M5 Max 64GB, 128K ctx, ~24 GB (Q8 quant). HF: `hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF`. | hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF |
+| 2026-06-13 | `qwen3.6-35b:opus4.6-128k` | *Superseded by opus4.7-128k.* Was the architect slot (Q4_K_M Qwen 4.6 Opus distill, ~109 tok/s). Safe to leave pulled for compatibility until 4.7 is stable. | hf.co/hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF |
+| 2026-06-13 | `qwen3.6:35b-96k`      | *Broken in llama.cpp master.* Hits `qwen35moe.cpp:9` and `qwen35.cpp:6` hard-coded `rope_sections` length of 4; the GGUF ships 3. Patch is one-line (`4` → `0` in `ml.get_key_or_arr`) and would unblock, but the working 128k distillate is the better default until then. | unsloth/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled-GGUF |
+| 2026-06-13 | `qwen2.5:32b`          | *Superseded.* Briefly adopted as 35B replacement but is ~4.3× slower and half the context. Keep until opus4.7-128k proves stable. Safe to `ollama rm` after. | ollama.com/library/qwen2.5 (tag:32b) |
 | 2026-05-27 | `deepseek-r1`          | Official DeepSeek reasoning model. No tool-calling. Variants: `8b`, `14b`, `32b`, `70b`, `671b`.                                                                                | ollama.com/library/deepseek-r1             |
 | 2026-05-27 | `deepseek-r1-tools`    | Community fine-tune (MFDoom) adding tool-calling. Qwen2-based, not a superset of `deepseek-r1`. Pullable as `MFDoom/deepseek-r1-tool-calling`. Local alias via `MODEL_REMOTES`. | ollama.com/MFDoom/deepseek-r1-tool-calling |
 | 2026-05-27 | `deepseek-r1:8b`       | Valid Ollama tag. Official 8B distilled reasoning (no tool-calling).                                                                                                            | ollama.com/library/deepseek-r1             |
@@ -101,10 +105,6 @@ shared, with the capability code distinguishing them:
 | `qwen3.5-27b:q5-128k`          | Qwen 3.5 27B (Writing, Q5 128K)          |
 | `qwen3.5-27b:q5-256k`          | Qwen 3.5 27B (Writing, Q5 256K)          |
 | `qwen3.5-27b:q8`               | Qwen 3.5 27B (Writing, Q8)               |
-| `qwen3.6-35b:q4`               | Qwen 3.6 35B A3B (Coding, Q4)            |
-| `qwen3.6-35b:q4-8k`            | Qwen 3.6 35B A3B (Coding, Q4 8K)         |
-| `qwen3.6-35b:q4-128k`          | Qwen 3.6 35B A3B (Coding, Q4 128K)       |
-| `qwen3.6-35b:q4-256k`          | Qwen 3.6 35B A3B (Coding, Q4 256K)       |
 | `qwen3-coder-30b-a3b:q5`       | Qwen3 Coder 30B A3B (Coding, Q5)         |
 | `qwen3-coder-30b-a3b:q5-8k`    | Qwen3 Coder 30B A3B (Coding, Q5 8K)      |
 | `qwen3-coder-30b-a3b:q5-32k`   | Qwen3 Coder 30B A3B (Coding, Q5 32K)     |
@@ -180,7 +180,10 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
   profiles only.
 - **`qwen3-coder-30b-a3b`** — MoE coding model, 3B active parameters. Available
   in `q5` and `q6` quants.
-- **`qwen3.6-35b`** — Agentic coding model. `q4` quantization.
+- **`qwen3.6-35b`** — *Removed 2026-06-13: MoE `rope_sections` length bug
+  (3 vs 4) in llama.cpp qwen35moe.cpp; replaced by `qwen2.5:32b`.*
+- **`qwen2.5:32b`** — Architect/agentic slot for 48GB+ profiles. Dense 32B
+  at Q4_K_M (~20 GB).
 - **`qwen3.5-27b`** — General/writing model. Available in `q5` and `q8` quants.
 - **`qwen3:14b`** — Solo coding for 16/32GB profiles.
 - **`qwen3:4b`** — Planning/routing/fast tasks.
@@ -201,7 +204,7 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 | -------------- | ------------------------- | ------- |
 | Coding (max)   | `qwen3-coder-next-80b:q4` | ~48 GB  |
 | Coding         | `qwen3-coder-30b-a3b:q6`  | ~26 GB  |
-| Agentic coding | `qwen3.6-35b:q4`          | ~22 GB  |
+| Architect      | `qwen2.5:32b`             | ~20 GB  |
 | Writing        | `qwen3.5-27b:q5`          | ~19 GB  |
 | Reasoning      | `deepseek-r1-tools:32b`   | ~20 GB  |
 | General        | `gemma4:31b`              | ~20 GB  |
@@ -216,7 +219,7 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 | Role           | Model                    | Size    |
 | -------------- | ------------------------ | ------- |
 | Coding         | `qwen3-coder-30b-a3b:q5` | ~21 GB  |
-| Agentic coding | `qwen3.6-35b:q4`         | ~22 GB  |
+| Architect      | `qwen2.5:32b`            | ~20 GB  |
 | Writing        | `qwen3.5-27b:q5`         | ~19 GB  |
 | Reasoning      | `deepseek-r1-tools:32b`  | ~20 GB  |
 | General        | `gemma4:31b`             | ~20 GB  |
@@ -251,6 +254,17 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
 | Apply/insert   | `codestral:22b`        | ~14 GB  |
 | Autocomplete   | `qwen2.5-coder:1.5b`   | ~1 GB   |
 | Embeddings     | `nomic-embed-text`     | ~0.3 GB |
+
+### 16GB (macbook-intel-2019-16gb) — Lightweight, Intel x86_64
+
+- **Mirrors the M1 16GB stack** (same 16 GB constraint, same model set)
+- **Different execution substrate:** no unified memory; AMD Radeon Pro 4-8 GB
+  dGPU has partial Metal/ROCm support on Intel macs → run with
+  `OLLAMA_NUM_GPU=0` (CPU-only)
+- **Network mode:** bind `OLLAMA_HOST=0.0.0.0:11434`; reach from the main M5
+  Max over Tailscale
+- Lives in the garage; secondary inference node
+- See `ai/profiles/macbook-intel-2019-16gb/README.md` for setup details
 
 ## Remote Models (MODEL_REMOTES)
 
@@ -330,8 +344,8 @@ it directly to `ollama pull`. Always verify tags exist at
 | `qwen3.5-27b`         | `qwen3.5:27b-q8_0`         | Tag includes size prefix |
 | `qwen3-coder-30b-a3b` | `qwen3-coder:30b-a3b-q8_0` | Library name differs     |
 | `gemma4:31b`          | _(none)_                   | Base model is Q6, ~20GB  |
-| `qwen3.6-35b`         | `qwen3.6:35b-a3b-q8_0`     | MoE, `-a3b` suffix       |
-| `qwen2.5-coder:7b`    | `qwen2.5-coder:7b-q8_0`    | Dash separator           |
+| `qwen3.6-35b`         | `qwen2.5:32b-q4_k_m`       | *Removed 2026-06-13*      |
+| `qwen2.5:32b`         | `qwen2.5:32b-q4_k_m`       | New architect slot        |
 
 ## May 2026 Refresh — Change Justification
 
@@ -466,12 +480,15 @@ Code research requires strong code understanding. The 30B MoE model was trained
 with 70% code ratio and execution-driven RL — strictly superior at reading and
 searching codebases compared to the general `qwen3:14b`.
 
-#### Claude Code `opus`: `qwen3.5-27b:q5` → `qwen3.6-35b:q4` (48GB+ only)
+#### Claude Code `opus`: `qwen3.5-27b:q5` → `qwen2.5:32b` (48GB+ only)
 
 The `opus` slot represents the "deep thinker" for code review and architect
-tasks. `qwen3.6-35b` preserves thinking across turns, making it more effective
-for multi-step agent workflows. 32GB and below retain `qwen3.5-27b:q5` since
-`qwen3.6-35b` won't fit.
+tasks. `qwen2.5:32b` is a dense 32B at Q4_K_M (~20 GB) that fits comfortably
+alongside the 30B MoE coder in 48GB+ profiles. It replaces `qwen3.6-35b:q4`
+which was removed 2026-06-13 due to a llama.cpp `rope_sections` array-length
+bug in `qwen35moe.cpp` (3 vs 4 hard-coded). 32GB and below retain
+`qwen3.5-27b:q5` since `qwen2.5:32b` (~20 GB) won't fit co-resident with
+the 30B coder.
 
 #### 16GB/32GB Claude Code: `reasoning` slot retained
 

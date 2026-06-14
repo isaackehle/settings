@@ -12,11 +12,27 @@ models:
     roles:
       - chat
 
-  - name: 'Claude Sonnet 4.6 (Balanced All-Rounder)'
+  - name: 'Claude Sonnet 4.6 (Exacto, Tool-Optimized)'
     provider: openai
     apiBase: https://openrouter.ai/api/v1
     apiKey: 'env.OPENROUTER_API_KEY'
-    model: 'anthropic/claude-sonnet-4-6'
+    model: 'anthropic/claude-sonnet-4-6:exacto'
+    roles:
+      - chat
+
+  - name: 'Claude Haiku 4.5 (Nitro, Fast)'
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'anthropic/claude-haiku-4-5:nitro'
+    roles:
+      - chat
+
+  - name: 'Gemini 2.5 Flash (Online, Web Search)'
+    provider: openai
+    apiBase: https://openrouter.ai/api/v1
+    apiKey: 'env.OPENROUTER_API_KEY'
+    model: 'google/gemini-2.5-flash:online'
     roles:
       - chat
 
@@ -76,6 +92,23 @@ models:
     model: 'qwen3.5-27b:q4'
     roles:
       - chat
+
+  - name: 'Qwen 2.5 32B (Architect)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'qwen3.6-35b:opus4.6-32k'
+    roles:
+      - chat
+
+  - name: 'Laguna XS.2 33B (Alt Coder)'
+    provider: openai
+    apiBase: http://localhost:11434/v1
+    apiKey: 'sk-local'
+    model: 'laguna-xs.2'
+    roles:
+      - chat
+      - edit
 
   - name: 'Qwen3 Coder 30B A3B (Coding)'
     provider: openai

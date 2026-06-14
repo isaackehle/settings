@@ -328,7 +328,7 @@ Use `ai/runtimes/llama-cpp.sh` to serve models by role — each role has a dedic
 | fast      | 8011 | qwen3:4b               |
 | general   | 8012 | qwen3.5-27b:q4         |
 | coder     | 8013 | qwen3-coder-30b-a3b:q6 |
-| heavy     | 8014 | qwen3.6-35b:opus4.6    |
+| heavy     | 8014 | qwen2.5:32b    |
 | reasoning | 8015 | deepseek-r1:32b        |
 | embedding | 8016 | nomic-embed-text       |
 | summary   | 8017 | qwen3.5:4b             |
@@ -746,7 +746,7 @@ Each agent has its own permission set:
 | **ask**         | Same as code (read-only, needs comprehension)             | Small models                     |
 | **debug**       | `deepseek-r1-tools-*` (better for reasoning)              | General models                   |
 | **think**       | `deepseek-r1-tools-*` (better for reasoning)              | General models                   |
-| **write**       | `qwen3.5-27b-q5-256k` or `qwen3.6-35b-256k`               | Main code model — different task |
+| **write**       | `qwen3.5-27b-q5-256k` or `qwen2.5:32b-32k`                  | Main code model — different task |
 | **plan**        | Small/fast model (e.g., `qwen3-4b-q8-256k`)               | Large models — just routing      |
 | **description** | Small/fast model                                          | Large models — just summaries    |
 | **summary**     | Small model (e.g., `qwen2.5-coder-7b-q4-32k`)             | Large — just commit messages     |

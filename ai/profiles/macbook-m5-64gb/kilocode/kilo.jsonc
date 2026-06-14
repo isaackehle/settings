@@ -30,7 +30,11 @@
         "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill, 128K)" },
         "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning)" },
         "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B (Planning, 128K)" },
-        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Writing, Claude Opus+Sonnet Distill)" }
+        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Writing, Claude Opus+Sonnet Distill)" },
+        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (Architect, 73% SWE-bench)" },
+        "qwen3.6-35b:opus4.7-32k": { "name": "Qwen 2.5 32B (32K ctx)" },
+        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (32K ctx, extended)" },
+        "laguna-xs.2": { "name": "Laguna XS.2 33B MoE (Alt Coder, 68% SWE-bench)" }
       }
     },
     // ── llama-server — GGUF direct serving on port 10000 ──────────────────
@@ -88,7 +92,7 @@
     },
     "debug": {
       "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "ollama/deepseek-r1:32b-128k",
+      "model": "ollama/deepseek-r1-tools:32b-128k",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/debug.md
@@ -102,7 +106,7 @@
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "ollama/deepseek-r1:32b-128k",
+      "model": "ollama/deepseek-r1-tools:32b-128k",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/think.md
@@ -130,7 +134,7 @@
     },
     "architect": {
       "description": "Stress-test technical designs and produce implementation-ready plans.",
-      "model": "ollama/deepseek-r1:32b-128k",
+      "model": "ollama/qwen3.6-35b:opus4.7-128k",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/architect.md

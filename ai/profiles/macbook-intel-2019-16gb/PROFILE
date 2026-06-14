@@ -1,0 +1,9 @@
+# Machine profile descriptor
+# 2019 Intel MacBook Pro 16" — Intel Core i7/i9 (9th gen, x86_64)
+FOLDER=macbook-intel-2019-16gb
+NAME=MacBook Intel 2019 16GB
+MEMORY=16
+MEMORY_RANGE_MIN=0
+MEMORY_RANGE_MAX=20
+COMPUTER_TYPES=MacBookPro16,1,MacBookPro16,2
+DESCRIPTION=Intel x86_64 + AMD Radeon Pro dGPU; CPU-first, conservative stack

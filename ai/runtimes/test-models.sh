@@ -12,7 +12,7 @@ ollama_is_running || fail "Ollama is not running. Start it first."
 DEFAULT_SMOKE_MODELS=(
     "qwen3-coder-30b-a3b:q6-8k"
     "qwen3-coder-next-80b:q4-16k"
-    "qwen3.6-35b:q4-8k"
+    "qwen3.6-35b:opus4.7-32k"
     "qwen3.5-27b:q5-8k"
     "deepseek-r1-tools:32b-128k"
     "qwen2.5-coder:1.5b"

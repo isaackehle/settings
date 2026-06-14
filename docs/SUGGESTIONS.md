@@ -11,7 +11,7 @@ All major models (Qwen3.5, Qwen3.6, Gemma 4) now have MLX tags on Ollama
 
 ```shell
 ollama pull qwen3.5:27b-mlx     # 17 GB, ~2x faster than Q4_0
-ollama pull qwen3.6:35b-mlx     # 22 GB
+ollama pull qwen2.5:32b-mlx     # 22 GB
 ollama pull gemma4:31b-mlx      # 20 GB
 ```
 

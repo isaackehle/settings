@@ -171,8 +171,8 @@ back to the default agent. New tools/patterns reference these agents.
 
 | Tier     | RAM  | Primary Coder            | Reasoning         | Writing               | Opus (Claude)             | Plan/Fast  |
 | -------- | ---- | ------------------------ | ----------------- | --------------------- | ------------------------- | ---------- |
-| **64GB** | 64GB | `qwen3-coder-30b-a3b:q6` | `deepseek-r1:32b` | `qwen3-14b:sonnet4.5` | `qwen3.6-35b:opus4.6`     | `qwen3:4b` |
-| **48GB** | 48GB | `qwen3-coder-30b-a3b:q5` | `deepseek-r1:32b` | `qwen3.5-27b:q4`      | `qwen3.6-35b:opus4.6`     | `qwen3:4b` |
+| **64GB** | 64GB | `qwen3-coder-30b-a3b:q6` | `deepseek-r1:32b` | `qwen3-14b:sonnet4.5` | `qwen3.6-35b:opus4.7-128k` | `qwen3:4b` |
+| **48GB** | 48GB | `qwen3-coder-30b-a3b:q5` | `deepseek-r1:32b` | `qwen3.5-27b:q4`      | `qwen3.6-35b:opus4.7-128k` | `qwen3:4b` |
 | **32GB** | 32GB | `qwen3-coder-30b-a3b:q5` | `deepseek-r1:7b`  | `qwen3.5-27b:q4`      | `qwen3.5-27b:q4` (Tier 2) | `qwen3:4b` |
 | **16GB** | 16GB | `qwen2.5-coder:7b`       | `deepseek-r1:7b`  | `qwen3:14b`           | `qwen3:14b` (Tier 2)      | `qwen3:4b` |
 
@@ -185,7 +185,10 @@ back to the default agent. New tools/patterns reference these agents.
 | **critical** | Primary coder for 32GB+ MUST be `qwen3-coder-30b-a3b` (MoE, best quality/speed ratio)   |
 | **critical** | Primary coder for 16GB MUST be `qwen2.5-coder:7b` (fits in RAM)                         |
 | **critical** | Claude's "Sonnet" (primary) MUST match the primary coder, NOT a general model           |
-| high         | Opus for 48GB+ MUST be `qwen3.6-35b:opus4.6` (MoE, 113 tok/s, 21GB, Opus 4.6 distil)    |
+| high         | Opus for 48GB+ MUST be `qwen3.6-35b:opus4.7-128k` (MoE 35B, 23GB Q4_K_M, ~110 tok/s, Claude 4.6 reasoning distilled). The 3.6:35b base variants are blocked by a `rope_sections` 3-vs-4 bug in llama.cpp's qwen35moe.cpp; the opus4.7-128k distillate from `hf.co/hesamation` is the one variant in the family that ships with a working RoPE layout. Decision: 2026-06-13 (revised 1h).
+
+**NOTE: rope_sections fix in llama.cpp master**
+The `qwen3.6:35b` base variants (96k, 32k, 128k, 256k, and the base opus tag) all carry the `rope_sections` bug (3 vs 4). The opus distillates from both hesamation (4.6) and mudler (4.7) ship with a working RoPE layout. Recommendation: keep only `opus4.6-128k` and `opus4.7-128k` (the distillate variants), drop all base variants. Decision: 2026-06-13. |
 | high         | `deepseek-r1:32b` only on 48GB+ (needs >=48GB RAM)                                      |
 | high         | `deepseek-r1:7b` on 16GB-32GB (fits comfortably)                                        |
 | medium       | Writing model can be a general model (not necessarily coder) — good prose > speed       |
@@ -195,9 +198,12 @@ back to the default agent. New tools/patterns reference these agents.
 
 **Rationale for Opus choices:**
 
-- `qwen3.6-35b:opus4.6` is MoE (3B active/token) → 113 tok/s, same speed as the 30B coder but with Claude Opus 4.6 reasoning distillation. ~21GB at Q4 fits easily on 48GB+, same speed as the coder with Opus-quality chain-of-thought.
-- 32GB: 21GB MoE leaves only ~5GB for other models — tight but workable if Opus runs solo. Decision deferred (Tier 2).
-- 16GB: `qwen3.5-9b:opus4.6` exists (6GB) but 9B < 14B in raw params; unclear if Opus distillation closes the gap. Decision deferred (Tier 2).
+- `qwen3.6-35b:opus4.7-128k` is a MoE 35B-A3B (Q8 quant, ~24GB), APEX-I calibrated for Claude 4.7 reasoning. **Measured 110 tok/s** on the M5 Max 64GB — solid throughput at 128K context. The 3.6:35b base variants (`qwen3.6:35b-96k`, `qwen3.6:35b`, `qwen3.6:35b-32k/128k`, `qwen3.6-35b:opus4.6` base) are blocked by a `rope_sections` 3-vs-4 bug in llama.cpp's `qwen35moe.cpp` and `qwen35.cpp` (the GGUF was written with 3 sections; the source hard-codes an expected length of 4). The Opus-distilled variant from `hf.co/mudler/Qwen3.6-35B-A3B-Claude-4.7-Opus-Distilled-APEX-GGUF` ships with a working RoPE layout and runs cleanly through Ollama. Decision: 2026-06-13 (revised 1h).
+
+**NOTE: rope_sections fix in llama.cpp master**
+The `qwen3.6:35b` base variants (96k, 32k, 128k, 256k, and the base opus tag) all carry the `rope_sections` bug (3 vs 4). The opus distillates from both hesamation (4.6) and mudler (4.7) ship with a working RoPE layout. Recommendation: keep only `opus4.6-128k` and `opus4.7-128k` (the distillate variants), drop all base variants. Decision: 2026-06-13.
+- 32GB: 20GB dense leaves ~12GB for other models — workable as sole model, tight if running alongside.
+- 16GB: dense 32B won't fit alongside anything; use `qwen3:14b` Tier 2 distil.
 
 ---
 
@@ -261,7 +267,7 @@ interpolation syntax. The old `{env:VAR}` style is a different tool's convention
 **Rationale:** Alphabetical ordering makes diffs reviewable and prevents
 accidental duplicates. A model added at the end of the list is easy to miss
 during audit. Sort order is by the model key string (the left-hand side before
-the colon in `"qwen3.5-9b:opus4.6" : { ... }`), using standard lexicographic
+the colon in `"qwen3.5-9b:opus4.7-128k" : { ... }`), using standard lexicographic
 ordering.
 
 **Example of correct ordering:**
@@ -269,21 +275,21 @@ ordering.
 ```jsonc
 "models": {
   "gemma4:31b": { ... },
+  "qwen3.6-35b:opus4.7-128k": { ... },
   "qwen3.5-9b:gemini3.1": { ... },
-  "qwen3.5-9b:opus4.6": { ... },
+  "qwen3.5-9b:opus4.7-128k": { ... },
   "qwen3.5:4b": { ... },
   "qwen3.6-27b:opus-sonnet": { ... },
-  "qwen3.6-35b:opus4.6": { ... },
-  "qwen3.6-35b:q4": { ... },
   "qwen3:14b": { ... },
   "qwen3:4b": { ... }
 }
 ```
 
-Note: `gemma4` sorts before `qwen3` (g < q), and `qwen3` sorts before
-`qwen3.5` (end-of-string < `.`). Within the same base model, the variant
-suffix determines order (e.g., `qwen3.5:4b` before `qwen3.6-27b:opus-sonnet`
-because `5` < `6` lexicographically).
+Note: `gemma4` sorts before `qwen3.6` (g < q), and `qwen3.6-35b:opus4.7-128k` sorts before
+`qwen3.5-9b:*` because `3.5` < `3.6` at the 5th character (`.` < `-` not the deciding
+factor — `5` < `6` at character 6 is).
+`qwen3.6-35b:opus4.7-128k` vs `qwen3.5-9b:...` where `3.5` < `3.6` at the 5th character.
+Within the same base model, the variant suffix determines order.
 
 ---
 
