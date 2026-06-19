@@ -73,11 +73,26 @@ setup_github_copilot() {
     # verify_copilot_extension || _install_copilot_extension || { print_error "Failed to install GitHub Copilot extension"; }
     verify_github_cli || _install_copilot_cli || { print_error "Failed to install GitHub Copilot CLI"; }
 
+    # Deploy custom prompts to global Copilot prompts directory
+    local prompts_source="${SETTINGS_BASE}/.github/prompts"
+    local prompts_target="${HOME}/.config/github-copilot/prompts"
+    if [ -d "$prompts_source" ]; then
+        if [ -L "$prompts_target" ] && [ "$(readlink "$prompts_target")" = "$prompts_source" ]; then
+            print_status "Copilot custom prompts already linked"
+        else
+            rm -rf "$prompts_target"
+            ln -sf "$prompts_source" "$prompts_target"
+            print_status "Copilot custom prompts linked → ${prompts_target}"
+        fi
+    else
+        print_warning "No custom prompts found at ${prompts_source}"
+    fi
+
     print_info ""
     print_info "=== GitHub Copilot ==="
     print_info "CLI:        gh copilot suggest <task>"
     print_info "CLI:        gh copilot explain <command>"
-    # print_info "Ollama:     VS Code Copilot Chat → Add Models → Ollama (requires v0.18.3+)"
+    print_info "Custom prompts: ~/.config/github-copilot/prompts/"
     print_info "Docs:       https://docs.github.com/en/copilot"
     print_info ""
 }
