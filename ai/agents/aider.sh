@@ -27,6 +27,31 @@ verify_aider() {
     return 1
 }
 
+backup_aider() {
+    log_info "Backing up Aider config..."
+    local config_file="$HOME/.aider.conf.yml"
+    if [ -f "$config_file" ]; then
+        local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}/aider-$(date +%Y%m%d-%H%M%S)"
+        mkdir -p "$backup_dir"
+        cp "$config_file" "$backup_dir/"
+        log_status "Aider config backed up to $backup_dir"
+    else
+        log_info "No Aider config to backup"
+    fi
+}
+
+restore_aider() {
+    log_info "Restoring Aider config..."
+    local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}"
+    local latest_backup=$(ls -dt "$backup_dir"/aider-* 2>/dev/null | head -1)
+    if [ -n "$latest_backup" ] && [ -f "$latest_backup/aider.conf.yml" ]; then
+        cp "$latest_backup/aider.conf.yml" "$HOME/.aider.conf.yml"
+        log_status "Aider config restored from $latest_backup"
+    else
+        log_warning "No Aider backup found"
+    fi
+}
+
 setup_aider() {
     log_info "Setting up Aider..."
     verify_aider || _install_aider || { log_error "Failed to install Aider"; return 1; }

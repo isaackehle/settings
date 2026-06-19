@@ -14,6 +14,32 @@ verify_crush() {
     return 1
 }
 
+backup_crush() {
+    log_info "Backing up Crush config..."
+    local config_file="$HOME/.config/crush/crush.json"
+    if [ -f "$config_file" ]; then
+        local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}/crush-$(date +%Y%m%d-%H%M%S)"
+        mkdir -p "$backup_dir"
+        cp "$config_file" "$backup_dir/"
+        log_status "Crush config backed up to $backup_dir"
+    else
+        log_info "No Crush config to backup"
+    fi
+}
+
+restore_crush() {
+    log_info "Restoring Crush config..."
+    local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}"
+    local latest_backup=$(ls -dt "$backup_dir"/crush-* 2>/dev/null | head -1)
+    if [ -n "$latest_backup" ] && [ -f "$latest_backup/crush.json" ]; then
+        mkdir -p "$HOME/.config/crush"
+        cp "$latest_backup/crush.json" "$HOME/.config/crush/"
+        log_status "Crush config restored from $latest_backup"
+    else
+        log_warning "No Crush backup found"
+    fi
+}
+
 _install_crush() {
     if command_exists "brew"; then
         log_info "Installing Crush via Homebrew..."

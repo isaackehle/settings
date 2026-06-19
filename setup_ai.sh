@@ -27,7 +27,6 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/ai/agents/aider.sh"
 . "${SETTINGS_BASE}/ai/other/anythingllm.sh"
 . "${SETTINGS_BASE}/ai/agents/claude.sh"
-. "${SETTINGS_BASE}/editors/cline.sh"
 . "${SETTINGS_BASE}/ai/agents/codex.sh"
 . "${SETTINGS_BASE}/editors/continue.sh"
 . "${SETTINGS_BASE}/ai/agents/crush.sh"
@@ -60,7 +59,6 @@ REPO_ROOT="$SETTINGS_BASE"
 . "${SETTINGS_BASE}/editors/pi-studio.sh"
 . "${SETTINGS_BASE}/editors/sublime.sh"
 . "${SETTINGS_BASE}/ai/agents/zeroclaw.sh"
-. "${SETTINGS_BASE}/editors/zoocode.sh"
 . "${SETTINGS_BASE}/ai/other/tabby.sh"
 . "${SETTINGS_BASE}/editors/vscode.sh"
 . "${SETTINGS_BASE}/editors/devin.sh"
@@ -95,7 +93,6 @@ deploy_mcp_servers() {
   echo ""
   echo "  Deploy shared MCP server config to all MCP-using tools:"
   echo "    Claude Code   → ~/.mcp.json"
-  echo "    Cline         → ~/.config/cline/mcp_settings.json"
   echo "    Aider         → ~/.aider/mcp.json"
   echo ""
 
@@ -113,7 +110,6 @@ deploy_mcp_servers() {
 
   # Deploy to each tool destination
   _deploy_mcp_to "$HOME/.mcp.json" "Claude Code"
-  _deploy_mcp_to "$HOME/.config/cline/mcp_settings.json" "Cline"
   _deploy_mcp_to "$HOME/.aider/mcp.json" "Aider"
 
   WIZARD_MCP_ACTION="deployed"
@@ -121,7 +117,6 @@ deploy_mcp_servers() {
   # Home Assistant credentials — prompt once, apply to all deployed files
   local deployed_files=()
   [ -f "$HOME/.mcp.json" ] && deployed_files+=("$HOME/.mcp.json")
-  [ -f "$HOME/.config/cline/mcp_settings.json" ] && deployed_files+=("$HOME/.config/cline/mcp_settings.json")
   [ -f "$HOME/.aider/mcp.json" ] && deployed_files+=("$HOME/.aider/mcp.json")
 
   if grep -q "home-assistant" "$mcp_src"; then
@@ -286,7 +281,7 @@ deploy_configs() {
 
   # --- Helper: merge VS Code extension settings into settings.json ---
   _merge_vscode_extension() {
-    local prefix="$1"    # e.g. "cline" or "zoo-code"
+    local prefix="$1"    # e.g. "kilocode" or "zoo-code"
     local src_file="$2"  # path to settings.jsonc snippet
     local vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
 
@@ -356,9 +351,6 @@ PYEOF
     rm -f "$_py_script"
   fi
 
-  # --- Cline ---
-  _merge_vscode_extension "cline" "${_profdir}/cline/settings.jsonc"
-
   mkdir -p "$HOME/.config/zed"
   copy_file "${_profdir}/zed/settings.json" "$HOME/.config/zed/settings.json"
   _validate_config_models "$HOME/.config/zed/settings.json" "Zed"
@@ -405,24 +397,15 @@ PYEOF
   IDE_CHOICE="${IDE_CHOICE:-1}"
 
   if [[ "$IDE_CHOICE" == "2" || "$IDE_CHOICE" == "3" ]]; then
-    [ -L "$HOME/.codeium" ] && rm "$HOME/.codeium"
-    mkdir -p "$HOME/.codeium"
-    copy_file "${_profdir}/windsurf/codeium-config.json" "$HOME/.codeium/config.json"
-
-    # Deploy to both Devin Desktop and legacy Windsurf paths
-    # (Devin Desktop reads old paths during transition, writes to new paths)
+    # Deploy Devin Desktop config
     [ -L "$HOME/.config/Devin" ] && rm "$HOME/.config/Devin"
     mkdir -p "$HOME/.config/Devin"
-    copy_file "${_profdir}/windsurf/argv.json" "$HOME/.config/Devin/argv.json"
-
-    [ -L "$HOME/.windsurf" ] && rm "$HOME/.windsurf"
-    mkdir -p "$HOME/.windsurf"
-    copy_file "${_profdir}/windsurf/argv.json" "$HOME/.windsurf/argv.json"
+    copy_file "${_profdir}/devin/argv.json" "$HOME/.config/Devin/argv.json"
 
     [ -L "$HOME/.devin" ] && rm "$HOME/.devin"
     mkdir -p "$HOME/.devin"
 
-    log_status "Devin Desktop config deployed (legacy Windsurf paths also written)."
+    log_status "Devin Desktop config deployed."
   fi
 
   if [[ "$IDE_CHOICE" == "1" || "$IDE_CHOICE" == "3" ]]; then
@@ -594,7 +577,6 @@ backup_existing_configs() {
   backup_hermes
   backup_picoclaw
   backup_zeroclaw
-  backup_zoocode
   backup_pi
   backup_pi_studio
   log_status "All existing configurations backed up successfully"
@@ -620,7 +602,6 @@ restore_configs() {
   restore_hermes
   restore_picoclaw
   restore_zeroclaw
-  restore_zoocode
   restore_pi
   restore_pi_studio
   log_status "All configurations restored successfully"
@@ -630,10 +611,8 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude_code verify_cline_cli verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_copilot verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_zoocode verify_pi verify_pi_studio; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_cli verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_pi verify_pi_studio; do
     local label="${check#verify_}"
-    [[ "$label" == "claude_code" ]] && label="claude"
-    [[ "$label" == "cline_cli" ]] && label="cline"
     [[ "$label" == "pi_studio" ]] && label="pi-studio"
     if $check; then
       verification_results="$verification_results ✓ $label - OK\n"
@@ -657,9 +636,9 @@ verify_installations() {
 
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui"
-  ["terminal-agents"]="claude cline opencode crush aider codex gemini grok llm fabric aichat goose plandex pi openclaw ironclaw hermes picoclaw zeroclaw"
-  ["vscode-extensions"]="continue copilot kilocode zoocode"
-  ["ides"]="windsurf cursor zed"
+  ["terminal-agents"]="claude opencode crush aider codex gemini grok llm fabric aichat goose plandex pi openclaw ironclaw hermes picoclaw zeroclaw"
+  ["vscode-extensions"]="continue copilot kilocode"
+  ["ides"]="devin cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
   ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
 )
@@ -670,7 +649,6 @@ declare -A GROUP_SETUP_FUNCS=(
   ["openrouter"]="setup_openrouter"
   ["openwebui"]="setup_openwebui"
   ["claude"]="setup_claude"
-  ["cline"]="setup_cline"
   ["opencode"]="setup_opencode"
   ["crush"]="setup_crush"
   ["aider"]="setup_aider"
@@ -680,7 +658,7 @@ declare -A GROUP_SETUP_FUNCS=(
   ["continue"]="setup_continue"
   ["copilot"]="setup_github_copilot"
   ["kilocode"]="setup_kilocode"
-  ["windsurf"]="setup_windsurf"
+  ["devin"]="setup_devin"
   ["cursor"]="setup_cursor"
   ["zed"]="setup_zed"
   ["anythingllm"]="setup_anythingllm"
@@ -696,7 +674,6 @@ declare -A GROUP_SETUP_FUNCS=(
   ["hermes"]="setup_hermes"
   ["picoclaw"]="setup_picoclaw"
   ["zeroclaw"]="setup_zeroclaw"
-  ["zoocode"]="setup_zoocode"
   ["pi"]="setup_pi"
   ["pi-studio"]="setup_pi_studio"
 )
@@ -706,8 +683,7 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["ollama"]="verify_ollama"
   ["openrouter"]="verify_openrouter"
   ["openwebui"]="verify_openwebui"
-  ["claude"]="verify_claude_code"
-  ["cline"]="verify_cline_cli"
+  ["claude"]="verify_claude"
   ["opencode"]="verify_opencode"
   ["crush"]="verify_crush"
   ["aider"]="verify_aider"
@@ -715,9 +691,8 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["gemini"]="verify_gemini"
   ["grok"]="verify_grok"
   ["continue"]="verify_continue"
-  ["copilot"]="verify_github_copilot"
+  ["copilot"]="verify_github_cli"
   ["kilocode"]="verify_kilocode"
-  ["windsurf"]="verify_windsurf"
   ["cursor"]="verify_cursor"
   ["zed"]="verify_zed"
   ["anythingllm"]="verify_anythingllm"
@@ -733,7 +708,6 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["hermes"]="verify_hermes"
   ["picoclaw"]="verify_picoclaw"
   ["zeroclaw"]="verify_zeroclaw"
-  ["zoocode"]="verify_zoocode"
   ["pi"]="verify_pi"
   ["pi-studio"]="verify_pi_studio"
 )
@@ -742,15 +716,14 @@ declare -A GROUP_VERIFY_FUNCS=(
 declare -A DISPLAY_NAMES=(
   ["infrastructure"]="Infrastructure (Ollama + OpenRouter + OpenWebUI)"
   ["terminal-agents"]="Terminal Agents (Claude, OpenCode, Crush, etc.)"
-  ["vscode-extensions"]="VS Code Extensions (Cline, Continue, Copilot, etc.)"
-  ["ides"]="IDEs (Windsurf, Cursor, Zed)"
+  ["vscode-extensions"]="VS Code Extensions (Continue, Copilot, Kilocode, etc.)"
+  ["ides"]="IDEs (Devin Desktop, Cursor, Zed)"
   ["self-hosted"]="Self-Hosted (AnythingLLM, Tabby, OpenHands)"
   ["all"]="All Tools"
   ["ollama"]="Ollama"
   ["openrouter"]="OpenRouter"
   ["openwebui"]="OpenWebUI"
   ["claude"]="Claude Code"
-  ["cline"]="Cline"
   ["opencode"]="OpenCode"
   ["crush"]="Crush"
   ["aider"]="Aider"
@@ -760,7 +733,7 @@ declare -A DISPLAY_NAMES=(
   ["continue"]="Continue"
   ["copilot"]="GitHub Copilot"
   ["kilocode"]="Kilo Code"
-  ["windsurf"]="Devin Desktop"
+  ["devin"]="Devin Desktop"
   ["cursor"]="Cursor"
   ["zed"]="Zed"
   ["anythingllm"]="AnythingLLM"
@@ -776,7 +749,6 @@ declare -A DISPLAY_NAMES=(
   ["hermes"]="Hermes"
   ["picoclaw"]="PicoClaw"
   ["zeroclaw"]="ZeroClaw"
-  ["zoocode"]="Zoo Code"
   ["pi"]="Pi"
   ["pi-studio"]="Pi Studio"
 )
@@ -1465,15 +1437,13 @@ wizard_step_tools() {
       "agent:zeroclaw:Fast Rust AI assistant"
       "agent:pi:Pi coding agent CLI"
       "editor:continue:Continue VS Code ext"
-      "editor:cline:Cline VS Code ext"
       "editor:copilot:GitHub Copilot"
       "editor:kilocode:Kilo Code ext"
-      "editor:windsurf:Devin Desktop IDE (formerly Windsurf)"
+      "editor:devin:Devin Desktop IDE"
       "editor:cursor:Cursor IDE"
       "editor:zed:Zed editor"
       "editor:sublime:Sublime Text"
       "misc:anythingllm:AnythingLLM desktop"
-      "misc:zoocode:Zoo Code ext"
       "misc:pi-studio:Pi Studio desktop GUI for Pi coding agent"
     )
 
@@ -1621,7 +1591,6 @@ _run_one() {
   case "$action:$tool" in
   setup:aider) setup_aider ;;
   setup:claude) setup_claude ;;
-  setup:cline) setup_cline ;;
   setup:codex) setup_codex ;;
   setup:continue) setup_continue ;;
   setup:crush) setup_crush ;;
@@ -1655,14 +1624,12 @@ _run_one() {
   setup:zeroclaw) install_tool "zeroclaw" ;;
   setup:pi) setup_pi ;;
   setup:pi-studio) setup_pi_studio ;;
-  setup:zoocode) setup_zoocode ;;
 
   setup:tabby) setup_tabby ;;
   setup:copilot) setup_github_copilot ;;
   setup:sublime) setup_sublime ;;
   setup:vscode) setup_vscode ;;
   setup:devin) setup_devin ;;
-  setup:windsurf) setup_windsurf ;;
   setup:zed) setup_zed ;;
   restore:claude) restore_claude ;;
   restore:continue) restore_continue ;;
@@ -1684,7 +1651,6 @@ _run_one() {
   restore:zeroclaw) restore_zeroclaw ;;
   restore:pi) restore_pi ;;
   restore:pi-studio) restore_pi_studio ;;
-  restore:zoocode) restore_zoocode ;;
   restore:*) log_info "No restore available for $tool — skipping" ;;
   backup:claude) backup_claude ;;
   backup:continue) backup_continue ;;
@@ -1706,7 +1672,6 @@ _run_one() {
   backup:zeroclaw) backup_zeroclaw ;;
   backup:pi) backup_pi ;;
   backup:pi-studio) backup_pi_studio ;;
-  backup:zoocode) backup_zoocode ;;
   backup:*) log_info "No backup available for $tool — skipping" ;;
   esac
 }
@@ -1736,7 +1701,6 @@ interactive_menu() {
 
 
     "claude|tools|Install CLI + deploy config"
-    "cline|tools|Install VS Code extension + CLI"
     "codex|tools|Install Codex CLI"
     "crush|tools|Install + deploy crush config"
     "grok|tools|Install + deploy grok config"
@@ -1763,12 +1727,11 @@ interactive_menu() {
     "kilocode|editors|Install Kilo Code VS Code extension"
     "sublime|editors|Install Sublime Text"
     "zed|editors|Install Zed editor + deploy config"
-    "vscode|editors|Install VS Code + Continue + Cline extensions"
-    "windsurf|editors|Install Devin Desktop + deploy argv.json (formerly Windsurf)"
+    "vscode|editors|Install VS Code + Continue extensions"
+    "devin|editors|Install Devin Desktop + deploy argv.json"
 
     "continue|extensions|Deploy Continue.dev config"
     "copilot|extensions|Install gh-copilot extension + VS Code extensions"
-    "zoocode|extensions|Deploy Zoo Code VS Code config merge"
   )
 
   local max_name=0 max_group=0
@@ -1874,15 +1837,11 @@ main() {
   claude)
     setup_claude
     ;;
-  cline)
-    setup_cline
-    ;;
   setup)
     setup_continue
     setup_opencode
     setup_crush
     setup_claude
-    setup_cline
     setup_github_copilot
     log_status "All tool configurations applied"
     ;;
@@ -1891,9 +1850,6 @@ main() {
     ;;
   devin)
     setup_devin
-    ;;
-  windsurf)
-    setup_windsurf
     ;;
   ollama)
     setup_ollama
@@ -1994,7 +1950,7 @@ main() {
     run_ai_setup_wizard
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|devin|windsurf|continue|opencode|crush|claude|cline|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|devin|continue|opencode|crush|claude|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -2006,9 +1962,9 @@ main() {
     echo ""
     echo "=== GROUPS (recommended) ==="
     echo "  install:infrastructure   - Ollama + OpenRouter + OpenWebUI"
-    echo "  install:terminal-agents    - Claude Code, Cline, OpenCode, Crush, Aider, etc."
+    echo "  install:terminal-agents    - Claude Code, OpenCode, Crush, Aider, etc."
     echo "  install:vscode-extensions  - Continue, Copilot, Kilocode"
-    echo "  install:ides               - Windsurf, Cursor, Zed"
+    echo "  install:ides               - Devin Desktop, Cursor, Zed"
     echo "  install:self-hosted        - AnythingLLM, Tabby, OpenHands"
     echo "  install:all                - Everything"
     echo "  install:infra,terminal    - Multiple groups (comma-separated)"
@@ -2019,7 +1975,6 @@ main() {
 
     echo "  openwebui   - Setup OpenWebUI (Docker)"
     echo "  claude      - Install Claude Code CLI"
-    echo "  cline       - Install Cline VS Code extension"
     echo "  opencode    - Setup OpenCode"
     echo "  llm         - Setup LLM CLI"
     echo "  fabric      - Setup Fabric"
@@ -2028,8 +1983,7 @@ main() {
     echo "  pi          - Install Pi coding agent CLI"
     echo "  pi-studio   - Install Pi Studio desktop GUI"
     echo "  plandex     - Setup Plandex"
-    echo "  devin       - Install Devin Desktop IDE (formerly Windsurf)"
-    echo "  windsurf    - Backward compat alias for 'devin'"
+    echo "  devin       - Install Devin Desktop IDE"
     echo "  cursor      - Install Cursor IDE"
     echo "  zed         - Install Zed editor"
     echo "  anythingllm - Install AnythingLLM"

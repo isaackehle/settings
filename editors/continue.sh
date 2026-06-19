@@ -56,6 +56,31 @@ verify_continue() {
     return $installed
 }
 
+backup_continue() {
+    log_info "Backing up Continue config..."
+    local config_dir="$HOME/.continue"
+    if [ -d "$config_dir" ]; then
+        local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}/continue-$(date +%Y%m%d-%H%M%S)"
+        mkdir -p "$backup_dir"
+        cp -R "$config_dir" "$backup_dir/"
+        log_status "Continue config backed up to $backup_dir"
+    else
+        log_info "No Continue config to backup"
+    fi
+}
+
+restore_continue() {
+    log_info "Restoring Continue config..."
+    local backup_dir="${BACKUP_DIR:-$HOME/.config-backups}"
+    local latest_backup=$(ls -dt "$backup_dir"/continue-* 2>/dev/null | head -1)
+    if [ -n "$latest_backup" ] && [ -d "$latest_backup/.continue" ]; then
+        cp -R "$latest_backup/.continue" "$HOME/"
+        log_status "Continue config restored from $latest_backup"
+    else
+        log_warning "No Continue backup found"
+    fi
+}
+
 setup_continue() {
     print_info "Setting up Continue..."
 
