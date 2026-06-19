@@ -20,7 +20,7 @@ PROFILE_DIR="${AI_BASE}/profiles/${MACHINE_PROFILE}"
 MODEL_STORE="${HOME}/Models"
 HF_CACHE_DIR="${HOME}/.cache/huggingface"
 HF_SRC_DIR="${MODEL_STORE}/hf"
-GGUF_DIR="/usr/local/lib/llama-models"
+GGUF_DIR="${MODEL_STORE}/llama-models"
 MODEL_LOG_DIR="${MODEL_STORE}/logs"
 MODEL_TMP_DIR="${MODEL_STORE}/tmp"
 
