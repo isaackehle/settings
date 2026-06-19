@@ -7,11 +7,15 @@
   "gitlens.ai.commitMessage.instructions": "Generate semantic commit messages that describe the intent and impact of changes. Follow Conventional Commits format (type(scope): description). Read and incorporate context from .AGENTS, .cursorrules, and CLAUDE.md files when available.",
   "gitlens.ai.context.files": [
     ".AGENTS",
-    ".cursorrules", 
+    ".cursorrules",
     "CLAUDE.md",
     "AGENTS.md",
     "CONVENTIONS.md",
     ".commitrules"
   ],
-  "gitlens.ai.commitMessage.prompt": "You are a commit message generator. Analyze the git diff and generate a semantic commit message that:\n1. Uses Conventional Commits format: type(scope): description\n2. Describes WHY the change was made, not just WHAT changed\n3. Incorporates context from project documentation (.AGENTS, .cursorrules, etc.)\n4. Keeps the subject line under 72 characters\n5. Uses imperative mood (\"add\" not \"added\")\n6. Adds a body for non-trivial changes explaining the motivation\n\nAvailable types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  "gitlens.ai.commitMessage.prompt": "You are a commit message generator. Analyze the git diff and generate a semantic commit message that:\n1. Uses Conventional Commits format: type(scope): description\n2. Describes WHY the change was made, not just WHAT changed\n3. Incorporates context from project documentation (.AGENTS, .cursorrules, etc.)\n4. Keeps the subject line under 72 characters\n5. Uses imperative mood (\"add\" not \"added\")\n6. Adds a body for non-trivial changes explaining the motivation\n\nAvailable types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert",
+  "gitlens.ai.generateCommitMessage.customInstructions": "Always read any AGENTS.md, .AGENTS, or .github/copilot-instructions.md files in the repository root before generating a commit message. Follow Conventional Commits format: <type>(<scope>): <description>. Types: feat, fix, docs, style, refactor, test, chore, build, ci, perf, revert. Keep subject line under 72 chars. Use imperative mood (\"add\" not \"added\"). Never add Co-Authored-By trailers.",
+  "gitlens.ai.generateCommits.customInstructions": "Always read any AGENTS.md, .AGENTS, or .github/copilot-instructions.md files in the repository root before generating commit messages. Follow Conventional Commits format. Keep subject lines under 72 chars. Use imperative mood. Never add Co-Authored-By trailers.",
+  "gitlens.ai.generateStashMessage.customInstructions": "Always read any AGENTS.md, .AGENTS, or .github/copilot-instructions.md files in the repository root. Follow Conventional Commits format for stash messages.",
+  "gitlens.ai.generateCreatePullRequest.customInstructions": "Always read any AGENTS.md, .AGENTS, or .github/copilot-instructions.md files in the repository root before generating PR title and description. Follow Conventional Commits format for the title."
 }
