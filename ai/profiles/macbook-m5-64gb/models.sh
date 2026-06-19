@@ -55,7 +55,7 @@ declare -A LOCAL_MODEL_NAMES=(
     ["architect"]="qwen3.6-35b:opus4.7-128k"
     ["autocomplete"]="qwen2.5-coder:1.5b"
     ["autocomplete_heavy"]="qwen2.5-coder:7b"
-    ["coder"]="qwen3-coder-30b-a3b:q6"
+    ["coder"]="qwen3-coder-30b-a3b:q4"
     ["coder_alt"]="laguna-xs.2"
     ["embedding"]="nomic-embed-text"
     ["fast"]="qwen3:4b"
@@ -137,7 +137,7 @@ unset _line _alias _rest _family _quant _local_fn _remote_fn _hf_source _ctx _pa
 
 # Optional additional GGUF variants to keep installed concurrently per alias.
 # Value format: quant|filename|source, quant|filename|source
-# Example: ["qwen3:4b"]="Q4_K_M|qwen3__4b__q5.gguf|hf.co/..."
+# Example: ["qwen3:4b"]="Q4_K_M|qwen3__4b__q4_k_m.gguf|hf.co/..."
 declare -A GGUF_VARIANTS=()
 
 # ==============================================
@@ -187,20 +187,20 @@ OLLAMA_CLOUD_MODELS=(
 
 # --- OpenCode agents (→ opencode.jsonc) ---
 declare -A OPENCODE_AGENTS=(
-    [code]="qwen3-coder-30b-a3b:q6"
-    [local]="qwen3-coder-30b-a3b:q6"
+    [code]="qwen3-coder-30b-a3b:q4"
+    [local]="qwen3-coder-30b-a3b:q4"
     [think]="deepseek-r1-tools:32b"
     [write]="qwen3.5-27b:q4"
     [research]="qwen3.5-27b:q4"
     [plan]="qwen3:4b"
-    [build]="qwen3-coder-30b-a3b:q6"
+    [build]="qwen3-coder-30b-a3b:q4"
     [summary]="qwen3.5:4b"
     [title]="qwen3.5:4b"
 )
 
 # --- Continue (→ config.yaml) ---
 declare -A CONTINUE_ROLES=(
-    [chat]="qwen3-coder-30b-a3b:q6"
+    [chat]="qwen3-coder-30b-a3b:q4"
     [chat_alt]="qwen3.5-27b:q4"
     [apply]="codestral:22b"
     [autocomplete]="qwen2.5-coder:1.5b"
@@ -210,18 +210,18 @@ declare -A CONTINUE_ROLES=(
 
 # --- Claude Code (→ settings.json + ollama/config.json) ---
 declare -A CLAUDE_CODE=(
-    [primary]="qwen3-coder-30b-a3b:q6"
+    [primary]="qwen3-coder-30b-a3b:q4"
     [fast]="qwen3:4b"
     [reasoning]="deepseek-r1-tools:32b"
     [research]="qwen3.5-27b:q4"
-    [coding]="qwen3-coder-30b-a3b:q6"
+    [coding]="qwen3-coder-30b-a3b:q4"
     [opus]="qwen3.6-35b:opus4.7-128k"
 )
 
 # --- Aider (CLI) ---
 declare -A AIDER_MODELS=(
     [editor]="codestral:22b"
-    [model]="qwen3-coder-30b-a3b:q6"
+    [model]="qwen3-coder-30b-a3b:q4"
     [weak]="qwen3:4b"
 )
 
@@ -229,17 +229,17 @@ declare -A AIDER_MODELS=(
 # --- Cursor ---
 declare -A CURSOR_MODELS=(
     [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q6"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Kilo Code (VS Code) ---
 declare -A KILOCODE_MODELS=(
     [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q6"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Zed ---
 declare -A ZED_MODELS=(
-    [model]="qwen3-coder-30b-a3b:q6"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 

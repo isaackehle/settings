@@ -5,4 +5,4 @@ MEMORY=48
 MEMORY_RANGE_MIN=40
 MEMORY_RANGE_MAX=56
 COMPUTER_TYPES=MacBook*,Mac1*,Mac14*
-DESCRIPTION=Q5 stack + 30B coder + 8B reasoning
+DESCRIPTION=Q4 stack + 30B coder + 8B reasoning

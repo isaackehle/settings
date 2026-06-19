@@ -132,7 +132,7 @@ OLLAMA_CLOUD_MODELS=(
 # ALTERNATIVE QUANTS — on-demand only
 # ==============================================
 declare -A MODEL_QUANTS=(
-    ["qwen2.5-coder"]="qwen2.5-coder:7b:q8_0|qwen2.5-coder:7b:q8|8 GB (solo coding)"
+    ["qwen2.5-coder"]="qwen2.5-coder:7b:q4_k_m|qwen2.5-coder:7b:q4|5 GB (solo coding)"
 )
 
 # ==============================================

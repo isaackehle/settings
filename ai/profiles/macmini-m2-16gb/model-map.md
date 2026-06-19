@@ -98,17 +98,17 @@ flowchart LR
 Tools across the rows, models across the columns. Cells show the role(s)
 each model plays in each tool. `-` = not assigned.
 
-| Tool           | deepseek-r1:7b | qwen3:4b | qwen2.5-coder:1.5b |             qwen2.5-coder:7b              | nomic-embed-text |
-| -------------- | :------------: | :------: | :----------------: | :---------------------------------------: | :--------------: |
-| **Cline**      |       —        |    —     |         —          |                     —                     |        —         |
-| **ZooCode**    |       —        |    —     |         —          |                     —                     |        —         |
-| **KiloCode**   |       —        |    —     |         —          |                     —                     |        —         |
-| **Aider**      |       —        |   weak   |         —          |               editor, model               |        —         |
-| **Zed**        |       —        |    —     |         —          |                     —                     |        —         |
-| **Cursor**     |       —        |    —     |         —          |                     —                     |        —         |
-| **OpenCode**   |     think      |   plan   |         —          |           code, write, research           |        —         |
-| **Continue**   |       —        |    —     |    autocomplete    | chat_alt, apply, chat, autocomplete_heavy |      embed       |
-| **ClaudeCode** |   reasoning    |   fast   |         —          |      coding, research, opus, primary      |        —         |
+| Tool           |   qwen3.5:4b   | deepseek-r1:7b | qwen3:4b | qwen2.5-coder:1.5b |             qwen2.5-coder:7b              | nomic-embed-text | qwen3:14b |
+| -------------- | :------------: | :------------: | :------: | :----------------: | :---------------------------------------: | :--------------: | :-------: |
+| **Cline**      |       —        |       —        |    —     |         —          |                     —                     |        —         |     —     |
+| **ZooCode**    |       —        |       —        |    —     |         —          |                     —                     |        —         |     —     |
+| **KiloCode**   |       —        |       —        |    —     |         —          |                     —                     |        —         |     —     |
+| **Aider**      |       —        |       —        |   weak   |         —          |               editor, model               |        —         |     —     |
+| **Zed**        |       —        |       —        |    —     |         —          |                     —                     |        —         |     —     |
+| **Cursor**     |       —        |       —        |    —     |         —          |                     —                     |        —         |     —     |
+| **OpenCode**   | title, summary |     think      |   plan   |         —          |       local, code, research, build        |        —         |   write   |
+| **Continue**   |       —        |       —        |    —     |    autocomplete    | chat_alt, apply, chat, autocomplete_heavy |      embed       |     —     |
+| **ClaudeCode** |       —        |   reasoning    |   fast   |         —          |      coding, research, opus, primary      |        —         |     —     |
 
 ---
 
@@ -116,6 +116,7 @@ each model plays in each tool. `-` = not assigned.
 
 | Category         |   # | Models                                                   |
 | ---------------- | --: | -------------------------------------------------------- |
+| **Writing**      |   1 | `qwen3.5:4b` (2.5 GB)                                    |
 | **Reasoning**    |   1 | `deepseek-r1:7b` (5 GB)                                  |
 | **Planning**     |   1 | `qwen3:4b` (2.5 GB)                                      |
 | **Autocomplete** |   2 | `qwen2.5-coder:1.5b` (986 MB), `qwen2.5-coder:7b` (5 GB) |

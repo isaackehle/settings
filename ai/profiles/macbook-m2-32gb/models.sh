@@ -9,9 +9,9 @@
 # with PARAMETER num_ctx.
 #
 # Concurrency budget: ~26 GB usable (32 GB - 6 GB macOS overhead).
-#   Resident:     qwen3-coder-30b-a3b:q5 (21 GB) + qwen3:4b (5 GB) + 1.5B (1 GB) + embed (0.3 GB) = 27.3 GB borderline
+#   Resident:     qwen3-coder-30b-a3b:q4 (21 GB) + qwen3:4b (5 GB) + 1.5B (1 GB) + embed (0.3 GB) = 27.3 GB borderline
 #   Solo mode:    coder-30B alone fits comfortably
-#   Writing:      Unload coder-30B, load 27B-q5 (19 GB)
+#   Writing:      Unload coder-30B, load 27B-q4 (17 GB)
 #   Codestral:    22B (14 GB) on-demand solo
 
 # >>> SHARED GGUF-FIRST DEFINITIONS >>>
@@ -36,7 +36,7 @@
 # LLAMA.CPP ROLE MAP — minimal runtime contract
 # ==============================================
 declare -A LOCAL_MODEL_NAMES=(
-    ["coder"]="qwen3-coder-30b-a3b:q5"
+    ["coder"]="qwen3-coder-30b-a3b:q4"
     ["embedding"]="nomic-embed-text"
     ["fast"]="qwen3:4b"
     ["fast_alt"]="qwen3.5:4b"
@@ -155,11 +155,11 @@ OLLAMA_CLOUD_MODELS=(
 
 # --- OpenCode agents ---
 declare -A OPENCODE_AGENTS=(
-    [build]="qwen3-coder-30b-a3b:q5"         # build, test, CI
-    [code]="qwen3-coder-30b-a3b:q5"          # primary coding agent
-    [local]="qwen3-coder-30b-a3b:q5"         # fully local (no internet)
+    [build]="qwen3-coder-30b-a3b:q4"         # build, test, CI
+    [code]="qwen3-coder-30b-a3b:q4"          # primary coding agent
+    [local]="qwen3-coder-30b-a3b:q4"         # fully local (no internet)
     [plan]="qwen3:4b"                        # next steps, task breakdown, routing
-    [research]="qwen3-coder-30b-a3b:q5"      # codebase/web investigation
+    [research]="qwen3-coder-30b-a3b:q4"      # codebase/web investigation
     [summary]="qwen3.5:4b"                   # commit messages, summaries
     [think]="deepseek-r1:7b"                 # tradeoff analysis, debugging strategy
     [title]="qwen3.5:4b"                     # PR/MR titles
@@ -171,44 +171,44 @@ declare -A CONTINUE_ROLES=(
     [apply]="codestral:22b"                   # applying suggested code to file
     [autocomplete]="qwen2.5-coder:1.5b"        # inline completions (default)
     [autocomplete_heavy]="qwen2.5-coder:7b"   # switch manually for complex files
-    [chat]="qwen3-coder-30b-a3b:q5"          # chat panel + inline edit (Ctrl+I)
+    [chat]="qwen3-coder-30b-a3b:q4"          # chat panel + inline edit (Ctrl+I)
     [chat_alt]="qwen3.5-27b:q4"               # manual model switch in chat
     [embed]="nomic-embed-text"               # @codebase semantic search
 )
 
 # --- Claude Code ---
 declare -A CLAUDE_CODE=(
-    [coding]="qwen3-coder-30b-a3b:q5"
+    [coding]="qwen3-coder-30b-a3b:q4"
     [fast]="qwen3:4b"
     [opus]="qwen3.5-27b:q4"
-    [primary]="qwen3-coder-30b-a3b:q5"
+    [primary]="qwen3-coder-30b-a3b:q4"
     [reasoning]="deepseek-r1:7b"
-    [research]="qwen3-coder-30b-a3b:q5"
+    [research]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Aider (CLI) ---
 declare -A AIDER_MODELS=(
     [editor]="codestral:22b"
-    [model]="qwen3-coder-30b-a3b:q5"
+    [model]="qwen3-coder-30b-a3b:q4"
     [weak]="qwen3:4b"
 )
 
 # --- Cline (VS Code) ---
 declare -A CLINE_MODELS=(
     [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q5"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Cursor ---
 declare -A CURSOR_MODELS=(
     [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q5"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Kilo Code (VS Code) ---
 declare -A KILOCODE_MODELS=(
     [cloud]="kimi-k2.6"
-    [model]="qwen3-coder-30b-a3b:q5"
+    [model]="qwen3-coder-30b-a3b:q4"
 )
 
 # --- Zed ---
@@ -218,9 +218,9 @@ declare -A ZED_MODELS=(
 
 # --- Zoo Code (VS Code extension) ---
 declare -A ZOOCODE_MODELS=(
-    [architect]="qwen3-coder-30b-a3b:q5"
+    [architect]="qwen3-coder-30b-a3b:q4"
     [cloud]="kimi-k2.6"
-    [code]="qwen3-coder-30b-a3b:q5"
+    [code]="qwen3-coder-30b-a3b:q4"
     [debug]="deepseek-r1:7b"
-    [model]="qwen3-coder-30b-a3b:q5"
+    [model]="qwen3-coder-30b-a3b:q4"
 )

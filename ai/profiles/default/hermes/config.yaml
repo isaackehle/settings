@@ -3,7 +3,7 @@
 # Inference backend: llama-server router on port 10000.
 
 model:
-  default: qwen3.6-35b-opus4.7-128k
+  default: qwen3.6-35b-opus4.7-128k-q4
   provider: llama
   base_url: http://localhost:10000/v1
   ollama_num_ctx: 131072
@@ -19,6 +19,21 @@ providers:
 fallback_providers:
   - openrouter
 
+agent:
+  reasoning_effort: low
+
+display:
+  show_reasoning: false
+  busy_input_mode: queue
+  final_response_markdown: render
+
 fallback_model:
   provider: openrouter
-  model: anthropic/claude-sonnet-4-6:exacto
+  model: ~anthropic/claude-sonnet-latest
+  models:
+  - ~anthropic/claude-sonnet-latest
+  - ~anthropic/claude-haiku-latest
+  - moonshotai/kimi-k2.6
+  - qwen/qwen3.7-plus
+  - minimax/minimax-m3
+  - deepseek/deepseek-v4-flash
