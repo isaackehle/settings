@@ -199,19 +199,58 @@ model, escalate to Opus/o3 only when stuck.
 
 ### Hermes Fallback
 
+After setting OpenRouter guardrails (blocked Opus 4.6/4.7/4.8 and GPT-5.5/5.4 Pro
+due to >$10/M cost), Hermes uses a multi-tier fallback chain via OpenRouter's
+native `models` array. The primary tier tries free models first, then falls
+through ultra-cheap paid, then fast Claude — all without leaving the free tier
+for routine work.
+
 ```yaml
 # ~/.hermes/config.yaml
 model:
-  default: qwen2.5:32b-96k          # local primary
-  provider: ollama
-fallback_providers:
-  - name: openrouter
-    default_model: anthropic/claude-sonnet-4-6:exacto
-    cache: true
+  default: poolside/laguna-m.1:free
+  provider: openrouter
+  models:
+  - poolside/laguna-m.1:free            # Free: Poolside flagship coding agent
+  - poolside/laguna-xs.2:free           # Free: Poolside efficient coding agent
+  - nex-agi/nex-n2-pro:free             # Free: 397B MoE, agentic
+  - nvidia/nemotron-3-ultra-550b-a55b:free  # Free: frontier-reasoning, 1M ctx
+  - nvidia/nemotron-3-super-120b-a12b:free  # Free: 120B, 1M ctx
+  - openai/gpt-oss-120b:free            # Free: OpenAI open-weight 120B
+  - google/gemma-4-31b-it:free          # Free: 31B with tool calling
+  - deepseek/deepseek-v4-flash          # $0.09/$0.18M: ultra-cheap, 1M ctx
+  - x-ai/grok-4.3                       # $1.25/$2.50M: 1M ctx backup
+  - ~anthropic/claude-haiku-latest      # $1/$5M: fast Claude fallback
+
+fallback_model:
+  provider: openrouter
+  model: ~anthropic/claude-sonnet-latest
+  models:
+  - ~anthropic/claude-sonnet-latest     # $3/$15M: primary paid fallback
+  - ~anthropic/claude-haiku-latest      # $1/$5M: fast backup
+  - moonshotai/kimi-k2.6                # $0.68/$3.41M: strong coder
+  - qwen/qwen3.7-plus                   # $0.32/$1.28M: 1M ctx, good value
+  - minimax/minimax-m3                  # $0.30/$1.20M: 1M ctx, agentic
+  - deepseek/deepseek-v4-flash          # $0.09/$0.18M: cheap last resort
 ```
 
-The `:exacto` variant improves tool-calling reliability.
-Prompt caching reduces repeated context costs by 50–70%.
+**How the chain works:**
+1. OpenRouter tries each `model.models` entry in order (free → cheap → Haiku)
+2. If ALL primary-chain models fail, `fallback_model.models` kicks in (Sonnet → paid alternatives)
+3. The `~` prefix on `~anthropic/claude-sonnet-latest` points to the "latest" alias, auto-resolving to the current stable Sonnet
+4. Discovery probing uses the fallback chain — models still blocked by guardrails (Opus, GPT-5.5) are skipped automatically without crashing
+
+**Failover scenarios:**
+
+| Scenario | What hits OpenRouter | Typical cost/session |
+|---|---|---|
+| Free models available | First free model in chain | $0 |
+| Free models rate-limited | Next free model → cheap paid | $0.01–0.05 |
+| All free/cheap down | Haiku → Sonnet | $0.10–0.50 |
+| Heavy agentic session | Falls through to Sonnet | $0.50–2.00 |
+
+The previous `:exacto` variant is no longer used — the multi-model chain provides
+better resilience than a single exacto-routed model.
 
 ### OpenCode Provider Config
 
