@@ -100,3 +100,81 @@ git remote set-url origin git@github.com:isaackehle/settings.git
 ssh isaac@ds9.local
 # then follow steps 1–5 above inside that session
 ```
+
+---
+
+## Copying SSH keys between fleet machines
+
+So you can SSH from one machine to another without a password. Run these from **discovery**.
+
+### First-time (password auth must still work)
+
+```bash
+# Copy discovery's public key to each machine
+ssh-copy-id isaac@ds9.local
+ssh-copy-id isaac@enterprise.local
+ssh-copy-id isaac@dx1.local
+```
+
+This appends `~/.ssh/id_ed25519.pub` to `~/.ssh/authorized_keys` on the target.
+You'll be prompted for the target machine's login password once.
+
+### Test passwordless access
+
+```bash
+ssh isaac@ds9.local "echo ok"
+ssh isaac@enterprise.local "echo ok"
+```
+
+### Add SSH config aliases (optional but handy)
+
+Append to `~/.ssh/config` on discovery:
+
+```
+Host ds9
+  HostName ds9.local
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
+
+Host enterprise
+  HostName enterprise.local
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
+```
+
+Then you can just `ssh ds9` or `ssh enterprise`.
+
+### Over Tailscale (when not on the same LAN)
+
+```bash
+# Use Tailscale IPs instead of .local hostnames
+ssh-copy-id isaac@100.64.0.x    # DS9's Tailscale IP
+ssh isaac@100.64.0.x "echo ok"
+```
+
+Or after adding Tailscale hostnames to `~/.ssh/config`:
+
+```
+Host ds9-ts
+  HostName 100.64.0.x   # fill in from: tailscale status
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+```
+
+### Enable SSH on macOS targets (if not already on)
+
+On each target machine (GUI or remote):
+
+```bash
+# Check current state
+sudo systemsetup -getremotelogin
+
+# Enable
+sudo systemsetup -setremotelogin on
+
+# Or via System Settings → General → Sharing → Remote Login
+```
