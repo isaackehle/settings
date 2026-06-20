@@ -1,4 +1,4 @@
-# GitHub SSH Key Setup
+# SSH Setup
 
 Do this on each machine that needs to push to `isaackehle/homelab` or `isaackehle/settings`.
 Each machine gets its own key — don't copy private keys between machines.
@@ -128,22 +128,30 @@ ssh isaac@enterprise.local "echo ok"
 
 ### Add SSH config aliases (optional but handy)
 
-Append to `~/.ssh/config` on discovery:
+The fleet SSH config lives at `config/ssh_config` in the homelab repo — install it instead of writing this by hand:
+
+```bash
+cp ~/code/isaackehle/homelab/config/ssh_config ~/.ssh/config
+chmod 600 ~/.ssh/config
+```
+
+If you need a minimal standalone block:
 
 ```
-Host ds9
-  HostName ds9.local
+Host ds9 enterprise dx1
   User isaac
   IdentityFile ~/.ssh/id_ed25519
   AddKeysToAgent yes
   UseKeychain yes
+
+Host ds9
+  HostName ds9.local
 
 Host enterprise
   HostName enterprise.local
-  User isaac
-  IdentityFile ~/.ssh/id_ed25519
-  AddKeysToAgent yes
-  UseKeychain yes
+
+Host dx1
+  HostName dx1.local
 ```
 
 Then you can just `ssh ds9` or `ssh enterprise`.
@@ -156,14 +164,7 @@ ssh-copy-id isaac@100.64.0.x    # DS9's Tailscale IP
 ssh isaac@100.64.0.x "echo ok"
 ```
 
-Or after adding Tailscale hostnames to `~/.ssh/config`:
-
-```
-Host ds9-ts
-  HostName 100.64.0.x   # fill in from: tailscale status
-  User isaac
-  IdentityFile ~/.ssh/id_ed25519
-```
+Tailscale aliases are already in `config/ssh_config` (`ssh ds9` resolves via `%h.tail303fda.ts.net`). Install it and you're done — no manual blocks needed.
 
 ### Enable SSH on macOS targets (if not already on)
 
