@@ -1,28 +1,19 @@
 {
-  // Cursor (cursor.sh) — VS Code-compatible settings snippet
-  // MERGE INTO: ~/Library/Application Support/Cursor/User/settings.json
-  //
-  // To use Ollama directly in Cursor:
-  //   1. Open Cursor Settings (Cmd+Shift+J) → Models
-  //   2. Under "Ollama", set base URL to http://localhost:11434
-  //   3. Add custom models (click + next to model list):
-  //        deepseek-r1-tools:8b
-  //        qwen3:4b
-  //        qwen3:14b
-  //        qwen3.5-27b:q4
-  //   4. Set default model to: qwen3:14b
-  //
-  // Cloud fallback:
-  //   Use Cursor's native claude-sonnet-4-6 or set OpenRouter key
-  //   and model kimi-k2.6
+  "//": "Models reference: ~/.models",
+  "//": "Source: ~/code/isaackehle/settings/ai/profiles/macbook-m2-32gb/models.json",
+  "//": "MERGE INTO: ~/Library/Application Support/Cursor/User/settings.json",
 
   "cursor.general.enableShadowWorkspace": false,
   "cursor.chat.smoothStreaming": true,
   "cursor.cpp.disabledLanguages": [],
+  "cursor.privacy.telemetryLevel": "off",
 
-  // Privacy: disable telemetry of prompts to Cursor servers
-  "cursor.privacy.telemetryLevel": "off"
-
-  // Cursor Rules (equivalent of CLAUDE.md) — set per-project in .cursor/rules/
-  // Global rules can be set in Settings → Rules for AI
+  "//": "To use llama.cpp via Ollama-compatible API:",
+  "//": "  1. Open Cursor Settings (Cmd+Shift+J) → Models",
+  "//": "  2. Under 'Ollama', set base URL to http://localhost:10000",
+  "//": "  3. Add custom models:",
+  "//": "       qwen3.5-27b-gemini3.1-it-ds-q4_k_m (main coding model)",
+  "//": "       qwen3:4b (planning)",
+  "//": "  4. Set default model to: qwen3.5-27b-gemini3.1-it-ds-q4_k_m",
+  "//": "Cloud fallback: Use Cursor's native Claude models or OpenRouter"
 }

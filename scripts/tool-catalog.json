@@ -18,8 +18,14 @@
       "description": "Personal AI assistant with 25+ messaging channels",
       "github": "openclaw/openclaw",
       "install_methods": [
-        {"method": "npm", "command": "npm install -g openclaw@latest"},
-        {"method": "pnpm", "command": "pnpm add -g openclaw@latest"}
+        {
+          "method": "npm",
+          "command": "npm install -g openclaw@latest"
+        },
+        {
+          "method": "pnpm",
+          "command": "pnpm add -g openclaw@latest"
+        }
       ],
       "binary": "openclaw",
       "setup_command": "openclaw onboard --install-daemon",
@@ -34,7 +40,10 @@
       "description": "Fast Rust AI assistant - OpenClaw successor",
       "github": "zeroclaw-labs/zeroclaw",
       "install_methods": [
-        {"method": "curl", "command": "curl -fsSL https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/install.sh | bash"}
+        {
+          "method": "curl",
+          "command": "curl -fsSL https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/install.sh | bash"
+        }
       ],
       "binary": "zeroclaw",
       "setup_command": "zeroclaw onboard",
@@ -49,8 +58,14 @@
       "description": "Privacy-first Agent OS with 13 security layers",
       "github": "nearai/ironclaw",
       "install_methods": [
-        {"method": "brew", "command": "brew install ironclaw"},
-        {"method": "cargo", "command": "cargo install ironclaw"}
+        {
+          "method": "brew",
+          "command": "brew install ironclaw"
+        },
+        {
+          "method": "cargo",
+          "command": "cargo install ironclaw"
+        }
       ],
       "binary": "ironclaw",
       "setup_command": "ironclaw onboard",
@@ -65,7 +80,10 @@
       "description": "Self-improving AI agent from Nous Research",
       "github": "NousResearch/hermes-agent",
       "install_methods": [
-        {"method": "curl", "command": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash"}
+        {
+          "method": "curl",
+          "command": "curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash"
+        }
       ],
       "binary": "hermes",
       "setup_command": "hermes setup",
@@ -80,7 +98,10 @@
       "description": "Tiny AI for embedded/edge devices",
       "github": "picoclaw-labs/picoclaw",
       "install_methods": [
-        {"method": "go", "command": "go install github.com/picoclaw-labs/picoclaw@latest"}
+        {
+          "method": "go",
+          "command": "go install github.com/picoclaw-labs/picoclaw@latest"
+        }
       ],
       "binary": "picoclaw",
       "setup_command": null,
@@ -94,7 +115,12 @@
       "display_name": "LLM",
       "description": "Simon Willison's swiss-army-knife CLI for LLMs",
       "github": "simonw/llm",
-      "install_methods": [{"method": "brew", "command": "brew install llm"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install llm"
+        }
+      ],
       "binary": "llm",
       "setup_command": null,
       "config_dir": "~/.config/io.datasette.llm",
@@ -107,7 +133,12 @@
       "display_name": "Fabric",
       "description": "AI CLI workflow toolkit with 100+ patterns",
       "github": "danielmiessler/fabric",
-      "install_methods": [{"method": "brew", "command": "brew install fabric-ai"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install fabric-ai"
+        }
+      ],
       "binary": "fabric-ai",
       "setup_command": "fabric --setup",
       "config_dir": "~/.config/fabric",
@@ -120,7 +151,12 @@
       "display_name": "AIChat",
       "description": "All-in-one LLM CLI with local and remote support",
       "github": "sigoden/aichat",
-      "install_methods": [{"method": "brew", "command": "brew install aichat"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install aichat"
+        }
+      ],
       "binary": "aichat",
       "setup_command": null,
       "config_dir": "~/.config/aichat",
@@ -133,7 +169,12 @@
       "display_name": "Goose",
       "description": "Block's open-source AI coding agent",
       "github": "block/goose",
-      "install_methods": [{"method": "brew", "command": "brew install block/tap/goose"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install block/tap/goose"
+        }
+      ],
       "binary": "goose",
       "setup_command": "goose --setup",
       "config_dir": "~/.config/goose",
@@ -146,7 +187,12 @@
       "display_name": "Plandex",
       "description": "Terminal AI planner for multi-file coding tasks",
       "github": "plandex-ai/plandex",
-      "install_methods": [{"method": "curl", "command": "curl -sL https://plandex.ai/install.sh | bash"}],
+      "install_methods": [
+        {
+          "method": "curl",
+          "command": "curl -sL https://plandex.ai/install.sh | bash"
+        }
+      ],
       "binary": "plandex",
       "setup_command": null,
       "config_dir": "~/.config/plandex",
@@ -160,8 +206,14 @@
       "description": "AI pair programming in your terminal",
       "github": "Aider-AI/aider",
       "install_methods": [
-        {"method": "uv", "command": "uv tool install aider-chat"},
-        {"method": "pip", "command": "pip3 install aider-chat"}
+        {
+          "method": "uv",
+          "command": "uv tool install aider-chat"
+        },
+        {
+          "method": "pip",
+          "command": "pip3 install aider-chat"
+        }
       ],
       "binary": "aider",
       "setup_command": null,
@@ -175,7 +227,12 @@
       "display_name": "Claude Code",
       "description": "Anthropic's official CLI coding assistant",
       "github": "anthropics/anthropic-cli",
-      "install_methods": [{"method": "npm", "command": "npm install -g @anthropic-ai/claude-code"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g @anthropic-ai/claude-code"
+        }
+      ],
       "binary": "claude",
       "setup_command": null,
       "config_dir": "~/.claude",
@@ -188,7 +245,12 @@
       "display_name": "Codex CLI",
       "description": "OpenAI's official coding CLI",
       "github": "openai/codex",
-      "install_methods": [{"method": "npm", "command": "npm install -g @openai/codex"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g @openai/codex"
+        }
+      ],
       "binary": "codex",
       "setup_command": null,
       "config_dir": "~/.config/codex",
@@ -201,7 +263,12 @@
       "display_name": "Crush",
       "description": "AI-powered terminal with intelligent command suggestions",
       "github": "charmbracelet/crush",
-      "install_methods": [{"method": "brew", "command": "brew install charmbracelet/tap/crush"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install charmbracelet/tap/crush"
+        }
+      ],
       "binary": "crush",
       "setup_command": null,
       "config_dir": "~/.config/crush",
@@ -214,7 +281,12 @@
       "display_name": "Gemini CLI",
       "description": "Google's Gemini CLI with Ollama local fallback",
       "github": "google-gemini/gemini-cli",
-      "install_methods": [{"method": "npm", "command": "npm install -g @google/gemini-cli"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g @google/gemini-cli"
+        }
+      ],
       "binary": "gemini",
       "setup_command": null,
       "config_dir": "~/.gemini",
@@ -227,7 +299,12 @@
       "display_name": "Grok CLI",
       "description": "xAI's conversational AI terminal tool",
       "github": "xai-org/grok-cli",
-      "install_methods": [{"method": "npm", "command": "npm install -g @vibe-kit/grok-cli"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g @vibe-kit/grok-cli"
+        }
+      ],
       "binary": "grok",
       "setup_command": null,
       "config_dir": "~/.grok",
@@ -240,7 +317,12 @@
       "display_name": "Groq CLI",
       "description": "Groq cloud LLM inference via API key",
       "github": "groq/groq-cli",
-      "install_methods": [{"method": "npm", "command": "npm install -g groq-cli"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g groq-cli"
+        }
+      ],
       "binary": "groq",
       "setup_command": null,
       "config_dir": "~/.groq",
@@ -253,7 +335,12 @@
       "display_name": "OpenCode",
       "description": "Open-source autonomous coding agent",
       "github": "opencode-ai/opencode",
-      "install_methods": [{"method": "npm", "command": "npm install -g opencode"}],
+      "install_methods": [
+        {
+          "method": "npm",
+          "command": "npm install -g opencode"
+        }
+      ],
       "binary": "opencode",
       "setup_command": null,
       "config_dir": "~/.config/opencode",
@@ -267,8 +354,14 @@
       "description": "Natural language interface to your computer",
       "github": "OpenInterpreter/open-interpreter",
       "install_methods": [
-        {"method": "uv", "command": "uv tool install open-interpreter"},
-        {"method": "pip", "command": "pip3 install open-interpreter"}
+        {
+          "method": "uv",
+          "command": "uv tool install open-interpreter"
+        },
+        {
+          "method": "pip",
+          "command": "pip3 install open-interpreter"
+        }
       ],
       "binary": "interpreter",
       "setup_command": null,
@@ -307,7 +400,9 @@
       "description": "Autonomous coding agent for VS Code",
       "marketplace_id": "saoudrizwan.claude-dev",
       "install_command": "code --install-extension saoudrizwan.claude-dev",
-      "category": "vscode-extensions"
+      "category": "vscode-extensions",
+      "deprecated": true,
+      "deprecated_reason": "Removed from all profiles. If seen in configs, ask user whether to remove."
     },
     {
       "name": "zoocode",
@@ -315,14 +410,21 @@
       "description": "VS Code settings merge for Zoo Code config",
       "marketplace_id": null,
       "install_command": null,
-      "category": "vscode-extensions"
+      "category": "vscode-extensions",
+      "deprecated": true,
+      "deprecated_reason": "Removed from all profiles. If seen in configs, ask user whether to remove."
     },
     {
       "name": "github-copilot",
       "display_name": "GitHub Copilot CLI",
       "description": "GitHub Copilot CLI extension",
       "github": "github/copilot-cli",
-      "install_methods": [{"method": "brew", "command": "brew install gh-copilot"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install gh-copilot"
+        }
+      ],
       "binary": "gh-copilot",
       "setup_command": "gh extension install github/copilot",
       "config_dir": "~/.config/gh",
@@ -335,7 +437,12 @@
       "display_name": "VS Code",
       "description": "Microsoft's extensible code editor",
       "github": "microsoft/vscode",
-      "install_methods": [{"method": "brew", "command": "brew install --cask visual-studio-code"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask visual-studio-code"
+        }
+      ],
       "binary": "code",
       "setup_command": null,
       "config_dir": "~/Library/Application Support/Code/User",
@@ -348,7 +455,12 @@
       "display_name": "Cursor",
       "description": "AI-native code editor fork of VS Code",
       "github": "getcursor/cursor",
-      "install_methods": [{"method": "brew", "command": "brew install --cask cursor"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask cursor"
+        }
+      ],
       "binary": "cursor",
       "setup_command": null,
       "config_dir": "~/.cursor",
@@ -361,7 +473,12 @@
       "display_name": "Windsurf",
       "description": "AI-native IDE by Codeium with cascade panels",
       "github": "exafunction/windsurf",
-      "install_methods": [{"method": "brew", "command": "brew install --cask windsurf"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask windsurf"
+        }
+      ],
       "binary": "windsurf",
       "setup_command": null,
       "config_dir": "~/.windsurf",
@@ -374,7 +491,12 @@
       "display_name": "Zed",
       "description": "High-performance multiplayer code editor",
       "github": "zed-industries/zed",
-      "install_methods": [{"method": "brew", "command": "brew install --cask zed"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask zed"
+        }
+      ],
       "binary": "zed",
       "setup_command": null,
       "config_dir": "~/.config/zed",
@@ -387,7 +509,12 @@
       "display_name": "Sublime Text",
       "description": "Sophisticated text editor for code",
       "github": "sublimehq/sublime_text",
-      "install_methods": [{"method": "brew", "command": "brew install --cask sublime-text"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask sublime-text"
+        }
+      ],
       "binary": "subl",
       "setup_command": null,
       "config_dir": "~/.config/sublime-text",
@@ -400,7 +527,12 @@
       "display_name": "Ollama",
       "description": "Run local LLMs with a single command",
       "github": "ollama/ollama",
-      "install_methods": [{"method": "brew", "command": "brew install ollama"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install ollama"
+        }
+      ],
       "binary": "ollama",
       "setup_command": "brew services start ollama",
       "config_dir": "~/.ollama",
@@ -426,7 +558,12 @@
       "display_name": "OpenWebUI",
       "description": "Self-hosted ChatGPT-like web interface for local LLMs",
       "github": "open-webui/open-webui",
-      "install_methods": [{"method": "pip", "command": "pip3 install open-webui"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install open-webui"
+        }
+      ],
       "binary": "open-webui",
       "setup_command": "open-webui serve",
       "config_dir": "~/.config/open-webui",
@@ -439,7 +576,12 @@
       "display_name": "exo",
       "description": "Distributed split inference across Apple Silicon",
       "github": "exo-explore/exo",
-      "install_methods": [{"method": "pip", "command": "pip3 install exo"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install exo"
+        }
+      ],
       "binary": "exo",
       "setup_command": null,
       "config_dir": "~/.config/exo",
@@ -452,7 +594,12 @@
       "display_name": "Tabby",
       "description": "Self-hosted AI code completion server",
       "github": "TabbyML/tabby",
-      "install_methods": [{"method": "brew", "command": "brew install tabby"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install tabby"
+        }
+      ],
       "binary": "tabby",
       "setup_command": "tabby serve --model TabbyML/StarCoder2-3B",
       "config_dir": "~/.tabby",
@@ -465,7 +612,12 @@
       "display_name": "LM Studio",
       "description": "Desktop app for running local models with GUI",
       "github": "lmstudio-ai/lmstudio",
-      "install_methods": [{"method": "brew", "command": "brew install --cask lm-studio"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask lm-studio"
+        }
+      ],
       "binary": "lmstudio",
       "setup_command": null,
       "config_dir": "~/.lmstudio",
@@ -504,7 +656,12 @@
       "display_name": "OpenHands",
       "description": "AI software developer that runs inside Docker",
       "github": "All-Hands-AI/OpenHands",
-      "install_methods": [{"method": "docker", "command": "docker pull docker.io/opendevin/opendevin"}],
+      "install_methods": [
+        {
+          "method": "docker",
+          "command": "docker pull docker.io/opendevin/opendevin"
+        }
+      ],
       "binary": "openhands",
       "setup_command": null,
       "config_dir": "~/.openhands",
@@ -517,7 +674,12 @@
       "display_name": "LangChain",
       "description": "Python framework for building LLM-powered applications",
       "github": "langchain-ai/langchain",
-      "install_methods": [{"method": "pip", "command": "pip3 install langchain --upgrade"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install langchain --upgrade"
+        }
+      ],
       "binary": null,
       "setup_command": null,
       "config_dir": "",
@@ -530,7 +692,12 @@
       "display_name": "LlamaIndex",
       "description": "Data framework for LLM applications with RAG",
       "github": "run-llama/llama_index",
-      "install_methods": [{"method": "pip", "command": "pip3 install llama-index --upgrade"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install llama-index --upgrade"
+        }
+      ],
       "binary": null,
       "setup_command": null,
       "config_dir": "",
@@ -543,7 +710,12 @@
       "display_name": "llama.cpp",
       "description": "C++ LLM inference engine with Metal support",
       "github": "ggerganov/llama.cpp",
-      "install_methods": [{"method": "brew", "command": "brew install llama.cpp"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install llama.cpp"
+        }
+      ],
       "binary": "llama-cli",
       "setup_command": null,
       "config_dir": "~/.llama.cpp",
@@ -598,7 +770,12 @@
       "display_name": "GPT4All",
       "description": "Offline desktop app for local models",
       "github": "nomic-ai/gpt4all",
-      "install_methods": [{"method": "brew", "command": "brew install --cask gpt4all"}],
+      "install_methods": [
+        {
+          "method": "brew",
+          "command": "brew install --cask gpt4all"
+        }
+      ],
       "binary": "GPT4All",
       "setup_command": null,
       "config_dir": "~/.config/nomic-ai/GPT4All",
@@ -611,7 +788,12 @@
       "display_name": "Hugging Face CLI",
       "description": "CLI for model downloads and datasets",
       "github": "huggingface/huggingface_hub",
-      "install_methods": [{"method": "pip", "command": "pip3 install --upgrade huggingface_hub"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install --upgrade huggingface_hub"
+        }
+      ],
       "binary": "huggingface-cli",
       "setup_command": "huggingface-cli login",
       "config_dir": "~/.huggingface",
@@ -637,7 +819,12 @@
       "display_name": "PyTorch",
       "description": "ML framework optimized for Apple Silicon (MPS backend)",
       "github": "pytorch/pytorch",
-      "install_methods": [{"method": "pip", "command": "pip3 install torch torchvision"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install torch torchvision"
+        }
+      ],
       "binary": null,
       "setup_command": null,
       "config_dir": "",
@@ -650,7 +837,12 @@
       "display_name": "vLLM",
       "description": "High-throughput LLM inference server (CPU-only on macOS)",
       "github": "vllm-project/vllm",
-      "install_methods": [{"method": "pip", "command": "pip3 install vllm"}],
+      "install_methods": [
+        {
+          "method": "pip",
+          "command": "pip3 install vllm"
+        }
+      ],
       "binary": null,
       "setup_command": null,
       "config_dir": "",
