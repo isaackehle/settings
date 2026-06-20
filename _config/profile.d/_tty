@@ -7,3 +7,9 @@
 # else
 #   export EDITOR='nvim'
 # fi
+
+# Fix doubled/garbled characters when SSH'd in from Ghostty or other terminals
+# that send an unrecognised TERM the remote lacks (e.g. xterm-ghostty).
+if [[ -n "$SSH_CONNECTION" ]]; then
+  export TERM=xterm-256color
+fi

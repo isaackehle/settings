@@ -1,0 +1,56 @@
+# ── Fleet machines ────────────────────────────────────────────────────────────
+# SetEnv TERM=xterm-256color prevents garbled/doubled output when SSHing from
+# Ghostty (which sends xterm-ghostty, unknown to remotes).
+# RequestTTY yes ensures a proper PTY is allocated.
+# ServerAliveInterval prevents silent drops that corrupt the next session.
+
+Host ds9
+  HostName ds9.local
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
+  RequestTTY yes
+  SetEnv TERM=xterm-256color
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+
+Host ds9-ts
+  HostName 100.64.0.x
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  RequestTTY yes
+  SetEnv TERM=xterm-256color
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+
+Host enterprise
+  HostName enterprise.local
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
+  RequestTTY yes
+  SetEnv TERM=xterm-256color
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+
+Host enterprise-ts
+  HostName 100.64.0.x
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  RequestTTY yes
+  SetEnv TERM=xterm-256color
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+
+Host dx1
+  HostName dx1.local
+  User isaac
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes
+  UseKeychain yes
+  RequestTTY yes
+  SetEnv TERM=xterm-256color
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
