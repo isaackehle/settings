@@ -1,0 +1,16 @@
+# Machine-generated / local state
+ai_setup.log
+scripts/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Sensitive local env vars
+.env.local
+**/.env.local
+
+# Claude local permissions — tracked here (homelab-specific permissions are useful to share)
+# If you don't want to share permissions, uncomment:
+# **/settings.local.json
+
+# macOS
+.DS_Store
