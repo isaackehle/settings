@@ -13,19 +13,45 @@ homelab/
 ├── STRUCTURE.md                 ← This file
 │
 ├── config/                      ← Files that get deployed to ~ on each machine
-│   ├── ssh_config               → ~/.ssh/config       (fleet SSH aliases + TERM fix)
-│   └── profile.d/               → ~/.profile.d/       (sourced by shell on login)
-│       ├── _ai                  ← AI workspace paths
-│       ├── _claude_code         ← Claude Code env
-│       ├── _devin               ← Devin agent env
-│       ├── _fabric              ← Fabric CLI env
-│       ├── _gemini              ← Gemini CLI → local proxy routing
-│       ├── _grok                ← Grok CLI → Ollama routing
-│       ├── _home_assistant      ← HA URL + token env vars
-│       ├── _lmstudio            ← LM Studio PATH
-│       ├── _ollama              ← Ollama aliases (model-scout, suggest-models)
-│       ├── _tty                 ← SSH TERM fix (xterm-256color when SSH_CONNECTION set)
-│       └── _windsurf            ← Windsurf env
+│   ├── ssh_config               → ~/.ssh/config
+│   ├── mcp.json                 → ~/.claude/mcp.json  (global MCP servers)
+│   ├── codeium-config.json      → ~/.codeium/config.json
+│   ├── continueignore           → ~/.continueignore
+│   ├── profile.d/               → ~/.profile.d/       (sourced by shell on login)
+│   │   ├── _ai                  ← AI workspace paths
+│   │   ├── _claude_code         ← Claude Code env
+│   │   ├── _devin               ← Devin agent env
+│   │   ├── _fabric              ← Fabric CLI env
+│   │   ├── _gemini              ← Gemini CLI → local proxy routing
+│   │   ├── _grok                ← Grok CLI → Ollama routing
+│   │   ├── _home_assistant      ← HA URL + token env vars
+│   │   ├── _lmstudio            ← LM Studio PATH
+│   │   ├── _ollama              ← Ollama aliases (model-scout, suggest-models)
+│   │   ├── _tty                 ← SSH TERM fix (xterm-256color when SSH_CONNECTION set)
+│   │   └── _windsurf            ← Windsurf env
+│   ├── rules/                   ← AI tool instruction files → deploy to repo roots
+│   │   ├── clinerules           → .clinerules
+│   │   ├── coderules            → .coderules
+│   │   ├── cursorrules          → .cursorrules
+│   │   ├── windsurfrules        → .windsurfrules
+│   │   └── GEMINI.md            → GEMINI.md
+│   ├── skills/                  ← Canonical skill definitions
+│   │   ├── conventional-commit/
+│   │   ├── create-implementation-plan/
+│   │   ├── find-skills/
+│   │   ├── markdownlint-integration/
+│   │   └── model-updater/
+│   ├── agents/skills/           → ~/.agents/skills/
+│   ├── claude/skills/           → ~/.claude/skills/
+│   ├── continue/skills/         → ~/.continue/skills/
+│   ├── cortex/skills/           → ~/.cortex/skills/
+│   ├── pi/skills/               → ~/.pi/skills/
+│   ├── qwen/skills/             → ~/.qwen/skills/
+│   ├── windsurf/skills/         → ~/.windsurf/skills/
+│   ├── zencoder/skills/         → ~/.zencoder/skills/
+│   └── github/                  → ~/.github/ (Copilot instructions + prompts)
+│       ├── copilot-instructions.md
+│       └── prompts/
 │
 ├── docs/                        ← Reference and operational documentation
 │   ├── MODELS.md                ← Model roster: what's loaded where and why
