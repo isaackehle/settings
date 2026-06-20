@@ -5,4 +5,12 @@ MEMORY=16
 MEMORY_RANGE_MIN=0
 MEMORY_RANGE_MAX=20
 COMPUTER_TYPES=Macmini*
-DESCRIPTION=Q4 lightweight stack
+DESCRIPTION=M2 Mini headless server
+
+# Model Strategy - Multi-Tier Fallback
+# 1. Local: llama.cpp router on port 10000
+# 2. Discovery: tailscale 100.64.0.1:10000
+# 3. Cloud: OpenRouter
+#
+# Providers: llama-gp-router, llama-discovery, openrouter
+# Models: qwen3-coder-30b, qwen3:4b, qwen3.5-27b

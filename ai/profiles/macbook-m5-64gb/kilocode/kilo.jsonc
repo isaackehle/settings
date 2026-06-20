@@ -1,154 +1,169 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "ollama/qwen3-coder-30b-a3b:q6",
-  "small_model": "ollama/qwen3.5:4b",
+  // Primary model for the default "code" agent.
+  // Uses the local llama-server router — tools work reliably here.
+  "model": "llama-gp-router/qwen3-coder-30b",
+  "small_model": "llama-gp-router/qwen3.5-4b",
   "disabled_providers": [],
   "provider": {
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1",
-        "apiKey": "sk-local"
-      },
-      "models": {
-        "codestral:22b": { "name": "Codestral 22B (Apply)" },
-        "deepseek-r1:32b": { "name": "DeepSeek R1 32B (Reasoning)" },
-        "deepseek-r1:32b-128k": { "name": "DeepSeek R1 32B (Reasoning, 128K)" },
-        "deepseek-r1-tools:32b": { "name": "DeepSeek R1 32B (Reasoning, Tools)" },
-        "deepseek-r1-tools:32b-128k": { "name": "DeepSeek R1 32B (Reasoning, Tools, 128K)" },
-        "nomic-embed-text": { "name": "Nomic Embed Text (Embedding)" },
-        "qwen2.5-7b:multi": { "name": "Qwen 2.5 7B Multi (General, Claude+Gemini+GPT Distill)" },
-        "qwen2.5-coder:1.5b": { "name": "Qwen 2.5 Coder 1.5B (Autocomplete)" },
-        "qwen2.5-coder:7b": { "name": "Qwen 2.5 Coder 7B (Autocomplete)" },
-        "qwen3-14b:sonnet4.5": { "name": "Qwen3 14B (Coding, Claude Sonnet 4.5 Distill)" },
-        "qwen3-8b:sonnet4.5": { "name": "Qwen3 8B (Coding, Claude Sonnet 4.5 Distill)" },
-        "qwen3-coder-30b-a3b:q6": { "name": "Qwen3 Coder 30B A3B (Coding)" },
-        "qwen3-coder-30b-a3b:q6-128k": { "name": "Qwen3 Coder 30B A3B (Coding, 128K)" },
-        "qwen3.5-27b:gemini3.1": { "name": "Qwen 3.5 27B (Writing, Gemini 3.1 Distill)" },
-        "qwen3.5-27b:q4": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill)" },
-        "qwen3.5-27b:q4-128k": { "name": "Qwen 3.5 27B (Writing, Claude Opus Distill, 128K)" },
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B (Planning)" },
-        "qwen3.5:4b-128k": { "name": "Qwen 3.5 4B (Planning, 128K)" },
-        "qwen3.6-27b:opus-sonnet": { "name": "Qwen 3.6 27B (Writing, Claude Opus+Sonnet Distill)" },
-        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (Architect, 73% SWE-bench)" },
-        "qwen3.6-35b:opus4.7-32k": { "name": "Qwen 2.5 32B (32K ctx)" },
-        "qwen3.6-35b:opus4.7-128k": { "name": "Qwen 2.5 32B (32K ctx, extended)" },
-        "laguna-xs.2": { "name": "Laguna XS.2 33B MoE (Alt Coder, 68% SWE-bench)" }
-      }
-    },
-    // ── llama-server — GGUF direct serving on port 10000 ──────────────────
-    "llamarouter": {
-      "name": "llama-server",
+    // ── Tier 1: Local llama-server multi-model router (port 10000) ───────────
+    // All models served via --models-preset from ai/router/models.ini.
+    // Tool calling works correctly here (native Jinja2 templates).
+    "llama-gp-router": {
+      "name": "Local (llama-server)",
       "npm": "@ai-sdk/openai-compatible",
       "options": { "baseURL": "http://localhost:10000/v1", "apiKey": "sk-local" },
       "models": {
-        "deepseek-r1-32b": { "name": "DeepSeek R1 32B (Reasoning, llama)" },
-        "qwen3-4b-it": { "name": "Qwen 3 4B (Planning, llama)" },
-        "qwen3-coder-30b": { "name": "Qwen3 Coder 30B (Coding, llama)" }
+        "codestral-22b":           { "name": "Codestral 22B (Apply, FIM)" },
+        "deepseek-r1-32b":         { "name": "DeepSeek R1 32B (Reasoning)" },
+        "qwen2.5-7b":              { "name": "Qwen 2.5 7B (General, Multi-Distill)" },
+        "qwen2.5-coder-1.5b":      { "name": "Qwen 2.5 Coder 1.5B (Autocomplete)" },
+        "qwen2.5-coder-7b":        { "name": "Qwen 2.5 Coder 7B (Autocomplete)" },
+        "qwen3-4b-it":             { "name": "Qwen 3 4B (Fast, Planning)" },
+        "qwen3-8b-sonnet4.5":      { "name": "Qwen 3 8B (Claude Sonnet 4.5 Distill)" },
+        "qwen3-14b-sonnet4.5":     { "name": "Qwen 3 14B (Claude Sonnet 4.5 Distill)" },
+        "qwen3-coder-30b":         { "name": "Qwen 3 Coder 30B A3B (Coding, tools ✓)" },
+        "qwen3-coder-next-80b":    { "name": "Qwen 3 Coder Next 80B (Heavy Coding, tools ✓)" },
+        "qwen3.5-4b":              { "name": "Qwen 3.5 4B (Fast, Summary)" },
+        "qwen3.5-27b-gemini3.1":   { "name": "Qwen 3.5 27B (Gemini 3.1 Distill)" },
+        "qwen3.5-27b-opus4.6":     { "name": "Qwen 3.5 27B (Claude Opus 4.6 Distill)" },
+        "qwen3.6-27b-opus-sonnet": { "name": "Qwen 3.6 27B (Opus+Sonnet Distill)" },
+        "qwen3.6-35b-opus4.6":     { "name": "Qwen 3.6 35B (Claude Opus 4.6 Distill)" },
+        "qwen3.6-35b-opus4.7-128k":{ "name": "Qwen 3.6 35B (Claude Opus 4.7, 128K, tools ✓)" }
       }
     },
+    // ── Tier 2: Discovery machine — Tailscale fallback (same router port) ────
+    // Used when local models are unavailable or context is too large.
+    "llama-discovery": {
+      "name": "Discovery (llama-server)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "http://100.64.0.1:10000/v1", "apiKey": "sk-local" },
+      "models": {
+        "codestral-22b":           { "name": "Codestral 22B (Apply, FIM) [discovery]" },
+        "deepseek-r1-32b":         { "name": "DeepSeek R1 32B (Reasoning) [discovery]" },
+        "qwen3-4b-it":             { "name": "Qwen 3 4B (Fast) [discovery]" },
+        "qwen3-coder-30b":         { "name": "Qwen 3 Coder 30B (Coding) [discovery]" },
+        "qwen3-coder-next-80b":    { "name": "Qwen 3 Coder Next 80B (Heavy) [discovery]" },
+        "qwen3.5-27b-opus4.6":     { "name": "Qwen 3.5 27B (Opus 4.6) [discovery]" },
+        "qwen3.6-35b-opus4.7-128k":{ "name": "Qwen 3.6 35B (Opus 4.7, 128K) [discovery]" }
+      }
+    },
+    // ── Tier 3: OpenRouter — cloud fallback ──────────────────────────────────
     "openrouter": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenRouter",
+      "name": "OpenRouter (Cloud)",
       "options": {
         "baseURL": "https://openrouter.ai/api/v1",
         "apiKey": "env.OPENROUTER_API_KEY"
       },
       "models": {
-        "anthropic/claude-haiku-4-5": { "name": "Claude Haiku 4.5 (Fast, Cheap, Lightweight)" },
-        "anthropic/claude-opus-4-6": { "name": "Claude Opus 4.6 (Heavy Reasoning, Best Quality)" },
-        "anthropic/claude-sonnet-4-6": { "name": "Claude Sonnet 4.6 (Balanced All-Rounder)" },
-        "deepseek/deepseek-r1-tool-calling-32b": { "name": "DeepSeek R1 32B Tools (Reasoning, Tools)" },
-        "google/gemini-2.5-flash": { "name": "Gemini 2.5 Flash (Fast, Vision, Long Context)" },
-        "google/gemini-2.5-pro": { "name": "Gemini 2.5 Pro (Deep Reasoning, Multimodal)" },
-        "mistralai/codestral": { "name": "Codestral (Code Generation, Fill-In-Middle)" },
-        "mistralai/mistral-large": { "name": "Mistral Large (Strong General Purpose)" },
-        "moonshot/kimi-k2.6": { "name": "Kimi K2.6 (Deep Reasoning, Long Context)" },
-        "openai/gpt-4o": { "name": "GPT-4o (General, Vision, Multimodal)" },
-        "openai/o3": { "name": "OpenAI o3 (Heavy Reasoning, STEM)" },
-        "perplexity/sonar-pro": { "name": "Sonar Pro (Web Search, Chat)" },
-        "qwen/qwen3-8b": { "name": "Qwen3 8B (Fast Planning, Cheap)" },
-        "thudm/glm-5.1": { "name": "GLM 5.1 (General Purpose)" },
-        "x-ai/grok-3": { "name": "Grok 3 (General, Real-Time Data)" },
-        "x-ai/grok-3-mini": { "name": "Grok 3 Mini (Fast, Cheap)" }
+        "anthropic/claude-haiku-4-5":              { "name": "Claude Haiku 4.5 (Fast, Cheap)" },
+        "anthropic/claude-sonnet-4-6":             { "name": "Claude Sonnet 4.6 (Balanced)" },
+        "anthropic/claude-opus-4-6":               { "name": "Claude Opus 4.6 (Best Quality)" },
+        "deepseek/deepseek-r1-tool-calling-32b":   { "name": "DeepSeek R1 32B Tools (Cloud)" },
+        "google/gemini-2.5-flash":                 { "name": "Gemini 2.5 Flash (Fast, Vision)" },
+        "google/gemini-2.5-pro":                   { "name": "Gemini 2.5 Pro (Multimodal)" },
+        "mistralai/codestral":                     { "name": "Codestral (FIM, Cloud)" },
+        "moonshot/kimi-k2.6":                      { "name": "Kimi K2.6 (Long Context)" },
+        "openai/gpt-4o":                           { "name": "GPT-4o (Vision, General)" },
+        "openai/o3":                               { "name": "o3 (Heavy Reasoning)" },
+        "perplexity/sonar-pro":                    { "name": "Sonar Pro (Web Search)" },
+        "x-ai/grok-3":                             { "name": "Grok 3 (General)" },
+        "x-ai/grok-3-mini":                        { "name": "Grok 3 Mini (Fast, Cheap)" }
+      }
+    },
+    // ── Ollama — local fallback for non-router models ─────────────────────────
+    // Kept for embedding, cloud-routed models, and models not yet in models.ini.
+    // Tool calling is unreliable here — prefer llama-gp-router for agentic tasks.
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (Local, no tools)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey": "sk-local"
+      },
+      "models": {
+        "nomic-embed-text":          { "name": "Nomic Embed Text (Embedding)" },
+        "laguna-xs.2":               { "name": "Laguna XS.2 33B MoE (Alt Coder)" },
+        "qwen3.5-27b:q4-cloud":      { "name": "Qwen 3.5 27B 397B (Cloud-routed)" },
+        "qwen3-coder:480b-cloud":    { "name": "Qwen 3 Coder 480B (Cloud-routed)" }
       }
     }
   },
   "agent": {
     "code": {
       "description": "Primary coding agent — implementation, editing, refactoring, debugging.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "llama-gp-router/qwen3-coder-30b",
       "mode": "primary",
       "temperature": 0.2
       // Prompt and permissions live in ~/.kilo/agents/code.md
     },
     "ask": {
       "description": "Q&A agent — answer questions about code, explain logic, provide context.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "llama-gp-router/qwen3-coder-30b",
       "mode": "primary",
       "temperature": 0.2
       // Prompt and permissions live in ~/.kilo/agents/ask.md
     },
     "debug": {
       "description": "Debugging agent — diagnose errors, trace bugs, suggest fixes.",
-      "model": "ollama/deepseek-r1-tools:32b-128k",
+      "model": "llama-gp-router/deepseek-r1-32b",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/debug.md
     },
     "plan": {
       "description": "Fast planning agent — next steps, breakdowns, lightweight routing.",
-      "model": "ollama/qwen3.5:4b",
+      "model": "llama-gp-router/qwen3.5-4b",
       "mode": "primary",
       "temperature": 0.25
       // Prompt and permissions live in ~/.kilo/agents/plan.md
     },
     "think": {
       "description": "Reasoning agent — decision analysis, debugging strategy, tradeoffs.",
-      "model": "ollama/deepseek-r1-tools:32b-128k",
+      "model": "llama-gp-router/deepseek-r1-32b",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/think.md
     },
     "write": {
       "description": "Writing agent — docs, summaries, cover letters, polished prose.",
-      "model": "ollama/qwen3.5-27b:q4-128k",
+      "model": "llama-gp-router/qwen3.5-27b-opus4.6",
       "mode": "primary",
       "temperature": 0.65
       // Prompt and permissions live in ~/.kilo/agents/write.md
     },
     "summary": {
       "description": "Commit message and session summary agent.",
-      "model": "ollama/qwen3.5:4b",
+      "model": "llama-gp-router/qwen3.5-4b",
       "mode": "primary",
       "temperature": 0.2
       // Prompt and permissions live in ~/.kilo/agents/summary.md
     },
     "description": {
       "description": "MR/PR description agent — longer summaries with context.",
-      "model": "ollama/qwen3.5-27b:q4",
+      "model": "llama-gp-router/qwen3.5-27b-opus4.6",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/description.md
     },
     "architect": {
       "description": "Stress-test technical designs and produce implementation-ready plans.",
-      "model": "ollama/qwen3.6-35b:opus4.7-128k",
+      "model": "llama-gp-router/qwen3.6-35b-opus4.7-128k",
       "mode": "primary",
       "temperature": 0.3
       // Prompt and permissions live in ~/.kilo/agents/architect.md
     },
     "code-reviewer": {
       "description": "Senior software engineer conducting thorough code reviews.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "llama-gp-router/qwen3-coder-30b",
       "mode": "primary",
       "temperature": 0.2
       // Prompt and permissions live in ~/.kilo/agents/code-reviewer.md
     },
     "test-engineer": {
       "description": "QA engineer and testing specialist.",
-      "model": "ollama/qwen3-coder-30b-a3b:q6-32k",
+      "model": "llama-gp-router/qwen3-coder-30b",
       "mode": "primary",
       "temperature": 0.2
       // Prompt and permissions live in ~/.kilo/agents/test-engineer.md

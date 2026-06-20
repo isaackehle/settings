@@ -1,38 +1,20 @@
 {
+  "//": "Models reference: ~/.models | Multi-tier fallback",
   "provider": {
     "openrouter": {
       "name": "OpenRouter",
-      "options": {
-        "baseURL": "https://openrouter.ai/api/v1",
-        "apiKey": "env.OPENROUTER_API_KEY"
-      },
+      "options": {"baseURL": "https://openrouter.ai/api/v1", "apiKey": "env.OPENROUTER_API_KEY"},
       "models": {
-        "anthropic/claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 (Balanced All-Rounder)"
-        },
-        "moonshot/kimi-k2.6": {
-          "name": "Kimi K2.6 (Deep Reasoning, Long Context)"
-        },
-        "qwen/qwen3-8b": {
-          "name": "Qwen3 8B (Fast Planning, Cheap)"
-        }
+        "anthropic/claude-opus-4-6": {"name": "Claude Opus 4.6"},
+        "anthropic/claude-sonnet-4-6": {"name": "Claude Sonnet 4.6"}
       }
     },
-    "ollama": {
-      "name": "Ollama (Local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1"
-      },
+    "llama-router": {
+      "name": "llama.cpp router",
+      "options": {"baseURL": "http://localhost:10000/v1", "apiKey": "sk-local"},
       "models": {
-        "deepseek-r1-tools:8b": {
-          "name": "DeepSeek R1 8B (Reasoning, Tools)"
-        },
-        "qwen3:14b": {
-          "name": "Qwen 3 14B (Coding)"
-        },
-        "qwen3:4b": {
-          "name": "Qwen 3 4B (Planning)"
-        }
+        "qwen3-coder-30b": {"name": "Qwen3 Coder 30B"},
+        "qwen3:4b": {"name": "Qwen3 4B (Planning)"}
       }
     }
   }

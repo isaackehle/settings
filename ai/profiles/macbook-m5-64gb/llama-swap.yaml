@@ -1,0 +1,199 @@
+# ============================================================================
+#  llama-swap config — MacBook Pro M5 Max 64GB (primary / network gateway)
+#
+#  This machine owns the heavy models (27B–80B) and is the proxy target for
+#  all other machines in the fleet. All 17 models run locally.
+#
+#  Port 10000 — same as the old llama-server --models-preset router.
+#  Tool configs (kilo.jsonc / opencode.jsonc) do not need to change.
+#
+#  Model dir:    /usr/local/lib/llama-models/
+#  Install:      brew install llama-swap
+#                ./install-llama-swap.sh
+#  Logs:         ~/Library/Logs/llama-swap/
+#
+#  TTL strategy:
+#    86400 = always-warm (24h idle before unload — effectively never)
+#      300 = on-demand   (5 min after last use)
+#       60 = ephemeral   (1 min, e.g. embedding)
+# ============================================================================
+
+healthCheckTimeout: 300
+
+models:
+
+  # ── Always-warm: primary coder + fast model ────────────────────────────────
+  # Keep these two in memory at all times. ~21GB combined.
+
+  qwen3-coder-30b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-coder-30b-a3b-cd-q4_k_m.gguf
+        -c 65536 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 86400
+
+  qwen3.5-4b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.5-4b-it-ud-q4_k_xl.gguf
+        -c 65536 -ngl 999 --flash-attn
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 86400
+
+  # ── On-demand: architect / writing / research (27–35B) ─────────────────────
+
+  qwen3.6-35b-opus4.7-128k:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.6-35b-opus4.7-128k-q4_k_m.gguf
+        -c 131072 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95 --top-k 20
+    ttl: 300
+
+  qwen3.6-35b-opus4.6:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.6-35b-opus4.6-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95 --top-k 20
+    ttl: 300
+
+  qwen3.5-27b-opus4.6:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.5-27b-opus4.6-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95 --top-k 20
+    ttl: 300
+
+  qwen3.5-27b-gemini3.1:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.5-27b-gemini3.1-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95 --top-k 20
+    ttl: 300
+
+  qwen3.6-27b-opus-sonnet:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.6-27b-opus-sonnet-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95 --top-k 20
+    ttl: 300
+
+  # ── On-demand: reasoning ───────────────────────────────────────────────────
+
+  deepseek-r1-32b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/deepseek-r1-32b-ds-q4_k_m.gguf
+        -c 16384 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.6 --top-p 0.95
+    ttl: 300
+
+  # ── On-demand: medium models (8–22B) ──────────────────────────────────────
+
+  codestral-22b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/codestral-22b-v0.1-cd-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen3-14b-sonnet4.5:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf
+        -c 40960 -ngl 999 --flash-attn
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen3-8b-sonnet4.5:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen2.5-7b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-7b-multi-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  # ── On-demand: small / autocomplete ──────────────────────────────────────
+
+  qwen3-4b-it:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-4b-it-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen2.5-coder-7b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-coder-7b-it-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen2.5-coder-1.5b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-coder-1.5b-it-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 12
+        --temp 0.7 --top-p 0.8
+    ttl: 300
+
+  # ── 80B: loaded alone, conservative ctx (~45GB — no room for co-resident) ──
+
+  qwen3-coder-next-80b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-coder-next-80b-cd-q4_k_m.gguf
+        -c 8192 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 12
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  # ── Embedding — always warm (~262MB, negligible RAM) ─────────────────────
+
+  nomic-embed-text:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/nomic-embed-text-em-f16.gguf
+        -c 8192 -ngl 999 --flash-attn
+        --embeddings --threads 8
+    ttl: 86400

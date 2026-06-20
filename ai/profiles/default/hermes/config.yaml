@@ -1,13 +1,13 @@
 # Hermes configuration — deployed by setup_ai.sh
-# This is the source-of-truth; deployed to ~/.hermes/config.yaml.
-# Inference backend: llama-server router on port 10000.
+# Models reference: ~/.models
+# Source: ~/code/isaackehle/settings/ai/profiles/macbook-m2-32gb/models.json
 
 model:
-  default: qwen3.6-35b-opus4.7-128k-q4
+  default: qwen3.5-27b-gemini3.1-it-ds-q4_k_m
   provider: llama
   base_url: http://localhost:10000/v1
   ollama_num_ctx: 131072
-  context_length: 131072
+  context_length: 262144
 
 providers:
   llama:
@@ -15,12 +15,10 @@ providers:
     api_key: sk-local
   openrouter:
     base_url: https://openrouter.ai/api/v1
-
-fallback_providers:
-  - openrouter
+    api_key: "${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY}"
 
 agent:
-  reasoning_effort: low
+  reasoning_effort: medium
 
 display:
   show_reasoning: false
@@ -29,11 +27,9 @@ display:
 
 fallback_model:
   provider: openrouter
-  model: ~anthropic/claude-sonnet-latest
+  model: anthropic/claude-sonnet-4.5
   models:
-  - ~anthropic/claude-sonnet-latest
-  - ~anthropic/claude-haiku-latest
-  - moonshotai/kimi-k2.6
+  - anthropic/claude-sonnet-4.5
+  - anthropic/claude-haiku-4.5
   - qwen/qwen3.7-plus
-  - minimax/minimax-m3
-  - deepseek/deepseek-v4-flash
+  - meta-llama/llama-3.3-70b-instruct:free

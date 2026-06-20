@@ -150,7 +150,7 @@ if len(parts) >= 3:
 done
 ```
 
-### crush — `~/.crush/config.json`
+### crush — `~/.config/crush/crush.json`
 
 Add to the JSON object:
 
@@ -246,7 +246,7 @@ grep "agents.md" ~/.kilo/agents/code.md
 grep "read-only" ~/.aider.conf.yml
 
 # Check crush has instructions set
-grep "instructions" ~/.crush/config.json
+grep "instructions" ~/.config/crush/crush.json
 
 # Check continue has systemMessage
 grep "systemMessage" ~/.continue/config.yaml

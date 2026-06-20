@@ -1,0 +1,157 @@
+# ============================================================================
+#  llama-swap config — DS9 (Mac mini M2 Pro 32GB, headless always-on)
+#
+#  DS9 is the fleet's always-on server. It keeps embedding and fast models
+#  warm so they're available even when all laptops are asleep.
+#
+#  At 32GB it can run models up to ~30B (tight). codestral-22b fits well.
+#  Everything 32B+ is proxied to discovery (100.64.0.1:10000).
+#
+#  Port 10000 — consistent across all machines.
+# ============================================================================
+
+healthCheckTimeout: 300
+
+models:
+
+  # ── Always-warm: small fast models + embedding (~5GB total) ───────────────
+  # These stay in memory 24/7. Core value of DS9: instant response when
+  # laptops are closed.
+
+  nomic-embed-text:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/nomic-embed-text-em-f16.gguf
+        -c 8192 -ngl 999 --flash-attn
+        --embeddings --threads 8
+    ttl: 86400
+
+  qwen3.5-4b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3.5-4b-it-ud-q4_k_xl.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 86400
+
+  qwen3-4b-it:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-4b-it-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 86400
+
+  qwen2.5-coder-1.5b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-coder-1.5b-cd-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 8
+        --temp 0.7 --top-p 0.8
+    ttl: 86400
+
+  # ── On-demand: medium models (5–22B) ──────────────────────────────────────
+
+  qwen3-8b-sonnet4.5:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-8b-sonnet4.5-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen3-14b-sonnet4.5:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-14b-sonnet4.5-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen3-14b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-14b-it-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  deepseek-r1-7b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/deepseek-r1-7b-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --jinja --threads 8
+        --temp 0.6 --top-p 0.95
+    ttl: 300
+
+  qwen2.5-7b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-7b-multi-it-ds-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen2.5-coder-7b:
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen2.5-coder-7b-cd-q4_k_m.gguf
+        -c 32768 -ngl 999 --flash-attn
+        --chat-template chatml --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  # ── On-demand: heavy-for-DS9 (22–30B, loads alone) ───────────────────────
+
+  codestral-22b:
+    # 13GB — fits well, leaves 19GB for OS + KV
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/codestral-22b-cd-q4_k_m.gguf
+        -c 16384 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  qwen3-coder-30b:
+    # 18GB GGUF — fits, leaves ~14GB for KV/OS. Keep ctx modest.
+    cmd: >-
+      llama-server --port ${PORT}
+        --model /usr/local/lib/llama-models/qwen3-coder-30b-a3b-cd-q4_k_m.gguf
+        -c 16384 -ngl 999 --flash-attn
+        --cache-type-k q8_0 --cache-type-v q8_0
+        --jinja --threads 8
+        --temp 0.7 --top-p 0.8 --top-k 20
+    ttl: 300
+
+  # ── Proxy → discovery gateway (32B+ does not fit on DS9) ─────────────────
+
+  deepseek-r1-32b:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3.5-27b-opus4.6:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3.5-27b-gemini3.1:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3.6-27b-opus-sonnet:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3.6-35b-opus4.7-128k:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3.6-35b-opus4.6:
+    proxy: "http://100.64.0.1:10000"
+
+  qwen3-coder-next-80b:
+    proxy: "http://100.64.0.1:10000"

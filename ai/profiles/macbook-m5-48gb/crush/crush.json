@@ -1,61 +1,41 @@
 {
-  "$schema": "https://charm.land/crush.json",
-  "providers": {
-    "ollama": {
-      "name": "Ollama (local)",
-      "type": "openai-compat",
-      "base_url": "http://localhost:11434/v1",
-      "api_key": "sk-local",
-      "models": [
-        {
-          "id": "deepseek-r1-tools:32b",
-          "name": "DeepSeek R1 32B (Reasoning, Tools)",
-          "context_window": 32768,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
+    "$schema": "https://charm.land/crush.json",
+    "models": {
+        "large": {
+            "model": "qwen3-coder-30b",
+            "provider": "llama-gp-router",
+            "max_tokens": 8192
         },
-        {
-          "id": "qwen3-coder-30b-a3b:q5",
-          "name": "Qwen3 Coder 30B A3B (Coding)",
-          "context_window": 32768,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
+        "fast": {
+            "model": "qwen3:4b",
+            "provider": "llama-gp-router",
+            "max_tokens": 4096
         },
-        {
-          "id": "qwen3.5-27b:q4",
-          "name": "Qwen 3.5 27B (Writing)",
-          "context_window": 32768,
-          "default_max_tokens": 8192,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
-        },
-        {
-          "id": "qwen3:4b",
-          "name": "Qwen 3 4B (Planning)",
-          "context_window": 32768,
-          "default_max_tokens": 4096,
-          "cost_per_1m_in": 0.0,
-          "cost_per_1m_out": 0.0,
-          "cost_per_1m_in_cached": 0.0,
-          "cost_per_1m_out_cached": 0.0,
-          "can_reason": false,
-          "supports_attachments": false
+        "writing": {
+            "model": "qwen3.5-27b",
+            "provider": "llama-heavy",
+            "max_tokens": 8192
         }
-      ]
-    }
-  }
+    },
+    "providers": {
+        "llama-gp-router": {
+            "name": "llama.cpp router (local)",
+            "type": "openai-compat",
+            "base_url": "http://localhost:10000/v1",
+            "api_key": "sk-local"
+        },
+        "llama-discovery": {
+            "name": "llama.cpp router (discovery)",
+            "type": "openai-compat",
+            "base_url": "http://100.64.0.1:10000/v1",
+            "api_key": "sk-local"
+        },
+        "openrouter": {
+            "name": "OpenRouter (cloud)",
+            "type": "openai-compat",
+            "base_url": "https://openrouter.ai/api/v1",
+            "api_key": "${OPENROUTER_API_KEY:?}"
+        }
+    },
+    "mcp": {}
 }

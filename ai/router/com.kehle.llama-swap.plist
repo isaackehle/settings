@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  launchd LaunchAgent for llama-swap (macOS / Apple Silicon).
+
+  llama-swap replaces the llama-server --models-preset router.
+  It manages one llama-server process per model, swapping on demand.
+  Exposes the same OpenAI-compatible API on port 10000.
+
+  Install:
+    cp com.kehle.llama-swap.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.kehle.llama-swap.plist
+
+  Or use: ai/runtimes/install-llama-swap.sh  (handles migration from llama-router)
+
+  NOTES:
+  - launchd does not expand ~ or $HOME inside <string> values.
+    Replace /Users/isaac if your username differs.
+  - On Apple Silicon, Homebrew installs to /opt/homebrew.
+    On Intel Macs, it's /usr/local. install-llama-swap.sh handles this.
+  - Config file is profile-specific. install-llama-swap.sh copies the
+    correct llama-swap.yaml from ai/profiles/<profile>/ to the models dir.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kehle.llama-swap</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- Apple Silicon Homebrew path; Intel uses /usr/local/bin/llama-swap -->
+        <string>/opt/homebrew/bin/llama-swap</string>
+        <string>serve</string>
+        <string>--config</string>
+        <string>/usr/local/lib/llama-models/llama-swap.yaml</string>
+        <string>--listen</string>
+        <string>0.0.0.0:10000</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/isaac</string>
+    </dict>
+
+    <!-- Start at login and restart on crash -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Don't hammer restarts if it crash-loops -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <!-- Logs -->
+    <key>StandardOutPath</key>
+    <string>/Users/isaac/Library/Logs/llama-swap/llama-swap.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/isaac/Library/Logs/llama-swap/llama-swap.err.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>/usr/local/lib/llama-models</string>
+</dict>
+</plist>
