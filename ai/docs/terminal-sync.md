@@ -42,46 +42,18 @@ If the terminal is so broken you can't type, close the tab and open a new one.
 
 ## Prevention: SSH config
 
-Add to `~/.ssh/config` on all machines. Keeps `TERM` predictable and avoids
-sending unknown terminal types that remote machines don't have terminfo for.
+The fleet SSH config lives at `config/ssh_config` in the homelab repo. Install it:
 
-```
-# ── Fleet machines ────────────────────────────────────────────────────────────
-Host ds9
-  HostName ds9.local
-  User isaac
-  IdentityFile ~/.ssh/id_ed25519
-  AddKeysToAgent yes
-  UseKeychain yes
-  SetEnv TERM=xterm-256color
-  ServerAliveInterval 30
-  ServerAliveCountMax 3
-
-Host ds9-ts
-  HostName 100.64.0.x          # fill in from: tailscale status
-  User isaac
-  IdentityFile ~/.ssh/id_ed25519
-  SetEnv TERM=xterm-256color
-  ServerAliveInterval 30
-  ServerAliveCountMax 3
-
-Host enterprise
-  HostName enterprise.local
-  User isaac
-  IdentityFile ~/.ssh/id_ed25519
-  AddKeysToAgent yes
-  UseKeychain yes
-  SetEnv TERM=xterm-256color
-  ServerAliveInterval 30
-  ServerAliveCountMax 3
+```bash
+cp ~/code/isaackehle/homelab/config/ssh_config ~/.ssh/config
+chmod 600 ~/.ssh/config
 ```
 
-`SetEnv TERM=xterm-256color` forces a safe, universally-supported terminal type
-regardless of what your local terminal app calls itself (iTerm2 sends
-`xterm-256color` anyway, but Ghostty sends `xterm-ghostty` which remotes don't have).
-
-`ServerAliveInterval` / `ServerAliveCountMax` prevents the silent-drop that causes
-the next session to have ghost echo.
+It uses Tailscale magic DNS as primary and `.local` mDNS as fallback.
+`SetEnv TERM=xterm-256color` on the local block forces a safe terminal type —
+Ghostty sends `xterm-ghostty` which remotes don't have terminfo for.
+`ServerAliveInterval` / `ServerAliveCountMax` prevents silent-drop that causes
+ghost echo on the next session.
 
 ---
 
@@ -125,10 +97,19 @@ if [[ -t 0 ]]; then
 fi
 ```
 
-### Consistent TERM in shell (add to .zshrc)
+### Consistent TERM in shell
+
+This is handled by `config/profile.d/_tty` in the homelab repo. Deploy it on each machine:
+
+```bash
+# From the homelab repo root:
+cp config/profile.d/_tty ~/.profile.d/_tty
+source ~/.profile.d/_tty   # activate in current shell
+```
+
+The file sets `TERM=xterm-256color` when `$SSH_CONNECTION` is present:
 
 ```zsh
-# Force a safe TERM when SSHing in (remote doesn't know about xterm-ghostty)
 if [[ -n "$SSH_CONNECTION" ]]; then
   export TERM=xterm-256color
 fi
