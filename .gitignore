@@ -51,7 +51,7 @@ Thumbs.db
 
 **/ai_setup.log
 **/tea_debug.log
-.claude/settings.local.json
+**/settings.local.json
 **/scripts/__pycache__/
 
 # Sensitive local env vars (never commit)
