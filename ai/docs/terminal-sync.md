@@ -30,13 +30,13 @@ If the terminal is so broken you can't type, close the tab and open a new one.
 
 ### Why it happens
 
-| Cause | Symptom |
-|---|---|
-| Previous SSH session didn't close cleanly | Doubled echo on next login |
-| `TERM` not recognized on remote machine | Garbled colors, cursor movement broken |
-| Missing terminfo on remote (e.g. `xterm-ghostty` on DS9) | `tput` errors, prompt breaks |
-| tmux on remote with wrong `TERM` | Everything doubled or invisible |
-| Bluetooth keyboard packet loss (macOS) | Random repeated characters |
+| Cause                                                    | Symptom                                |
+| -------------------------------------------------------- | -------------------------------------- |
+| Previous SSH session didn't close cleanly                | Doubled echo on next login             |
+| `TERM` not recognized on remote machine                  | Garbled colors, cursor movement broken |
+| Missing terminfo on remote (e.g. `xterm-ghostty` on DS9) | `tput` errors, prompt breaks           |
+| tmux on remote with wrong `TERM`                         | Everything doubled or invisible        |
+| Bluetooth keyboard packet loss (macOS)                   | Random repeated characters             |
 
 ---
 
@@ -128,12 +128,12 @@ set -ag terminal-overrides ",xterm-256color:RGB"
 
 ## Quick reference: fix commands
 
-| Problem | Command |
-|---|---|
-| Doubled characters | `stty sane` |
-| Completely broken display | `reset` |
-| Colors gone | `export TERM=xterm-256color` |
-| Prompt not rendering | `source ~/.zshrc` |
-| Check current STTY | `stty -a` |
-| Check TERM | `echo $TERM` |
-| Check terminfo exists | `tput colors` (should print `256`) |
+| Problem                   | Command                            |
+| ------------------------- | ---------------------------------- |
+| Doubled characters        | `stty sane`                        |
+| Completely broken display | `reset`                            |
+| Colors gone               | `export TERM=xterm-256color`       |
+| Prompt not rendering      | `source ~/.zshrc`                  |
+| Check current STTY        | `stty -a`                          |
+| Check TERM                | `echo $TERM`                       |
+| Check terminfo exists     | `tput colors` (should print `256`) |
