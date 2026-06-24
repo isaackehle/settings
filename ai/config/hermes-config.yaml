@@ -1,0 +1,26 @@
+model:
+  default: qwen3.6-35b-opus4.7-128k-q5_k_m
+  provider: llama
+  base_url: http://127.0.0.1:54906/v1
+  context_length: 131072
+providers:
+  llama:
+    base_url: http://127.0.0.1:54906/v1
+    api_key: sk-local
+  openrouter:
+    base_url: https://openrouter.ai/api/v1
+    api_key: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY}
+agent:
+  reasoning_effort: medium
+display:
+  show_reasoning: false
+onboarding:
+  seen:
+    openclaw_residue_cleanup: true
+    busy_input_prompt: true
+
+mcp_servers:
+  amazon:
+    command: "node"
+    args: ["/Users/isaac/code/mcp-server-amazon/build/index.js"]
+    env: {}

@@ -175,7 +175,34 @@ docker exec openwebui sh -c 'curl -s -H "Authorization: Bearer $(echo $OPENAI_AP
 
 ---
 
-## 6. Troubleshooting
+## 4. Hermes-llama (port 54906)
+
+The hermes-llama provider runs the reasoning model (qwen3.6-35b-opus4.7-128k-q5_k_m)
+for use with the Hermes Telegram gateway.
+
+### Start
+
+```bash
+nohup /usr/local/bin/llama-server \
+  --model /usr/local/lib/llama-models/qwen3.6-35b-opus4.7-128k-q5_k_m.gguf \
+  --host 127.0.0.1 \
+  --port 54906 \
+  --ctx-size 131072 \
+  --n-gpu-layers 999 \
+  --threads 12 \
+  --flash-attn on \
+  > /tmp/llama-54906.log 2>&1 &
+```
+
+### Verify
+
+```bash
+curl -s http://127.0.0.1:54906/v1/models | jq '.data[].id'
+```
+
+---
+
+## 5. Troubleshooting
 
 | Symptom | Likely cause |
 | ------- | ----------- |

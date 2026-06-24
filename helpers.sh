@@ -315,7 +315,10 @@ declare -gA _PROFILE_CACHE
 
 _get_profile_numbers() {
     # List only profile directories that have a PROFILE file
-    ls -d "$PROFILES_DIR"/*/ 2>/dev/null | while read -r d; do
+    if [[ ! -d "$PROFILES_DIR" ]]; then
+        return
+    fi
+    find "$PROFILES_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | while IFS= read -r d; do
         [[ -f "$d/PROFILE" ]] && basename "$d"
     done | sort
 }
