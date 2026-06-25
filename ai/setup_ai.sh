@@ -18,51 +18,77 @@ if [ -z "$BASH_VERSION" ]; then
   exit 1
 fi
 
-SETTINGS_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+SETTINGS_BASE="$REPO_ROOT"
+HOMELAB_ROOT="${HOMELAB:-$HOME/code/isaackehle/homelab}"
+
+. "$REPO_ROOT/helpers.sh"
+# helpers.sh overwrites REPO_ROOT to the parent of SETTINGS_BASE — restore it
 REPO_ROOT="$SETTINGS_BASE"
 
-. "${SETTINGS_BASE}/helpers.sh"
+# Ensure homelab scripts can find shared helpers.sh
+if [ ! -f "$HOMELAB_ROOT/helpers.sh" ]; then
+  ln -sf "$REPO_ROOT/helpers.sh" "$HOMELAB_ROOT/helpers.sh"
+fi
+
+# Safe source: skip with warning if file is missing
+_safe_source() {
+  local f="$1" base="${2:-$REPO_ROOT}"
+  if [ ! -f "$f" ]; then
+    log_warning "Skipping (not found): $f"
+    return 0
+  fi
+  local _saved_settings_base="$SETTINGS_BASE"
+  local _saved_repo_root="$REPO_ROOT"
+  SETTINGS_BASE="$base"
+  . "$f"
+  SETTINGS_BASE="$_saved_settings_base"
+  REPO_ROOT="$_saved_repo_root"
+}
+
 # Source AI tool setup scripts
-. "${SETTINGS_BASE}/ai/agents/aichat.sh"
-. "${SETTINGS_BASE}/ai/agents/aider.sh"
-. "${SETTINGS_BASE}/ai/other/anythingllm.sh"
-. "${SETTINGS_BASE}/ai/agents/claude.sh"
-. "${SETTINGS_BASE}/ai/agents/codex.sh"
-. "${SETTINGS_BASE}/editors/continue.sh"
-. "${SETTINGS_BASE}/ai/agents/crush.sh"
-. "${SETTINGS_BASE}/editors/cursor.sh"
-. "${SETTINGS_BASE}/ai/other/exo.sh"
-. "${SETTINGS_BASE}/ai/agents/fabric.sh"
-. "${SETTINGS_BASE}/ai/agents/gemini.sh"
-. "${SETTINGS_BASE}/editors/github-copilot.sh"
-. "${SETTINGS_BASE}/ai/agents/goose.sh"
-. "${SETTINGS_BASE}/ai/agents/grok.sh"
-. "${SETTINGS_BASE}/ai/cloud/groq.sh"
-. "${SETTINGS_BASE}/ai/agents/hermes.sh"
-. "${SETTINGS_BASE}/ai/runtimes/install-models.sh"
-. "${SETTINGS_BASE}/ai/agents/ironclaw.sh"
-. "${SETTINGS_BASE}/editors/kilocode.sh"
-. "${SETTINGS_BASE}/ai/agents/llm.sh"
-. "${SETTINGS_BASE}/ai/runtimes/lmstudio.sh"
-. "${SETTINGS_BASE}/ai/runtimes/omlx.sh"
-. "${SETTINGS_BASE}/ai/runtimes/ollama.sh"
-. "${SETTINGS_BASE}/ai/other/olol.sh"
-. "${SETTINGS_BASE}/ai/agents/open-hands.sh"
-. "${SETTINGS_BASE}/ai/agents/open-interpreter.sh"
-. "${SETTINGS_BASE}/ai/agents/opencode.sh"
-. "${SETTINGS_BASE}/ai/other/openwebui.sh"
-. "${SETTINGS_BASE}/ai/cloud/openrouter.sh"
-. "${SETTINGS_BASE}/ai/agents/openclaw.sh"
-. "${SETTINGS_BASE}/ai/agents/picoclaw.sh"
-. "${SETTINGS_BASE}/ai/agents/plandex.sh"
-. "${SETTINGS_BASE}/ai/agents/pi.sh"
-. "${SETTINGS_BASE}/editors/pi-studio.sh"
-. "${SETTINGS_BASE}/editors/sublime.sh"
-. "${SETTINGS_BASE}/ai/agents/zeroclaw.sh"
-. "${SETTINGS_BASE}/ai/other/tabby.sh"
-. "${SETTINGS_BASE}/editors/vscode.sh"
-. "${SETTINGS_BASE}/editors/devin.sh"
-. "${SETTINGS_BASE}/editors/zed.sh"
+# editors/ lives in this repo; agents/other/cloud/runtimes live in homelab
+_safe_source "$HOMELAB_ROOT/agents/aichat.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/aider.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/other/anythingllm.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/claude.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/codex.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/continue.sh"
+_safe_source "$HOMELAB_ROOT/agents/crush.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/cursor.sh"
+_safe_source "$HOMELAB_ROOT/other/exo.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/fabric.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/gemini.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/github-copilot.sh"
+_safe_source "$HOMELAB_ROOT/agents/goose.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/grok.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/cloud/groq.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/hermes.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/runtimes/install-models.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/ironclaw.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/kilocode.sh"
+_safe_source "$HOMELAB_ROOT/agents/llm.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/runtimes/lmstudio.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/runtimes/omlx.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/runtimes/ollama.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/other/olol.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/open-hands.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/open-interpreter.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/opencode.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/other/openwebui.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/cloud/openrouter.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/openclaw.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/picoclaw.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/plandex.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/agents/pi.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/pi-studio.sh"
+_safe_source "$REPO_ROOT/editors/sublime.sh"
+_safe_source "$HOMELAB_ROOT/agents/zeroclaw.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/other/tabby.sh" "$HOMELAB_ROOT"
+_safe_source "$REPO_ROOT/editors/vscode.sh"
+_safe_source "$REPO_ROOT/editors/devin.sh"
+_safe_source "$REPO_ROOT/editors/zed.sh"
 
 # ============================================================================
 # CONFIGURATION DEPLOYMENT
@@ -72,7 +98,7 @@ _deploy_mcp_to() {
   local dest="$1" label="$2"
   local mcp_src
   mcp_src=$(find_source "mcp.json")
-  [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
+  [ -z "$mcp_src" ] && mcp_src="$HOMELAB_ROOT/claude-code/mcp.json"
   [ ! -f "$mcp_src" ] && { log_warning "MCP source not found: $mcp_src"; return 1; }
 
   if [ -f "$dest" ]; then
@@ -102,7 +128,7 @@ deploy_mcp_servers() {
 
   local mcp_src
   mcp_src=$(find_source "mcp.json")
-  [ -z "$mcp_src" ] && mcp_src="$SETTINGS_BASE/ai/claude-code/mcp.json"
+  [ -z "$mcp_src" ] && mcp_src="$HOMELAB_ROOT/claude-code/mcp.json"
   if [ ! -f "$mcp_src" ]; then
     log_warning "MCP source not found: $mcp_src"
     return 1
@@ -142,7 +168,7 @@ deploy_configs() {
   # Resolve per-profile config directory and source models.sh
   local _profile _profdir
   _profile="${MACHINE_PROFILE}"
-  _profdir="${SETTINGS_BASE}/ai/profiles/${_profile}"
+  _profdir="${HOMELAB_ROOT}/profiles/${_profile}"
   [ -n "$_profile" ] && log_info "Profile: ${_profile}" ||
     log_warning "Profile not detected — per-profile configs will be skipped"
 
@@ -244,7 +270,7 @@ deploy_configs() {
   copy_file "${_profdir}/gemini/settings.json" "$HOME/.gemini/settings.json"
   _validate_config_models "$HOME/.gemini/settings.json" "Gemini"
   copy_file "${_profdir}/gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
-  copy_file "${SETTINGS_BASE}/ai/agents/gemini-projects.json" "$HOME/.gemini/projects.json"
+  copy_file "${HOMELAB_ROOT}/agents/gemini-projects.json" "$HOME/.gemini/projects.json"
 
   [ -L "$HOME/.continue" ] && rm "$HOME/.continue"
   mkdir -p "$HOME/.continue"
@@ -257,7 +283,7 @@ deploy_configs() {
   _validate_config_models "$HOME/.config/opencode/opencode.jsonc" "OpenCode"
   # Deploy shared OpenCode agent prompts (profile-agnostic)
   mkdir -p "$HOME/.config/opencode/agents"
-  for _agent_md in "${SETTINGS_BASE}/ai/opencode/agents/"*.md; do
+  for _agent_md in "${HOMELAB_ROOT}/opencode/agents/"*.md; do
     [ -f "$_agent_md" ] && copy_file "$_agent_md" "$HOME/.config/opencode/agents/$(basename "$_agent_md")"
   done
 
@@ -364,7 +390,7 @@ PYEOF
   _validate_config_models "$HOME/.kilo/kilo.jsonc" "Kilo Code"
   # Deploy shared Kilo Code agent prompts (profile-agnostic)
   mkdir -p "$HOME/.kilo/agents"
-  for _agent_md in "${SETTINGS_BASE}/ai/kilocode/agents/"*.md; do
+  for _agent_md in "${HOMELAB_ROOT}/kilocode/agents/"*.md; do
     [ -f "$_agent_md" ] && copy_file "$_agent_md" "$HOME/.kilo/agents/$(basename "$_agent_md")"
   done
 
@@ -536,7 +562,7 @@ PYEOF
   log_info "  Wrote required models list to $_reqfile"
 
   # --- Generate model map ---
-  local _mapper="${SETTINGS_BASE}/ai/profiles/generate-model-map.sh"
+  local _mapper="${HOMELAB_ROOT}/profiles/generate-model-map.sh"
   if [ -f "$_mapper" ]; then
     bash "$_mapper" "${_profile}" 2>/dev/null && log_info "  Updated model-map.md" || true
   fi
@@ -1138,7 +1164,7 @@ wizard_step_profile() {
   print_step "Profile"
 
   local detected="${MACHINE_PROFILE:-unknown}"
-  local profiles_dir="${SETTINGS_BASE}/ai/profiles"
+  local profiles_dir="${HOMELAB_ROOT}/profiles"
 
   echo "Detected profile: ${detected}"
   prompt_wizard_choice \
@@ -1368,7 +1394,7 @@ wizard_step_local_models() {
   read -p "  Check OpenRouter for new models worth trying? (y/N) " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    local _suggester="${SETTINGS_BASE}/ai/profiles/suggest-models.sh"
+    local _suggester="${HOMELAB_ROOT}/profiles/suggest-models.sh"
     if [ -f "$_suggester" ]; then
       bash "$_suggester" "$WIZARD_PROFILE" 2>/dev/null || true
     fi

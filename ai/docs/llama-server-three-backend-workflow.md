@@ -32,9 +32,9 @@ flowchart LR
 
 Two key ports on localhost:
 
-| Port | Service | What it does |
-| ---- | ------- | ------------ |
-| **8080** | Open WebUI | The chat UI you open in a browser |
+| Port      | Service             | What it does                      |
+| --------- | ------------------- | --------------------------------- |
+| **8080**  | Open WebUI          | The chat UI you open in a browser |
 | **10000** | llama-server router | Model inference (no UI, just API) |
 
 The container reaches the host via `host.docker.internal`.
@@ -90,11 +90,11 @@ cd ~/code/isaackehle/settings/ai/router
 
 ## 2. Models served by the router
 
-| API model ID | GGUF file | Role | Size |
-| ------------ | --------- | ---- | ---- |
-| `qwen3-4b-it` | `qwen3-4b-it-q4_k_m.gguf` | Fast chat / default | ~2.5 GB |
-| `qwen3-coder-30b` | `qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf` | Coding | ~26 GB |
-| `deepseek-r1-32b` | `deepseek-r1-32b-ds-q4_k_m.gguf` | Reasoning | ~19 GB |
+| API model ID      | GGUF file                                | Role                | Size    |
+| ----------------- | ---------------------------------------- | ------------------- | ------- |
+| `qwen3-4b-it`     | `qwen3-4b-it-q4_k_m.gguf`                | Fast chat / default | ~2.5 GB |
+| `qwen3-coder-30b` | `qwen3-coder-30b-a3b-cd-ud-q6_k_xl.gguf` | Coding              | ~26 GB  |
+| `deepseek-r1-32b` | `deepseek-r1-32b-ds-q4_k_m.gguf`         | Reasoning           | ~19 GB  |
 
 Plus 6 auto-discovered models from GGUF filenames in
 `/usr/local/lib/llama-models/` (e.g., `qwen3-coder-next-80b-cd-q4_k_m`,
@@ -137,11 +137,11 @@ from all three backends.
 
 ## 4. Three backend paths explained
 
-| Backend | Port / URL | Models available | Auth |
-| ------- | ---------- | ---------------- | ---- |
-| **llama-server router** | `host.docker.internal:10000` | 9 local GGUF-served models | `sk-local` (any non-empty key) |
-| **Ollama** | `host.docker.internal:11434` | 29 local Ollama models | none |
-| **OpenRouter** | `openrouter.ai/api/v1` | 300+ cloud models (Claude, Gemini, etc.) | `OPENROUTER_API_KEY` |
+| Backend                 | Port / URL                   | Models available                         | Auth                           |
+| ----------------------- | ---------------------------- | ---------------------------------------- | ------------------------------ |
+| **llama-server router** | `host.docker.internal:10000` | 9 local GGUF-served models               | `sk-local` (any non-empty key) |
+| **Ollama**              | `host.docker.internal:11434` | 29 local Ollama models                   | none                           |
+| **OpenRouter**          | `openrouter.ai/api/v1`       | 300+ cloud models (Claude, Gemini, etc.) | `OPENROUTER_API_KEY`           |
 
 The `OPENAI_API_BASE_URLS` and `OPENAI_API_KEYS` env vars are semicolon-separated
 lists — index 0 = llama-server, index 1 = OpenRouter. Ollama gets its own
@@ -175,42 +175,23 @@ docker exec openwebui sh -c 'curl -s -H "Authorization: Bearer $(echo $OPENAI_AP
 
 ---
 
-## 4. Hermes-llama (port 54906)
+## 4. Hermes-llama (DEPRECATED — REMOVED)
 
-The hermes-llama provider runs the reasoning model (qwen3.6-35b-opus4.7-128k-q5_k_m)
-for use with the Hermes Telegram gateway.
-
-### Start
-
-```bash
-nohup /usr/local/bin/llama-server \
-  --model /usr/local/lib/llama-models/qwen3.6-35b-opus4.7-128k-q5_k_m.gguf \
-  --host 127.0.0.1 \
-  --port 54906 \
-  --ctx-size 131072 \
-  --n-gpu-layers 999 \
-  --threads 12 \
-  --flash-attn on \
-  > /tmp/llama-54906.log 2>&1 &
-```
-
-### Verify
-
-```bash
-curl -s http://127.0.0.1:54906/v1/models | jq '.data[].id'
-```
+> **Note:** The separate hermes-llama provider on port 54906 has been removed.
+> Hermes now uses the Ollama provider on port 11434. All reasoning models
+> (including qwen3.6-35b:opus4.7-128k) are served through Ollama.
 
 ---
 
 ## 5. Troubleshooting
 
-| Symptom | Likely cause |
-| ------- | ----------- |
-| Router models missing from dropdown | Router down. Check `launchctl list \| grep llama-router` or restart. |
-| Ollama models missing | Ollama bound to `127.0.0.1`. Set `OLLAMA_HOST=0.0.0.0:11434` and restart. |
-| OpenRouter 401 | Key not passed. Check `~/.env.local` has `OPENROUTER_API_KEY` set. |
-| Container can't reach host | Ensure `--add-host=host.docker.internal:host-gateway` on `docker run`. |
-| Port 8080 shows "ssh" in `lsof` | Normal — Colima port-forward, not a problem. |
+| Symptom                             | Likely cause                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| Router models missing from dropdown | Router down. Check `launchctl list \| grep llama-router` or restart.      |
+| Ollama models missing               | Ollama bound to `127.0.0.1`. Set `OLLAMA_HOST=0.0.0.0:11434` and restart. |
+| OpenRouter 401                      | Key not passed. Check `~/.env.local` has `OPENROUTER_API_KEY` set.        |
+| Container can't reach host          | Ensure `--add-host=host.docker.internal:host-gateway` on `docker run`.    |
+| Port 8080 shows "ssh" in `lsof`     | Normal — Colima port-forward, not a problem.                              |
 
 ---
 
