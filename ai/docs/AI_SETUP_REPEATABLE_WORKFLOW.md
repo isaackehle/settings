@@ -645,3 +645,22 @@ When running through `pc bash`, shell startup may emit unrelated errors from `fn
 - Decide whether oMLX deserves a first-class experimental profile or remains a research note.
 - Continue moving optional overlapping tools behind the fzf selection gate.
 - Keep the repeatable workflow document updated whenever a workstream note graduates into operational policy.
+
+## REFERENCES
+
+For detailed information about model installation and tool configuration, see:
+- [MODEL_INSTALLATION_GUIDE](https://github.com/isaackehle/homelab/blob/main/docs/MODEL_INSTALLATION_GUIDE.md)
+- [ollama-model-registration](https://github.com/isaackehle/homelab/blob/main/docs/ollama-model-registration.md)
+- [ollama-multimodel-cheatsheet](https://github.com/isaackehle/homelab/blob/main/docs/ollama-multimodel-cheatsheet.md)
+
+Use the MODEL_INSTALLATION_GUIDE.md for complete understanding of how models are discovered, registered, and used by tools.
+
+## FUTURE IMPLEMENTATION NOTES
+
+- Add explicit references to MODEL_INSTALLATION_GUIDE.md in tools documentation (Continue.md, OpenCode.md, etc.)
+- Ensure ollama.sh, install-models.sh, and validate-profile.sh cover the concepts from MODEL_INSTALLATION_GUIDE.md
+- Update relevant sections in MODELS.md to reference the new guide
+
+## ACKNOWLEDGEMENTS
+
+Thanks to all the maintainers, contributors, and users who make this setup possible.

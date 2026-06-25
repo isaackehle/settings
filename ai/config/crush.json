@@ -1,66 +1,65 @@
 {
     "$schema": "https://charm.land/crush.json",
     "models": {
+        "fast": {
+            "model": "qwen3:4b",
+            "provider": "ollama",
+            "max_tokens": 4096
+        },
         "large": {
-            "model": "qwen3-coder-30b",
-            "provider": "llama-gp-router",
+            "model": "qwen3-coder-30b-a3b:q6",
+            "provider": "ollama",
             "max_tokens": 8192
         },
         "reasoning": {
-            "model": "qwen3.6-35b-opus4.7-128k-q5_k_m",
-            "provider": "hermes-llama",
+            "model": "qwen3.6-35b:opus4.7-128k",
+            "provider": "ollama",
             "max_tokens": 8192
         },
-        "fast": {
-            "model": "qwen3:4b",
-            "provider": "llama-gp-router",
-            "max_tokens": 4096
-        },
         "writing": {
-            "model": "qwen3.5-27b",
-            "provider": "llama-heavy",
+            "model": "qwen3.5-27b:q5",
+            "provider": "ollama",
             "max_tokens": 8192
         }
     },
     "providers": {
-        "hermes-llama": {
-            "name": "Hermes (qwen3.6-35b-opus4.7)",
+        "ollama": {
+            "name": "Ollama (Local)",
             "type": "openai-compat",
-            "base_url": "http://127.0.0.1:54906/v1",
-            "api_key": "sk-local",
-            "models": [
-                {
-                    "id": "qwen3.6-35b-opus4.7-128k-q5_k_m",
-                    "name": "Qwen 3.6 35B Opus 4.7 (Hermes Local)",
-                    "context_window": 131072,
-                    "default_max_tokens": 8192,
-                    "cost_per_1m_in": 0.0,
-                    "cost_per_1m_out": 0.0,
-                    "can_reason": true,
-                    "supports_attachments": false
-                }
-            ]
-        },
-        "llama-gp-router": {
-            "name": "llama.cpp router (local)",
-            "type": "openai-compat",
-            "base_url": "http://localhost:10000/v1",
-            "api_key": "sk-local"
-        },
-        "llama-heavy": {
-            "name": "llama.cpp heavy (local)",
-            "type": "openai-compat",
-            "base_url": "http://localhost:10001/v1",
+            "base_url": "http://127.0.0.1:11434/v1",
             "api_key": "sk-local"
         },
         "openrouter": {
-            "name": "OpenRouter (cloud)",
+            "name": "OpenRouter (Cloud)",
             "type": "openai-compat",
             "base_url": "https://openrouter.ai/api/v1",
             "api_key": "${OPENROUTER_API_KEY:?}"
         }
     },
     "mcp": {
+        "amazon": {
+            "type": "stdio",
+            "command": "node",
+            "args": [
+                "/Users/isaac/code/mcp-server-amazon/build/index.js"
+            ]
+        },
+        "apple-reminders": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "mcp-server-apple-events"
+            ]
+        },
+        "duckduckgo": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@aiprintmoney-arc/mcp-server-duckduckgo"
+            ]
+        },
         "fetlife": {
             "type": "stdio",
             "command": "/Users/isaac/code/isaackehle/settings/mcp-servers/fetlife-discussions/.venv/bin/python",
@@ -74,36 +73,12 @@
                 "FETLIFE_HEADLESS": "1"
             }
         },
-        "duckduckgo": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "-y",
-                "@aiprintmoney-arc/mcp-server-duckduckgo"
-            ]
-        },
         "home-assistant": {
             "type": "http",
             "url": "https://kehle.duckdns.org:8123/api/mcp",
             "headers": {
                 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5MzZmMDY4YWNmOTM0ZmU4OWM2NWJhY2M0MDdkODFkYyIsImlhdCI6MTc3MzU0NzU1MywiZXhwIjoyMDg4OTA3NTUzfQ.MVhgnij-Fw0lCiDOJwdgVXDrXbCqncjhZWsXwWzIDFI"
             }
-        },
-        "apple-reminders": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-server-apple-events"
-            ]
-        },
-        "weather": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "-y",
-                "@dangahagan/weather-mcp@latest"
-            ]
         },
         "one-search": {
             "type": "stdio",
@@ -116,11 +91,12 @@
                 "SEARCH_PROVIDER": "duckduckgo"
             }
         },
-        "amazon": {
+        "weather": {
             "type": "stdio",
-            "command": "node",
+            "command": "npx",
             "args": [
-                "/Users/isaac/code/mcp-server-amazon/build/index.js"
+                "-y",
+                "@dangahagan/weather-mcp@latest"
             ]
         }
     }

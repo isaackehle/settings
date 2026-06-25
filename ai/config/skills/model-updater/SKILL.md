@@ -1,56 +1,35 @@
----
-name: model-updater
-description: >
-  Search for newer or better LLM models and suggest replacements for what's currently installed.
-  Use this skill whenever the user asks about model updates, new model releases, whether their
-  models are outdated, what's new from Qwen/Meta/Mistral/DeepSeek/Google, or wants to know if
-  there's a better model for a specific role (coding, reasoning, autocomplete, embeddings, RAG).
-  Also trigger when the user mentions llmfit, HuggingFace trending, Ollama new models, or says
-  things like "check my models", "are there better options", "what dropped recently", or
-  "update my model list".
----
+# model-updater
 
-# Model Updater
+Automatically detect and suggest replacements for outdated models in the local Ollama installation based on newer releases, better quantizations, or model improvements discovered through searching.
 
-A skill for finding new model releases and suggesting upgrades to the local model stack defined
-in `scripts/models.sh`. When a custom GGUF alias changes, this skill keeps two things in sync:
+## Purpose
 
-`scripts/models.sh` — the `CUSTOM_MODELS_*` source array entries
+When a newer or better model is discovered (new version, higher performance, smaller footprint, or improved capabilities), this skill:
 
-Custom GGUF aliases are created at install time by `install_custom_models` in `docs/02 - AI/install-models.sh`,
-which writes a temp Modelfile, calls `ollama create`, then deletes the temp file. There are no persistent
-Modelfile templates — `CUSTOM_MODELS_*` entries in `models.sh` are the single source of truth for the
-`source|alias|num_ctx|thinking_mode` tuple.
-
-The goal is not to replace every model on every run — it's to surface meaningful upgrades: a newer
-version of something already installed, a new model that beats the current one on the relevant
-benchmark, or a smaller model that fits better in available RAM with similar quality.
-
----
+1. Identifies opportunities to replace existing models
+2. Provides clear recommendation details and rationale
+3. Can automatically update model configuration files when requested
+4. Helps keep the model stack current without manual investigation
 
 ## Workflow
 
-### Step 1 — Read the current model config
+### Step 1 — Read Current Model Config
 
-Read `scripts/models.sh` from the settings repo. Extract:
+Use `SCRIPT_MD_VIEW_COMMAND` to read `scripts/models.sh` and extract:
 
-- Which hardware profiles exist (m5-48gb, m5-64gb, m1-16gb, macmini-m2-16gb, etc.)
-- Which models are assigned to each profile and role (chat, autocomplete, apply, embed, reasoning)
-- Custom model aliases in `CUSTOM_MODELS_*` arrays — note the `source|alias|num_ctx` format:
-  - `source` — HuggingFace URL (`hf.co/owner/repo:tag`) or Ollama model ref
-  - `alias` — the local Ollama name that will be created (e.g., `qwen3.6-35b-a3b:q5`)
-  - `num_ctx` — optional context override (e.g., `32768`); empty means Ollama default
+- Hardware profiles (macbook-m5-64gb, macbook-m1-16gb, etc.)
+- Model assignments for each profile (architect, coder, reasoning, etc.)
+- Current Ollama versions and quants
+- Custom GGUF aliases in `CUSTOM_MODELS_*` arrays
+- Context window information
 
-Also read the per-machine `models.sh` files (e.g., `scripts/macbook-m5-48gb/models.sh`) to understand
-what's currently documented as installed and to compare with any discovered upgrades.
+Also read the per-machine `models.sh` files to understand what's currently installed.
 
-If the user specifies a profile, focus there. Otherwise check all profiles.
+### Step 2 — Check Ollama Current State
 
-### Step 2 — Check what Ollama currently has
+If Ollama is running locally:
 
-If Ollama is running locally, call the tags endpoint to see what's installed:
-
-```shell
+```bash
 curl -s http://localhost:11434/api/tags | python3 -c "
 import json,sys
 tags = json.load(sys.stdin)
@@ -63,186 +42,87 @@ Cross-reference with `models.sh` to identify:
 
 - Models configured but not yet pulled
 - Models pulled but no longer referenced (orphans)
-- Aliases installed whose source URL no longer matches what's in `models.sh` (drift)
+- Aliases installed whose source URL no longer matches (drift)
 
-### Step 3 — Search for new releases
+### Step 3 — Search for New Releases
 
-Search these sources. Aim for breadth first, then drill into specifics.
+Search these sources for newer models:
 
-**Web search targets:**
-
-Search the web for recent (last 60 days) announcements from:
-
-- Alibaba/Qwen (Qwen3, Qwen3-Coder, Qwen2.5 series)
-- DeepSeek (R2, V3, Coder updates)
-- Meta (Llama 4, Llama 3.x updates)
-- Mistral (Devstral, Codestral updates)
-- Google (Gemma 3 updates)
-- Microsoft (Phi-4 updates)
-
-Good search queries:
-
-- `"qwen3 coder" new model release 2025`
-- `deepseek r2 release ollama`
-- `llama 4 ollama available`
-- `best local coding LLM 2025 ollama`
-- `mistral devstral ollama 2025`
-
-**Ollama Hub search:**
-
-Use web search to find the latest tags for models already in the stack:
-
-```shell
-# Check for newer tags on a model
-curl -s "https://ollama.com/library/qwen2.5-coder/tags" 2>/dev/null | head -100
-ollama search qwen3-coder 2>/dev/null | head -20
-```
-
-**HuggingFace search (if HuggingFace MCP tools are available):**
-
-Search for trending GGUF models:
-
-- `GGUF coding model trending`
-- `GGUF reasoning instruct`
-- `GGUF embed`
-
-Prefer bartowski or lmstudio-community quantizations (standard llama.cpp format, compatible with
-all Ollama versions). Unsloth UD-quants (dynamic mixed-quant) require a recent llama.cpp build
-and may be incompatible with older Ollama releases — prefer bartowski Q5_K_M / Q6_K when
-in doubt. A new GGUF for an existing model
-family (e.g., Q5_K_M → Q6_K) warrants an update to `models.sh` even if the base model hasn't
-changed, if the newer quant improves quality or fits better in the target RAM budget.
-
-### Step 4 — Check llmfit compatibility
-
-If `llmfit` is available (`which llmfit`), verify suggested models fit the target RAM:
-
-```shell
-llmfit model <model-name>
-```
-
-If not installed, estimate from parameter count × bytes per parameter at the target quant:
-
-| Quant  | Bytes/param approx |
-| ------ | ------------------ |
-| Q4_K_M | 0.5                |
-| Q5_K_M | 0.625              |
-| Q6_K   | 0.75               |
-| Q8_0   | 1.0                |
-| F16    | 2.0                |
-
-A 30B model at Q5_K_M ≈ 30B × 0.625 ≈ 18.75 GB + ~2 GB Ollama overhead.
-
-### Step 5 — Produce the recommendation report
-
-Write a focused report. Do not overwhelm — if nothing meaningful has changed, say so directly.
-
----
-
-## Report Format
-
-```
-## Model Update Report — [date]
-
-### Profile: [profile-name]
-
-#### ✅ Current models looking good
-- model-name: still competitive, no significant replacement available
-
-#### 🔄 Suggested upgrades
-- **[role]**: replace `current-model` → `new-model`
-  - Why: [brief reason — benchmark improvement, newer architecture, smaller size]
-  - RAM: [estimated footprint]
-  - Changes needed: models.sh
-
-#### 🆕 New models worth evaluating
-- **model-name** ([size], [quant])
-  - Best for: [role]
-  - Context window: [tokens]
-  - Why notable: [one sentence]
-  - Fits in [X]GB RAM: yes/no
-
-#### ❌ Models to consider retiring
-- **model-name**: superseded by [newer model], no longer maintained upstream
-
-### Sources
-- [link 1]
-- [link 2]
-```
-
-Keep each entry to 2–3 lines. Link sources so the user can verify.
-
----
-
-## Applying an upgrade — two files, one change
-
-When the user approves an upgrade, update both in order:
-
-### 1. Update `scripts/models.sh`
-
-Find the relevant `CUSTOM_MODELS_*` array entry and update the source field:
+**Ollama Hub Search**
 
 ```bash
-# Old
-"hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_XL|qwen3-coder-30b-a3b:q5|"
+# Check for newer tags on specific models
+ollama search qwen2.5-coder
+ollama search qwen3.6-35b
+ollama search deepseek-r1
 
-# New
-"hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:UD-Q5_K_M|qwen3-coder-30b-a3b:q5|"
+# Get exact tag details to compare:
+official tags, size, quant, context windows
 ```
 
-The install script (`install_custom_models` in `docs/02 - AI/install-models.sh`) builds a temp Modelfile
-at runtime and calls `ollama create` — no persistent Modelfile files are stored. After updating
-`models.sh`, re-running the installer picks up the change automatically.
+**Web Search for Improvements**
 
-The alias name (e.g., `qwen3.6-35b-a3b:q5`) encodes the quant tier — change it when the quant
-changes, keep it when only the source URL changes (e.g., same quant, new upstream revision). All
-derived aliases (`qwen3.6-35b-32k`, `qwen3.6-35b-220k:q5`) are unaffected unless the base alias
-name changes.
+- Search for "Qwen 3.5 27B Q4 quantization improvements"
+- Look for "Best local coding model 2024"
+- Check for "New MoE model requirements"
+- Search tool stability benchmarks
 
-If the model architecture or quantization tier changes significantly (e.g., Q5 → Q6 across
-a profile bump), also update:
+**Hugging Face**
 
-- The alias names to reflect the new quant (`-q5` → `-q6`)
-- All derived alias entries in the same array
-- The role mapping variables (`CLAUDE_CODE_SONNET_48GB`, `OPENCODE_AGENTS`, etc.)
+- Compare model repositories for quantization improvements
+- Check for new architectures with better performance
+- Look for quant-to-quant improvements (Q4_K_M → Q5_K_M)
+- Find models with better tool calling support
 
-### 2. Update the relevant `models.sh` matrix
+### Step 4 — Generate Recommendations
 
-Each machine has a `profiles/<machine>/models.sh` with the Model Matrix table. Update:
+Compare discovered models against current setup:
 
-- The **Source** row: new HF URL or Ollama model path
-- The **RAM loaded** row: if the new quant changes memory footprint
-- The **Alias chain** section: if filenames or source URLs changed
-- The **Install** section: if the quant tag appears in any code example
-- The **`Models last updated:`** header line: bump to today's date (format: `YYYY-MM-DD`)
+**What makes a model better replacement:**
 
-The matrix table uses model names as column headers — those don't change unless the alias name
-changes. If an alias name changes, update the column header and every row that references it.
+- Same role, smaller footprint (e.g., 16B → 8B for 16GB machines)
+- Same role, higher performance (faster generation, better tools, larger context)
+- Newer architecture or better training methodology
+- More stable tool-calling implementation
+- Better community support and updates
 
-Always bump the date even for minor source-URL-only changes — the date signals the last time
-the installed stack was reviewed and verified, not just when the documentation was touched.
+**Recommendation format:**
 
----
+```yaml
+role: "architect"
+current: "qwen3.6-35b:opus4.7-128k" (25GB, Q6_K_M)
+replacement: "qwen2.5:32b" (20GB, Q4_K_M)
+improvement: "Better architect model, 20% faster generation"
+impact: "Same role, 20% smaller memory footprint"
+profile: "macbook-m5-64gb"
 
-## Guardrails
+role: "coder"  
+current: "qwen3-coder-30b-a3b:q5" (26GB, Q5_K_M)
+replacement: "laguna-xs.2" (23GB, Q6_K)
+improvement: "Better MoE architecture for coding"
+impact: "Better reasoning in code, same footprint"
+```
 
-- Only suggest models with GGUF weights on Ollama Hub or HuggingFace. Do not suggest models
-  requiring GPU-only inference unless the user has a dedicated GPU machine.
-- Prefer unsloth, bartowski, or lmstudio-community GGUF quantizations (standard llama.cpp format). Unsloth
-  UD-quants may require a newer llama.cpp than the installed Ollama version supports — call out
-  this risk if suggesting a UD-quant.
-- `scripts/models.sh` (`CUSTOM_MODELS_*` source fields) is the single source of truth for what
-  gets installed. There are no separate Modelfile template files.
-- Do not suggest models larger than ~80% of the profile's total RAM.
-- Flag speculative releases (announced but not yet pullable) clearly.
+### Step 5 — Auto-Update When Requested
 
----
+If user confirms auto-update:
 
-## Follow-up actions
+1. Update `models.sh` CUSTOM_MODELS_ arrays
+2. Optionally run `setup_ai.sh` to apply new models
+3. Create context aliases for the new model if needed
+4. Clean up old model directories (optional)
 
-After presenting the report, offer to:
+## Integration with Other Skills
 
-1. Apply the upgrade (both files — models.sh, including the `Models last updated:` date) — show a diff first.
-2. Run `llmfit` on each candidate if available.
-3. Re-run the install: `bash docs/02 - AI/install-models.sh` → select profile.
-4. Verify with `ollama list` and `ollama ps` after pulling.
+This skill works with:
+
+- **model-updater-updates**: Track when models are replaced and log changes
+- **oMLX**: Handle oMLX quantization variants when they become available
+- **ollama-model-registry**: Sync new model registrations with official Ollama Hub
+- **workflow-notifications**: Alert users when model suggestions become available
+
+## Trigger Phrases
+
+```
+"are there better models for my setup?"
+"what new AI models were released?\ 
