@@ -1,0 +1,8 @@
+1|# Thought Bot — save destinations
+2|# Deployed from settings repo. Edit DESTINATIONS to add/remove save locations.
+3|export DESTINATIONS='{
+4|  "incoming": "~/vault/incoming",
+5|  "links": "~/code/isaackehle/settings/saved-links",
+6|  "notes": "~/vault/incoming"
+7|}'
+8|

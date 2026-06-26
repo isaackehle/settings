@@ -1,0 +1,6 @@
+1|# Grok CLI — route through Ollama
+2|command -v grok >/dev/null 2>&1 || return 0
+3|export GROKCLI_PROVIDER=openai
+4|export GROKCLI_BASE_URL=http://localhost:11434/v1
+5|export GROKCLI_API_KEY=sk-local
+6|

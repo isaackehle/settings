@@ -1,0 +1,10 @@
+1|[ -d "$HOME/Library/pnpm" ] || return 0
+2|
+3|# pnpm
+4|export PNPM_HOME="$HOME/Library/pnpm"
+5|case ":$PATH:" in
+6|  *":$PNPM_HOME:"*) ;;
+7|  *) export PATH="$PNPM_HOME:$PATH" ;;
+8|esac
+9|# pnpm end
+10|

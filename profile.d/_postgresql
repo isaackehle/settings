@@ -1,0 +1,4 @@
+1|# PostgreSQL
+2|[ -d "/opt/homebrew/opt/postgresql@15" ] || return 0
+3|export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+4|

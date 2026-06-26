@@ -1,0 +1,7 @@
+1|# Ollama
+2|command -v ollama >/dev/null 2>&1 || return 0
+3|export OLLAMA_KEEP_ALIVE="10m"   # keep models warm in RAM (0 = immediate unload)
+4|
+5|alias model-scout="${SETTINGS_BASE:-$HOME/code/isaackehle/settings}/model-scout.sh"
+6|alias suggest-models="${SETTINGS_BASE:-$HOME/code/isaackehle/settings}/2-ai/profiles/suggest-models.sh"
+7|

@@ -1,0 +1,16 @@
+1|# ~/.shellrc: loaded by both bash and zsh
+2|# Shell configuration that applies across both shells
+3|
+4|alias ls='gls -h'
+5|alias la='ls -A'
+6|alias ll='ls -lh'
+7|alias lla='ll -A'
+8|alias l='ls'
+9|alias less='less -R'
+10|alias grep='grep --color=auto'
+11|
+12|# FNM environment if we haven't sourced it in login shell
+13|[ -f "$HOME/.bashrc" ] || return 0
+14|if command -v fnm >/dev/null 2>&1; then
+15|  eval "$(fnm env)" 2>/dev/null
+16|fi

@@ -1,0 +1,5 @@
+1|# Global sourcing diagnostics — controlled by SOURCING_DEBUG env var.
+2|# Set: export SOURCING_DEBUG=1
+3|# Default off. _sourcing_debug() returns 0 when on, 1 when off.
+4|_sourcing_debug() { [ -n "${SOURCING_DEBUG:-}" ]; }
+5|

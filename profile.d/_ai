@@ -1,0 +1,4 @@
+1|# AI workspace paths
+2|export JOB_SEARCH_WORKSPACE="$PRIMARY_VAULT/job_search"
+3|export PRIVATE_CONFIG_ROOT="$PRIMARY_VAULT/private"
+4|
