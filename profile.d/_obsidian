@@ -1,0 +1,22 @@
+1|command -v opencode >/dev/null 2>&1 || return 0
+2|
+3|# Use helpers.sh to detect the machine profile and pull the research model
+4|if [[ -f "$SETTINGS_BASE/helpers.sh" ]]; then
+5|    source "$SETTINGS_BASE/helpers.sh"
+6|    _profile=$( _detect_profile )
+7|    if [[ -n "$_profile" ]]; then
+8|        _models_file="$SETTINGS_BASE/2-ai/profiles/$_profile/models.sh"
+9|        if [[ -f "$_models_file" ]]; then
+10|            source "$_models_file"
+11|            _vault_model="${OPENCODE_AGENTS[research]}"
+12|        fi
+13|    fi
+14|fi
+15|
+16|# Fallback if detection fails
+17|_vault_model="${_vault_model:-deepseek-r1-tools-8b:q4-128k}"
+18|
+19|alias vault="cd \"\$PRIMARY_VAULT\" && opencode --model $_vault_model"
+20|
+21|unset _profile _models_file _vault_model
+22|

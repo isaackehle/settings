@@ -1,0 +1,5 @@
+1|# LM Studio CLI (lms)
+2|[ -d "$HOME/.lmstudio/bin" ] || return 0
+3|export PATH="$PATH:$HOME/.lmstudio/bin"
+4|
+5|

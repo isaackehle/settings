@@ -1,0 +1,6 @@
+1|### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+2|[ -d "$HOME/.rd/bin" ] && export PATH="$HOME/.rd/bin:$PATH"
+3|### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+4|
+5|
+6|

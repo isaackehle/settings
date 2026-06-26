@@ -1,0 +1,4 @@
+1|# Gemini CLI — route to local LiteLLM proxy (comment out to use real Gemini API)
+2|# export GOOGLE_GEMINI_BASE_URL="http://localhost:4000"
+3|# export GEMINI_API_KEY="sk-dummy"
+4|

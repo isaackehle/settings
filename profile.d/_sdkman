@@ -1,0 +1,5 @@
+1|# SDKMAN — must be sourced after other PATH modifications
+2|[ -d "$HOME/.sdkman" ] || return 0
+3|export SDKMAN_DIR="$HOME/.sdkman"
+4|[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+5|

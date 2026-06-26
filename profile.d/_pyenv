@@ -1,0 +1,5 @@
+1|if command -v pyenv 1>/dev/null 2>&1; then
+2|  eval "$(pyenv init --path)"
+3|  eval "$(pyenv init -)"
+4|fi
+5|

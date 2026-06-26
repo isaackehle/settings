@@ -1,0 +1,4 @@
+1|# Windsurf
+2|[ -d "$HOME/.codeium/windsurf/bin" ] || return 0
+3|export PATH="$HOME/.codeium/windsurf/bin:$PATH"
+4|

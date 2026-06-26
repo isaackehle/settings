@@ -1,0 +1,5 @@
+1|# Bun
+2|[ -d "$HOME/.bun" ] || return 0
+3|export BUN_INSTALL="$HOME/.bun"
+4|export PATH="$BUN_INSTALL/bin:$PATH"
+5|

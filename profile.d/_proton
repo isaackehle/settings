@@ -1,0 +1,6 @@
+1|# ProtonDrive — auto-detect by email folder name
+2|[ -d "$HOME/Library/CloudStorage" ] || return 0
+3|
+4|export PROTON_DRIVE
+5|PROTON_DRIVE=$(find "$HOME/Library/CloudStorage" -maxdepth 1 -type d -name "ProtonDrive-*@*-folder" 2>/dev/null | head -1)
+6|
