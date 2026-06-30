@@ -64,6 +64,7 @@ _safe_source "$REPO_ROOT/editors/github-copilot.sh"
 _safe_source "$HOMELAB_ROOT/agents/goose.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/grok.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/cloud/groq.sh" "$HOMELAB_ROOT"
+_safe_source "$HOMELAB_ROOT/cloud/huggingface.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/hermes.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/runtimes/install-models.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/ironclaw.sh" "$HOMELAB_ROOT"
@@ -661,7 +662,7 @@ verify_installations() {
 # ============================================================================
 
 declare -A TOOL_GROUPS=(
-  ["infrastructure"]="ollama openrouter openwebui"
+  ["infrastructure"]="ollama openrouter openwebui huggingface"
   ["terminal-agents"]="claude opencode crush aider codex gemini grok llm fabric aichat goose plandex pi openclaw ironclaw hermes picoclaw zeroclaw"
   ["vscode-extensions"]="continue copilot kilocode"
   ["ides"]="devin cursor zed"
@@ -674,6 +675,7 @@ declare -A GROUP_SETUP_FUNCS=(
   ["ollama"]="setup_ollama"
   ["openrouter"]="setup_openrouter"
   ["openwebui"]="setup_openwebui"
+  ["huggingface"]="setup_huggingface"
   ["claude"]="setup_claude"
   ["opencode"]="setup_opencode"
   ["crush"]="setup_crush"
@@ -709,6 +711,7 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["ollama"]="verify_ollama"
   ["openrouter"]="verify_openrouter"
   ["openwebui"]="verify_openwebui"
+  ["huggingface"]="verify_huggingface"
   ["claude"]="verify_claude"
   ["opencode"]="verify_opencode"
   ["crush"]="verify_crush"
@@ -740,7 +743,7 @@ declare -A GROUP_VERIFY_FUNCS=(
 
 # Display names for groups/tools
 declare -A DISPLAY_NAMES=(
-  ["infrastructure"]="Infrastructure (Ollama + OpenRouter + OpenWebUI)"
+  ["infrastructure"]="Infrastructure (Ollama + OpenRouter + OpenWebUI + HuggingFace)"
   ["terminal-agents"]="Terminal Agents (Claude, OpenCode, Crush, etc.)"
   ["vscode-extensions"]="VS Code Extensions (Continue, Copilot, Kilocode, etc.)"
   ["ides"]="IDEs (Devin Desktop, Cursor, Zed)"
@@ -749,6 +752,7 @@ declare -A DISPLAY_NAMES=(
   ["ollama"]="Ollama"
   ["openrouter"]="OpenRouter"
   ["openwebui"]="OpenWebUI"
+  ["huggingface"]="HuggingFace CLI"
   ["claude"]="Claude Code"
   ["opencode"]="OpenCode"
   ["crush"]="Crush"
@@ -979,6 +983,7 @@ apply_infrastructure_stack() {
       openrouter) setup_openrouter ;;
       openwebui)  setup_openwebui ;;
       lmstudio)   setup_lmstudio ;;
+      huggingface) setup_huggingface ;;
     esac
   done
 
@@ -1027,42 +1032,33 @@ select_infrastructure() {
   fi
 
   echo ""
-  echo "  Choose access layer components:"
+  echo "  Access layer services (all bind to 0.0.0.0 for fleet access):"
   echo ""
-  echo "  1) Standard access layer  - OpenRouter + OpenWebUI + Unsloth Studio"
-  echo "  2) OpenRouter only"
-  echo "  3) OpenWebUI only"
-  echo "  4) Unsloth Studio only"
-  echo "  5) None"
-  echo "  6) Custom access layer"
-  echo ""
-  printf "Select access option [1]: "
-  read -r access_choice
-  access_choice="${access_choice:-1}"
 
   local access_layers=""
-  case "$access_choice" in
-    1) access_layers="openrouter openwebui lmstudio" ;;
-    2) access_layers="openrouter" ;;
-    3) access_layers="openwebui" ;;
-    4) access_layers="lmstudio" ;;
-    5) access_layers="" ;;
-    6)
-      echo ""
-      echo "Select access layer components (space-separated, enter to confirm):"
-      echo "  openrouter - Cloud model fallback / broker"
-      echo "  openwebui  - Web UI"
-      echo "  lmstudio   - Unsloth Studio / local GUI"
-      echo ""
-      printf "Access components [openrouter openwebui lmstudio]: "
-      read -r access_layers
-      access_layers="${access_layers:-openrouter openwebui lmstudio}"
-      ;;
-    *)
-      log_error "Invalid option"
-      return 1
-      ;;
-  esac
+
+  printf "  OpenRouter (cloud fallback)?       [Y/n]: "
+  read -r yn; yn="${yn:-Y}"
+  [[ "$yn" =~ ^[Yy] ]] && access_layers="$access_layers openrouter"
+
+  printf "  OpenWebUI (web UI, port 8080)?     [Y/n]: "
+  read -r yn; yn="${yn:-Y}"
+  [[ "$yn" =~ ^[Yy] ]] && access_layers="$access_layers openwebui"
+
+  printf "  Unsloth Studio (local GUI)?        [y/N]: "
+  read -r yn; yn="${yn:-N}"
+  [[ "$yn" =~ ^[Yy] ]] && access_layers="$access_layers lmstudio"
+
+  printf "  HuggingFace CLI (model downloads)? [y/N]: "
+  read -r yn; yn="${yn:-N}"
+  [[ "$yn" =~ ^[Yy] ]] && access_layers="$access_layers huggingface"
+
+  access_layers="$(echo "$access_layers" | xargs)"
+  if [ -z "$access_layers" ]; then
+    echo "  -> No access layer services"
+  else
+    echo "  -> Selected: $access_layers"
+  fi
 
   apply_infrastructure_stack "$runtimes" "$access_layers"
 }
@@ -1259,37 +1255,42 @@ wizard_step_infrastructure() {
     echo "  -> Selected: $runtimes"
   fi
 
-  prompt_wizard_choice \
-    "Choose access layer:" \
-    "1) Standard access layer (OpenRouter + OpenWebUI + Unsloth Studio)" \
-    "2) OpenRouter only" \
-    "3) OpenWebUI only" \
-    "4) Unsloth Studio only" \
-    "5) None" \
-    "6) Custom access layer"
+  echo ""
+  echo "  Access layer services (all bind to 0.0.0.0 for fleet access):"
+  echo ""
 
   local access_layers=""
-  case "${WIZARD_CHOICE:-1}" in
-    1|"") access_layers="openrouter openwebui lmstudio" ;;
-    2) access_layers="openrouter" ;;
-    3) access_layers="openwebui" ;;
-    4) access_layers="lmstudio" ;;
-    5) access_layers="" ;;
-    6)
-      echo ""
-      echo "Select access layer components (space-separated, enter to confirm):"
-      echo "  openrouter - Cloud model fallback / broker"
-      echo "  openwebui  - Web UI"
-      echo "  lmstudio   - Unsloth Studio / local GUI"
-      echo ""
-      read -r -p "Access components [openrouter openwebui lmstudio]: " access_layers
-      access_layers="${access_layers:-openrouter openwebui lmstudio}"
-      ;;
-    *)
-      log_error "Invalid selection."
-      return 1
-      ;;
-  esac
+
+  prompt_wizard_choice \
+    "OpenRouter (cloud fallback):" \
+    "1) Yes (default)" \
+    "2) No"
+  [[ "${WIZARD_CHOICE:-1}" != "2" ]] && access_layers="$access_layers openrouter"
+
+  prompt_wizard_choice \
+    "OpenWebUI (web UI, port 8080):" \
+    "1) Yes (default)" \
+    "2) No"
+  [[ "${WIZARD_CHOICE:-1}" != "2" ]] && access_layers="$access_layers openwebui"
+
+  prompt_wizard_choice \
+    "Unsloth Studio (local GUI):" \
+    "1) Yes" \
+    "2) No (default)"
+  [[ "${WIZARD_CHOICE:-1}" == "1" ]] && access_layers="$access_layers lmstudio"
+
+  prompt_wizard_choice \
+    "HuggingFace CLI (model downloads):" \
+    "1) Yes" \
+    "2) No (default)"
+  [[ "${WIZARD_CHOICE:-1}" == "1" ]] && access_layers="$access_layers huggingface"
+
+  access_layers="$(echo "$access_layers" | xargs)"
+  if [ -z "$access_layers" ]; then
+    echo "  -> No access layer services"
+  else
+    echo "  -> Selected: $access_layers"
+  fi
 
   apply_infrastructure_stack "$runtimes" "$access_layers"
 }

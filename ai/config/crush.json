@@ -39,7 +39,7 @@
     "mcp": {
         "amazon": {
             "type": "stdio",
-            "command": "node",
+            "command": "/Users/isaac/.local/share/fnm/node-versions/v24.15.0/installation/bin/node",
             "args": [
                 "/Users/isaac/code/mcp-server-amazon/build/index.js"
             ]
@@ -59,19 +59,6 @@
                 "-y",
                 "@aiprintmoney-arc/mcp-server-duckduckgo"
             ]
-        },
-        "fetlife": {
-            "type": "stdio",
-            "command": "/Users/isaac/code/isaackehle/settings/mcp-servers/fetlife-discussions/.venv/bin/python",
-            "args": [
-                "-u",
-                "/Users/isaac/code/isaackehle/settings/mcp-servers/fetlife/server.py"
-            ],
-            "env": {
-                "FETLIFE_USERNAME": "${FETLIFE_USERNAME:?}",
-                "FETLIFE_PASSWORD": "${FETLIFE_PASSWORD:?}",
-                "FETLIFE_HEADLESS": "1"
-            }
         },
         "home-assistant": {
             "type": "http",

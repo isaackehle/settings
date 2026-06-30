@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component Dependencies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dependency-graph {
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h1>Component Dependency Graph</h1>
+            <div class="dependency-graph" id="dependency-graph"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// Sample dependency data (would be populated from server)
+const dependencies = {
+    nodes: [
+        { id: 'ollama' },
+        { id: 'openwebui' },
+        { id: 'openrouter' }
+    ],
+    links: [
+        { source: 'ollama', target: 'openwebui' },
+        { source: 'openwebui', target: 'openrouter' }
+    ]
+};
+
+// Create a simple force-directed graph
+const svg = d3.select("#dependency-graph")
+    .append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .call(d3.zoom().on("zoom", function(event) {
+        svg.attr("transform", event.transform);
+    }))
+    .append("g");
+
+const simulation = d3.forceSimulation(dependencies.nodes)
+    .force("link", d3.forceLink(dependencies.links).id(d => d.id))
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("center", d3.forceCenter(400, 300));
+
+const link = svg.append("g")
+    .attr("stroke", "#999")
+    .attr("stroke-width", 2)
+    .selectAll("line")
+    .data(dependencies.links)
+    .enter().append("line");
+
+const node = svg.append("g")
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 1.5)
+    .selectAll("circle")
+    .data(dependencies.nodes)
+    .enter().append("circle")
+    .attr("r", 20)
+    .call(d3.drag()
+        .on("start", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        })
+        .on("drag", (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+        })
+        .on("end", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        })
+    );
+
+node.append("title")
+    .text(d => d.id);
+
+simulation.on("tick", () => {
+    link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+});
+</script>
+</body>
+</html>
