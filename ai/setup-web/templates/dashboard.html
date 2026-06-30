@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setup AI Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin-bottom: 1rem;
+        }
+        .progress-container {
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #0d6efd;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h1 class="mb-4">Setup AI Dashboard</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Hardware Status</h5>
+                    <div id="hardware-info"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Component Status</h5>
+                    <div id="component-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Installation Progress</h5>
+                    <div class="progress-container" id="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <p id="progress-text" class="mt-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Real-time hardware updates via SSE
+const eventSource = new EventSource('/stream');
+
+eventSource.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    
+    // Update hardware info
+    document.getElementById('hardware-info').innerHTML = `
+        <p><strong>Model:</strong> ${data.hw_model}</p>
+        <p><strong>Memory:</strong> ${data.hw_mem_gb} GB</p>
+        <p><strong>Cores:</strong> ${data.hw_cores}</p>
+        <p><strong>Tier:</strong> ${data.memory_tier} / ${data.speed_tier}</p>
+    `;
+
+    // Update progress bar
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    
+    if (data.step) {
+        progressBar.style.width = `${data.progress}%`;
+        progressText.textContent = `${data.step}: ${data.status}`;
+    }
+};
+</script>
+</body>
+</html>

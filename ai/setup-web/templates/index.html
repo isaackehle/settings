@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup AI — Fleet Installer</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --muted: #71717a;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #eab308;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .container { max-width: 640px; width: 100%; }
+  h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .subtitle { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+  
+  /* Machine selector */
+  .machine-selector {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .machine-selector label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .machine-selector select {
+    width: 100%;
+    padding: 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .machine-selector select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .machine-info {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg);
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .machine-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+  .machine-info-row:last-child {
+    margin-bottom: 0;
+  }
+  .machine-info-label {
+    color: var(--muted);
+  }
+  .machine-info-value {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .step.active { display: block; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .step-num {
+    background: var(--accent);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .step-num.done { background: var(--green); }
+  .step-title { font-weight: 600; font-size: 1.1rem; }
+  .step-desc { color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem; }
+
+  /* Hardware info */
+  .hw-info {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .hw-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+  .hw-row:last-child { margin-bottom: 0; }
+  .hw-label { color: var(--muted); }
+  .hw-value { font-weight: 500; }
+  .tier-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .tier-light { background: #166534; color: #86efac; }
+  .tier-medium { background: #1e40af; color: #93c5fd; }
+  .tier-heavy { background: #7c2d12; color: #fdba74; }
+  .tier-maximum { background: #581c87; color: #d8b4fe; }
+
+  /* Toggle rows */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-weight: 500; }
+  .toggle-desc { color: var(--muted); font-size: 0.8rem; }
+  .toggle-right { display: flex; align-items: center; gap: 0.75rem; }
+  .default-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--border);
+    color: var(--muted);
+  }
+  .default-badge.yes { background: #166534; color: #86efac; }
+
+  /* Toggle switch */
+  .switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: var(--text);
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .switch input:checked + .slider { background: var(--accent); }
+  .switch input:checked + .slider::before { transform: translateX(20px); }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+  .btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary { background: var(--border); color: var(--text); }
+  .btn-secondary:hover { background: #3a3d4a; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Progress */
+  .progress-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+  }
+  .progress-icon { width: 20px; text-align: center; }
+  .progress-icon.running { color: var(--yellow); }
+  .progress-icon.complete { color: var(--green); }
+  .progress-icon.error { color: var(--red); }
+  .progress-detail { color: var(--muted); flex: 1; }
+  .progress-log {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Fleet machine */
+  .fleet-machine {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .fleet-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .fleet-name {
+    font-weight: 600;
+    min-width: 100px;
+  }
+  .fleet-ip {
+    color: var(--muted);
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+  .fleet-os {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .fleet-status {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .btn-small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    flex: none;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Setup AI</h1>
+  <div class="subtitle">Hardware-aware installer for AI development tools</div>
+
+  <!-- Machine Selector -->
+  <div class="machine-selector">
+    <label for="machine-select">Target Machine</label>
+    <select id="machine-select" onchange="selectMachine(this.value)">
+      <option value="">Loading machines...</option>
+    </select>
+    <div class="machine-info" id="machine-info" style="display: none;">
+      <div class="machine-info-row">
+        <span class="machine-info-label">Hardware</span>
+        <span class="machine-info-value" id="machine-hw">-</span>
+      </div>
+      <div class="machine-info-row">
+        <span class="machine-info-label">Memory</span>
+        <span class="machine-info-value" id="machine-mem">-</span>
+      </div>
+      <div class="machine-info-row">
+        <span class="machine-info-label">IP Address</span>
+        <span class="machine-info-value" id="machine-ip">-</span>
+      </div>
+      <div class="machine-info-row">
+        <span class="machine-info-label">Status</span>
+        <span class="machine-info-value" id="machine-status">-</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: Hardware Detection -->
+  <div class="step active" id="step1">
+    <div class="step-header">
+      <div class="step-num" id="step1-num">1</div>
+      <div>
+        <div class="step-title">Hardware Detected</div>
+        <div class="step-desc">System specs and optimal configuration tier.</div>
+      </div>
+    </div>
+    <div class="hw-info" id="hw-info">
+      <div class="hw-row">
+        <span class="hw-label">Model</span>
+        <span class="hw-value" id="hw-model">Detecting...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Memory</span>
+        <span class="hw-value" id="hw-memory">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Cores</span>
+        <span class="hw-value" id="hw-cores">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Memory Tier</span>
+        <span class="hw-value" id="hw-memory-tier">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Speed Tier</span>
+        <span class="hw-value" id="hw-speed-tier">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Quantization</span>
+        <span class="hw-value" id="hw-quant">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">oMLX Support</span>
+        <span class="hw-value" id="hw-omlx">...</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Fleet Role</span>
+        <span class="hw-value" id="hw-role">...</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Backend Selection -->
+  <div class="step" id="step2">
+    <div class="step-header">
+      <div class="step-num" id="step2-num">2</div>
+      <div>
+        <div class="step-title">Inference Backend</div>
+        <div class="step-desc">Choose which backends to install. Both can be installed and switched between.</div>
+      </div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Ollama</div>
+        <div class="toggle-desc">llama.cpp backend, works on all Macs including Intel</div>
+      </div>
+      <div class="toggle-right">
+        <span class="default-badge yes">default</span>
+        <label class="switch"><input type="checkbox" name="backend-ollama" value="ollama" checked id="ollama-toggle"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">oMLX</div>
+        <div class="toggle-desc">MLX backend, faster on Apple Silicon — can run alongside Ollama</div>
+      </div>
+      <div class="toggle-right">
+        <span class="default-badge" id="omlx-badge">requires Apple Silicon</span>
+        <label class="switch"><input type="checkbox" name="backend-omlx" value="omlx" id="omlx-toggle"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="hw-info" id="backend-info" style="margin-top: 1rem;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem;">Switching backends</div>
+      <div class="hw-row">
+        <span class="hw-label">CLI</span>
+        <span class="hw-value">source ai-backend ollama | omlx | status</span>
+      </div>
+      <div class="hw-row">
+        <span class="hw-label">Per-session</span>
+        <span class="hw-value">INFRA_BACKEND=omlx ./your-script.sh</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(1)">Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Components -->
+  <div class="step" id="step3">
+    <div class="step-header">
+      <div class="step-num" id="step3-num">3</div>
+      <div>
+        <div class="step-title">System Summary</div>
+        <div class="step-desc">What's installed, what's missing, and what to do.</div>
+      </div>
+    </div>
+    
+    <!-- Status Summary -->
+    <div class="hw-info" id="summary-installed" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem; color: var(--green);">✓ Installed</div>
+      <div id="summary-installed-list"></div>
+    </div>
+    
+    <div class="hw-info" id="summary-upToDate" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem; color: var(--green);">✓ Up to Date</div>
+      <div id="summary-upToDate-list"></div>
+    </div>
+    
+    <div class="hw-info" id="summary-needsUpdate" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem; color: var(--yellow);">⚠ Needs Update</div>
+      <div id="summary-needsUpdate-list"></div>
+    </div>
+    
+    <div class="hw-info" id="summary-missing" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem; color: var(--red);">✗ Missing</div>
+      <div id="summary-missing-list"></div>
+    </div>
+    
+    <div class="hw-info" id="summary-extra" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem; color: var(--muted);">? Extra (not in registry)</div>
+      <div id="summary-extra-list"></div>
+    </div>
+    
+    <!-- Model Inventory -->
+    <div class="hw-info" id="model-inventory" style="display: none;">
+      <div style="font-weight: 500; margin-bottom: 0.5rem;">Local Models</div>
+      <div id="model-inventory-list"></div>
+    </div>
+    
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(2)">Back</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Models -->
+  <div class="step" id="step4">
+    <div class="step-header">
+      <div class="step-num" id="step4-num">4</div>
+      <div>
+        <div class="step-title">Model Configuration</div>
+        <div class="step-desc">Models assigned based on your hardware tier and backend.</div>
+      </div>
+    </div>
+    <div class="hw-info" id="model-preview"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(3)">Back</button>
+      <button class="btn btn-primary" id="install-btn" onclick="startInstall()">Install</button>
+    </div>
+  </div>
+
+  <!-- Step 5: Progress -->
+  <div class="step" id="step5">
+    <div class="step-header">
+      <div class="step-num" id="step5-num">5</div>
+      <div>
+        <div class="step-title">Installation</div>
+        <div class="step-desc" id="progress-status">Starting...</div>
+      </div>
+    </div>
+    <div id="progress-list"></div>
+    <div class="progress-log" id="progress-log"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(6); loadFleet();">Next: Fleet</button>
+    </div>
+  </div>
+
+  <!-- Step 6: Fleet Management -->
+  <div class="step" id="step6">
+    <div class="step-header">
+      <div class="step-num" id="step6-num">6</div>
+      <div>
+        <div class="step-title">Fleet Deployment</div>
+        <div class="step-desc">Deploy to other machines via Tailscale SSH.</div>
+      </div>
+    </div>
+    <div id="fleet-list"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(5)">Back</button>
+      <button class="btn btn-primary" onclick="loadFleet()">Refresh</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let hardware = {};
+let components = {};
+let selectedComponents = [];
+
+// ── Initialize ──────────────────────────────────────────────────────
+async function init() {
+  const resp = await fetch('/api/detect');
+  hardware = await resp.json();
+  renderHardware();
+  renderBackendOptions();
+
+  const compResp = await fetch('/api/components');
+  components = await compResp.json();
+  renderComponents();
+  renderModels();
+  
+  // Load pre-install summary
+  loadSummary();
+  loadModelInventory();
+}
+
+async function loadSummary() {
+  try {
+    const resp = await fetch('/api/summary');
+    const summary = await resp.json();
+    renderSummary(summary);
+  } catch (e) {
+    console.error('Failed to load summary:', e);
+  }
+}
+
+function renderSummary(summary) {
+  // Installed
+  const installedEl = document.getElementById('summary-installed');
+  const installedList = document.getElementById('summary-installed-list');
+  if (summary.installed && summary.installed.length > 0) {
+    installedEl.style.display = 'block';
+    installedList.innerHTML = summary.installed.map(c => 
+      `<div class="hw-row"><span class="hw-label">${c.name}</span><span class="hw-value">${c.version || 'installed'}</span></div>`
+    ).join('');
+  }
+  
+  // Up to date
+  const upToDateEl = document.getElementById('summary-upToDate');
+  const upToDateList = document.getElementById('summary-upToDate-list');
+  if (summary.up_to_date && summary.up_to_date.length > 0) {
+    upToDateEl.style.display = 'block';
+    upToDateList.innerHTML = summary.up_to_date.map(c => 
+      `<div class="hw-row"><span class="hw-label">${c.name}</span><span class="hw-value">${c.version || 'current'}</span></div>`
+    ).join('');
+  }
+  
+  // Needs update
+  const needsUpdateEl = document.getElementById('summary-needsUpdate');
+  const needsUpdateList = document.getElementById('summary-needsUpdate-list');
+  if (summary.needs_update && summary.needs_update.length > 0) {
+    needsUpdateEl.style.display = 'block';
+    needsUpdateList.innerHTML = summary.needs_update.map(c => 
+      `<div class="hw-row"><span class="hw-label">${c.name}</span><span class="hw-value" style="color: var(--yellow);">${c.version || 'outdated'}</span></div>`
+    ).join('');
+  }
+  
+  // Missing
+  const missingEl = document.getElementById('summary-missing');
+  const missingList = document.getElementById('summary-missing-list');
+  if (summary.missing && summary.missing.length > 0) {
+    missingEl.style.display = 'block';
+    missingList.innerHTML = summary.missing.map(c => 
+      `<div class="hw-row"><span class="hw-label">${c.name}</span><span class="hw-value" style="color: var(--red);">not installed</span></div>`
+    ).join('');
+  }
+  
+  // Extra
+  const extraEl = document.getElementById('summary-extra');
+  const extraList = document.getElementById('summary-extra-list');
+  if (summary.extra && summary.extra.length > 0) {
+    extraEl.style.display = 'block';
+    extraList.innerHTML = summary.extra.map(c => 
+      `<div class="hw-row"><span class="hw-label">${c.name}</span><span class="hw-value" style="color: var(--muted);">could remove</span></div>`
+    ).join('');
+  }
+}
+
+async function loadModelInventory() {
+  try {
+    const resp = await fetch('/api/models');
+    const inventory = await resp.json();
+    renderModelInventory(inventory);
+  } catch (e) {
+    console.error('Failed to load model inventory:', e);
+  }
+}
+
+function renderModelInventory(inventory) {
+  const container = document.getElementById('model-inventory');
+  const list = document.getElementById('model-inventory-list');
+  
+  if (inventory.error || !inventory.families) {
+    container.style.display = 'block';
+    list.innerHTML = '<div style="color: var(--muted);">No local models found</div>';
+    return;
+  }
+  
+  container.style.display = 'block';
+  let html = `<div class="hw-row"><span class="hw-label">Total models</span><span class="hw-value">${inventory.total_models}</span></div>`;
+  html += `<div class="hw-row"><span class="hw-label">Total size</span><span class="hw-value">${inventory.total_size_gb} GB</span></div>`;
+  
+  // Group by family
+  for (const [family, quants] of Object.entries(inventory.families)) {
+    html += `<div style="margin-top: 0.75rem; font-weight: 500; text-transform: capitalize;">${family}</div>`;
+    for (const [quant, models] of Object.entries(quants)) {
+      for (const model of models) {
+        html += `<div class="hw-row"><span class="hw-label">${model.base}</span><span class="hw-value">${quant} ${model.context !== 'default' ? '(' + model.context + ')' : ''} — ${model.size_gb}GB</span></div>`;
+      }
+    }
+  }
+  
+  list.innerHTML = html;
+}
+
+function renderHardware() {
+  document.getElementById('hw-model').textContent = hardware.hw_model || 'Unknown';
+  document.getElementById('hw-memory').textContent = `${hardware.hw_mem_gb || '?'} GB`;
+  document.getElementById('hw-cores').textContent = hardware.hw_cores || '?';
+
+  const memTier = hardware.memory_tier || 'unknown';
+  const speedTier = hardware.speed_tier || 'unknown';
+  const quant = hardware.quant_override || 'q4';
+  const omlxSupported = hardware.omlx_supported || false;
+  const fleetRole = hardware.fleet_role || 'unknown';
+
+  document.getElementById('hw-memory-tier').innerHTML =
+    `<span class="tier-badge tier-${memTier}">${memTier}</span>`;
+  document.getElementById('hw-speed-tier').innerHTML =
+    `<span class="tier-badge tier-${memTier}">${speedTier}</span>`;
+  document.getElementById('hw-quant').textContent = quant;
+  
+  document.getElementById('hw-omlx').innerHTML = omlxSupported
+    ? '<span style="color: var(--green);">✓ Supported</span>'
+    : '<span style="color: var(--red);">✗ Not supported (Intel)</span>';
+  
+  document.getElementById('hw-role').innerHTML =
+    `<span class="tier-badge tier-${fleetRole === 'primary' ? 'maximum' : 'medium'}">${fleetRole}</span>`;
+  
+  // Enable/disable oMLX toggle based on hardware support
+  const omlxToggle = document.getElementById('omlx-toggle');
+  const omxBadge = document.getElementById('omlx-badge');
+  if (omlxSupported) {
+    omlxToggle.disabled = false;
+    omxBadge.textContent = 'available';
+    omxBadge.classList.add('yes');
+  } else {
+    omlxToggle.disabled = true;
+    omxBadge.textContent = 'requires Apple Silicon';
+    omxBadge.classList.remove('yes');
+  }
+}
+
+function renderBackendOptions() {
+  // Set up backend checkboxes
+  document.querySelectorAll('input[name="backend-ollama"], input[name="backend-omlx"]').forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      selectedBackends = [];
+      if (document.getElementById('ollama-toggle').checked) selectedBackends.push('ollama');
+      if (document.getElementById('omlx-toggle').checked) selectedBackends.push('omlx');
+      renderModels();
+    });
+  });
+}
+
+function renderComponents() {
+  const container = document.getElementById('components-list');
+  container.innerHTML = '';
+
+  const categoryOrder = ['runtimes', 'access', 'agents', 'editors', 'cloud'];
+  const categoryNames = {
+    runtimes: 'Local Runtimes',
+    access: 'Access Layer',
+    agents: 'AI Agents',
+    editors: 'Editors & IDEs',
+    cloud: 'Cloud Services',
+  };
+
+  for (const cat of categoryOrder) {
+    const comps = components[cat];
+    if (!comps || comps.length === 0) continue;
+
+    const header = document.createElement('div');
+    header.style.cssText = 'color: var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-top: 1rem; margin-bottom: 0.5rem;';
+    header.textContent = categoryNames[cat] || cat;
+    container.appendChild(header);
+
+    for (const comp of comps) {
+      const row = document.createElement('div');
+      row.className = 'toggle-row';
+
+      const isDefault = ['ollama', 'openwebui', 'openrouter', 'claude', 'opencode'].includes(comp.slug);
+      if (isDefault) selectedComponents.push(comp.slug);
+
+      row.innerHTML = `
+        <div>
+          <div class="toggle-label">${comp.name}</div>
+          <div class="toggle-desc">${comp.description}</div>
+        </div>
+        <div class="toggle-right">
+          ${isDefault ? '<span class="default-badge yes">default</span>' : ''}
+          <label class="switch">
+            <input type="checkbox" data-slug="${comp.slug}" ${isDefault ? 'checked' : ''}>
+            <span class="slider"></span>
+          </label>
+        </div>
+      `;
+
+      row.querySelector('input').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          if (!selectedComponents.includes(comp.slug)) {
+            selectedComponents.push(comp.slug);
+          }
+        } else {
+          selectedComponents = selectedComponents.filter(s => s !== comp.slug);
+        }
+      });
+
+      container.appendChild(row);
+    }
+  }
+}
+
+function renderModels() {
+  const container = document.getElementById('model-preview');
+  const backends = selectedBackends.length > 0 ? selectedBackends : ['ollama'];
+
+  let html = '<div style="font-weight: 500; margin-bottom: 0.75rem;">Models to install:</div>';
+
+  for (const backend of backends) {
+    const models = backend === 'omlx' ? hardware.models_omlx : hardware.models_ollama;
+    
+    html += `<div style="margin-top: 0.5rem; color: var(--muted); font-size: 0.85rem;">${backend.toUpperCase()}:</div>`;
+    
+    for (const [role, info] of Object.entries(models || {})) {
+      const model = info.model || info;
+      const quant = info.quant || '';
+      const ctx = info.context || '';
+      html += `
+        <div class="hw-row">
+          <span class="hw-label">${role}</span>
+          <span class="hw-value">${model}${quant ? ':' + quant : ''} ${ctx ? '(' + ctx + ')' : ''}</span>
+        </div>
+      `;
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+// ── Fleet Management ──────────────────────────────────────────────────────
+let fleetMachines = [];
+
+async function loadFleet() {
+  try {
+    const resp = await fetch('/api/fleet/machines');
+    fleetMachines = await resp.json();
+    renderFleet();
+  } catch (e) {
+    console.error('Failed to load fleet:', e);
+  }
+}
+
+function renderFleet() {
+  const container = document.getElementById('fleet-list');
+  if (!container) return;
+
+  if (fleetMachines.length === 0) {
+    container.innerHTML = '<div style="color: var(--muted); padding: 1rem;">No machines found</div>';
+    return;
+  }
+
+  container.innerHTML = fleetMachines.map(m => `
+    <div class="fleet-machine" data-host="${m.hostname}">
+      <div class="fleet-header">
+        <div class="fleet-name">${m.hostname}</div>
+        <div class="fleet-ip">${m.ip}</div>
+        <div class="fleet-os">${m.os}</div>
+        <button class="btn btn-small" onclick="checkMachine('${m.hostname}')">Check</button>
+        <button class="btn btn-small btn-primary" onclick="deployToMachine('${m.hostname}')">Deploy</button>
+      </div>
+      <div class="fleet-status" id="fleet-status-${m.hostname}"></div>
+    </div>
+  `).join('');
+}
+
+async function checkMachine(hostname) {
+  const statusEl = document.getElementById(`fleet-status-${hostname}`);
+  statusEl.innerHTML = '<span style="color: var(--yellow);">Checking...</span>';
+
+  try {
+    const resp = await fetch(`/api/fleet/check/${hostname}`);
+    const data = await resp.json();
+
+    if (data.ssh_ok) {
+      const hw = data.hardware || {};
+      statusEl.innerHTML = `
+        <div class="hw-row">
+          <span class="hw-label">SSH</span>
+          <span class="hw-value" style="color: var(--green);">Connected</span>
+        </div>
+        ${hw.model ? `
+        <div class="hw-row">
+          <span class="hw-label">Hardware</span>
+          <span class="hw-value">${hw.model} (${hw.memory_gb}GB, ${hw.cores} cores)</span>
+        </div>
+        ` : ''}
+      `;
+    } else {
+      statusEl.innerHTML = '<span style="color: var(--red);">SSH not configured — run: ssh-copy-id ' + hostname + '</span>';
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span style="color: var(--red);">Error: ${e.message}</span>`;
+  }
+}
+
+async function deployToMachine(hostname) {
+  statusEl = document.getElementById(`fleet-status-${hostname}`);
+  statusEl.innerHTML = '<span style="color: var(--yellow);">Deploying...</span>';
+
+  try {
+    const resp = await fetch('/api/fleet/deploy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        hostname: hostname,
+        components: selectedComponents,
+      }),
+    });
+
+    const data = await resp.json();
+    if (data.status === 'started') {
+      statusEl.innerHTML = '<span style="color: var(--green);">Deployment started</span>';
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span style="color: var(--red);">Error: ${e.message}</span>`;
+  }
+}
+
+// ── Navigation ──────────────────────────────────────────────────────
+let currentStep = 1;
+let selectedBackends = ['ollama'];
+
+function goStep(step) {
+  document.getElementById(`step${currentStep}`).classList.remove('active');
+  document.getElementById(`step${step}`).classList.add('active');
+  currentStep = step;
+}
+
+// ── Installation ────────────────────────────────────────────────────
+async function startInstall() {
+  document.getElementById('install-btn').disabled = true;
+  goStep(5);
+
+  const resp = await fetch('/api/install', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      hardware: hardware,
+      components: selectedComponents,
+      backends: selectedBackends,
+    }),
+  });
+
+  const data = await resp.json();
+  if (data.status === 'started') {
+    streamProgress();
+  }
+}
+
+function streamProgress() {
+  const evtSource = new EventSource('/api/stream');
+  const logEl = document.getElementById('progress-log');
+  const statusEl = document.getElementById('progress-status');
+  const listEl = document.getElementById('progress-list');
+
+  evtSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    const { step, status, detail } = data;
+
+    if (step === 'all' && status === 'done') {
+      statusEl.textContent = 'Installation complete!';
+      evtSource.close();
+      return;
+    }
+
+    if (status === 'error') {
+      statusEl.textContent = 'Error occurred';
+      logEl.textContent += `\nERROR: ${detail}`;
+      logEl.scrollTop = logEl.scrollHeight;
+      return;
+    }
+
+    if (step === 'log') {
+      logEl.textContent += detail + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+      return;
+    }
+
+    // Component status update
+    const icon = status === 'complete' ? '✓' : status === 'started' ? '⟳' : '○';
+    const iconClass = status === 'complete' ? 'complete' : status === 'started' ? 'running' : '';
+
+    const existing = document.getElementById(`progress-${step}`);
+    if (existing) {
+      existing.querySelector('.progress-icon').textContent = icon;
+      existing.querySelector('.progress-detail').textContent = detail;
+    } else {
+      const item = document.createElement('div');
+      item.id = `progress-${step}`;
+      item.className = 'progress-item';
+      item.innerHTML = `
+        <div class="progress-icon ${iconClass}">${icon}</div>
+        <div style="font-weight: 500; min-width: 100px;">${step}</div>
+        <div class="progress-detail">${detail}</div>
+      `;
+      listEl.appendChild(item);
+    }
+
+    statusEl.textContent = `Installing ${step}...`;
+  };
+
+  evtSource.onerror = () => {
+    statusEl.textContent = 'Connection lost';
+  };
+}
+
+// ── Start ───────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
