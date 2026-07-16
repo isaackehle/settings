@@ -183,7 +183,7 @@ from the base alias, not from a GGUF path.
 | `qwen3.5-27b:gemini3.1`   | `hf.co/Jackrong/Qwen3.5-27B-Gemini-3.1-Pro-Reasoning-Distill-GGUF`                     | `Qwen3.5-27B.Q4_K_M.gguf`                                                  |
 | `deepseek-r1:32b`         | `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF`                                    | `DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf`                                 |
 | `codestral:22b`           | `hf.co/bartowski/Codestral-22B-v0.1-GGUF`                                              | `Codestral-22B-v0.1-Q4_K_M.gguf`                                           |
-| `qwen2.5:32b`     | `hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF`            | `Qwen2.5-32B-Instruct.Q4_K_M.gguf`          |
+| `qwen2.5:32b`             | `hf.co/hesamation/Qwen2.5-32B-Instruct-GGUF`                                           | `Qwen2.5-32B-Instruct.Q4_K_M.gguf`                                         |
 | `qwen3.6-27b:opus-sonnet` | `hf.co/Brian6145/Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-GGUF`                  | `Qwen3.6-27B-Claude-Opus-Sonnet-DistilledV2-MTP-Q4_K_M.gguf`               |
 | `qwen3-14b:sonnet4.5`     | `hf.co/TeichAI/Qwen3-14B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                     | `Qwen3-14B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`           |
 | `qwen3-8b:sonnet4.5`      | `hf.co/TeichAI/Qwen3-8B-Claude-Sonnet-4.5-Reasoning-Distill-GGUF`                      | `Qwen3-8B-claude-sonnet-4.5-high-reasoning-distill-Q4_K_M.gguf`            |
@@ -257,7 +257,7 @@ Official Ollama library models get either full Jinja2 templates or
 | Model                     | Template           | Tool Support | Priority |
 | ------------------------- | ------------------ | ------------ | -------- |
 | `codestral:22b`           | `{{ .Prompt }}`    | None         | Medium   |
-| `qwen2.5:32b`     | `{{ .Prompt }}`    | None         | High     |
+| `qwen2.5:32b`             | `{{ .Prompt }}`    | None         | High     |
 | `qwen3.5-27b:gemini3.1`   | `{{ .Prompt }}`    | None\*       | Medium   |
 | `qwen3-coder-next-80b:q4` | 13 lines, no tools | None         | Low      |
 | `qwen3.6-27b:opus-sonnet` | 12 lines, no tools | None         | Low      |

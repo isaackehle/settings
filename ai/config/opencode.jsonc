@@ -133,7 +133,14 @@
         "qwen3.6-35b:opus4.6": {
           "name": "Qwen 3.6 35B (Claude Opus 4.6 Distill)"
         },
-        "qwen3.6-35b:opus4.7-128k": {
+        "gemma-4-e4b": { "name": "Gemma 4 E4M3 Finetune" },
+        "gpt-oss-20b": { "name": "GPT-OSS 20B (General)" },
+        "lmstudio-community/mistrallite-7b": { "name": "Mistrallite 7B" },
+        "ornith-1.0-35b": { "name": "Ornith 1.0 35B" },
+        "qwen2.5-3b-instruct": { "name": "Qwen 2.5 3B Instruct" },
+        "qwen3-32b-it": { "name": "Qwen 3 32B Instruct" },
+        "qwen3.5-9b:opus4.7": { "name": "Qwen 3.5 9B (Opus 4.7 Distill)" },
+        "qwen3.6-35b-a3b:opus4.7-128k": {
           "name": "Qwen 3.6 35B (Claude Opus 4.7, 128K, tools ✓)"
         }
       }
@@ -241,12 +248,14 @@
     },
     "home-assistant": {
       "type": "local",
-      "command": ["uvx", "ha-mcp@latest"],
-      "enabled": true,
-      "env": {
-        "HOMEASSISTANT_URL": "https://kehle.duckdns.org:8123",
-        "HOMEASSISTANT_TOKEN": "${HOMEASSISTANT_TOKEN}"
-      }
+      "command": [
+        "uvx",
+        "mcp-proxy",
+        "--transport",
+        "streamablehttp",
+        "https://homeassistant.tail303fda.ts.net:9584/***REMOVED-HA-MCP-PATH-SECRET***"
+      ],
+      "enabled": true
     },
     "weather": {
       "type": "local",
