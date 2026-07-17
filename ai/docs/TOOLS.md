@@ -147,26 +147,14 @@ Choose the architecture that matches your setup. All configurations support hybr
 
 ### Recommended: Ollama Direct
 
-```
-┌─────────────────────────────────────────────────────────┐
-│              Agents (OpenCode, Claude Code, etc.)       │
-│                            ↓                            │
-│               http://localhost:11434/v1                 │
-│                            ↓                            │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │                    Ollama                        │   │
-│  │  - Model serving                  ───────────    │   │
-│  │  - OpenAI-compatible API              │   │      │   │
-│  │  - Cloud models via tool-native       │   │      │   │
-│  │    OpenRouter provider blocks         │   │      │   │
-│  └───────────────────────────────────────┴───┴──────┘   │
-│                            ↓                            │
-│                   ┌──────────────────┐                  │
-│                   │ OpenWebUI        │                  │
-│                   │ :8080 (optional) │                  │
-│                   │ (human chat UI)  │                  │
-│                   └──────────────────┘                  │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    agents["Agents (OpenCode, Claude Code, etc.)"]
+    ollama["<b>Ollama</b><br/>- Model serving<br/>- OpenAI-compatible API<br/>- Cloud models via tool-native OpenRouter provider blocks"]
+    webui["OpenWebUI :8080 (optional)<br/>human chat UI"]
+
+    agents -->|http://localhost:11434/v1| ollama
+    ollama --> webui
 ```
 
 **Why this stack:**

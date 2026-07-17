@@ -130,6 +130,7 @@ interactive_menu() {
     "zed|devtools|Install Zed editor"
     "helix|devtools|Install Helix editor"
     "git|devtools|Install Git and GitHub CLI"
+    "gitkraken-cli|devtools|Install GitKraken CLI (gk) + link GitHub account"
     "gradle|devtools|Install Gradle"
     "just|devtools|Install Just command runner"
     "sdk|devtools|Install Android Studio / SDK"

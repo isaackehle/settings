@@ -23,8 +23,14 @@
         }
     },
     "providers": {
+        "lmstudio": {
+            "name": "LM Studio (Local)",
+            "type": "openai-compat",
+            "base_url": "http://127.0.0.1:1234/v1",
+            "api_key": "sk-local"
+        },
         "ollama": {
-            "name": "Ollama (Local)",
+            "name": "Ollama (Local) - DISABLED FOR NOW",
             "type": "openai-compat",
             "base_url": "http://127.0.0.1:11434/v1",
             "api_key": "sk-local"

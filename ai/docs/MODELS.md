@@ -58,6 +58,37 @@ Tags used in display names to indicate a model's primary role. Use the full word
 7. **Full words only**: No `(REAS)`, `(CODE)`, `(PLAN)` — use `(Reasoning)`, `(Coding)`, `(Planning)`
 8. **Vendor capitalization**: `K2.6` not `k2.6`
 
+### Generated Config Display Names (`generate-configs.sh`, 2026-07-16)
+
+The rules above (1–8) govern this registry's own Display Names table and any
+doc that references it. The `name`/`display_name` fields that
+`homelab/profiles/generate-configs.sh` writes into `continue`, `zed`,
+`gemini`, and `grok` configs are intentionally a **different, more compact**
+convention — don't apply rules 1–8 to those fields, and don't "fix" them to
+match. It's `ENGINE_ABBR: short model name`, no role text, no full engine
+name, no org/publisher prefix:
+
+- **Engine abbreviation always first, then a colon** — 4 letters:
+  `OLMA` (Ollama), `LMST` (LM Studio), `OMLX` (oMLX), `LLPX` (llama-proxy).
+- **Drop org/publisher prefixes** — `mistralai/codestral-22b-v0.1` →
+  `codestral 22b`, `qwen/qwen3.5-9b` → `qwen 3.5 9b`, not `mistralai/...` or
+  `google/...` kept in the label.
+- **Drop boilerplate suffixes** — version tags (`-v0.1`), `-instruct`,
+  `-qat`, redundant repeated words (`text-embedding-nomic-embed-text-v1.5` →
+  `nomic embed`) — unless the suffix is the actual point of the entry (kept
+  `gpt-oss 20b tools` because "tools" is what distinguishes it from the
+  non-tool-calling `gpt-oss` variant; see DeepSeek R1 notes above for why
+  that distinction matters).
+- **No role prefix** — unlike rules 1–8's capability tags, these labels
+  don't say "Coder" / "Reasoning" / etc. The tool's own role/section
+  grouping already conveys that; repeating it in the name was found to add
+  noise without adding information.
+- Per-model short names for each engine live in
+  `profiles/discovery/engines.sh`'s `MODEL_SHORT_NAMES_<ENGINE>` maps —
+  extend that map (not this file) when adding a new model. `label()` in
+  `generate-configs.sh` falls back to the raw model id if a short name isn't
+  mapped yet, so this degrades gracefully rather than breaking generation.
+
 ### DeepSeek R1 — Three Distinct Models
 
 There are three different DeepSeek R1 models. The display name `DeepSeek R1` is
@@ -173,6 +204,20 @@ Only a tiny JSON manifest (~400 bytes) is downloaded — no local weights.
   Continue, Claude Code) where tool-calling is needed. Use `deepseek-r1` for
   pure reasoning tasks or when RAM is too limited for the 32B tool-calling
   variant.
+
+- **LM Studio has no equivalent alias** — `deepseek-r1-distill-qwen-32b`
+  (publisher `bartowski`) is the plain base distill, same as Ollama's
+  `deepseek-r1:32b`, with no tool-calling adaptation. There is no MFDoom-style
+  fork of it loaded in LM Studio. Do not map it to a `reasoning_tools`-type
+  role — confirmed via `curl http://127.0.0.1:1234/api/v0/models`, which
+  omits the `capabilities` key entirely for this model (present as
+  `"capabilities": ["tool_use"]` for models that do support it). The verified
+  tool-calling substitute on `discovery`'s LM Studio is
+  `gpt-oss-20b-hermes_agent-tool-finetune_gguf` (publisher `fesalfayed`,
+  20B GPT-OSS, explicitly tool-finetuned, confirmed `tool_use` capability and
+  a working `get_weather`-style function call on 2026-07-16). See
+  `homelab/profiles/discovery/engines.sh` for the live role map and
+  `docs/SOURCES.md` for the full verification method.
 
 ### Qwen Family
 
@@ -612,3 +657,33 @@ dash-format. This aligns with `models.sh` which is the single source of truth.
 - `gemma4-26b` removed (31B variant is the correct model)
 - `llama3.3-70b` removed (not used, too large)
 - `qwen3-32b` removed (30B MoE is preferred for coding)
+
+### 2026-07-16: LM Studio Multi-Engine Support (discovery profile)
+
+Homelab's `discovery` profile gained a switchable local-inference-engine layer
+(`profiles/discovery/engines.sh` + `profiles/generate-configs.sh` — see
+`homelab/docs/DECISIONS.md` §21 for the infra-level decisions). Below is the
+LM Studio role map that resulted, verified against `discovery`'s actual LM
+Studio state on 2026-07-16 (see `docs/SOURCES.md` for the verification method
+— every entry below was confirmed live, none were guessed from a model name).
+
+| Role                 | LM Studio model id                        | Notes                                                          |
+| -------------------- | ------------------------------------------ | ---------------------------------------------------------------- |
+| `coder`               | `qwen_qwen3-30b-a3b`                      | `qwen/qwen3-coder-next` (80B) is the target once downloaded — not loaded as of 2026-07-16 |
+| `coder_alt`           | `mistralai/codestral-22b-v0.1`            | Pending: `hermes-qwen3.5-35b-a3b-Q6_K.gguf` once downloaded (see below) |
+| `apply`               | `mistralai/codestral-22b-v0.1`            | Matches Ollama's `codestral:22b` apply role                    |
+| `architect` / `heavy` | `qwen/qwen3.6-35b-a3b`                    | —                                                                |
+| `autocomplete`        | `qwen2.5-3b-instruct`                     | —                                                                |
+| `autocomplete_heavy`  | `qwen/qwen3.5-9b`                         | —                                                                |
+| `embedding`           | `text-embedding-nomic-embed-text-v1.5`    | —                                                                |
+| `fast` / `fast_alt`   | `google/gemma-4-e4b` / `qwen2.5-3b-instruct` | —                                                             |
+| `general`             | `google/gemma-4-26b-a4b-qat`              | —                                                                |
+| `reasoning`           | `deepseek-r1-distill-qwen-32b`            | Plain distill — no tool-calling, see Model Identity Notes above |
+| `reasoning_tools`     | `gpt-oss-20b-hermes_agent-tool-finetune_gguf` | Verified `tool_use` capable — do not revert to the plain distill |
+| `summary`             | `google/gemma-4-e4b`                      | —                                                                |
+
+**Pending, not yet verified:** `hermes-qwen3.5-35b-a3b-Q6_K.gguf` —
+`profiles/discovery/hermes/config.yaml` switched to this model as an
+improvement over `ornith-1.0-35b`, but as of 2026-07-16 it is not downloaded
+in LM Studio (checked via `lms ls`). Candidate for the `coder_alt` role once
+downloaded and confirmed — do not wire it into `engines.sh` before then.

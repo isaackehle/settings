@@ -77,6 +77,12 @@ plugins=(git bundler macos rake ruby aws)
 
 source $ZSH/oh-my-zsh.sh
 
+# Reclaim `gk` from the git plugin's own alias (gk='gitk --all --branches &!')
+# for the real GitKraken CLI (settings/git/gitkraken-cli.sh, binary: gk) once
+# installed. Safe no-op if the alias isn't set. Losing the old shortcut on
+# purpose — use `gitk --all --branches &!` directly if you still want it.
+unalias gk 2>/dev/null
+
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"

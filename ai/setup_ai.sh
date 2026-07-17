@@ -61,6 +61,7 @@ _safe_source "$HOMELAB_ROOT/other/exo.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/fabric.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/gemini.sh" "$HOMELAB_ROOT"
 _safe_source "$REPO_ROOT/editors/github-copilot.sh"
+_safe_source "$REPO_ROOT/editors/gitlens.sh"
 _safe_source "$HOMELAB_ROOT/agents/goose.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/agents/grok.sh" "$HOMELAB_ROOT"
 _safe_source "$HOMELAB_ROOT/cloud/groq.sh" "$HOMELAB_ROOT"
@@ -594,6 +595,7 @@ backup_existing_configs() {
   backup_grok
   backup_olol
   backup_kilocode
+  backup_gitlens
   backup_llm
   backup_aichat
   backup_fabric
@@ -619,6 +621,7 @@ restore_configs() {
   restore_grok
   restore_olol
   restore_kilocode
+  restore_gitlens
   restore_llm
   restore_aichat
   restore_fabric
@@ -638,7 +641,7 @@ verify_installations() {
   log_info "Verifying tool installations..."
   local verification_results=""
   local all_passed=true
-  for check in verify_ollama verify_openrouter verify_openwebui verify_claude verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_cli verify_aider verify_cursor verify_kilocode verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_pi verify_pi_studio; do
+  for check in verify_ollama verify_openrouter verify_openwebui verify_claude verify_opencode verify_crush verify_codex verify_gemini verify_grok verify_groq verify_github_cli verify_aider verify_cursor verify_kilocode verify_gitlens verify_zed verify_tabby verify_llm verify_aichat verify_fabric verify_goose verify_plandex verify_openclaw verify_ironclaw verify_hermes verify_picoclaw verify_zeroclaw verify_pi verify_pi_studio; do
     local label="${check#verify_}"
     [[ "$label" == "pi_studio" ]] && label="pi-studio"
     if $check; then
@@ -664,7 +667,7 @@ verify_installations() {
 declare -A TOOL_GROUPS=(
   ["infrastructure"]="ollama openrouter openwebui huggingface"
   ["terminal-agents"]="claude opencode crush aider codex gemini grok llm fabric aichat goose plandex pi openclaw ironclaw hermes picoclaw zeroclaw"
-  ["vscode-extensions"]="continue copilot kilocode"
+  ["vscode-extensions"]="continue copilot kilocode gitlens"
   ["ides"]="devin cursor zed"
   ["self-hosted"]="anythingllm tabby open-hands"
   ["all"]="infrastructure terminal-agents vscode-extensions ides self-hosted"
@@ -686,6 +689,7 @@ declare -A GROUP_SETUP_FUNCS=(
   ["continue"]="setup_continue"
   ["copilot"]="setup_github_copilot"
   ["kilocode"]="setup_kilocode"
+  ["gitlens"]="setup_gitlens"
   ["devin"]="setup_devin"
   ["cursor"]="setup_cursor"
   ["zed"]="setup_zed"
@@ -722,6 +726,7 @@ declare -A GROUP_VERIFY_FUNCS=(
   ["continue"]="verify_continue"
   ["copilot"]="verify_github_cli"
   ["kilocode"]="verify_kilocode"
+  ["gitlens"]="verify_gitlens"
   ["cursor"]="verify_cursor"
   ["zed"]="verify_zed"
   ["anythingllm"]="verify_anythingllm"
@@ -763,6 +768,7 @@ declare -A DISPLAY_NAMES=(
   ["continue"]="Continue"
   ["copilot"]="GitHub Copilot"
   ["kilocode"]="Kilo Code"
+  ["gitlens"]="GitLens"
   ["devin"]="Devin Desktop"
   ["cursor"]="Cursor"
   ["zed"]="Zed"
@@ -1840,6 +1846,9 @@ main() {
   kilocode)
     setup_kilocode
     ;;
+  gitlens)
+    setup_gitlens
+    ;;
   open-hands)
     setup_openhands
     ;;
@@ -1977,7 +1986,7 @@ main() {
     run_ai_setup_wizard
     ;;
   *)
-    echo "Usage: $0 {backup|restore|deploy|vscode|devin|continue|opencode|crush|claude|aider|cursor|kilocode|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
+    echo "Usage: $0 {backup|restore|deploy|vscode|devin|continue|opencode|crush|claude|aider|cursor|kilocode|gitlens|zed|tabby|open-hands|pi|pi-studio|setup|ollama|grok|olol|exo|codex|gemini|llm|fabric|aichat|goose|plandex|anythingllm|lmstudio|copilot|check|verify|install|infrastructure|models}"
     echo "  (no args)   - Interactive tool picker"
     echo "  deploy      - Copy all AI tool configs to their home-directory locations"
     echo ""
@@ -1990,7 +1999,7 @@ main() {
     echo "=== GROUPS (recommended) ==="
     echo "  install:infrastructure   - Ollama + OpenRouter + OpenWebUI"
     echo "  install:terminal-agents    - Claude Code, OpenCode, Crush, Aider, etc."
-    echo "  install:vscode-extensions  - Continue, Copilot, Kilocode"
+    echo "  install:vscode-extensions  - Continue, Copilot, Kilocode, GitLens"
     echo "  install:ides               - Devin Desktop, Cursor, Zed"
     echo "  install:self-hosted        - AnythingLLM, Tabby, OpenHands"
     echo "  install:all                - Everything"

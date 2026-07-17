@@ -310,7 +310,7 @@ install_config_file() {
 # PROFILE DETECTION & MANAGEMENT
 # ============================================================================
 
-PROFILES_DIR="$SETTINGS_BASE/ai/profiles"
+PROFILES_DIR="$SETTINGS_BASE/profiles"
 declare -gA _PROFILE_CACHE
 
 _get_profile_numbers() {
