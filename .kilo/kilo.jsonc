@@ -1,0 +1,16 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+
+  // "kilo-code.new.model.providerID": "LM Studio",
+  // "kilo-code.new.model.modelID": "qwen_qwen3-30b-a3b",
+  "permission": {
+    "bash": "allow",
+  },
+
+  "model": "lmstudio/qwen_qwen3-30b-a3b",
+
+  // Autocomplete can point at a different (usually smaller/faster) provider
+  // profile independently — see kilo-code.new.autocomplete.provider / .model
+  // if you want that to differ from the chat default above.
+  "small_model": "lmstudio/qwen2.5-3b-instruct",
+}

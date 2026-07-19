@@ -58,9 +58,6 @@ Thumbs.db
 .env.local
 **/.env.local
 
-# Deprecated tools (removed from repo, directory may still exist locally)
-.kilo/
-
 # Embedded git repos (standalone projects, not submodules)
 /mcp-servers/*
 
