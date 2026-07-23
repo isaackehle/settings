@@ -61,6 +61,15 @@ Thumbs.db
 # Embedded git repos (standalone projects, not submodules)
 /mcp-servers/*
 
+# Machine-specific live AI tool configs — generated/patched per-machine by
+# homelab's profiles/<machine>/... registry (profiles/generate-configs.sh).
+# Committing these bakes one machine's model IDs/ports into a repo shared
+# across the fleet; only the homelab profile source is authoritative.
+/.kilo/kilo.jsonc
+/ai/config/crush.json
+/ai/config/opencode.jsonc
+/ai/config/hermes-config.yaml
+
 .venv/
 .venv/
 scripts/path/to/venv/
