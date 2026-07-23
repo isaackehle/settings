@@ -7,10 +7,10 @@
     "bash": "allow",
   },
 
-  "model": "lmstudio/qwen_qwen3-30b-a3b",
+  "model": "ollama/qwen3-coder-30b-a3b:q4",
 
   // Autocomplete can point at a different (usually smaller/faster) provider
   // profile independently — see kilo-code.new.autocomplete.provider / .model
   // if you want that to differ from the chat default above.
-  "small_model": "lmstudio/qwen2.5-3b-instruct",
+  "small_model": "ollama/qwen2.5-coder:1.5b",
 }
