@@ -8,14 +8,8 @@
       ]
     },
     "home-assistant": {
-      "command": "uvx",
-      "args": [
-        "ha-mcp@latest"
-      ],
-      "env": {
-        "HOMEASSISTANT_URL": "YOUR_HOMEASSISTANT_URL",
-        "HOMEASSISTANT_TOKEN": "YOUR_LONG_LIVED_TOKEN"
-      }
+      "type": "http",
+      "url": "${HA_MCP_URL}"
     }
   }
 }
